@@ -1,0 +1,1156 @@
+{
+ "found": [
+  {
+   "checked": "Checked 2026-11-16 against HEAD 5e22415 (the checkout is clean; I wrote nothing in /home/user/sow-generator and made no repository copy). All 7 products were checked. 4 are proposed: AEM Assets, GenStudio for Performance Marketing, Adobe Express and Firefly Custom Models. 3 are not documented: Firefly Creative Production, Creative Cloud and Frame.io.\n\nHOW: Experience League and help.frame.io pages were fetched with curl and turned into text. A script checked 40 quotes word for word against those pages (scripts/check_quotes.py with quotes1.json and quotes2.json; both runs printed ALL OK). I also searched help.frame.io for \"figma\" (one hit, the HTML Review note) and searched GitHub AdobeDocs for \"figma\". That search showed no developer.adobe.com Firefly Services or GenStudio docs about Figma; the Express add-on docs only mention Figma for design guidance.\n\nBLOCKER: WebFetch got HTTP 403 on every helpx.adobe.com page, about 15 tries across locales and a .md variant. business.adobe.com gave 503. www.figma.com does not resolve in this session. So the helpx quotes for Express and Firefly Custom Models come from the search index: the exact-phrase search returned the helpx page, but I could not open the page. Re-read those pages with WebFetch before building; the apostrophe may be curly on the page.\n\nBUILD NOTE: canvas/build.py line 191 asserts that an outside connection's line is 'native' or 'platform'. All four Figma routes are Adobe plugins or add-ons, so line 'extension' needs that assert widened. canvas/template.html line 614 already draws extension as ' ex' (dash-dot).\n\nSUGGESTED BOX: id figma, name Figma, outside:true. Suggested systems text: \"Figma design files, through Adobe's plugins in the Figma Community and the Figma add-on in Adobe Express\".\n\nOUT OF SCOPE, seen but not verified for building:\n- Brand Intelligence, BN06 (skipped as told).\n- AEM Sites + Coworker: Figma to Visual Content Fragments Skill, already AXD10 on aemsites-cw. The agent \"Job\" version is reported as Limited Availability.\n- Edge Delivery: the Experience Modernization Agent uses Figma frames as a design source; status not checked.\n- Workfront: Fusion Figma modules. Quote checked: \"With the Adobe Workfront Fusion Figma modules, you can retrieve lists of comments, files, file versions, or projects. You can also post a comment or make a call to the Figma API.\" (https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/third-party-app-connectors/figma-modules)\n- AEM Assets Content Supply Chain Agent: Figma is under \"Gateways in development\", so it is coming and left out.\n- AEM Forms Experience Builder pages mention Figma; not read.\n\nFILES: /tmp/claude-0/-home-user-sow-generator/0ad60d2d-88a9-5e10-895d-06e2c3f40304/scratchpad/wf4/figma/creative/pages (saved pages and .txt), /tmp/claude-0/-home-user-sow-generator/0ad60d2d-88a9-5e10-895d-06e2c3f40304/scratchpad/wf4/figma/creative/scripts/text.py, /tmp/claude-0/-home-user-sow-generator/0ad60d2d-88a9-5e10-895d-06e2c3f40304/scratchpad/wf4/figma/creative/scripts/check_quotes.py, /tmp/claude-0/-home-user-sow-generator/0ad60d2d-88a9-5e10-895d-06e2c3f40304/scratchpad/wf4/figma/creative/quotes1.json, /tmp/claude-0/-home-user-sow-generator/0ad60d2d-88a9-5e10-895d-06e2c3f40304/scratchpad/wf4/figma/creative/quotes2.json",
+   "candidates": [
+    {
+     "product": "AEM Assets (aemassets)",
+     "verdict": "propose",
+     "kind": "extension",
+     "how": "Adobe's Adobe Experience Manager (AEM) Assets Connector runs as a panel inside Figma. Designers open it from Actions in Figma or from the Figma Community, then search AEM Assets with Content Advisor. They drag approved images (JPEG, PNG), videos (MP4, MOV, WebM), GIFs and SVGs onto the Figma canvas. Check for updates compares the placed assets with AEM and pulls in newer versions. Designers upload a selected item or a whole page back to an AEM Assets folder as PNG, PDF, JPG or SVG, choosing the format, scale and quality. Adobe calls the integration native.",
+     "gain": "Approved DAM assets inside Figma | Your client's designers place approved AEM Assets files on the Figma canvas and see when a newer version exists. They save finished designs back to AEM Assets, so nobody works from a downloaded copy and the rest of the team finds the work in the DAM.",
+     "sources": [
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/integration-figma/integrate-aem-assets-with-figma",
+       "title": "Experience League: Integrate AEM Assets with Figma",
+       "quote": "AEM Assets integrates natively with Figma, which allows designers to directly access the assets stored in AEM Assets from within the Figma user interface. You can place content managed in AEM Assets in the Figma canvas and then save new or edited content in the AEM Assets repository."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/integration-figma/integrate-aem-assets-with-figma",
+       "title": "Experience League: Integrate AEM Assets with Figma",
+       "quote": "Minimum required AEM release version is 19149."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/integration-figma/integrate-aem-assets-with-figma",
+       "title": "Experience League: Integrate AEM Assets with Figma",
+       "quote": "You must have valid AEM Assets and Figma licenses to integrate AEM Assets with Figma."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/integration-figma/integrate-aem-assets-with-figma",
+       "title": "Experience League: Integrate AEM Assets with Figma",
+       "quote": "The integration is native, requiring no third-party connectors beyond the Adobe Experience Manager AEM Assets Connector available on the Figma community."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/overview",
+       "title": "Experience League: AEM Assets as a Cloud Service overview (integrations)",
+       "quote": "Integration with Figma: AEM Assets integrates natively with Figma, enabling designers to access assets stored directly in AEM Assets from within the Figma user interface."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-cloud-kcs/kbarticles/ka-41364",
+       "title": "Experience League: Resolve Unknown clientId login error in AEM Assets Connector for Figma",
+       "quote": "Confirm that you are signing in to Figma with the same company or federated Adobe ID used for Experience Cloud and AEM Assets."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/release-notes/release-notes/2025/release-notes-2025-12-0",
+       "title": "Experience League: AEM as a Cloud Service 2025.12.0 release notes",
+       "quote": "Support for checking if there are any updates to the assets that are used in Figma document as compared to the assets that exist in AEM repository and getting the latest version of assets if there are any updates."
+      }
+     ],
+     "services": [
+      {
+       "name": "AEM Assets Connector rollout for Figma designers",
+       "scope": "Confirm your client's AEM environment is on release 19149 or later, give the designers access to the agreed Assets folders with the same company or federated Adobe ID they sign in with, roll out Adobe's AEM Assets Connector from the Figma Community, and test search, place, Check for updates and upload with the design team.",
+       "unit": "one-time",
+       "low": 8,
+       "base": 16,
+       "high": 32,
+       "source_url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/integration-figma/integrate-aem-assets-with-figma",
+       "evidence": "AEM Assets integrates natively with Figma, which allows designers to directly access the assets stored in AEM Assets from within the Figma user interface."
+      },
+      {
+       "name": "Save-back folders and export settings for Figma designs",
+       "scope": "Agree with your client's DAM owner where designs uploaded from Figma land in AEM Assets, which format, scale and quality each use needs, how the files are named and when designers run Check for updates, then write the short guide the design team follows.",
+       "unit": "one-time",
+       "low": 8,
+       "base": 16,
+       "high": 32,
+       "source_url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/integration-figma/integrate-aem-assets-with-figma",
+       "evidence": "The export configuration comprises the file format, scale, and quality."
+      }
+     ],
+     "notes": "KIND: Adobe calls this native ('integrates natively'), but it is an Adobe plugin installed in Figma, so it is an extension by this task's terms. The tool's precedent: Adobe Asset Link (creativecloud-aemassets) is counted native. Pick native if Adobe's own word should win.\n\nLINES: the first service starts on (pattern of XJ01, 8/16/32). The second is optional (pattern of XJ03, 8/16/32).\n\nPREREQUISITES: AEM as a Cloud Service on release 19149 or later; valid AEM Assets and Figma licenses; designers sign in with the same company or federated Adobe ID they use for AEM Assets; the official connector from the Figma Community (the KCS article says to reinstall from there if sign-in fails with 'Unknown clientId'); Adobe Support for a Network Error after sign-in.\n\nAVAILABILITY: no beta label. It launched in 2025.5.0. The newer version (video, GIF and SVG import, Check for updates, export settings) is in 2025.12.0 under the 'Experience Manager Assets as a Cloud Service' heading, not under 'AEM Beta Programs'.\n\nTIER: AEM Assets as a Cloud Service.\n\nOVERLAPS: AS01 (DAM onboarding, users and access) for user access; the overlap review should ask how they differ.\n\nLEFT OUT: the Content Supply Chain Agent lists Figma under 'Gateways in development', so it is coming. The Firefly Enterprise and GenStudio plugin also has a 'Browse AEM assets' option in its edit tools; I saw that only in helpx search snippets, so it is not cited.\n\nSUGGESTED LABEL: Adobe's AEM Assets Connector in Figma places DAM assets on the canvas and saves designs back to AEM Assets."
+    },
+    {
+     "product": "GenStudio for Performance Marketing (gspm)",
+     "verdict": "propose",
+     "kind": "extension",
+     "how": "Adobe's GenStudio for Performance Marketing Figma plugin adds a panel to Figma. It is installed from the Figma community marketplace and is named Firefly Enterprise and GenStudio there. Designers lay out ad templates as sections (projects) and frames (templates), then map text and image layers to GenStudio field roles such as headline, body, on_image_text and CTA. The plugin generates up to eight on-brand Meta, LinkedIn or Display variations from a brand, persona, product and prompt. It translates them and exports them to GenStudio for Performance Marketing as experiences, or to a local folder as flattened images. With GenStudio Photoshop also installed, it converts Figma frames to Photoshop documents.",
+     "gain": "Ad variations without leaving Figma | Your client's designers keep building ads in Figma and get on-brand copy variations and translations from GenStudio's brands, personas and products. The results go to GenStudio as experiences.",
+     "sources": [
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/integrations/figma-plugin",
+       "title": "Experience League: Figma plugin for GenStudio for Performance Marketing",
+       "quote": "The GenStudio for Performance Marketing Figma plugin adds a new panel to the Figma application that lets you generate on-brand content."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/integrations/figma-plugin",
+       "title": "Experience League: Figma plugin for GenStudio for Performance Marketing",
+       "quote": "Find and install the plugin from the Figma community marketplace."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/integrations/figma-plugin",
+       "title": "Experience League: Figma plugin for GenStudio for Performance Marketing",
+       "quote": "Export generated Experiences to GenStudio for Performance Marketing."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/integrations/figma-plugin",
+       "title": "Experience League: Figma plugin for GenStudio for Performance Marketing",
+       "quote": "You can use the Figma plugin to convert a Figma frame, multiple frames, or an entire document to Photoshop format and export it for use with GenStudio Photoshop."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/integrations/overview",
+       "title": "Experience League: GenStudio for Performance Marketing integrations",
+       "quote": "Note: Although these plugins allow creatives to make ads and export them as approved expriences to GenStudio, Adobe Express templates within GenStudio for Performance Marketing is the recommended approach for creatives to make ad templates."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/release-notes",
+       "title": "Experience League: GenStudio for Performance Marketing release notes (2025.10.16)",
+       "quote": "Create on-brand and personalized ads directly using the new GenStudio Plugins for Adobe Photoshop and Figma design tools."
+      }
+     ],
+     "services": [
+      {
+       "name": "Figma ad templates prepared for the GenStudio plugin",
+       "scope": "Install the GenStudio plugin from the Figma community marketplace for your client's designers, set up their Figma ad files as sections and frames at the sizes Meta, LinkedIn and Display accept, map the field roles with at least one image, and generate, translate and export test variations to GenStudio for Performance Marketing.",
+       "unit": "one-time",
+       "low": 16,
+       "base": 32,
+       "high": 56,
+       "source_url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/integrations/figma-plugin",
+       "evidence": "Map Figma text elements to GenStudio for Performance Marketing fields, such as headline, body, on_image_text, and more."
+      },
+      {
+       "name": "Figma frames converted for GenStudio Photoshop",
+       "scope": "Convert the agreed Figma frames to Photoshop with the plugin, open them in GenStudio Photoshop, and rebuild with the designer what Adobe says does not carry over, such as gradients, opacity percentages, strikethrough, superscript and subscript.",
+       "unit": "one-time",
+       "low": 8,
+       "base": 16,
+       "high": 32,
+       "source_url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/integrations/figma-plugin",
+       "evidence": "You can use the Figma plugin to convert a Figma frame, multiple frames, or an entire document to Photoshop format and export it for use with GenStudio Photoshop."
+      }
+     ],
+     "notes": "ADOBE'S CAVEAT: Adobe recommends Express templates inside GenStudio for ad templates (quoted with Adobe's typo 'expriences'). So this connection suits clients whose designers already work in Figma; the Express route stays XJ10.\n\nLINES: the first service starts on (pattern of XJ10, 16/32/56). The second is optional (pattern of XJ11, 8/16/32) and also needs GenStudio Photoshop.\n\nPREREQUISITES: brands, personas and products set up in GenStudio (GS02); the plugin from the Figma community marketplace; the first two levels of each Figma file are a Section and its Frames; supported sizes; the image role mapped to at least one image element; every font in the file installed on the designer's machine. Sizes: Meta posts are 1080 wide by 1080 or 1350 high, stories 1080 by 1920. LinkedIn is 1200 wide by 1200, 628, 2292, 1800 or 1500 high. Display can be any size.\n\nPSD CONVERSION also needs: GenStudio Photoshop from the Creative Cloud Marketplace in Adobe Exchange (Creative Cloud desktop app, Photoshop 25.6.0 or later, sign-in to a GenStudio instance); frames not nested in a section; each Figma file link pasted in and file access allowed once.\n\nAVAILABILITY: release notes of 2025.10.16 with no Beta badge (other items in those notes carry one); the plugin page is from March 9 2026; Experience Cloud release notes list a 'GenStudio Figma Integration demo' video from July 2026.\n\nOVERLAPS: GS03 (channel templates) and GS05 (editor training); the overlap review asks how they differ.\n\nSCOPE NOTE: the same plugin is Adobe's 'Firefly Enterprise and GenStudio' plugin. Its Firefly tools (Text to image, Generative fill, expand, remove, Text to video) need Firefly access and are not GenStudio features; custom models are handled in the fireflycm candidate.\n\nSUGGESTED LABEL: Adobe's GenStudio plugin in Figma generates on-brand ad variations in Figma templates and exports them to GenStudio."
+    },
+    {
+     "product": "Adobe Express (express)",
+     "verdict": "propose",
+     "kind": "extension",
+     "how": "The Figma add-on in Adobe Express (More, then Add-ons, search Figma) connects the user's Figma account. The user pastes a Figma file link and picks a page, frame or layer. Native Import brings it in as editable Express elements: text stays editable, shapes and vectors are recreated, and images are placed as in the Figma layout. Rasterize brings it in as a flattened image, and both can be used in one design. Fonts are matched by name, and a missing font gets a fallback that the import summary flags. The add-on only reads the Figma file.",
+     "gain": "Figma work reused in Express | Designs your client's designers make in Figma become editable Express designs and templates the wider team can reuse with brand controls, without rebuilding them by hand.",
+     "sources": [
+      {
+       "url": "https://helpx.adobe.com/express/web/add-ons-and-integrations/import-figma-designs-into-adobe-express.html",
+       "title": "Adobe Help: Import Figma designs into Adobe Express",
+       "quote": "Native Import imports supported content as editable Adobe Express elements"
+      }
+     ],
+     "services": [
+      {
+       "name": "Figma designs turned into Express templates",
+       "scope": "Allow the Figma add-on for your client's Express users in the Admin Console, connect the designers' Figma accounts, import the agreed frames with Native Import or Rasterize, fix the fonts the import summary flags as not available, and build the first Express templates from them.",
+       "unit": "one-time",
+       "low": 16,
+       "base": 24,
+       "high": 48,
+       "source_url": "https://helpx.adobe.com/express/web/add-ons-and-integrations/import-figma-designs-into-adobe-express.html",
+       "evidence": "Native Import imports supported content as editable Adobe Express elements"
+      }
+     ],
+     "notes": "NOT READ DIRECTLY: helpx gave 403 to WebFetch. The quote is an exact-phrase match in the search index and needs a re-read.\n\nFROM SEARCH SNIPPETS ONLY, so do not cite as quotes:\n- You need a Figma account with access to the file, and access to Add-ons in Adobe Express.\n- 'The Figma add-on is available at no additional cost'.\n- Full and Dev Figma seats have unlimited use; Collab and View seats have daily limits.\n- The add-on is read-only on Figma files.\n- Listed in Express What's new for May 2026.\nNo beta label was seen, and the add-on's publisher is not named in what I could see.\n\nADMIN CONTROL: Adobe's 'Manage Adobe Express add-on access' pages (https://helpx.adobe.com/business/enterprise/using/adobe-express-add-ons-access.html) describe an organization-wide switch on the App add-ons page (Teams) and roles under Users > Roles (enterprise). Not read on the page.\n\nLINE: pattern of XJ12 (16/24/48). Overlaps EP03 (locked templates with brand controls): this line brings the Figma designs in, and EP03 locks them.\n\nTIER: Adobe Express for Enterprise with add-ons allowed.\n\nLEFT OUT: the reverse direction (Express designs into Figma through an 'Adobe Express Connector' Figma plugin for Enterprise users) is described only on Figma's community listing; I found no Adobe page.\n\nSUGGESTED LABEL: The Figma add-on in Express imports Figma frames as editable Express designs."
+    },
+    {
+     "product": "Firefly Custom Models (fireflycm)",
+     "verdict": "propose",
+     "kind": "extension",
+     "how": "In Adobe's Firefly Enterprise and GenStudio plugin for Figma, Text to image has a Model menu. There the designer picks an Adobe or partner model, or a custom model, and the generated images go onto the Figma canvas. The plugin needs the Figma desktop app or Figma in the browser and an active Adobe account with Firefly access.",
+     "gain": "Brand models on the Figma canvas | Designers generate images in your client's trained brand style or product subject inside Figma, with the same custom models the team uses in Firefly, Express and Photoshop.",
+     "sources": [
+      {
+       "url": "https://helpx.adobe.com/firefly/web/app-integrations/figma/generate-images-in-figma.html",
+       "title": "Adobe Firefly help: Use text to image to generate images in Figma",
+       "quote": "Select an Adobe or Partner model from the Model dropdown menu or choose a custom model you've created"
+      },
+      {
+       "url": "https://helpx.adobe.com/firefly/web/app-integrations/figma/firefly-plugin-for-figma.html",
+       "title": "Adobe Firefly help: Use Firefly Enterprise and GenStudio for Figma",
+       "quote": "Firefly Enterprise and GenStudio plugin installed in Figma"
+      },
+      {
+       "url": "https://helpx.adobe.com/firefly/web/custom-models/get-started-with-custom-models/custom-models-overview.html",
+       "title": "Adobe Firefly help: Custom models overview",
+       "quote": "Custom models can be used to generate content in supported Adobe apps, including Photoshop, Illustrator, Adobe Express, Firefly, and GenStudio."
+      }
+     ],
+     "services": [
+      {
+       "name": "Custom models for Figma designers",
+       "scope": "Publish the approved models, share them with your client's Figma designers with the Generator permission, check each model shows in the plugin's Model menu and generates as expected on the Figma canvas, and give the designers the prompt guide for each model.",
+       "unit": "one-time",
+       "low": 8,
+       "base": 16,
+       "high": 24,
+       "source_url": "https://helpx.adobe.com/firefly/web/app-integrations/figma/generate-images-in-figma.html",
+       "evidence": "Select an Adobe or Partner model from the Model dropdown menu or choose a custom model you've created"
+      }
+     ],
+     "notes": "NOT READ DIRECTLY: the first two quotes come from the search index; helpx gave 403 to WebFetch. Both phrases returned the cited page in exact-phrase searches. The apostrophe in you've may be curly on the page. Re-read before building. The third quote is the repo's existing XK09 evidence, checked on Nov 10.\n\nPREREQUISITES: Firefly Custom Models on a Creative Cloud for enterprise plan that includes them; each model trained and published, then shared with the designers with at least the Generator permission; the plugin installed; an Adobe account with Firefly access.\n\nLINE: pattern of XK09 (8/16/24). Overlaps FM04 (prompt guide) and FM05 (sharing) in the same way XK09 does.\n\nAVAILABILITY: no beta label seen on the plugin pages.\n\nLEFT OUT: the plugin's other Firefly tools (Text to image with Adobe or partner models, Generate similar, Generative fill, Generative expand, Generative remove, Text to video) belong to the Firefly app, which has no box on the map.\n\nSUGGESTED LABEL: Custom models are picked in Text to image in Adobe's Firefly plugin for Figma."
+    },
+    {
+     "product": "Firefly Creative Production (fireflycp)",
+     "verdict": "not documented",
+     "kind": "partner",
+     "how": "Adobe documents no Figma route for Creative Production. No workflow node, input or output storage, or bulk action reads from or writes to Figma. Adobe's Figma pages sit under the Firefly app's integrations and cover single generations and edits, not production workflows.",
+     "gain": "",
+     "sources": [],
+     "services": [],
+     "notes": "Kind is not applicable. Searches covered: Creative Production with Figma, Workflow Builder with a Figma node, and the 'Firefly Enterprise and GenStudio' plugin with bulk, workflow or Creative Production. The only Figma hit on the Creative Production FAQ was the helpx side menu (App integrations > Figma), not FAQ content. Search results also said no source shows bulk actions running inside the Figma plugin. helpx pages could not be opened (403), so the FAQ body was not read; recheck it if a later reader gets helpx. Firefly Builder (MAX, Nov 10 2026) is a Figma competitor in private beta, not an integration."
+    },
+    {
+     "product": "Creative Cloud (creativecloud)",
+     "verdict": "not documented",
+     "kind": "partner",
+     "how": "No Adobe page documents Photoshop, Illustrator, InDesign, Creative Cloud Libraries, Adobe Stock or Adobe Fonts working with Figma. The one documented route into a Creative Cloud app, Figma frames converted to Photoshop documents, needs the GenStudio for Performance Marketing Figma plugin and GenStudio Photoshop (a GenStudio sign-in). It is the optional line on the GenStudio candidate.",
+     "gain": "",
+     "sources": [
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/integrations/figma-plugin",
+       "title": "Experience League: Figma plugin for GenStudio for Performance Marketing",
+       "quote": "To perform this task, you need both the Figma plugin and GenStudio Photoshop."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/integrations/photoshop-plugin",
+       "title": "Experience League: GenStudio Photoshop for GenStudio for Performance Marketing",
+       "quote": "Log in to a GenStudio for Performance Marketing instance with an Adobe ID"
+      }
+     ],
+     "services": [],
+     "notes": "Kind is not applicable. Using Adobe Fonts in Figma is described only on Figma's help center, which the tool does not cite. Searches found no official Adobe Stock, Illustrator, Photoshop or Libraries plugin for Figma; the hits were third-party tools such as CI HUB. The Firefly Enterprise and GenStudio plugin's general generation needs 'Active Adobe account with Firefly access' (helpx, from search snippets). Attaching it to the Creative Cloud box would rest on the plan including Firefly, not on a Creative Cloud page, so it is not proposed."
+    },
+    {
+     "product": "Frame.io (frameio)",
+     "verdict": "not documented",
+     "kind": "partner",
+     "how": "Frame.io documents no Figma integration. Its HTML Review, which takes live web URLs for review, names Figma among the sites whose URLs are not currently supported when embedded. A help.frame.io search for Figma returns only that article. Workfront Fusion has separate Figma and Frame.io modules, but no Adobe page describes the two working together, and that would be a Workfront route.",
+     "gain": "",
+     "sources": [
+      {
+       "url": "https://help.frame.io/en/articles/12893213-html-review",
+       "title": "Frame.io: HTML Review",
+       "quote": "URLs from the following sites are not currently supported due to degraded viewing experience when embedded:"
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/third-party-app-connectors/figma-modules",
+       "title": "Experience League: Workfront Fusion, Figma modules",
+       "quote": "With the Adobe Workfront Fusion Figma modules, you can retrieve lists of comments, files, file versions, or projects. You can also post a comment or make a call to the Figma API."
+      }
+     ],
+     "services": [],
+     "notes": "Kind is not applicable. In the HTML Review article the quoted sentence is followed by the list 'YouTube' and 'Figma'. The help.frame.io search page reads '1 result for figma'. The Integrations and API collection (Adobe Products, iOS, AI tools, Mac, Apple TV, Transfer, Zapier, Additional API) has no Figma article. Third-party automations (Pipedream, viaSocket) are not Adobe pages. The user's 'add frame.io' may mean another change (Frame.io is already the frameio box); this candidate answers only the Figma question."
+    }
+   ]
+  },
+  {
+   "checked": "2026-11-16. Pages read with curl and saved as text (Experience League, aem.live): Workfront Fusion Figma modules, the Fusion apps index and Fusion release notes for the weeks of July 11 2022, January 20 2025 and October 13 2025; Workfront Planning Connect records and the Workfront and Planning Coworker pages; AEM's Figma to Visual Content Fragments skill, Experience Production use cases, the AEM agentic capabilities and AEM agents overviews, and the Visual Content Fragments overview, templates, publish URL and tutorial pages; the Experience Modernization Agent overview, Make visual changes, Restyle sites, prompting guide, capability reference, FAQ, getting started, evaluate, console and release notes; AEM Local Development with AI Tools and the AEM Agent Skills component tutorial; Coworker workflows, use cases overview, Chat overview, UI guide, plugins, AI platforms, Coworker for teams release notes and documentation updates; Journey Optimizer Coworker for content management, Work with AI, image to HTML and the 2026 and current release notes; Journey Optimizer B2B image to template; Marketo Engage image to HTML and the Coworker for Marketo overview and data pages; Marketo Optimizer Coworker skills; GenStudio for Performance Marketing Figma plugin, integrations and release notes; AEM Assets Figma integration; AEM Forms agentic use cases; Commerce storefront design pages; Brand Concierge and Sites Optimizer overviews; Experience Cloud central release notes (current, March 2026, October 2025). aem.live: all 283 pages in its query index fetched as .plain.html and searched; Figma appears only in the multi-brand sites guide (map design tokens from Figma by hand) and a Developers Live video listing, so aem.live documents no Figma integration of its own. Web searches on Experience League, developer.adobe.com, helpx.adobe.com and business.adobe.com for Figma with each product in canvas/catalog_map.json. Coworker's workflows page, Adobe's catalog of Coworker skills across products, mentions Figma only for AEM Sites and Journey Optimizer. Not reachable: helpx.adobe.com (WebFetch 403) for Adobe Express's Import Figma designs add-on (helpx.adobe.com/express/web/add-ons-and-integrations/import-figma-designs-into-adobe-express.html) and Use Firefly Enterprise and GenStudio for Figma (helpx.adobe.com/firefly/web/app-integrations/figma/firefly-plugin-for-figma.html), both found by search and left to the creative researcher (scratchpad wf4/figma/creative, which also holds Frame.io's HTML review page); business.adobe.com (503) for the Workfront integrations page. Brand Intelligence skipped as instructed. No beta, early access or coming label applies to any proposed route; the one early access item in the Experience Modernization Agent release notes is Auto mode, which the Figma route does not need. Every quote below was checked word for word against the saved page text with /tmp/claude-0/-home-user-sow-generator/0ad60d2d-88a9-5e10-895d-06e2c3f40304/scratchpad/wf4/figma/rest/scripts/checkfinal.py (pages in /tmp/claude-0/-home-user-sow-generator/0ad60d2d-88a9-5e10-895d-06e2c3f40304/scratchpad/wf4/figma/rest/pages; the full answer is also saved as /tmp/claude-0/-home-user-sow-generator/0ad60d2d-88a9-5e10-895d-06e2c3f40304/scratchpad/wf4/figma/rest/check/final.json; 82 quotes, none missing, no en or em dashes). The live checkout /home/user/sow-generator was only read (HEAD 5e22415); no repository copy was made. Outside system suggested for catalog_map.json: id figma, name Figma, outside true, a new design icon (for example a pen nib), systems 'Figma design files'. Every Figma route is direct (no Experience Platform in between), so each outside connection is kind outside with line native. Offer Figma on Create your own play, on the AEM play (figma-eds) and on a restored GenStudio play (figma-gspm); not on the Coworker play, whose Figma services need AEM Sites or Journey Optimizer.",
+   "candidates": [
+    {
+     "product": "Workfront (workfront), including Workfront Fusion apps and modules",
+     "verdict": "propose",
+     "how": "Workfront itself has no Figma integration; the route is Workfront Fusion's Figma connector. In a scenario the partner builds, its modules watch a Figma team's events (file update, file version update, file delete, library publish and file comment), read files, version history, projects, comments, styles and components, render frames as JPG, PNG, SVG or PDF, and post or delete comments on a Figma file. The connection uses the Figma connection type (Figma (Legacy) is deprecated) with a Client ID and Client Secret, and needs a Workfront Fusion license.",
+     "kind": "extension",
+     "gain": "Design work tracked with the project: Figma file versions and comments reach the Workfront task they belong to, and approved frames go into review without anyone exporting and uploading them by hand.",
+     "notes": "Connection id figma-workfront (outside, line native). Suggested label: Workfront Fusion's Figma connector, in scenarios the partner builds; Fusion license needed. Availability: needs a Workfront Fusion license; the modules shipped the week of July 11 2022 and the current connection type replaced Figma (Legacy) in 2025. Prerequisites: Workfront Fusion (any Workflow package with an Automation and Integration package, Workfront Ultimate, or Prime and Select with Fusion bought separately); a Workfront Standard license, or Work or higher; a Figma account; a Client ID and Client Secret from your client's Figma app for the connection; for the Watch events trigger, the ID of the Figma team whose events are watched. Flows: figma to workfront (file versions, comments and rendered frames); workfront to figma (review comments). Same pattern as workfront-fireflycp and acrobat-workfront (kind extension; the line's ext is Workfront Fusion, part of Workfront Ultimate and of Workflow plus Automation and Integration packages, bought separately with Prime and Select). The service starts on when the Figma box is added. No Workfront Proof or Workfront for Creative Cloud page names Figma (only community threads do).",
+     "sources": [
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/third-party-app-connectors/figma-modules",
+       "title": "Experience League: Figma modules (Workfront Fusion)",
+       "quote": "With the Adobe Workfront Fusion Figma modules, you can retrieve lists of comments, files, file versions, or projects. You can also post a comment or make a call to the Figma API."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/third-party-app-connectors/figma-modules",
+       "title": "Experience League: Figma modules (Workfront Fusion)",
+       "quote": "This trigger module starts a scenario when one of the following events occur for a specific team in your Figma team space:"
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/third-party-app-connectors/figma-modules",
+       "title": "Experience League: Figma modules (Workfront Fusion)",
+       "quote": "The module renders images from a file."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/third-party-app-connectors/figma-modules",
+       "title": "Experience League: Figma modules (Workfront Fusion)",
+       "quote": "This action module posts a comment to a Figma file."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/third-party-app-connectors/figma-modules",
+       "title": "Experience League: Figma modules (Workfront Fusion)",
+       "quote": "Figma changed their authentication requrements in January 2025. The Figma connection type meets the new requirements. The Figma (Legacy) connection type has been deprecated and will be removed in the near future."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/third-party-app-connectors/figma-modules",
+       "title": "Experience League: Figma modules (Workfront Fusion)",
+       "quote": "Enter your Figma Client ID."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/third-party-app-connectors/figma-modules",
+       "title": "Experience League: Figma modules (Workfront Fusion)",
+       "quote": "To use Figma modules, you must have a Figma account."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/third-party-app-connectors/figma-modules",
+       "title": "Experience League: Figma modules (Workfront Fusion)",
+       "quote": "Any Adobe Workfront Workflow package and any Adobe Workfront Automation and Integration package"
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/third-party-app-connectors/figma-modules",
+       "title": "Experience League: Figma modules (Workfront Fusion)",
+       "quote": "If your organization has a Select or Prime Workfront package that does not include Workfront Automation and Integration, your organization must purchase Adobe Workfront Fusion."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/fusion-release-activity/fusion-releases-2022/fusion-july-11-22",
+       "title": "Experience League: Workfront Fusion release activity, week of July 11 2022",
+       "quote": "Now you can use Adobe Workfront Fusion to connect to your Figma account."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/fusion-release-activity/fusion-releases-2025/fusion-2025-10-13",
+       "title": "Experience League: Workfront Fusion release activity, week of October 13 2025",
+       "quote": "To ensure that Fusion conforms to Figma\u2019s updated security requirements, we\u2019ve created a new Figma connection type."
+      }
+     ],
+     "services": [
+      {
+       "name": "Figma scenarios in Workfront Fusion",
+       "scope": "Create the Figma connection in Workfront Fusion with the Client ID and Client Secret your client's Figma admin provides, using the current Figma connection type rather than Figma (Legacy). Build the agreed scenarios, such as a Watch events webhook on the design team that updates the Workfront task when a file version is saved or a comment is posted, frames rendered as PNG or PDF and attached to the task for review, and review decisions posted back to the Figma file as comments, then test each one on a live project.",
+       "unit": "one-time",
+       "low": 24,
+       "base": 40,
+       "high": 80,
+       "source_url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/third-party-app-connectors/figma-modules",
+       "evidence": "With the Adobe Workfront Fusion Figma modules, you can retrieve lists of comments, files, file versions, or projects. You can also post a comment or make a call to the Figma API."
+      }
+     ]
+    },
+    {
+     "product": "AEM Sites (aemsites)",
+     "verdict": "propose",
+     "how": "AEM's Figma to Visual Content Fragments skill, part of the Experience Production Agentic Capability, runs in Coworker Chat: the AEM user prompts Coworker with the share link of an approved Figma design, and AEM creates the Content Fragment Models, Content Fragments and HTML templates for it, reusing existing models or fragments where they fit. Each Figma user first creates an access token in Figma and stores it in AEM. Developers have a second route: Adobe's AEM Agent Skills for AI coding tools (the create-component skill) build an AEM component from a Figma design URL through Figma's MCP server.",
+     "kind": "native",
+     "gain": "Figma designs become AEM content: approved Figma designs become Content Fragment models, fragments and layout templates in AEM, so content teams reuse them without a developer hand-coding each template.",
+     "notes": "Connection id figma-aemsites (outside, line native). The main service already exists: AXD10 Visual Content Fragments from Figma (16, 24, 48), today an optional line on aemsites-cw. Recommended: move AXD10 to figma-aemsites, on when the Figma box is added, with needs ['cw'] (build.py allows a line in one place only); otherwise give figma-aemsites no_services with covered 'Visual Content Fragments from Figma sits on the AEM Sites and Coworker connection'. Either way the aemsites-cw prerequisite 'Figma access token stored in AEM for Figma imports' and the Figma clause of its how text belong with this connection. Suggested label: AEM's Figma to Visual Content Fragments skill in Coworker Chat. Availability: Coworker Chat is generally available; AEM agents come through Try Before You Buy, a trial or the Agentic SKU (CSM or TAM). Prerequisites: CX Enterprise Coworker license; AEM as a Cloud Service; AEM agent access through Try Before You Buy, a trial or the Agentic SKU; an access token for each Figma user, stored in AEM at experience.adobe.com/#/aem/figmatocontentfragment; a share link to each approved design; Visual Content Fragments do not support composite fields; Coworker is not offered to health care, finance or some other sensitive-data organizations (Workfront's Coworker pages, already on the Coworker connections). Coworker's workflows page lists the skill under Application 'Adobe Experience Manager (AEM) - AEM Sites'. Flows: figma to aemsites (the approved design, as models, fragments and an HTML template; needs cw); figma to aemsites (components built from Figma frames, developer route). The second service is optional and overlaps SI02 Site build with components and templates; drop it if the overlap review would only repeat SI02. The AEM Agent Skills route is documented for the AEM Java stack; for Edge Delivery the page points to aem.live's Developing with AI Tools, which does not mention Figma.",
+     "sources": [
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/experience-production/figma-to-visual-content-fragments",
+       "title": "Experience League: Figma to Visual Content Fragments Skill",
+       "quote": "As visual designs for modular experiences are often created in Figma, it is possible to streamline this process for Visual Content Fragments by directly importing designs from Figma into AEM."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/experience-production/figma-to-visual-content-fragments",
+       "title": "Experience League: Figma to Visual Content Fragments Skill",
+       "quote": "The Figma to Visual Content Fragments skill is part of the Experience Production Agentic Capability."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/experience-production/figma-to-visual-content-fragments",
+       "title": "Experience League: Figma to Visual Content Fragments Skill",
+       "quote": "The Figma user needs to create an access token in Figma and store it in the AEM service."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/experience-production/figma-to-visual-content-fragments",
+       "title": "Experience League: Figma to Visual Content Fragments Skill",
+       "quote": "In AEM, the AEM user can start with an initial prompt to use Coworker to recreate the approved design in AEM. AEM will automatically create the required Content Fragment Models, Content Fragments and HTML templates."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/experience-production/figma-to-visual-content-fragments",
+       "title": "Experience League: Figma to Visual Content Fragments Skill",
+       "quote": "The creation process also includes capabilities that allow reusing existing content models or fragments when already available."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows",
+       "title": "Experience League: Coworker Chat workflows",
+       "quote": "Import designs directly from Figma into Adobe Experience Manager using natural language. The skill automatically creates the required content model, content fragment, assets, and visualization template, enabling business users to move from design to web-ready content in minutes without manual setup."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/experience-production/use-cases",
+       "title": "Experience League: Experience Production Agentic Capabilities",
+       "quote": "The Experience Production Agentic Capability of Adobe Experience Manager (AEM) as a Cloud Service collaborates with Coworker Chat to help you accelerate your content creation and automatically orchestrate changes."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agents/overview",
+       "title": "Experience League: Overview of Agents in AEM",
+       "quote": "You may have the option to access AEM Agents through the Try Before You Buy program, which is rolling out in phases. Your CSM or TAM can help confirm availability for your organization."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agents/overview",
+       "title": "Experience League: Overview of Agents in AEM",
+       "quote": "Connect with your CSM or TAM to discuss access via the Agentic SKU if that aligns with your roadmap and evaluation plans."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/configuring-and-extending/content-fragments-visualization-templates",
+       "title": "Experience League: Visual Content Fragments, templates",
+       "quote": "Use the Figma to Visual Content Fragments Skill to automate loading an HTML design."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/sites/administering/content-fragments/visual-content-fragments",
+       "title": "Experience League: Visual Content Fragments",
+       "quote": "Visual Content Fragments (Content Fragments with HTML templates) do not currently support composite fields."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/local-development-with-ai-tools",
+       "title": "Experience League: Local Development with AI Tools (AEM)",
+       "quote": "The design can come from various sources, including a text description, an image, or a Figma design url using Figma\u2019s MCP server."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/local-development-with-ai-tools",
+       "title": "Experience League: Local Development with AI Tools (AEM)",
+       "quote": "Adobe publishes AEM as a Cloud Service skills in the adobe/skills repository:"
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/ai/ai-assisted-development/use-cases/component-development",
+       "title": "Experience League: Component development using AEM Agent Skills",
+       "quote": "To generate the component, you can provide a Figma design via the Figma MCP server instead of providing the design reference as a screenshot. The create-component skill supports the Figma design integration"
+      }
+     ],
+     "services": [
+      {
+       "name": "Visual Content Fragments from Figma",
+       "scope": "Store the Figma access token in AEM, import approved Figma designs with Coworker, then review the Content Fragment models, fragments and templates it creates, reusing existing models where they fit.",
+       "unit": "one-time",
+       "low": 16,
+       "base": 24,
+       "high": 48,
+       "source_url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/experience-production/figma-to-visual-content-fragments",
+       "evidence": "In AEM, the AEM user can start with an initial prompt to use Coworker to recreate the approved design in AEM. AEM will automatically create the required Content Fragment Models, Content Fragments and HTML templates."
+      },
+      {
+       "name": "AEM components from Figma with AEM Agent Skills",
+       "scope": "Where your client's developers build AEM components with AI coding tools: install Adobe's AEM Agent Skills, turn on Figma's MCP server in the IDE, generate the agreed components from Figma frame URLs with the create-component skill, then review the HTL, Sling Model, dialog and unit tests, deploy them to a local AEM SDK and check them against the design before they go through the Cloud Manager pipeline.",
+       "unit": "one-time",
+       "low": 16,
+       "base": 32,
+       "high": 64,
+       "source_url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/local-development-with-ai-tools",
+       "evidence": "The design can come from various sources, including a text description, an image, or a Figma design url using Figma\u2019s MCP server."
+      }
+     ]
+    },
+    {
+     "product": "AEM Sites with Edge Delivery Services (eds)",
+     "verdict": "propose",
+     "how": "The Experience Modernization Agent, Adobe's AI development agent for Edge Delivery Services and part of the Brand Experience Agent, reads a Figma component or frame through its Figma import add-on, which calls Figma's API through an MCP server. It turns the design's colors, typography, spacing and variables into the site's design tokens and its components into blocks or block variants, builds a new page from a Figma frame, and can redesign a site during migration with Figma as the design source and the live site as the content source. It also works for Experience Manager authoring projects, where it generates the block definitions. Each person stores their own Figma personal access token in the console, the agent works one component or frame at a time, and code reaches the site through the Git repository after a developer reviews it.",
+     "kind": "native",
+     "gain": "The site built from the design files: approved Figma components become the site's blocks and design tokens, and Figma frames become pages authors can edit, so a redesign starts from the designers' files instead of screenshots.",
+     "notes": "Connection id figma-eds (outside, line native); offer Figma on the AEM play (bv, so, eds) and Create your own play. Kind native: Figma import (add-on excat-figma@excat-extended) is an optional capability of Adobe's agent, turned on per project, and nothing is installed in Figma; under a strict reading of 'Adobe-provided plugin' it could be called extension. Suggested label: The Experience Modernization Agent's Figma import builds blocks, design tokens and pages. Availability: access to the Experience Modernization Console comes through the Adobe account team, which confirms entitlement, commercial terms and the AI credit allowance; credits count for each page uploaded to Experience Workspace or the author instance, not for prompts, and a restyle needs no upload. No beta or early access label on the Figma pages; release notes list Figma block migration for AEM authoring (2026.06.23), better Figma page migration (2026.08.06) and a Home page prompt for a page from Figma (2026.09.17). Prerequisites: console access through the Adobe account team; a Dev or Full Figma seat per person (View or Collab seats can read files through Figma's API only a few times a month); each person's own read-only Figma personal access token in the console's Settings under Credentials (there is no organization-wide Figma connection, and a token reads every file its owner can open); Figma import turned on for the project; write access to the site's Git repository, with branch protection so a developer approves each pull request; your client approves what the agent sends to the AI model for each frame or component (its structure, a screenshot, its variables and its text). Overlaps: A01 Implement AEM Sites on Edge Delivery also builds blocks and A02 SEO-safe content migration covers migration; these lines cover only the Figma import work. aem.live has no Figma integration of its own (its multi-brand sites guide only says to map Figma tokens into CSS custom properties by hand). Flows: figma to eds (design tokens, blocks and variants, and pages whose text and images come from Figma). The first service starts on when the box is added, the second is optional.",
+     "sources": [
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agents/brand-experience/modernization/overview",
+       "title": "Experience League: Experience Modernization Agent overview",
+       "quote": "The Experience Modernization Agent is Adobe\u2019s AI development agent for Edge Delivery Services and is part of the Brand Experience Agent."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agents/brand-experience/modernization/overview",
+       "title": "Experience League: Experience Modernization Agent overview",
+       "quote": "You can add a Figma design as a new target for the whole site or part of it."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agents/brand-experience/modernization/overview",
+       "title": "Experience League: Experience Modernization Agent overview",
+       "quote": "Your team can apply a new brand design from Figma, build new pages from existing blocks, or track down a bug."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agents/brand-experience/modernization/visual-changes",
+       "title": "Experience League: Make Visual Changes with the Experience Modernization Agent",
+       "quote": "The agent can read a design from Figma through the Figma import add-on. It turns the design\u2019s colors, typography, spacing, and variables into the site\u2019s design tokens, and its components into blocks or block variants."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agents/brand-experience/modernization/visual-changes",
+       "title": "Experience League: Make Visual Changes with the Experience Modernization Agent",
+       "quote": "In the console, open Settings, enter the token under Credentials, and select Save."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agents/brand-experience/modernization/visual-changes",
+       "title": "Experience League: Make Visual Changes with the Experience Modernization Agent",
+       "quote": "One component or frame at a time. The agent builds one block from a component, or one page from a frame."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agents/brand-experience/modernization/visual-changes",
+       "title": "Experience League: Make Visual Changes with the Experience Modernization Agent",
+       "quote": "The add-on. Figma import is an optional capability. If it isn\u2019t on for your project, the agent offers to turn it on."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agents/brand-experience/modernization/evaluate",
+       "title": "Experience League: Evaluate and Approve the Experience Modernization Agent",
+       "quote": "With the Figma import add-on, the agent reads the selected component or frame through Figma\u2019s API, using a Model Context Protocol (MCP) server, the way a developer reads a design handoff."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agents/brand-experience/modernization/evaluate",
+       "title": "Experience League: Evaluate and Approve the Experience Modernization Agent",
+       "quote": "There is no organization-wide Figma connection, and a personal access token can\u2019t be limited to specific files: it reads every file that its owner can open."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agents/brand-experience/modernization/evaluate",
+       "title": "Experience League: Evaluate and Approve the Experience Modernization Agent",
+       "quote": "With a View or Collab seat, a token can read files through Figma\u2019s API only a few times a month, so people who use Figma with the agent need a Dev or Full seat."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agents/brand-experience/modernization/evaluate",
+       "title": "Experience League: Evaluate and Approve the Experience Modernization Agent",
+       "quote": "Data: For the selected frame or component, the agent sends its structure, a screenshot, its variables, and its text to the AI model."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agents/brand-experience/modernization/capabilities",
+       "title": "Experience League: Experience Modernization Agent capability reference",
+       "quote": "Migrates blocks and creates pages from Figma components and frames."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agents/brand-experience/modernization/prompting-guide",
+       "title": "Experience League: Prompting Guide for Experience Modernization Agent",
+       "quote": "Use these prompts when a site gets a new design during migration: Figma supplies the design and the blocks, and the live site supplies the content."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agents/brand-experience/modernization/getting-started",
+       "title": "Experience League: Get started with the Experience Modernization Agent",
+       "quote": "Request access to the Experience Modernization Console through your Adobe account manager, and sign in with an Adobe ID that belongs to your company\u2019s Adobe organization."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agents/brand-experience/modernization/getting-started",
+       "title": "Experience League: Get started with the Experience Modernization Agent",
+       "quote": "Your organization\u2019s agreement determines the applicable AI credit allowance and migration terms; signing in alone doesn\u2019t establish your entitlement."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agents/brand-experience/modernization/getting-started",
+       "title": "Experience League: Get started with the Experience Modernization Agent",
+       "quote": "Credits are counted for each page that is uploaded to your content destination, Experience Workspace or the author instance, not for prompts or for iterations in the console."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/release-notes/current",
+       "title": "Experience League: Experience Modernization Agent release notes",
+       "quote": "Figma migration for AEM authoring: Figma block migration supports AEM authoring projects and generates the required block definitions."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agents/overview",
+       "title": "Experience League: Overview of Agents in AEM",
+       "quote": "Experience Modernization Agent - Migrates websites to cloud-ready formats"
+      }
+     ],
+     "services": [
+      {
+       "name": "Blocks and design tokens from Figma",
+       "scope": "Agree the approved Figma file and components with your client's design lead, have each person store their own Figma personal access token in the Experience Modernization Console (a Dev or Full Figma seat is needed), turn on the Figma import add-on, build or update blocks and variants one component at a time, reconcile the Figma values with the site's existing design tokens, check each block at desktop, tablet and mobile widths and in authoring, and hand the code to a developer as a pull request.",
+       "unit": "one-time",
+       "low": 24,
+       "base": 40,
+       "high": 80,
+       "source_url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agents/brand-experience/modernization/visual-changes",
+       "evidence": "The agent can read a design from Figma through the Figma import add-on. It turns the design\u2019s colors, typography, spacing, and variables into the site\u2019s design tokens, and its components into blocks or block variants."
+      },
+      {
+       "name": "New pages from Figma frames",
+       "scope": "For pages that exist only in Figma, such as campaign or event pages: have the designers organize each frame into clear sections, build each page from its frame with the agent, map the sections to existing blocks, default content or new variants, build search, forms or personalization separately as dynamic blocks, then check the pages in authoring before they are uploaded for review.",
+       "unit": "one-time",
+       "low": 16,
+       "base": 24,
+       "high": 48,
+       "source_url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agents/brand-experience/modernization/prompting-guide",
+       "evidence": "Use this prompt when a page doesn\u2019t exist on a source site and a Figma frame or page should become a new page."
+      }
+     ]
+    },
+    {
+     "product": "Journey Optimizer (ajo)",
+     "verdict": "propose",
+     "how": "Coworker's Channel Content plugin in Journey Optimizer includes Build Email from Figma: it builds final email HTML directly from a live Figma frame when its copy, layout and imagery should ship unchanged, with no separate layout plan, and Save Channel Content saves the approved email to Journey Optimizer as a draft or into its source template. Each user first saves a Figma personal access token, with at least the File content: Read-only scope, as the FIGMA_ACCESS_TOKEN secret in Coworker's Settings > Secrets.",
+     "kind": "native",
+     "gain": "Emails that match the approved design: final email HTML is built straight from the approved Figma frame, keeping its copy, image crops and call to action, so nobody rebuilds the design by hand.",
+     "notes": "Connection id figma-ajo (outside, line native), with the service's needs ['cw']: the skill runs in Coworker. Suggested label: Coworker's Build Email from Figma skill for Journey Optimizer. Availability: Channel Content is available for all customers who have access to CX Coworker; it arrived in Journey Optimizer's September 2026 release (availability date September 24, 2026). Coworker covers Journey Optimizer B2C; its Chat overview lists the B2B Edition as coming soon, so draw nothing to Journey Optimizer B2B. Prerequisites: CX Enterprise Coworker license; Journey Optimizer B2C Edition; each user's Figma personal access token with at least the File content: Read-only scope, saved as the FIGMA_ACCESS_TOKEN secret in Coworker; frames with final copy, layout and imagery (desktop and mobile frames for a responsive email); Coworker is not offered to health care, finance or some other sensitive-data organizations. Coworker's workflows page also lists a Build email skill, under Email design, that works from a Figma design link. Without Coworker, Journey Optimizer's image to HTML converter names Figma mockups as a use case: an exported JPEG or PNG becomes an editable content template; it needs the signed Generative AI addendum and the Generate Content permission, and personalization, dynamic content and tracking are added by hand. That is a file route, not an integration; if Adam wants it, an optional 4, 8, 16 hour line 'Figma email mockups converted to content templates' (source ajo image-to-html, evidence 'Design mockup conversion: Transform design mockups from tools like Photoshop, Figma, or other design software into functional email templates.') could sit on the same connection without needs. Overlap: JO04 Content templates and personalization also builds templates. Flows: figma to ajo (final email HTML from the frame; needs cw).",
+     "sources": [
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/content-management-coworker-skills#ce-channel-content",
+       "title": "Experience League: Coworker for content management (Journey Optimizer), Channel Content",
+       "quote": "Builds final email HTML directly from a live Figma frame when its copy, layout, and imagery are what should ship unchanged, with no separate layout plan involved."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/content-management-coworker-skills#ce-channel-content",
+       "title": "Experience League: Coworker for content management (Journey Optimizer), Channel Content",
+       "quote": "Channel Content is available for all customers who have access to CX Coworker."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/content-management-coworker-skills#ce-channel-content",
+       "title": "Experience League: Coworker for content management (Journey Optimizer), Channel Content",
+       "quote": "Sign in to Coworker and go to Settings > Secrets."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/content-management-coworker-skills#ce-channel-content",
+       "title": "Experience League: Coworker for content management (Journey Optimizer), Channel Content",
+       "quote": "In Name, enter FIGMA_ACCESS_TOKEN."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/content-management-coworker-skills#ce-channel-content",
+       "title": "Experience League: Coworker for content management (Journey Optimizer), Channel Content",
+       "quote": "Generate a Figma Personal Access Token with at least the File content: Read-only scope."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/content-management-coworker-skills#ce-channel-content",
+       "title": "Experience League: Coworker for content management (Journey Optimizer), Channel Content",
+       "quote": "\u201cTurn this approved desktop and mobile Figma design into a responsive email.\u201d"
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/content-management-coworker-skills#ce-channel-content",
+       "title": "Experience League: Coworker for content management (Journey Optimizer), Channel Content",
+       "quote": "Saves approved campaign content as a draft asset or fills it into its source template in Adobe Journey Optimizer or another supported solution."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/whats-new/previous-rn-new/release-notes-2026",
+       "title": "Experience League: Journey Optimizer release notes 2026",
+       "quote": "A new Channel Content plugin is now available in Coworker, bringing campaign copy, image, and assembled email HTML skills together under one plugin from strategy to deployment."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows",
+       "title": "Experience League: Coworker Chat workflows",
+       "quote": "Produce final email HTML from a live Figma frame when its copy is ready to ship; a separate layout plan is not needed."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows",
+       "title": "Experience League: Coworker Chat workflows",
+       "quote": "Builds, adapts, edits, and refines email HTML from a layout plan, a screenshot, or a Figma design link."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/content-templates/image-to-html",
+       "title": "Experience League: Convert images to email content templates (Journey Optimizer)",
+       "quote": "Design mockup conversion: Transform design mockups from tools like Photoshop, Figma, or other design software into functional email templates."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/content-templates/image-to-html",
+       "title": "Experience League: Convert images to email content templates (Journey Optimizer)",
+       "quote": "To use this feature, your organization must have signed the Generative AI addendum with Adobe."
+      }
+     ],
+     "services": [
+      {
+       "name": "Emails built from Figma frames with Coworker",
+       "scope": "Have each email builder save a Figma personal access token with at least the File content read-only scope as the FIGMA_ACCESS_TOKEN secret in Coworker, agree with your client's designers how desktop and mobile frames are prepared with final copy and images, build the first emails from approved frames with Build Email from Figma, check rendering, links and accessibility, and save them to Journey Optimizer as drafts or into their source templates for review.",
+       "unit": "one-time",
+       "low": 8,
+       "base": 16,
+       "high": 32,
+       "source_url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/content-management-coworker-skills#ce-channel-content",
+       "evidence": "Builds final email HTML directly from a live Figma frame when its copy, layout, and imagery are what should ship unchanged, with no separate layout plan involved."
+      }
+     ]
+    },
+    {
+     "product": "Coworker (cw)",
+     "verdict": "propose",
+     "how": "Coworker Chat is where the two Figma skills Adobe documents run: AEM's Figma to Visual Content Fragments (listed under AEM Sites; the access token is stored in AEM) and Journey Optimizer's Build Email from Figma (the token is a Coworker secret). Coworker documents no Figma connection of its own beyond these skills.",
+     "kind": "native",
+     "gain": "Designs turned into AEM content and emails by asking: content and email teams paste a Figma link into Coworker instead of rebuilding the design.",
+     "notes": "Recommended: no figma-cw connection. Put the services on figma-aemsites (AXD10) and figma-ajo, each with needs ['cw']; the Coworker play holds only Coworker, so a Figma box there would have no product to receive the design. Coworker Chat is generally available; its UI guide lists AEM as available now in both the immersive and in-product experiences, and Journey Optimizer as available now in the immersive experience with in-product coming soon. Coworker Chat can also connect a custom MCP server under Customizations, but no Adobe page describes doing that for Figma, so it is not a route here. Coworker is not currently offered to organizations in health care, finance or some other industries with sensitive data (Workfront's and Planning's Coworker pages); the existing Coworker connections already carry this, and it is an Adobe eligibility rule rather than a play's industry.",
+     "sources": [
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows",
+       "title": "Experience League: Coworker Chat workflows",
+       "quote": "Import designs directly from Figma into Adobe Experience Manager using natural language. The skill automatically creates the required content model, content fragment, assets, and visualization template, enabling business users to move from design to web-ready content in minutes without manual setup."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows",
+       "title": "Experience League: Coworker Chat workflows",
+       "quote": "Produce final email HTML from a live Figma frame when its copy is ready to ship; a separate layout plan is not needed."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/overview",
+       "title": "Experience League: Coworker Chat overview",
+       "quote": "Coworker Chat is generally available."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/workfront/using/basics/coworker-in-workfront/coworker-overview",
+       "title": "Experience League: Coworker in Workfront overview",
+       "quote": "CX Enterprise Coworker is not currently available to organizations in health care, finance, or some other industries with sensitive data."
+      }
+     ],
+     "services": []
+    },
+    {
+     "product": "Marketo Engage (marketo)",
+     "verdict": "not documented",
+     "how": "Marketo Engage has no Figma integration. Its Email Designer's image to HTML converter lists Figma mockups as a use case: an image of the design (JPEG or PNG) is uploaded in Design Studio and converted into an editable email template, with no link back to the Figma file. Coworker for Marketo Engage's skills do not mention Figma.",
+     "kind": "native",
+     "notes": "Leave Marketo without a Figma line unless the tool accepts file routes. If it does, one optional line: 'Figma email mockups converted to Email Designer templates', one-time 8, 16, 32: export the approved Figma email designs as PNG or JPEG at 600 to 800 pixels wide, convert each in Design Studio with Convert image to template, then add personalization and links in the Email Designer and publish; prerequisites are the Core Gen-AI terms and the supplemental Email Designer terms agreed with the Adobe account team, and the Access Email Template and Edit/Generate Email Template permissions; source the Marketo image to HTML page. Coworker's save-content skill lists Marketo as a target for content built by Journey Optimizer's content skills, but no Adobe page describes building a Marketo email from Figma.",
+     "sources": [
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/email-marketing/email-designer/image-to-html",
+       "title": "Experience League: Convert images to HTML templates (Marketo Engage)",
+       "quote": "Design mockup conversion: Transform design mockups from tools like Photoshop, Figma, or other design software into functional email templates"
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/email-marketing/email-designer/image-to-html",
+       "title": "Experience League: Convert images to HTML templates (Marketo Engage)",
+       "quote": "You must first agree to the Core Gen-AI terms and the supplemental terms for using the Gen-AI functionality in the Email Designer."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows",
+       "title": "Experience League: Coworker Chat workflows",
+       "quote": "Saves approved content back to Adobe Journey Optimizer, Adobe Campaign v8, or Marketo."
+      }
+     ],
+     "services": []
+    },
+    {
+     "product": "Workfront Planning (planning)",
+     "verdict": "not documented",
+     "how": "Workfront Planning records connect to Workfront objects, AEM Assets and GenStudio for Performance Marketing; no Adobe page connects Planning to Figma. Workfront Fusion has separate Figma and Workfront Planning connectors, but Adobe does not describe a scenario that joins them.",
+     "kind": "partner",
+     "notes": "A partner could join the two Fusion connectors in a scenario, but with no Adobe page saying how, the tool should not draw a Figma line to Planning. The Figma line to Workfront covers the Fusion route.",
+     "sources": [
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-planning/adobe-workfront-planning-records/connect-records",
+       "title": "Experience League: Connect records (Workfront Planning)",
+       "quote": "You can connect records with objects of the types listed below from the following applications:"
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/apps-and-modules-toc",
+       "title": "Experience League: Fusion applications and their modules, article index",
+       "quote": "Adobe Workfront Planning modules"
+      }
+     ],
+     "services": []
+    },
+    {
+     "product": "GenStudio for Performance Marketing (gspm), sweep",
+     "verdict": "propose",
+     "how": "The GenStudio for Performance Marketing plugin for Figma, installed from the Figma community marketplace, adds a panel in Figma: designers map template elements to GenStudio field roles, generate on-brand Meta, LinkedIn or display ad variants from a brand, persona, product and prompt, translate them, and export them to GenStudio as experiences or as flattened images. With GenStudio Photoshop it also converts Figma frames for Photoshop. Adobe recommends Adobe Express templates in GenStudio as the main way for creatives to make ad templates.",
+     "kind": "extension",
+     "gain": "Ad variants made where designers work: designers generate on-brand Meta, LinkedIn and display ad variants inside their Figma templates and send the approved ones to GenStudio as experiences.",
+     "notes": "The creative researcher (scratchpad wf4/figma/creative) has the same pages; reconcile with theirs. Connection id figma-gspm (outside, line native). The plugin page also calls it the Firefly Enterprise and GenStudio plugin. Released 2025.10.16 with no Beta badge. Prerequisites from the page: Figma files whose first two levels are sections (projects) and frames (templates) at the supported sizes; at least one element mapped to the image role; fonts available on the designer's machine; GenStudio Photoshop for the Photoshop conversion. Overlap: GS03 Channel templates and approved assets.",
+     "sources": [
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/integrations/figma-plugin",
+       "title": "Experience League: Figma plugin for GenStudio for Performance Marketing",
+       "quote": "The GenStudio for Performance Marketing Figma plugin adds a new panel to the Figma application that lets you generate on-brand content."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/integrations/figma-plugin",
+       "title": "Experience League: Figma plugin for GenStudio for Performance Marketing",
+       "quote": "Find and install the plugin from the Figma community marketplace."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/integrations/figma-plugin",
+       "title": "Experience League: Figma plugin for GenStudio for Performance Marketing",
+       "quote": "Generate new on-brand Meta, LinkedIn, or Display ad Experiences based on a brand, persona, product, and text prompt."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/integrations/figma-plugin",
+       "title": "Experience League: Figma plugin for GenStudio for Performance Marketing",
+       "quote": "Export generated Experiences to GenStudio for Performance Marketing."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/integrations/overview",
+       "title": "Experience League: GenStudio for Performance Marketing integrations",
+       "quote": "Note: Although these plugins allow creatives to make ads and export them as approved expriences to GenStudio, Adobe Express templates within GenStudio for Performance Marketing is the recommended approach for creatives to make ad templates."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/release-notes",
+       "title": "Experience League: GenStudio for Performance Marketing release notes",
+       "quote": "Create on-brand and personalized ads directly using the new GenStudio Plugins for Adobe Photoshop and Figma design tools."
+      }
+     ],
+     "services": [
+      {
+       "name": "Figma ad templates for the GenStudio plugin",
+       "scope": "Install the GenStudio for Performance Marketing plugin from the Figma community for your client's designers, set up the Figma files with sections as projects and frames as templates at the Meta, LinkedIn and display sizes the plugin supports, map the field roles (with at least one image), generate and translate first variants with your client's brands, personas and products, and export the approved variants to GenStudio.",
+       "unit": "one-time",
+       "low": 16,
+       "base": 24,
+       "high": 48,
+       "source_url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/integrations/figma-plugin",
+       "evidence": "Export generated Experiences to GenStudio for Performance Marketing."
+      }
+     ]
+    },
+    {
+     "product": "AEM Assets (aemassets), sweep",
+     "verdict": "propose",
+     "how": "AEM Assets integrates natively with Figma through the Adobe Experience Manager (AEM) Assets Connector from the Figma community: designers search AEM Assets and place images, videos, animated files and vectors on the Figma canvas, check for newer versions in AEM, and save new or edited designs back to AEM Assets as PNG, PDF, JPG or SVG.",
+     "kind": "native",
+     "gain": "Approved assets inside Figma: designers place approved AEM assets on the Figma canvas, check for newer versions and save finished designs back to AEM Assets, so the DAM stays the source of truth.",
+     "notes": "The creative researcher covers AEM Assets; quotes checked here as a cross-check. Connection id figma-aemassets (outside, line native). Adobe calls it native; the connector is an Adobe plugin run inside Figma, which the task's definition would call extension. Prerequisites: AEM release 19149 or later; valid AEM Assets and Figma licenses. On the AEM play AEM Assets is only a 'kept' product, so offer this on Create your own play.",
+     "sources": [
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/integration-figma/integrate-aem-assets-with-figma",
+       "title": "Experience League: Integrate AEM Assets with Figma",
+       "quote": "AEM Assets integrates natively with Figma, which allows designers to directly access the assets stored in AEM Assets from within the Figma user interface. You can place content managed in AEM Assets in the Figma canvas and then save new or edited content in the AEM Assets repository."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/integration-figma/integrate-aem-assets-with-figma",
+       "title": "Experience League: Integrate AEM Assets with Figma",
+       "quote": "You must have valid AEM Assets and Figma licenses to integrate AEM Assets with Figma."
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/integration-figma/integrate-aem-assets-with-figma",
+       "title": "Experience League: Integrate AEM Assets with Figma",
+       "quote": "Minimum required AEM release version is 19149."
+      }
+     ],
+     "services": [
+      {
+       "name": "AEM Assets Connector in Figma for designers",
+       "scope": "Confirm AEM release 19149 or later and your client's Figma licenses, make the Adobe Experience Manager (AEM) Assets Connector available to the designers from the Figma community, agree the destination folders and export formats (PNG, PDF, JPG or SVG) for designs saved back to AEM Assets, and train the designers on search, Check for updates and upload.",
+       "unit": "one-time",
+       "low": 8,
+       "base": 16,
+       "high": 32,
+       "source_url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/integration-figma/integrate-aem-assets-with-figma",
+       "evidence": "AEM Assets integrates natively with Figma, which allows designers to directly access the assets stored in AEM Assets from within the Figma user interface. You can place content managed in AEM Assets in the Figma canvas and then save new or edited content in the AEM Assets repository."
+      }
+     ]
+    },
+    {
+     "product": "Sweep, no Figma route found: Real-Time CDP (rtcdp), Target (target), Customer Journey Analytics (cja), Brand Visibility (bv), Sites Optimizer (so), Adobe Commerce (commerce), Brand Concierge (bc), AEM Forms (aemforms), Journey Optimizer B2B Edition (ajob2b), Experimentation Accelerator (xa), Content Analytics (ca), Real-Time CDP Collaboration (collab), Marketing Campaign Analytics (mmm), Adobe Analytics (aa), Marketo Measure (mmeasure), Acrobat and Acrobat Services (acrobat), Acrobat Sign (acrobatsign), Marketo Qualifier (mqualifier), Marketo Optimizer (moptimizer), Creative Cloud (creativecloud)",
+     "verdict": "not documented",
+     "how": "No Adobe page found that says how these products work with Figma. Coworker's workflows page, which lists Adobe's Coworker skills for Target, CJA, Adobe Analytics, Content Analytics, Real-Time CDP, Journey Optimizer, Marketo Engage, AEM Sites, AEM Forms and Workfront, mentions Figma only for AEM Sites and Journey Optimizer. AEM Forms' Coworker skills create forms from a description, brief, image or PDF, not from Figma. Journey Optimizer B2B's image to template page does not name Figma. Commerce's storefront design system pages (design tokens) do not mention Figma.",
+     "kind": "partner",
+     "notes": "Searched Experience League, developer.adobe.com, helpx.adobe.com and business.adobe.com for Figma with each product; read the Coworker workflows and use cases pages, AEM Forms agentic use cases, Journey Optimizer B2B image to template, the Commerce storefront SDK design pages, and the Brand Concierge and Sites Optimizer overviews. Left to the creative researcher: Adobe Express (helpx 'Import Figma designs into Adobe Express' add-on), Firefly Creative Production and Firefly Custom Models (helpx 'Use Firefly Enterprise and GenStudio for Figma'), Frame.io (the creative researcher saved Frame.io's HTML review page, which lists Figma among URLs not supported); these pages could not be read here (helpx 403). Brand Intelligence skipped as instructed.",
+     "sources": [
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows",
+       "title": "Experience League: Coworker Chat workflows",
+       "quote": "Produce final email HTML from a live Figma frame when its copy is ready to ship; a separate layout plan is not needed."
+      }
+     ],
+     "services": []
+    }
+   ]
+  }
+ ],
+ "verified": {
+  "holds": false,
+  "problems": [
+   "HEAD MOVED DURING THE CHECK: /home/user/sow-generator is now at 054d3f4 ('First page: Adobe names, Brand Intelligence beside Coworker, GenStudio's six areas'), not 5e22415. Line numbers below are at 5e22415. At 054d3f4, canvas/build.py:191 and canvas/test_canvas.js:555 are unchanged. In canvas/template.html, KIND/EDGE/legend/WATCH/OVERLAP/edge class move from 612/614/616/621/764/946 to 624/626/628/633/776/959. Every precedent used here is the same in both commits (XJ03 on, kinds of creativecloud-*, commerce-crm, the Fusion routes, BN06). I wrote nothing to the repo and ran no builds.",
+   "ALL FIVE, KIND: 'extension' does not fit the repo. A connection to an outside system is kind 'outside' with a line of 'native' or 'platform' only. /home/user/sow-generator/canvas/build.py:191 asserts this. /home/user/sow-generator/canvas/test_canvas.js:555 checks it and also pins 19 outside connections (OUTC.length === 19), so adding a Figma box must raise that count. AEM Assets should be line 'native': Adobe says 'AEM Assets integrates natively with Figma' and 'The integration is native', and so do the 2025.5.0 notes. The GenStudio, Firefly and Express routes are direct and documented by Adobe, and the catalog already counts Adobe plugins inside other apps as native (creativecloud-aemassets for the Asset Link panel, creativecloud-workfront for the Workfront plugin, creativecloud-fireflycm), so 'native' fits them too. Only the Workfront Fusion route is an extension by the catalog's own typing (workfront-ajo, workfront-fireflycp, marketo-workfront, acrobat-workfront, acrobatsign-workfront). An 'extension' line needs only build.py:191 and test_canvas.js:555 widened, because canvas/template.html already draws one (EDGE :614, legend :616, edge class :946 all use c.line||c.kind). Otherwise draw it 'native', as commerce-crm already is.",
+   "AEM ASSETS, HOW AND GAIN: 'approved' (in both how and gain) is on none of the cited pages. The connector searches AEM Assets, and nothing says it shows only approved assets. 'so nobody works from a downloaded copy and the rest of the team finds the work in the DAM' claims more than the pages say; Adobe's FAQ says only 'without switching between tools'. 'choosing the format, scale and quality' is looser than Adobe, which sets scale for PNG and JPG and quality for JPG only. 'Adobe's Adobe Experience Manager' repeats Adobe. Otherwise it holds: all seven quotes are exact on the live pages (curl, 2026-11-16), and availability is confirmed. The 2025.5.0 notes launch it and the 2025.12.0 notes update it, both under 'Experience Manager Assets as a Cloud Service', not 'AEM Beta Programs'.",
+   "AEM ASSETS, LINES: the second line is called optional with the 'pattern of XJ03', but XJ03 is on by default at express-aemassets (it is in lines, not more, in /home/user/sow-generator/canvas/catalog.json). Start it on to match, or say why it is off.",
+   "GENSTUDIO, HOW: 'is named Firefly Enterprise and GenStudio there' (meaning in the marketplace) is not on the page. The page says 'Open the Firefly Enterprise and GenStudio plugin in Figma', and Firefly help snippets say to search 'Adobe GenStudio' in the Figma Community. 'to a local folder' should be Adobe's 'to a local source as flattened images', which arrive as a ZIP file. All six quotes are exact, and so is the evidence for both services.",
+   "GENSTUDIO, NOTES: '(other items in those notes carry one)' is wrong. No item in the 2025.10.16 release has a Beta badge; the badges sit on items in other releases, such as PDF export in 2025.11.14. The no-beta conclusion holds. GenStudio Photoshop's page confirms the PSD prerequisites: Creative Cloud desktop app, Photoshop 25.6.0 or later, installed from the Creative Cloud Marketplace in Adobe Exchange.",
+   "EXPRESS AND FIREFLY CUSTOM MODELS, NOT RE-OPENED: helpx.adobe.com returned HTTP 403 to WebFetch for all four cited helpx URLs (import-figma-designs-into-adobe-express, generate-images-in-figma, firefly-plugin-for-figma, custom-models-overview). The proxy also refused community.adobe.com and blog.developer.adobe.com. I did not route around either block. Exact-phrase searches for 'Native Import imports supported content as editable Adobe Express elements', 'Firefly Enterprise and GenStudio plugin installed in Figma' and 'choose a custom model you've created' return the cited helpx pages in several locales. That supports the quotes but does not prove them character for character, and it cannot rule out a beta label. I marked both 'hold' rather than dropping them; drop them if a direct read is required before building.",
+   "EXPRESS, CONTENT: the gain's 'templates the wider team can reuse with brand controls' describes Express template work (EP03), not the add-on. The service's 'Allow the Figma add-on ... in the Admin Console' rests on an admin page nobody read. 'More, then Add-ons' appears in no snippet I saw; the snippets say the Add-ons panel, search Figma, then Add. Snippets also say gradients, patterns and some masked or combined shapes come in as images. The add-on's publisher is still not confirmed.",
+   "FIREFLY CUSTOM MODELS: the service's 'Publish the approved models' and its prompt guide repeat XK09 (Express) and XK10 (Creative Cloud), which the catalog already repeats with no overlap pair. Overlap pairs live in OVERLAPS at /home/user/sow-generator/index.html:698 and OVERLAP at canvas/template.html:764. Name XK09 and XK10 in its overlap review, not only FM04 and FM05, or drop publishing from its scope. The search index also lists Custom Models pages titled '(beta)' for the individual and team Creative Cloud offer, so this line must use the enterprise offer (the fireflycm box, 'Adobe Firefly Custom Models'). 'No beta label seen' came from snippets only.",
+   "WORKFRONT, TRUNCATED: the task text stops at 'needs a Workfront Fusi', so I did not receive or check its kind (there is no kind before 'how'), gain, sources, services or notes. The visible 'how' matches the Fusion Figma modules page (last update September 25, 2026), with one exception. 'Workfront itself has no Figma integration' overclaims: Adobe's Workfront review tool page names Figma ('We recommend using the desktop proofing viewer for interactive content that is hosted on a website that requires SSO authentication or prevents opening their site in iFrames, such as Figma.'), so say it has no Figma connector of its own. Fusion services in the catalog run 24/40/80 (XK03, XN18, XJ16), 24/48/80 (XB15) and 24/48/96 (XN11); check its hours against those. If 'Figma (Legacy)' goes into availability or prerequisites, the card's WATCH pattern (canvas/template.html:621) flags 'legacy' as a status.",
+   "POSSIBLE ROUTES NOT IN THE RECEIVED LIST (check them against the full list): (1) AEM's 'Figma to Visual Content Fragments' skill, part of the Experience Production agentic capability with Coworker Chat. It needs a Figma personal token stored in AEM. The English page shows no availability label, but a localized search snippet called it Limited Availability. (2) BN06 'Figma templates for assembled variants' (Brand Intelligence, ext 'Figma', off on the brandintel product) is already in canvas/catalog.json. If a brandintel-to-Figma connection is added, BN06 must move there, because build.py asserts that each line has one home.",
+   "Evidence files: raw pages in /tmp/claude-0/-home-user-sow-generator/0ad60d2d-88a9-5e10-895d-06e2c3f40304/scratchpad/wf4/figma/verify/pages, extracted text in .../verify/text, and the quote checker in .../verify/scripts/checkquote.py. Every quote marked exact returned EXACT against the extracted text."
+  ],
+  "corrected": [
+   {
+    "product": "AEM Assets (aemassets)",
+    "verdict": "propose",
+    "kind": "outside",
+    "line": "native",
+    "kind_reason": "Figma is an outside system, so the kind is 'outside'. The line is native: Adobe says 'AEM Assets integrates natively with Figma' and 'The integration is native', the catalog counts Adobe panels in other apps as native (creativecloud-aemassets), and build.py:191 accepts only native or platform for an outside line.",
+    "how": "The Adobe Experience Manager (AEM) Assets Connector runs as a panel inside Figma. Designers open it from Actions in Figma or from the Figma Community, then search AEM Assets with Content Advisor. They drag images (JPEG, PNG), videos (MP4, MOV, WebM), GIFs and SVGs onto the Figma canvas. Check for updates compares the assets in the Figma file with AEM and lists the ones that changed, and Update brings in the newer version. Designers upload a selected item or a whole page back to an AEM Assets folder as PNG, PDF, JPG or SVG, setting the scale for PNG or JPG and the quality for JPG. Adobe calls the integration native.",
+    "gain": "AEM Assets inside Figma | Your client's designers place AEM Assets files on the Figma canvas and see when a newer version exists in AEM. They save new or edited designs back to an AEM Assets folder without switching tools.",
+    "sources": [
+     {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/integration-figma/integrate-aem-assets-with-figma",
+      "title": "Experience League: Integrate AEM Assets with Figma",
+      "quote": "AEM Assets integrates natively with Figma, which allows designers to directly access the assets stored in AEM Assets from within the Figma user interface. You can place content managed in AEM Assets in the Figma canvas and then save new or edited content in the AEM Assets repository.",
+      "check": "exact"
+     },
+     {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/integration-figma/integrate-aem-assets-with-figma",
+      "title": "Experience League: Integrate AEM Assets with Figma",
+      "quote": "Minimum required AEM release version is 19149.",
+      "check": "exact"
+     },
+     {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/integration-figma/integrate-aem-assets-with-figma",
+      "title": "Experience League: Integrate AEM Assets with Figma",
+      "quote": "You must have valid AEM Assets and Figma licenses to integrate AEM Assets with Figma.",
+      "check": "exact"
+     },
+     {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/integration-figma/integrate-aem-assets-with-figma",
+      "title": "Experience League: Integrate AEM Assets with Figma",
+      "quote": "The integration is native, requiring no third-party connectors beyond the Adobe Experience Manager AEM Assets Connector available on the Figma community.",
+      "check": "exact"
+     },
+     {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/overview",
+      "title": "Experience League: AEM Assets as a Cloud Service overview (integrations)",
+      "quote": "Integration with Figma: AEM Assets integrates natively with Figma, enabling designers to access assets stored directly in AEM Assets from within the Figma user interface.",
+      "check": "exact"
+     },
+     {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-cloud-kcs/kbarticles/ka-41364",
+      "title": "Experience League: Resolve Unknown clientId login error in AEM Assets Connector for Figma",
+      "quote": "Confirm that you are signing in to Figma with the same company or federated Adobe ID used for Experience Cloud and AEM Assets.",
+      "check": "exact"
+     },
+     {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/release-notes/release-notes/2025/release-notes-2025-12-0",
+      "title": "Experience League: AEM as a Cloud Service 2025.12.0 release notes",
+      "quote": "Support for checking if there are any updates to the assets that are used in Figma document as compared to the assets that exist in AEM repository and getting the latest version of assets if there are any updates.",
+      "check": "exact"
+     }
+    ],
+    "services": [
+     {
+      "name": "AEM Assets Connector rollout for Figma designers",
+      "scope": "Confirm your client's AEM environment is on release 19149 or later, give the designers access to the agreed Assets folders with the same company or federated Adobe ID they sign in with, roll out Adobe's AEM Assets Connector from the Figma Community, and test search, place, Check for updates and upload with the design team.",
+      "unit": "one-time",
+      "low": 8,
+      "base": 16,
+      "high": 32,
+      "default": "on",
+      "source_url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/integration-figma/integrate-aem-assets-with-figma",
+      "evidence": "AEM Assets integrates natively with Figma, which allows designers to directly access the assets stored in AEM Assets from within the Figma user interface.",
+      "check": "unchanged; evidence exact; real partner work; hours match XJ01"
+     },
+     {
+      "name": "Save-back folders and export settings for Figma designs",
+      "scope": "Agree with your client's DAM owner where designs uploaded from Figma land in AEM Assets, which format, scale and quality each use needs, how the files are named and when designers run Check for updates, then write the short guide the design team follows.",
+      "unit": "one-time",
+      "low": 8,
+      "base": 16,
+      "high": 32,
+      "default": "decide: XJ03, the pattern cited, is on by default at express-aemassets",
+      "source_url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/integration-figma/integrate-aem-assets-with-figma",
+      "evidence": "The export configuration comprises the file format, scale, and quality.",
+      "check": "unchanged; evidence exact; hours match XJ03"
+     }
+    ],
+    "notes": "Pages fetched 2026-11-16: the Figma page (last update October 9, 2026) and the KCS article (August 20, 2026). Availability: launched in the 2025.5.0 notes and updated in 2025.12.0, both under 'Experience Manager Assets as a Cloud Service'. No beta or limited label. All proposed prerequisites are confirmed: release 19149 or later; valid AEM Assets and Figma licenses; sign-in with the same company or federated Adobe ID; the official connector from the Figma Community (reinstall from there for 'Unknown clientId'); Adobe Support for a Network Error after logging in. TIER: AEM as a Cloud Service (the page's 'Applies to'). OVERLAP: AS01. Suggested label (holds): Adobe's AEM Assets Connector in Figma places DAM assets on the canvas and saves designs back to AEM Assets.",
+    "changed": [
+     "kind extension -> outside with a native line",
+     "dropped 'approved' from how and gain",
+     "dropped 'so nobody works from a downloaded copy and the rest of the team finds the work in the DAM' in favor of Adobe's 'without switching tools'",
+     "export settings narrowed to scale for PNG or JPG and quality for JPG",
+     "'Adobe's Adobe Experience Manager' -> 'The Adobe Experience Manager'",
+     "Check for updates: it lists changed assets, and Update brings the newer version in"
+    ]
+   },
+   {
+    "product": "GenStudio for Performance Marketing (gspm)",
+    "verdict": "propose",
+    "kind": "outside",
+    "line": "native",
+    "kind_reason": "An Adobe-built plugin inside another app, with a direct route that does not go through Experience Platform. The catalog counts creativecloud-workfront (the Workfront plugin in Creative Cloud apps) and creativecloud-aemassets as native. Adobe calls it a plugin, not native; if 'extension' is preferred, widen build.py:191 and canvas/test_canvas.js:555.",
+    "how": "Adobe's GenStudio for Performance Marketing Figma plugin adds a panel to Figma. Designers install it from the Figma community marketplace, and in Figma it opens as the Firefly Enterprise and GenStudio plugin. They lay out ad templates as sections (projects) and frames (templates), then map text and image layers to GenStudio field roles such as headline, body, on_image_text and CTA. The plugin generates up to eight on-brand Meta, LinkedIn or Display variations from a brand, persona, product and prompt. It translates them and exports them to GenStudio for Performance Marketing as experiences, or as flattened images in a ZIP file. With GenStudio Photoshop also installed, it converts Figma frames to Photoshop documents.",
+    "gain": "Ad variations without leaving Figma | Your client's designers keep building ads in Figma and get on-brand copy variations and translations from GenStudio's brands, personas and products. The results go to GenStudio as experiences.",
+    "sources": [
+     {
+      "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/integrations/figma-plugin",
+      "title": "Experience League: Figma plugin for GenStudio for Performance Marketing",
+      "quote": "The GenStudio for Performance Marketing Figma plugin adds a new panel to the Figma application that lets you generate on-brand content.",
+      "check": "exact"
+     },
+     {
+      "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/integrations/figma-plugin",
+      "title": "Experience League: Figma plugin for GenStudio for Performance Marketing",
+      "quote": "Find and install the plugin from the Figma community marketplace.",
+      "check": "exact"
+     },
+     {
+      "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/integrations/figma-plugin",
+      "title": "Experience League: Figma plugin for GenStudio for Performance Marketing",
+      "quote": "Export generated Experiences to GenStudio for Performance Marketing.",
+      "check": "exact"
+     },
+     {
+      "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/integrations/figma-plugin",
+      "title": "Experience League: Figma plugin for GenStudio for Performance Marketing",
+      "quote": "You can use the Figma plugin to convert a Figma frame, multiple frames, or an entire document to Photoshop format and export it for use with GenStudio Photoshop.",
+      "check": "exact"
+     },
+     {
+      "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/integrations/overview",
+      "title": "Experience League: GenStudio for Performance Marketing integrations",
+      "quote": "Note: Although these plugins allow creatives to make ads and export them as approved expriences to GenStudio, Adobe Express templates within GenStudio for Performance Marketing is the recommended approach for creatives to make ad templates.",
+      "check": "exact ('Note:' is part of the paragraph; Adobe's typo kept)"
+     },
+     {
+      "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/release-notes",
+      "title": "Experience League: GenStudio for Performance Marketing release notes (2025.10.16)",
+      "quote": "Create on-brand and personalized ads directly using the new GenStudio Plugins for Adobe Photoshop and Figma design tools.",
+      "check": "exact"
+     }
+    ],
+    "services": [
+     {
+      "name": "Figma ad templates prepared for the GenStudio plugin",
+      "scope": "Install the GenStudio plugin from the Figma community marketplace for your client's designers, set up their Figma ad files as sections and frames at the sizes Meta, LinkedIn and Display accept, map the field roles with at least one image, and generate, translate and export test variations to GenStudio for Performance Marketing.",
+      "unit": "one-time",
+      "low": 16,
+      "base": 32,
+      "high": 56,
+      "default": "on",
+      "source_url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/integrations/figma-plugin",
+      "evidence": "Map Figma text elements to GenStudio for Performance Marketing fields, such as headline, body, on_image_text, and more.",
+      "check": "unchanged; evidence exact; hours match XJ10"
+     },
+     {
+      "name": "Figma frames converted for GenStudio Photoshop",
+      "scope": "Convert the agreed Figma frames to Photoshop with the plugin, open them in GenStudio Photoshop, and rebuild with the designer what Adobe says does not carry over, such as gradients, opacity percentages, strikethrough, superscript and subscript.",
+      "unit": "one-time",
+      "low": 8,
+      "base": 16,
+      "high": 32,
+      "default": "off",
+      "source_url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/integrations/figma-plugin",
+      "evidence": "You can use the Figma plugin to convert a Figma frame, multiple frames, or an entire document to Photoshop format and export it for use with GenStudio Photoshop.",
+      "check": "unchanged; evidence exact; hours match XJ11. Also needs Photoshop 25.6.0 or later with GenStudio Photoshop (confirmed on its Experience League page)"
+     }
+    ],
+    "notes": "Pages last updated March 9, 2026. Availability: the 2025.10.16 notes, with no Beta badge on any item in that release; Beta badges appear on items in other releases, such as PDF export in 2025.11.14. Adobe's caveat stands: Express templates are 'the recommended approach', so the Express route remains XJ10. The PSD conversion also needs GenStudio Photoshop: Creative Cloud desktop app, Photoshop 25.6.0 or later, installed from the Creative Cloud Marketplace in Adobe Exchange, logged in to a GenStudio instance with an Adobe ID. Frames must not be inside a section. Each Figma file link must be pasted in, and file access is allowed once. All other proposed prerequisites are confirmed: sections and frames, sizes, an image role on at least one element, fonts installed on the designer's machine. Not re-checked: the July 2026 Experience Cloud demo video. OVERLAPS: GS03, GS05.",
+    "changed": [
+     "kind extension -> outside with a native line",
+     "'is named Firefly Enterprise and GenStudio there' -> 'in Figma it opens as the Firefly Enterprise and GenStudio plugin'",
+     "'to a local folder as flattened images' -> 'as flattened images in a ZIP file'",
+     "notes: corrected the Beta badge remark"
+    ]
+   },
+   {
+    "product": "Adobe Express (express)",
+    "verdict": "hold",
+    "hold_reason": "Source not re-opened: helpx.adobe.com returned HTTP 403 to WebFetch. Exact-phrase searches return the cited page (several locales), but the quote is not proven character for character and a beta label cannot be ruled out. Build only after a direct read.",
+    "kind": "outside",
+    "line": "native",
+    "kind_reason": "Adobe documents the add-on in its own Express help and its May 2026 What's new, and the route is direct. The publisher is not confirmed; use 'extension' only if build.py:191 and canvas/test_canvas.js:555 are widened.",
+    "how": "The Figma add-on in Adobe Express (in the Add-ons panel, search Figma) connects the user's Figma account. The user pastes a Figma file link and picks a page, frame or layer. Native Import brings it in as editable Express elements: text stays editable, shapes and vectors are recreated, and images are placed as in the Figma layout. Rasterize brings it in as a flattened image, and both can be used in one design. Some gradients, patterns and masked or combined shapes come in as images. Fonts are matched by name, and a missing font gets a fallback that the import summary flags as Font Not Available. The add-on only reads the Figma file.",
+    "gain": "Figma work reused in Express | Frames your client's designers make in Figma come into Express as editable designs the wider team can build on, instead of being rebuilt by hand.",
+    "sources": [
+     {
+      "url": "https://helpx.adobe.com/express/web/add-ons-and-integrations/import-figma-designs-into-adobe-express.html",
+      "title": "Adobe Help: Import Figma designs into Adobe Express",
+      "quote": "Native Import imports supported content as editable Adobe Express elements",
+      "check": "not re-opened (HTTP 403); exact-phrase search returns this page"
+     }
+    ],
+    "services": [
+     {
+      "name": "Figma designs turned into Express templates",
+      "scope": "Check that your client's Express admin allows the Figma add-on for the users who need it, connect the designers' Figma accounts, import the agreed frames with Native Import or Rasterize, fix the fonts the import summary flags as not available and the shapes that came in as images, and build the first Express templates from them.",
+      "unit": "one-time",
+      "low": 16,
+      "base": 24,
+      "high": 48,
+      "default": "on",
+      "source_url": "https://helpx.adobe.com/express/web/add-ons-and-integrations/import-figma-designs-into-adobe-express.html",
+      "evidence": "Native Import imports supported content as editable Adobe Express elements",
+      "check": "hours match XJ12; evidence not re-opened"
+     }
+    ],
+    "notes": "Search snippets only (not quotable): no additional cost; valid Express and Figma accounts; Full and Dev Figma seats unlimited, Collab and View seats with daily limits; read-only on Figma files; listed in Adobe's May 2026 highlights; page last updated October 2026. The admin control page was not read, so the admin step is phrased as a check. OVERLAP: EP03 (this line brings the designs in, EP03 locks them). TIER: Adobe Express for Enterprise. Suggested label: The Figma add-on in Express imports Figma pages, frames or layers as editable Express elements or flattened images.",
+    "changed": [
+     "kind extension -> outside with a native line",
+     "gain: removed 'templates the wider team can reuse with brand controls' (EP03 work, not the add-on)",
+     "how: removed the unseen 'More, then Add-ons' path; added that some shapes come in as images",
+     "service: 'Allow the Figma add-on ... in the Admin Console' -> 'Check that your client's Express admin allows the Figma add-on'"
+    ]
+   },
+   {
+    "product": "Firefly Custom Models (fireflycm)",
+    "verdict": "hold",
+    "hold_reason": "The two Figma sources were not re-opened: helpx.adobe.com returned HTTP 403 to WebFetch. Exact-phrase searches return generate-images-in-figma for 'choose a custom model you've created' and firefly-plugin-for-figma for 'Firefly Enterprise and GenStudio plugin installed in Figma'. The third quote is the catalog's existing XK09 evidence, which I could not re-open either. Build only after a direct read.",
+    "kind": "outside",
+    "line": "native",
+    "kind_reason": "An Adobe-built plugin; the catalog counts creativecloud-fireflycm and express-fireflycm as native.",
+    "how": "In Adobe's Firefly Enterprise and GenStudio plugin for Figma, Text to image has a Model menu. There the designer picks an Adobe or partner model, or a custom model, and the generated images go onto the Figma canvas. The plugin needs the Figma desktop app or Figma in the browser and an active Adobe account with Firefly access.",
+    "gain": "Brand models on the Figma canvas | Designers generate images in your client's trained brand style or product subject inside Figma, with the same custom models the team uses in Firefly, Express and Photoshop.",
+    "sources": [
+     {
+      "url": "https://helpx.adobe.com/firefly/web/app-integrations/figma/generate-images-in-figma.html",
+      "title": "Adobe Firefly help: Use text to image to generate images in Figma",
+      "quote": "Select an Adobe or Partner model from the Model dropdown menu or choose a custom model you've created",
+      "check": "not re-opened (HTTP 403); exact-phrase search returns this page; the apostrophe may be curly"
+     },
+     {
+      "url": "https://helpx.adobe.com/firefly/web/app-integrations/figma/firefly-plugin-for-figma.html",
+      "title": "Adobe Firefly help: Use Firefly Enterprise and GenStudio for Figma",
+      "quote": "Firefly Enterprise and GenStudio plugin installed in Figma",
+      "check": "not re-opened (HTTP 403); exact-phrase search returns this page"
+     },
+     {
+      "url": "https://helpx.adobe.com/firefly/web/custom-models/get-started-with-custom-models/custom-models-overview.html",
+      "title": "Adobe Firefly help: Custom models overview",
+      "quote": "Custom models can be used to generate content in supported Adobe apps, including Photoshop, Illustrator, Adobe Express, Firefly, and GenStudio.",
+      "check": "not re-opened (HTTP 403); it is XK09's existing evidence"
+     }
+    ],
+    "services": [
+     {
+      "name": "Custom models for Figma designers",
+      "scope": "Publish the approved models, share them with your client's Figma designers with the Generator permission, check each model shows in the plugin's Model menu and generates as expected on the Figma canvas, and give the designers the prompt guide for each model.",
+      "unit": "one-time",
+      "low": 8,
+      "base": 16,
+      "high": 24,
+      "default": "on",
+      "source_url": "https://helpx.adobe.com/firefly/web/app-integrations/figma/generate-images-in-figma.html",
+      "evidence": "Select an Adobe or Partner model from the Model dropdown menu or choose a custom model you've created",
+      "check": "hours match XK09; it repeats XK09 and XK10 on publishing and the prompt guide, so add those to the overlap review or drop publishing from the scope"
+     }
+    ],
+    "notes": "The search index lists Custom Models pages titled '(beta)' for the individual and team Creative Cloud offer. Keep this line on the enterprise offer (the fireflycm box, 'Adobe Firefly Custom Models', on a Creative Cloud for enterprise plan that includes it). Prerequisites as proposed. OVERLAPS: FM04, FM05, plus XK09 and XK10. Suggested label (holds): Custom models are picked in Text to image in Adobe's Firefly plugin for Figma.",
+    "changed": [
+     "kind extension -> outside with a native line",
+     "verdict propose -> hold (sources not re-opened)",
+     "overlaps: add XK09 and XK10"
+    ]
+   },
+   {
+    "product": "Workfront (workfront), including Workfront Fusion apps and modules",
+    "verdict": "partial",
+    "partial_reason": "The task text stops at 'needs a Workfront Fusi'. The kind (absent before 'how'), gain, sources, services and notes were not received and not checked. Only the visible 'how' was checked, against the live page.",
+    "kind": "outside",
+    "line": "extension if build.py:191 and canvas/test_canvas.js:555 are widened (every Fusion route in the catalog is an extension); otherwise native, as commerce-crm is drawn",
+    "how": "Workfront has no Figma connector of its own, so the route is Workfront Fusion's Figma modules. In a scenario the partner builds, its modules watch a Figma team's events (file update, file version update, file delete, library publish and file comment), read files, version history, projects, comments, styles and components, render frames as JPG, PNG, SVG or PDF, and post or delete comments on a Figma file. The connection uses the Figma connection type (Figma (Legacy) is deprecated) with a Client ID and Client Secret, and needs a Workfront Fusi[TEXT CUT OFF IN THE TASK; NOT CHECKED PAST HERE]",
+    "verified_sources": [
+     {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/third-party-app-connectors/figma-modules",
+      "title": "Experience League: Figma modules (Workfront Fusion)",
+      "quote": "With the Adobe Workfront Fusion Figma modules, you can retrieve lists of comments, files, file versions, or projects. You can also post a comment or make a call to the Figma API.",
+      "check": "exact"
+     },
+     {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/third-party-app-connectors/figma-modules",
+      "title": "Experience League: Figma modules (Workfront Fusion)",
+      "quote": "To use Figma modules, you must have a Figma account.",
+      "check": "exact"
+     },
+     {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/third-party-app-connectors/figma-modules",
+      "title": "Experience League: Figma modules (Workfront Fusion)",
+      "quote": "Workfront Prime and Select packages, with an additional purchase of Workfront Fusion.",
+      "check": "exact"
+     },
+     {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/third-party-app-connectors/figma-modules",
+      "title": "Experience League: Figma modules (Workfront Fusion)",
+      "quote": "This trigger module starts a scenario when one of the following events occur for a specific team in your Figma team space:",
+      "check": "exact"
+     },
+     {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/third-party-app-connectors/figma-modules",
+      "title": "Experience League: Figma modules (Workfront Fusion)",
+      "quote": "Figma changed their authentication requrements in January 2025. The Figma connection type meets the new requirements. The Figma (Legacy) connection type has been deprecated and will be removed in the near future.",
+      "check": "exact (Adobe's typo 'requrements')"
+     },
+     {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/fusion-release-activity/fusion-releases-2025/fusion-2025-1-20",
+      "title": "Experience League: Workfront Fusion release activity, week of January 20, 2025",
+      "quote": "For new connections, use the Figma connection type.",
+      "check": "exact"
+     },
+     {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront/using/review-and-approve-work/proofing/review-proofs-in-workfront/review-a-proof/review-proof-in-web-viewer-extension",
+      "title": "Experience League: Review interactive content with the Adobe Workfront review tool",
+      "quote": "We recommend using the desktop proofing viewer for interactive content that is hosted on a website that requires SSO authentication or prevents opening their site in iFrames, such as Figma.",
+      "check": "exact; why 'no Figma integration' became 'no Figma connector of its own'"
+     }
+    ],
+    "verified_facts": "Access requirements on the Fusion page: any Workfront Workflow package and any Automation and Integration package, or Workfront Ultimate, or Prime and Select with Workfront Fusion bought separately. Workfront license: Standard (or Work or higher). Fusion license: operation-based, or connector-based (legacy). Prerequisite: a Figma account. Connection fields: type Figma (not the Legacy one), name, Client ID, Client Secret, Custom Scopes, and a verify URL (default https://api.figma.com/v1/me). Redirect URL: https://oauth.app.workfrontfusion.com/oauth/cb/figma3. Figma API base: https://api.figma.com/v1. Modules: Watch events; Get a file or image (file, file nodes, rendered image at scale 0.01 to 4 in JPG/PNG/SVG/PDF, image fills); List file version history; List project files; List projects; Get a style or component; List, Post and Delete a comment; Make an API call. No beta label.",
+    "services": "not received; benchmark: Fusion lines in the catalog are 24/40/80 (XK03, XN18, XJ16), 24/48/80 (XB15) and 24/48/96 (XN11)",
+    "changed": [
+     "'Workfront itself has no Figma integration' -> 'Workfront has no Figma connector of its own'",
+     "kind not given -> outside; line extension needs the build change, else native"
+    ]
+   }
+  ]
+ }
+}

@@ -1,0 +1,102 @@
+[
+ {
+  "verdict": "Not ready as is: one high-severity evidence problem, plus one medium and two low. The rest of the evidence holds. I fetched all 16 cited pages fresh at 13:11 UTC with plain curl, and every one returned 200. Each is byte-for-byte the same as the builder's saved copy in wf5/figma/sources. All 47 distinct (page, quote) pairs in wave6_figma.json, connection_types.json and KB batch_14 appear word for w",
+  "issues": [
+   {
+    "severity": "high",
+    "title": "Figma + Firefly Custom Models assumes shared team models work in the Figma plugin, which no Adobe page says",
+    "fix": "Narrow this connection to what Adobe documents: custom models the designer has created. Do not add a hedge.\n- **Prerequisites:** in connection_types.json and wave6_figma.json, drop \"Each model shared with the designers with at least the Generator permission\". Add \"Custom models each designer has created in Firefly\". Reword the publishing line to Adobe's condition, for example \"On enterprise plans, each model published where the organization's workflow requires it before other apps can use it\".\n- **Gain:** title \"Custom models on the Figma canvas\". Text: \"Your client's designers generate images in the style or subject of the custom models they have created, inside Figma, with the same models they use in Firefly, Adobe Express and Photoshop.\" The custom models overview page, already cited, backs the app list.\n- **Client copy (product_copy_rules.json):** \"Your designers pick the custom models they have created...\" and \"...the same custom models they use in other Adobe apps.\"\n- **XF06:** rescope to the documented route. Check plugin, Firefly access and Custom Models on the plan. With each designer, pick their models in Text to image, set aspect ratio and style reference, generate and place on the Figma canvas, and walk through the prompt guide. Remove the share/Generator step and the \"check that each model shows\" step.\n- **KB batch_14 XF06:** update steps, deliverables, asks, risk, outcome and the phrase to match.\n- **Alternative:** if the owner wants XF06 to cover team models, take XF06 off the card until an Adobe page documents shared models in the Figma plugin.\n- Re-run prove_apply.sh and the suites after the change."
+   },
+   {
+    "severity": "medium",
+    "title": "Express gain and client gain add benefits the Express page does not state",
+    "fix": "Reword both to what Adobe says. Gain text: \"Frames your client's designers make in Figma come into Adobe Express as editable Express elements, so the team can keep editing them in Express.\" Client gain: \"Your designers' Figma work comes into Adobe Express as editable elements your team keeps editing there.\" Change it in wave6_figma.json, connection_types.json (label unchanged) and product_copy_rules.json connection_client.figma-express, then rebuild."
+   },
+   {
+    "severity": "low",
+    "title": "XF04 shows the Photoshop 25.6.0 requirement twice",
+    "fix": "Optional. Keep the ext on XF04 and shorten the connection prerequisite to \"For frames converted to Photoshop: GenStudio Photoshop, and frames that are not inside a section\". Or leave it as is if the owner accepts the XK16 precedent."
+   },
+   {
+    "severity": "low",
+    "title": "XF05 write-up says \"exact appearance\"; Adobe says \"preserve their appearance\"",
+    "fix": "Change it to \"Import the agreed frames with Native Import, and rasterize individual elements where they must keep their appearance.\""
+   }
+  ]
+ },
+ {
+  "verdict": "Not ready for pictures yet. The build follows the owner's evidence rule, step 86 and the client voice, and the cards fit at both 1440 and 768 px. Hours match every comparable line and the names follow the nearby services. Fix three things before Adam sees it. First, the Custom Models card promises that models shared with designers work in Figma; Adobe does not document this, and the card's own 'ho",
+  "issues": [
+   {
+    "severity": "high",
+    "title": "The Custom Models card sells shared brand models in Figma, which Adobe does not document, and it contradicts its own 'how it works' text",
+    "fix": "Say only what Adobe documents. Change these in apply_figma.py (wave6_figma.json, connection_types.json, product_copy_rules.json, knowledge-base batch 14):\n- Label: 'Adobe's Firefly Enterprise and GenStudio plugin for Figma generates images with custom models in Text to image'. This also replaces the passive 'Custom models are picked in ...'.\n- Gain: 'Your client's designers generate images in a trained brand style or product subject inside Figma, picking the custom model in the plugin's Model menu.' Write the client's version the same way.\n- Drop prerequisite 5.\n- XF06 scope: 'Check with your client's Figma designers that their custom models show in the plugin's Model menu and generate as expected on the Figma canvas, and walk them through Text to image with the prompt guide for each model.' Sharing stays with FM05, XK09 and XK10.\n- Change the knowledge-base XF06 step 1, deliverable 1 and the phrase 'share custom models with designers'.\n\nPut the sharing wording back only if an Adobe page says shared models appear in the Figma plugin."
+   },
+   {
+    "severity": "high",
+    "title": "An RFI that only mentions Figma now gets a Figma line in place of the product's own services, so partners under-scope",
+    "fix": "Let Figma lead a draft only when the question asks about Figma working with the product, for example 'in Figma', 'inside Figma', 'Figma plugin', 'from Figma' or 'Figma templates' next to the product's name. Otherwise keep the product's own services and add the XF line as a supporting line. Add the four questions above to test_step64 as checks that the product's own main services stay."
+   },
+   {
+    "severity": "medium",
+    "title": "One Figma plugin appears as two connections under three names",
+    "fix": "Use Adobe's listed name, Firefly Enterprise and GenStudio plugin, on both cards:\n- GenStudio label: 'Adobe's Firefly Enterprise and GenStudio plugin in Figma generates on-brand ad variations in Figma templates and exports them to GenStudio for Performance Marketing'.\n- Start the Custom Models 'how it works' text with: 'In Adobe's Firefly Enterprise and GenStudio plugin for Figma, the same plugin as on the GenStudio for Performance Marketing card, ...'.\n- Keep XF03's name, or make it 'Figma ad templates prepared for the Firefly Enterprise and GenStudio plugin'."
+   },
+   {
+    "severity": "medium",
+    "title": "The 'how it works' texts read like user manuals and make these cards the longest in the catalog",
+    "fix": "Use two or three sentences on what moves where, and keep formats and limits in the prerequisites. Every fact below is on the pages already cited.\n- AEM Assets: 'Adobe's AEM Assets Connector opens as a panel in Figma. Designers search AEM Assets, place images, videos, GIFs and SVGs on the Figma canvas, bring in newer versions with Check for updates, and upload a selected item or a whole page to an AEM Assets folder.'\n- Adobe Express: 'The Figma add-on in Adobe Express connects the user's Figma account and imports a page, frame or layer from a Figma file, as editable Express elements (Native Import) or a flattened image (Rasterize). Some gradients, patterns and masked shapes come in as images, and fonts Express lacks get a fallback. The Figma file is not changed.'\n- GenStudio: 'Adobe's Firefly Enterprise and GenStudio plugin adds a GenStudio for Performance Marketing panel to Figma. Designers map the text and image layers of their ad templates to GenStudio fields, generate up to eight on-brand Meta, LinkedIn or Display variations from a brand, persona, product and prompt, translate them, and export them to GenStudio for Performance Marketing as experiences.'"
+   },
+   {
+    "severity": "low",
+    "title": "Figma's tag in the Add outside system menu wraps to four lines, and its rounded border cuts through the words",
+    "fix": "When an outside system connects to more than two products on the canvas, use the count form the Add product menu already uses ('Connects to 5 on your canvas', canvas/template.html line 1367). Or give wrapped tags square corners. Update the expected text in canvas/test_canvas.js line 651."
+   },
+   {
+    "severity": "low",
+    "title": "XF04 repeats its Photoshop need, leaves out part of the Photoshop setup, and never says why to convert",
+    "fix": "- Drop the Photoshop item from the connection's prerequisites.\n- XF04's tag: 'GenStudio Photoshop from Adobe Exchange, in Photoshop 25.6.0 or later with the Creative Cloud desktop app'.\n- XF04's scope: 'Take the agreed Figma frames out of sections, convert them to Photoshop with the plugin so the designer can keep working on them with GenStudio Photoshop, and rebuild ...'."
+   },
+   {
+    "severity": "low",
+    "title": "Small wording slips",
+    "fix": "1. Say 'check for newer versions in AEM'.\n2. Merge prerequisites 1 and 2 into: 'Adobe Express and Figma accounts with access to each Figma file to import and to Add-ons in Express (the add-on has no extra cost)'.\n3. Use commas or 'and' instead of semicolons inside a prerequisite.\n4. Say 'connect the Figma account of each person who imports'.\n5. End XF05 at 'hand the corrected designs over for templates', or say plainly that EP03 locks the templates XF05 builds."
+   },
+   {
+    "severity": "low",
+    "title": "Already on 6a96c44: at 768 px the map draws no lines, so Figma's five bolts float unconnected",
+    "fix": "Not caused by this build, so nothing to change in it. Raise it with the owner as a separate fix: in the narrow layout, give the line layer the map's own size instead of 0, so the lines show at 768 px."
+   }
+  ]
+ },
+ {
+  "verdict": "Not ready to show as is. The build reproduces exactly: apply_figma.py, and figma.patch with two builds, rebuild wt5_figma from 6a96c44. The changes only add data, the IDs are unique, the counts moved by exactly +4 connections and +6 services, and the six services start off like XK16. A canvas saved on 6a96c44 with Figma, the four products and XK16 on reopens with the same services, totals and stat",
+  "issues": [
+   {
+    "severity": "high",
+    "title": "RFI Builder: naming Figma anywhere in a question now replaces the Adobe product's own services with the Figma connection's (NAMES figma in rfp_answers.js)",
+    "fix": "Let only an integration question pick a figma+X connection. Either remove figma from NAMES until that rule exists (the drafter then behaves as on 6a96c44), or keep it and (a) leave outside-system names out of nameW, so 'Figma' still counts for AXD10, BN06 and XK16, and (b) choose a figma+X pair only when the question's ask ties Figma to the product (plugin, add-on, connector, in/inside/from/into Figma), keeping the product's own lead services otherwise. Add negative checks to test_step64 for the Express rollout, DAM migration and Coworker Figma-import questions above: EP01-EP04, AS02 and AXD10 must stay."
+   },
+   {
+    "severity": "medium",
+    "title": "An RFI answer that names Figma in passing now puts an unconnected Figma box on Build",
+    "fix": "In selectedProducts() add outside systems only through the answer's connection (m.conn), or prune outside systems with no linked product when Build restores, using the filter the canvas already applies. Fixing the high issue also removes the Figma case."
+   },
+   {
+    "severity": "low",
+    "title": "figma.patch does not rebuild correctly with the README's build steps and will clash with the other knowledge-base jobs",
+    "fix": "Land the change through apply_figma.py, which builds twice and picks the next free batch, or state in the README section that the two builds run twice. Regenerate figma.patch after the other KB jobs land."
+   },
+   {
+    "severity": "low",
+    "title": "XF04's statement of work states the Photoshop requirement twice",
+    "fix": "Keep one of them. Either drop XF04's ext (and the CAT.lines.XF04.ext assertion in canvas/test_canvas.js), or drop the Photoshop item from the connection's prerequisites and keep 'frames that are not inside a section' there."
+   },
+   {
+    "severity": "low",
+    "title": "apply_figma.py has 20 quotes it never writes, so the research file lacks evidence for several 'how' facts",
+    "fix": "Write these quotes into wave6_figma.json as how_evidence on each connection, or delete the unused entries from the script."
+   }
+  ]
+ }
+]

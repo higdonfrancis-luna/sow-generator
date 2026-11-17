@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Where each of our 60 Coworker services comes from: the Adobe page and a word-for-word Adobe quote for every one, and the process we used to find and check them.">
+  <meta name="theme-color" content="#ffffff">
+  <title>Coworker evidence · Partner growth</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="leadership.css">
+  <link rel="stylesheet" href="adobe-shell.css">
+  <link rel="stylesheet" href="case-stories.css">
+  <style>
+/* Coworker evidence tab. Builds on the brief's four stylesheets and their variables. */
+.masthead nav a[href='index.html#top']:before{border-radius:5px 5px 3px 3px;transform:rotate(0deg);border-top-width:4px}
+.masthead nav a[href='index.html#revenue']:before{border-radius:50%;border-top-color:transparent;transform:rotate(-35deg)}
+.masthead nav a[href='index.html#sow-builder']:before{border-radius:3px;box-shadow:3px -3px 0 -1px #fff,3px -3px 0 0 currentColor}
+.masthead nav a[href='index.html#rfi-builder']:before{border-radius:5px 5px 5px 0}
+.masthead nav a[href='index.html#architecture']:before{border-radius:0;border-style:dashed}
+.masthead nav a[href='index.html#scale']:before{border-left-width:5px;border-right-width:5px;border-top:0;border-bottom:0;border-radius:0}
+.masthead nav a[href='index.html#knowledge']:before{border-radius:50%;box-shadow:5px 4px 0 -2px #fff,5px 4px 0 -1px currentColor}
+.masthead nav a[href='index.html#sources']:before{border-radius:2px;border-top-width:4px}
+.masthead nav a[href='index.html#validation']:before{border-radius:50%;border-bottom-width:5px}
+.masthead nav a[href='index.html#impact']:before{border-top:0;border-right:0;border-radius:0;transform:skewY(-15deg)}
+.cw-sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
+.cw-ext:after{content:'';display:inline-block;width:.6em;height:.6em;margin-left:.32em;vertical-align:.04em;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M4.5 2.5h5v5M9.5 2.5 2.5 9.5' fill='none' stroke='black' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M4.5 2.5h5v5M9.5 2.5 2.5 9.5' fill='none' stroke='black' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat}
+.cw-ext{color:#3158d5;font-weight:650;text-decoration:none}
+.cw-ext:hover{text-decoration:underline}
+.cw-hero .hero-deck{max-width:760px}
+.cw-hero .actions{justify-content:center;margin-bottom:0}
+.cw-metrics strong{font-variant-numeric:tabular-nums}
+/* Adobe asks for this work */
+.cw-asks .impact-ledger article{display:flex;flex-direction:column;min-width:0}
+.cw-asks .impact-ledger .micro{font-size:11px;line-height:1.4;color:var(--muted);margin:0}
+.cw-asks blockquote{margin:14px 0 20px;font-size:18px;line-height:1.5;font-weight:600;letter-spacing:-.01em;color:var(--ink)}
+.cw-asks .impact-ledger .cw-from{margin-top:auto;font-size:14px;line-height:1.5;overflow-wrap:anywhere}
+/* Our process */
+.cw-steps{margin:0}
+.cw-steps li{display:flex;flex-direction:column;min-width:0}
+.cw-steps .micro{font-size:11px;line-height:1.4;color:var(--case-accent);margin:0}
+.cw-steps h3{font-size:20px;line-height:1.25;letter-spacing:-.02em;margin:10px 0 0}
+.cw-steps strong{color:var(--ink);font-weight:700}
+/* The evidence */
+.cw-jump-label{margin:0 0 10px}
+.cw-jump{display:flex;flex-wrap:wrap;gap:8px}
+.cw-jump a{display:inline-flex;align-items:center;gap:8px;font-size:13px;line-height:1.3;padding:7px 12px;border:1px solid var(--line);border-radius:100px;background:#fff;color:var(--ink);text-decoration:none}
+.cw-jump a:hover{border-color:#a7a7a7}
+.cw-jump a span{color:var(--muted);font-variant-numeric:tabular-nums}
+.cw-place{margin-top:48px}
+.cw-place-head{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 14px;margin-bottom:14px}
+.cw-place-head h3{font-size:25px;line-height:1.2}
+.cw-count{font-size:13px;font-weight:650;color:var(--muted)}
+.cw-place-sub{font-size:14px;line-height:1.55;color:var(--muted);margin:-4px 0 16px;max-width:920px}
+.cw-table{background:#fff;border:1px solid var(--line);border-radius:17px;overflow:hidden}
+.cw-table table{table-layout:fixed;font-size:15px}
+.cw-table thead th{background:#f4f4f4;font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);padding:13px 22px;border-bottom:1px solid var(--line)}
+.cw-table thead th:first-child{width:31%}
+.cw-table tbody th,.cw-table tbody td{padding:20px 22px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}
+.cw-table tbody th{font-size:16px;font-weight:700;line-height:1.4;letter-spacing:-.01em;color:var(--ink)}
+.cw-table tbody td{line-height:1.5;overflow-wrap:anywhere}
+.cw-table tbody tr:last-child>*{border-bottom:0}
+.cw-table .cw-ext{font-size:15px;line-height:1.4}
+.cw-table blockquote{margin:8px 0 0;padding-left:14px;border-left:3px solid #dcdcdc;font-size:15px;line-height:1.55;color:#4a4a4a}
+.cw-place-note{margin-top:12px;max-width:920px}
+.cw-place-note strong{color:var(--ink)}
+.cw-footer>p{font-size:13px;color:var(--muted);margin:0}
+@media(max-width:1100px){
+.cw-steps{grid-template-columns:repeat(2,minmax(0,1fr))}
+.cw-asks .impact-ledger{grid-template-columns:1fr}
+}
+@media(max-width:700px){
+.cw-steps{grid-template-columns:1fr}
+.cw-asks blockquote{font-size:17px}
+.cw-place{margin-top:40px}
+.cw-place-head h3{font-size:22px}
+.cw-table{background:none;border:0;border-radius:0;overflow:visible}
+.cw-table table,.cw-table tbody,.cw-table tr,.cw-table th,.cw-table td{display:block;width:auto}
+.cw-table thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}
+.cw-table tbody tr{background:#fff;border:1px solid var(--line);border-radius:15px;padding:16px 18px;margin-bottom:12px}
+.cw-table tbody tr:last-child{margin-bottom:0}
+.cw-table tbody th{padding:0 0 12px;border-bottom:1px solid var(--line);font-size:17px}
+.cw-table tbody td{padding:12px 0 0;border-bottom:0}
+.cw-table tbody tr:last-child>*{border-bottom:0}
+.cw-table tbody tr:last-child>th{border-bottom:1px solid var(--line)}
+.cw-table tbody td:before{content:attr(data-label);display:block;font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.cw-footer>p{order:0;width:auto}
+}
+@media print{
+.cw-jump,.cw-jump-label{display:none}
+.cw-ext:after{content:' (' attr(href) ')';display:inline;width:auto;height:auto;margin:0;background:none;-webkit-mask:none;mask:none;font-weight:400;font-size:10px;color:#555}
+.cw-table tbody tr{break-inside:avoid}
+.cw-place-head{break-after:avoid}
+}
+</style>
+</head>
+<body>
+<div class="adobe-context"><span class="adobe-context-brand">Adobe</span><span>Partner growth</span><span class="context-right">Internal briefing · 2027 opportunity</span></div>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="masthead">
+  <a class="brand" href="index.html#top"><span class="brand-mark" aria-hidden="true">Pg</span><span>Partner growth<small>Three capabilities · One platform</small></span></a>
+  <button class="menu-toggle" aria-controls="nav" aria-expanded="false">Contents <span aria-hidden="true">+</span></button>
+  <nav id="nav" aria-label="Briefing sections"><a href="index.html#top">Overview</a><span class="nav-label">Three business cases</span><a href="index.html#revenue">Brand Visibility plays</a><a href="index.html#sow-builder">SOW Builder</a><a href="index.html#rfi-builder">RFI Builder</a><span class="nav-label">Shared foundation</span><a href="index.html#architecture">Architecture</a><a href="index.html#scale">Code &amp; scale</a><a href="index.html#knowledge">Knowledge model</a><a href="index.html#sources">Sources</a><a href="index.html#validation">Evidence</a><a href="coworker-evidence.html" class="active" aria-current="page">Coworker evidence</a><a href="index.html#pilot">Partner pilot</a><a href="index.html#impact">Financial appendix</a></nav>
+  <span class="internal-label"><span class="brief-status-dot" aria-hidden="true"></span> Working system · Evidence inside</span>
+</header>
+<main id="main">
+<section class="hero executive-hero wrap cw-hero" id="top">
+  <div class="hero-copy"><p class="eyebrow">Coworker research</p><h1>Every Coworker service,<em> traced to Adobe’s own words.</em></h1><p class="hero-deck">For each of our 60 Coworker services, this page shows the Adobe page it comes from and a quote from that page, word for word.</p><div class="actions"><a class="button primary" href="#evidence">See the evidence <span aria-hidden="true">↓</span></a><a class="text-link" href="#process">How we checked it →</a></div></div>
+</section>
+<section class="metric-strip wrap cw-metrics" aria-label="This page in numbers"><div><strong>60</strong><span>Coworker services, each traced to an Adobe page</span></div><div><strong>46</strong><span>public Adobe pages cited</span></div><div><strong>63</strong><span>quotes checked word for word</span></div><div><strong>286</strong><span>Adobe pages read live on November 17</span></div></section>
+
+<section class="section cw-asks" id="adobe-asks"><div class="wrap">
+  <div class="section-heading"><div><p class="eyebrow">In Adobe’s words</p><h2>Adobe asks for this work.</h2></div><p>Adobe says Coworker needs the right data foundations, governance, workflow design and team skills to work at full capacity. That is services work. Adobe’s own teams do it, and global systems integrators and agencies already build on Coworker.</p></div>
+  <div class="impact-ledger">
+      <article>
+        <p class="micro">Adobe Support and Services, on Coworker</p>
+        <blockquote cite="https://business.adobe.com/support/adobe-support-and-services.html">“Getting it to work at full capacity requires the right data foundations, governance structures, workflow design, and team skills. Adobe Support and Services helps you address all these needs, ...”</blockquote>
+        <p class="cw-from"><a class="cw-ext" href="https://business.adobe.com/support/adobe-support-and-services.html" target="_blank" rel="noopener">Adobe for Business: Adobe Support and Services<span class="cw-sr"> (opens in a new tab)</span></a></p>
+      </article>
+      <article>
+        <p class="micro">Adobe news release, November 4, 2026</p>
+        <blockquote cite="https://news.adobe.com/news/2026/11/adobe-integrates-agentic-cx-enterprise-coworker-into-ai-platforms">“Global systems integrators (Accenture, Capgemini, Cognizant, Deloitte Digital, EY, IBM, Infosys, PwC and TCS) and agencies (dentsu, Havas, Omnicom, Publicis, Stagwell and WPP) are leveraging CX Enterprise Coworker to build and scale customized agentic AI solutions for enterprises.”</blockquote>
+        <p class="cw-from"><a class="cw-ext" href="https://news.adobe.com/news/2026/11/adobe-integrates-agentic-cx-enterprise-coworker-into-ai-platforms" target="_blank" rel="noopener">Adobe Integrates Agentic CX Enterprise Coworker Into AI Platforms from Anthropic, Google, Microsoft, OpenAI and More<span class="cw-sr"> (opens in a new tab)</span></a></p>
+      </article>
+      <article>
+        <p class="micro">Adobe’s Coworker overview</p>
+        <blockquote cite="https://experienceleague.adobe.com/en/docs/coworker/content/home">“Onboarding: Adobe’s enterprise support or professional services team configures Coworker for your environment, sets up integrations with your Adobe applications, and defines governance and approval workflows.”</blockquote>
+        <p class="cw-from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/coworker/content/home" target="_blank" rel="noopener">Adobe CX Enterprise Coworker Overview | Adobe Coworker<span class="cw-sr"> (opens in a new tab)</span></a></p>
+      </article>
+  </div>
+</div></section>
+
+<section class="section capability-section sow-case cw-process" id="process"><div class="wrap">
+  <div class="section-heading"><div><p class="eyebrow">How we know</p><h2>Our process,<br>start to finish.</h2></div><p>Six steps, from reading Adobe’s pages to building the services into the SOW Builder. Each step shows the date and the numbers.</p></div>
+  <ol class="capability-flow cw-steps">
+      <li><p class="micro">Step 1 · November 16 and 17</p><h3>Read Adobe’s own pages</h3><p>We began with the <strong>10</strong> Adobe sources behind the Coworker case. Then we read <strong>286</strong> Adobe pages live and saved each one: all <strong>80</strong> pages of the Coworker guide, the Coworker pages in <strong>14</strong> product guides, <strong>5</strong> Adobe news releases and <strong>2</strong> Adobe developer pages.</p></li>
+      <li><p class="micro">Step 2 · November 17</p><h3>Find the work each feature leaves to the client</h3><p>Our rule: list a service only when Adobe calls for the work directly, or when the work follows from what Adobe documents about the feature. We recorded <strong>190</strong> findings, each with an Adobe quote. In <strong>94</strong>, Adobe calls for the work. The other <strong>96</strong> follow from a documented capability, limit, setting or data condition.</p></li>
+      <li><p class="micro">Step 3 · November 17</p><h3>Write the service</h3><p>From those findings we wrote <strong>26</strong> new Coworker services, each with its Adobe page and quote. With the <strong>34</strong> already in the tool, that makes <strong>60</strong>. Every one is in the tables below.</p></li>
+      <li><p class="micro">Step 4 · November 17</p><h3>Check every quote word for word</h3><p>A script matched all <strong>190</strong> finding quotes word for word against the saved pages. For this page we checked all <strong>63</strong> quotes again, and all <strong>63</strong> match. We checked <strong>62</strong> against our saved live reads. The Adobe Support and Services site refuses automated tools, so we checked its quote against the page text the tool’s owner pasted. Only spacing and quote mark style may differ.</p></li>
+      <li><p class="micro">Step 5 · November 6 to 17</p><h3>Try to prove them wrong</h3><p>A separate review reread the Adobe pages behind the new services live, <strong>86</strong> pages in all. For each service it checked the quote, the release status and any overlap with services already in the tool. It corrected <strong>17</strong>, kept <strong>9</strong> and dropped none. Older services had earlier checks: a November 6 citation audit, and a November 12 outside review where a second checker tried to refute every claim that held.</p></li>
+      <li><p class="micro">Step 6 · November 17</p><h3>Approve and build</h3><p>The tool’s owner approved the <strong>26</strong> new services, a Coworker + Adobe Analytics connection, six RFI write-ups and industry-neutral wording. We built them into a working copy of the SOW Builder and RFI Builder. A second review found no defects, and all <strong>33</strong> test suites pass. Once saved, all <strong>60</strong> services are in the SOW Builder and <strong>59</strong> have an RFI Builder write-up. Today the live tool has <strong>34</strong> of the <strong>60</strong>.</p></li>
+  </ol>
+</div></section>
+
+<section class="section cw-evidence" id="evidence"><div class="wrap">
+  <div class="section-heading"><div><p class="eyebrow">Service by service</p><h2>The evidence.</h2></div><p>60 services in 18 groups, in the order the SOW Builder canvas shows them: the Coworker card, its 16 connections, then the shared setup on three Brand Visibility plays. Each link opens the Adobe page in a new tab. An ellipsis marks a partial quote.</p></div>
+  <p class="micro cw-jump-label" id="jump-label">Jump to a group</p>
+  <nav class="cw-jump" aria-labelledby="jump-label"><a href="#g-cw">Coworker <span>11</span></a><a href="#g-cw-cja">Coworker + Customer Journey Analytics <span>5</span></a><a href="#g-cw-eds">Coworker + AEM Sites with Edge Delivery Services <span>1</span></a><a href="#g-cw-bc">Coworker + Brand Concierge <span>1</span></a><a href="#g-aemforms-cw">AEM Forms + Coworker <span>3</span></a><a href="#g-aemsites-cw">AEM Sites + Coworker <span>6</span></a><a href="#g-aemassets-cw">AEM Assets + Coworker <span>3</span></a><a href="#g-cw-rtcdp">Coworker + Real-Time CDP <span>4</span></a><a href="#g-cw-ajo">Coworker + Journey Optimizer <span>6</span></a><a href="#g-cw-target">Coworker + Target <span>2</span></a><a href="#g-marketo-cw">Marketo Engage + Coworker <span>3</span></a><a href="#g-workfront-cw">Workfront + Coworker <span>3</span></a><a href="#g-cw-gspm">Coworker + GenStudio for Performance Marketing <span>1</span></a><a href="#g-ca-cw">Content Analytics + Coworker <span>2</span></a><a href="#g-planning-cw">Workfront Planning + Coworker <span>2</span></a><a href="#g-cw-aa">Coworker + Adobe Analytics <span>1</span></a><a href="#g-moptimizer-cw">Marketo Optimizer + Coworker <span>5</span></a><a href="#g-plays-cja-aem-fsi">Brand Visibility plays <span>1</span></a></nav>
+      <section class="cw-place" id="g-cw" aria-labelledby="g-cw-h">
+        <div class="cw-place-head"><h3 id="g-cw-h">Coworker</h3><span class="cw-count">11 services</span></div>
+        <div class="cw-table">
+          <table role="table" aria-labelledby="g-cw-h">
+            <thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Service</th><th scope="col" role="columnheader">Where it comes from</th></tr></thead>
+            <tbody role="rowgroup">
+            <tr role="row"><th scope="row" role="rowheader">Coworker workflow discovery</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/coworker/content/home" target="_blank" rel="noopener">Adobe CX Enterprise Coworker Overview | Adobe Coworker<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/coworker/content/home">“Coworker is built for organizations running complex, cross-functional customer experience workflows.”</blockquote></td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Coworker access and business context</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/coworker/content/home" target="_blank" rel="noopener">Adobe CX Enterprise Coworker Overview | Adobe Coworker<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/coworker/content/home">“Access: Assign roles and access to Coworker features for your teams in the Admin Console.”</blockquote></td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Build reusable Coworker Skills</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/coworker/content/customizations/skills/what-are-skills" target="_blank" rel="noopener">What Are Skills? | Adobe Coworker<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/coworker/content/customizations/skills/what-are-skills">“Skills are reusable playbooks that help Adobe CX Coworker perform customer experience orchestration tasks consistently and efficiently.”</blockquote></td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Package Skills and connections as a plugin</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/coworker/content/customizations/plugins/what-are-plugins" target="_blank" rel="noopener">Coworker Plugins - What They Are, How They Work, and How to Install Them | Adobe Coworker<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/coworker/content/customizations/plugins/what-are-plugins">“Plugins make Coworker extensible by packaging related skills and governed connections into installable solutions.”</blockquote></td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Coworker pilot, training and handover</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/coworker/content/home" target="_blank" rel="noopener">Adobe CX Enterprise Coworker Overview | Adobe Coworker<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/coworker/content/home">“Describe what you need in plain language, and Coworker Chat plans the work, runs it across your Adobe and connected systems, and returns the results for your approval.”</blockquote></td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Coworker adoption and Skill maintenance</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/coworker/content/customizations/skills/what-are-skills" target="_blank" rel="noopener">What Are Skills? | Adobe Coworker<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/coworker/content/customizations/skills/what-are-skills">“Skills help teams capture and reuse these best practices without manually re-explaining the process each time.”</blockquote></td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Approved Coworker connection or plugin</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/coworker/content/customizations/plugins/manage-plugins-for-your-org" target="_blank" rel="noopener">Adobe Coworker Administration - Managing Plugins and User Access | Adobe Analytics<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/coworker/content/customizations/plugins/manage-plugins-for-your-org">“Learn how administrators can extend Adobe Coworker Chat with approved plugins, manage marketplaces, and govern access to skills and connected tools while maintaining alignment with existing Adobe permissions.”</blockquote></td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Coworker set up in an AI platform</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/coworker/content/ai-platforms" target="_blank" rel="noopener">Adobe CX Enterprise Coworker for AI Platforms | Adobe Coworker<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/coworker/content/ai-platforms">“Your administrator must approve Coworker before you add it.”</blockquote></td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Coworker governance and access policy</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/coworker/content/home" target="_blank" rel="noopener">Adobe CX Enterprise Coworker Overview | Adobe Coworker<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/coworker/content/home">“Onboarding: Adobe’s enterprise support or professional services team configures Coworker for your environment, sets up integrations with your Adobe applications, and defines governance and approval workflows.”</blockquote></td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Custom MCP server for a Client system</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/coworker/content/home" target="_blank" rel="noopener">Adobe CX Enterprise Coworker Overview | Adobe Coworker<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/coworker/content/home">“MCP connectors: Act across Adobe and external systems through governed access, using built-in connectors or your own.”</blockquote></td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Coworker trial value sprint</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/cx-enterprise-ai/experience-cloud-ai/agents/trial" target="_blank" rel="noopener">CX Enterprise Coworker Trial | Adobe CX Enterprise<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/cx-enterprise-ai/experience-cloud-ai/agents/trial">“Certain eligible CX Enterprise customers may have access to a usage-bound trial to experience the value of Adobe’s agentic AI offerings in their own environment before making the commitment to purchase.”</blockquote></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="small-note cw-place-note"><strong>Coworker governance and access policy.</strong> Where Adobe’s onboarding team has defined governance and approval workflows, this service builds on that work to run Coworker beyond the pilot.</p>
+      </section>
+      <section class="cw-place" id="g-cw-cja" aria-labelledby="g-cw-cja-h">
+        <div class="cw-place-head"><h3 id="g-cw-cja-h">Coworker + Customer Journey Analytics</h3><span class="cw-count">5 services</span></div>
+        <div class="cw-table">
+          <table role="table" aria-labelledby="g-cw-cja-h">
+            <thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Service</th><th scope="col" role="columnheader">Where it comes from</th></tr></thead>
+            <tbody role="rowgroup">
+            <tr role="row"><th scope="row" role="rowheader">Coworker Skills for CJA reporting</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows" target="_blank" rel="noopener">Coworker Chat Workflows | Adobe Coworker<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows">“Turn analytical patterns into reusable, repeatable skills that persist across sessions”</blockquote></td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Implementation plan from Coworker, checked against the tenant</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/intelligent-implementation-and-administration/implementation-guide" target="_blank" rel="noopener">Plan Your Customer Journey Analytics or Streaming Media Implementation with Coworker | Adobe Coworker<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/intelligent-implementation-and-administration/implementation-guide">“These skills don’t access your Adobe systems or make any changes. They help you plan your implementation. They don’t perform it or verify it against a live tenant.”</blockquote></td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Adobe Analytics and CJA data validation and fixes</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/intelligent-implementation-and-administration/data-validation-aa-cja" target="_blank" rel="noopener">Validate Adobe Analytics to Customer Journey Analytics Data | Adobe Coworker<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/intelligent-implementation-and-administration/data-validation-aa-cja">“Verify that the suggested actions are valid, then resolve them in Adobe Experience Platform or Adobe Analytics.”</blockquote></td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Coworker analytics enablement on CJA data views</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/analytics-overview" target="_blank" rel="noopener">Analyze Analytics Data with Adobe CX Enterprise Coworker Chat | Adobe Coworker<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/analytics-overview">“Create a library of vetted prompts and skills that correlate with the data and components that are available to users.”</blockquote></td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Streaming Media collection from the Coworker plan</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/intelligent-implementation-and-administration/implementation-guide" target="_blank" rel="noopener">Plan Your Customer Journey Analytics or Streaming Media Implementation with Coworker | Adobe Coworker<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/intelligent-implementation-and-administration/implementation-guide">“Get an implementation plan for Streaming Media collection on the Edge, covering datastream configuration, per-platform SDK/API implementation, and the media event model, ...”</blockquote></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section class="cw-place" id="g-cw-eds" aria-labelledby="g-cw-eds-h">
+        <div class="cw-place-head"><h3 id="g-cw-eds-h">Coworker + AEM Sites with Edge Delivery Services</h3><span class="cw-count">1 service</span></div>
+        <div class="cw-table">
+          <table role="table" aria-labelledby="g-cw-eds-h">
+            <thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Service</th><th scope="col" role="columnheader">Where it comes from</th></tr></thead>
+            <tbody role="rowgroup">
+            <tr role="row"><th scope="row" role="rowheader">Coworker Skills for AEM content</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/coworker/aem-in-coworker" target="_blank" rel="noopener">CX Enterprise Coworker in AEM | Adobe Experience Manager as a Cloud Service<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/coworker/aem-in-coworker">“Ask Coworker to review AEM content against your brand guidelines before it goes live.”</blockquote></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section class="cw-place" id="g-cw-bc" aria-labelledby="g-cw-bc-h">
+        <div class="cw-place-head"><h3 id="g-cw-bc-h">Coworker + Brand Concierge</h3><span class="cw-count">1 service</span></div>
+        <div class="cw-table">
+          <table role="table" aria-labelledby="g-cw-bc-h">
+            <thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Service</th><th scope="col" role="columnheader">Where it comes from</th></tr></thead>
+            <tbody role="rowgroup">
+            <tr role="row"><th scope="row" role="rowheader">Coworker Skills for answer review</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/brand-concierge/content/getting-started/exporting-conversations-using-adobe-cx-enterprise-coworker" target="_blank" rel="noopener">Exporting conversations using Adobe CX Enterprise Coworker | Adobe Brand Concierge<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/brand-concierge/content/getting-started/exporting-conversations-using-adobe-cx-enterprise-coworker">“Ask Coworker to retrieve data from the responses table for a specified date range”</blockquote></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="small-note cw-place-note"><strong>Coworker Skills for answer review.</strong> Renamed on November 17 so it fits any industry.</p>
+      </section>
+      <section class="cw-place" id="g-aemforms-cw" aria-labelledby="g-aemforms-cw-h">
+        <div class="cw-place-head"><h3 id="g-aemforms-cw-h">AEM Forms + Coworker</h3><span class="cw-count">3 services</span></div>
+        <div class="cw-table">
+          <table role="table" aria-labelledby="g-aemforms-cw-h">
+            <thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Service</th><th scope="col" role="columnheader">Where it comes from</th></tr></thead>
+            <tbody role="rowgroup">
+            <tr role="row"><th scope="row" role="rowheader">Coworker form drafts and edits</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/experience-production/forms-use-cases" target="_blank" rel="noopener">AI-Powered Forms Agentic Capabilities Overview | Adobe Experience Manager<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/experience-production/forms-use-cases">“You describe the Adaptive Form or change you need, and the AI builds or updates it directly in your Experience Manager environment, then returns a link so you can review or continue customizing it.”</blockquote></td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Connectors and services ready for Coworker</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/experience-production/forms-use-cases" target="_blank" rel="noopener">AI-Powered Forms Agentic Capabilities Overview | Adobe Experience Manager<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/experience-production/forms-use-cases">“The connector must already be configured in Experience Manager before the Form submission configuration skill can select and set it.”</blockquote></td></tr>
+            <tr role="row"><th scope="row" role="rowheader">PDF and XDP imports with Coworker</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/experience-production/forms-use-cases" target="_blank" rel="noopener">AI-Powered Forms Agentic Capabilities Overview | Adobe Experience Manager<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/experience-production/forms-use-cases">“Convert a PDF or XDP stored in AEM DAM into an Adaptive Form.”</blockquote></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section class="cw-place" id="g-aemsites-cw" aria-labelledby="g-aemsites-cw-h">
+        <div class="cw-place-head"><h3 id="g-aemsites-cw-h">AEM Sites + Coworker</h3><span class="cw-count">6 services</span></div>
+        <div class="cw-table">
+          <table role="table" aria-labelledby="g-aemsites-cw-h">
+            <thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Service</th><th scope="col" role="columnheader">Where it comes from</th></tr></thead>
+            <tbody role="rowgroup">
+            <tr role="row"><th scope="row" role="rowheader">Coworker page drafts from reference pages</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/experience-production/content-create" target="_blank" rel="noopener">Content Create Skill | Adobe Experience Manager<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/experience-production/content-create">“It uses a natural language prompt together with a marketing brief to provide guidance, and an AEM reference page as a template for the layout.”</blockquote></td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Coworker for AEM developers and operations</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/development/use-cases" target="_blank" rel="noopener">Development Agentic Capabilities Overview | Adobe Experience Manager<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/development/use-cases">“To use the AEM Cloud Manager Pipeline Troubleshooting skill, you must have either the Developer or the Program Manager role in Cloud Manager.”</blockquote></td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Visual Content Fragments from Figma</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/experience-production/figma-to-visual-content-fragments" target="_blank" rel="noopener">Figma to Visual Content Fragments Skill | Adobe Experience Manager<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/experience-production/figma-to-visual-content-fragments">“AEM will automatically create the required Content Fragment Models, Content Fragments and HTML templates.”</blockquote></td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Dispatcher, security and vulnerability fixes from Coworker findings</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/development/use-cases" target="_blank" rel="noopener">Development Agentic Capabilities Overview | Adobe Experience Manager<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/development/use-cases">“After you apply and deploy a change, ask Coworker to reassess the available logs or live URL behavior.”</blockquote></td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Content Fragment readiness fixes with Coworker</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/experience-production/use-cases" target="_blank" rel="noopener">Experience Production Agentic Capabilities Overview | Adobe Experience Manager<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/experience-production/use-cases">“Finally it provides assessments with guided, human-reviewed remediation steps.”</blockquote></td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Brand rules in Experience Context with a site audit</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-governance/experience-context" target="_blank" rel="noopener">Experience Context | Adobe Experience Manager<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-governance/experience-context">“New entities are created as Draft by default, so you must set an entity to Active to put it into effect.”</blockquote></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section class="cw-place" id="g-aemassets-cw" aria-labelledby="g-aemassets-cw-h">
+        <div class="cw-place-head"><h3 id="g-aemassets-cw-h">AEM Assets + Coworker</h3><span class="cw-count">3 services</span></div>
+        <div class="cw-table">
+          <table role="table" aria-labelledby="g-aemassets-cw-h">
+            <thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Service</th><th scope="col" role="columnheader">Where it comes from</th></tr></thead>
+            <tbody role="rowgroup">
+            <tr role="row"><th scope="row" role="rowheader">Partner-written Coworker Skills for DAM work</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows" target="_blank" rel="noopener">Coworker Chat Workflows | Adobe Coworker<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows">“Recommends and creates scalable folder structures in AEM Assets (under /content/dam) based on business needs or CSV inputs.”</blockquote></td></tr>
+            <tr role="row"><th scope="row" role="rowheader">DAM metadata ready for Coworker search</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/content-advisor/discovery/use-cases" target="_blank" rel="noopener">Content Discovery Agentic Capabilities Overview | Adobe Experience Manager<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/content-advisor/discovery/use-cases">“To improve discovery performance, index relevant custom metadata properties.”</blockquote></td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Asset rights, Content Hub access rules and permission fixes</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-governance/overview" target="_blank" rel="noopener">Governance Agent Overview | Adobe Experience Manager<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-governance/overview">“The agentic capability is read-only: it diagnoses permissions and recommends changes, but it does not modify access control lists, groups, or content on your behalf.”</blockquote></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section class="cw-place" id="g-cw-rtcdp" aria-labelledby="g-cw-rtcdp-h">
+        <div class="cw-place-head"><h3 id="g-cw-rtcdp-h">Coworker + Real-Time CDP</h3><span class="cw-count">4 services</span></div>
+        <div class="cw-table">
+          <table role="table" aria-labelledby="g-cw-rtcdp-h">
+            <thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Service</th><th scope="col" role="columnheader">Where it comes from</th></tr></thead>
+            <tbody role="rowgroup">
+            <tr role="row"><th scope="row" role="rowheader">Partner-written Coworker Skills for audience work</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows" target="_blank" rel="noopener">Coworker Chat Workflows | Adobe Coworker<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows">“Orchestrate step-by-step audience creation with user approval at each phase.”</blockquote></td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Experience Platform health check fixes with Coworker</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/experience-platform/run-and-operate/health-checks/overview" target="_blank" rel="noopener">Health Checks | Adobe Experience Platform<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/experience-platform/run-and-operate/health-checks/overview">“These issues are difficult to detect and often require specialized expertise to diagnose.”</blockquote></td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Data lake retention review with Coworker</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-management/manage-data-lake-retention" target="_blank" rel="noopener">Manage Data Lake Retention | Adobe Coworker<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-management/manage-data-lake-retention">“We recommend reviewing the available details and applying your business context before taking action.”</blockquote></td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Monthly data quality checks with Coworker</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/intelligent-implementation-and-administration/data-validation-aep" target="_blank" rel="noopener">Validate Your Experience Platform Data with Coworker | Adobe Coworker<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/intelligent-implementation-and-administration/data-validation-aep">“Run ongoing data stewardship checks on critical datasets to catch regressions early.”</blockquote></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section class="cw-place" id="g-cw-ajo" aria-labelledby="g-cw-ajo-h">
+        <div class="cw-place-head"><h3 id="g-cw-ajo-h">Coworker + Journey Optimizer</h3><span class="cw-count">6 services</span></div>
+        <div class="cw-table">
+          <table role="table" aria-labelledby="g-cw-ajo-h">
+            <thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Service</th><th scope="col" role="columnheader">Where it comes from</th></tr></thead>
+            <tbody role="rowgroup">
+            <tr role="row"><th scope="row" role="rowheader">Partner-written Coworker Skills for journey work</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows" target="_blank" rel="noopener">Coworker Chat Workflows | Adobe Coworker<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows">“Orchestrate journey creation in AJO from a text prompt or an uploaded image/flowchart”</blockquote></td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Journeys built with Coworker: readiness, finishing and checks</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/journey-optimizer/using/orchestrate-journeys/journeys-coworker-skills" target="_blank" rel="noopener">Coworker for journeys | Adobe Journey Optimizer<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/journey-optimizer/using/orchestrate-journeys/journeys-coworker-skills">“Make sure to check and validate any expressions that Journey Skills create to ensure that the correct fields and values are used.”</blockquote></td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Journey inventory and channel setup cleanup with Coworker</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/journey-optimizer/using/orchestrate-journeys/journeys-coworker-skills" target="_blank" rel="noopener">Coworker for journeys | Adobe Journey Optimizer<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/journey-optimizer/using/orchestrate-journeys/journeys-coworker-skills">“Get recommendations to clean up and stabilize your journey inventory.”</blockquote></td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Custom outbound channel with Channel Builder</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/journey-optimizer/using/channels/custom-channel/configure-custom-channel/create-custom-channel" target="_blank" rel="noopener">Create a custom channel | Adobe Journey Optimizer<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/journey-optimizer/using/channels/custom-channel/configure-custom-channel/create-custom-channel">“... an administrator must first create the channel. This involves defining the endpoint, authentication, throttling policy, and message payload structure. You can create the channel manually in the Channel Builder, as described below, or with the Channel Builder skill in Coworker.”</blockquote></td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Email content production with Coworker&#x27;s content skills</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/content-management-coworker-skills" target="_blank" rel="noopener">Coworker for content management | Adobe Journey Optimizer<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/content-management-coworker-skills">“Request all relevant reviews: Ask for brand, compliance, design, and accessibility review before treating content as send-ready.”</blockquote></td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Loyalty Challenges setup with Coworker</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/journey-optimizer/using/loyalty-challenges/get-started" target="_blank" rel="noopener">Get started with Loyalty Challenges | Adobe Journey Optimizer<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/journey-optimizer/using/loyalty-challenges/get-started">“Before challenges can be authored, an administrator configures the program foundations: reward providers, event mappings that map customer actions to task completions, product inventory, and exclusion lists.”</blockquote></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section class="cw-place" id="g-cw-target" aria-labelledby="g-cw-target-h">
+        <div class="cw-place-head"><h3 id="g-cw-target-h">Coworker + Target</h3><span class="cw-count">2 services</span></div>
+        <div class="cw-table">
+          <table role="table" aria-labelledby="g-cw-target-h">
+            <thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Service</th><th scope="col" role="columnheader">Where it comes from</th></tr></thead>
+            <tbody role="rowgroup">
+            <tr role="row"><th scope="row" role="rowheader">Partner-written Coworker Skills for Target testing</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/optimization/accelerate-experimentation" target="_blank" rel="noopener">Accelerate Experimentation with Coworker | Adobe Coworker<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/optimization/accelerate-experimentation">“... Coworker helps develop an experimentation strategy, create an A/B test in Adobe Target, ...”</blockquote></td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Target program audit and cleanup with Coworker</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/target/using/introduction/coworker-skills" target="_blank" rel="noopener">Coworker skills for Adobe Target | Adobe Target<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/target/using/introduction/coworker-skills">“Audits Target programs for risks, collisions, misconfigurations, hygiene issues, and quick wins.”</blockquote></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section class="cw-place" id="g-marketo-cw" aria-labelledby="g-marketo-cw-h">
+        <div class="cw-place-head"><h3 id="g-marketo-cw-h">Marketo Engage + Coworker</h3><span class="cw-count">3 services</span></div>
+        <div class="cw-table">
+          <table role="table" aria-labelledby="g-marketo-cw-h">
+            <thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Service</th><th scope="col" role="columnheader">Where it comes from</th></tr></thead>
+            <tbody role="rowgroup">
+            <tr role="row"><th scope="row" role="rowheader">Coworker access and skills rollout in Marketo</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/coworker-for-marketo/overview" target="_blank" rel="noopener">CX Enterprise Coworker for Marketo Engage Overview | Adobe Marketo Engage<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/coworker-for-marketo/overview">“... you must perform some setup steps to ensure the desired users have access.”</blockquote></td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Organizational Rules for Coworker in Marketo Engage</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/coworker-for-marketo/organizational-rules" target="_blank" rel="noopener">Organizational rules | Adobe Marketo Engage<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/coworker-for-marketo/organizational-rules">“Every Marketo Engage environment includes default Organizational Rules. You can customize them to reflect your organization’s specific governance needs.”</blockquote></td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Monthly program builds with Coworker in Marketo Engage</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/coworker-for-marketo/skills/build-programs" target="_blank" rel="noopener">Build programs | Adobe Marketo Engage<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/coworker-for-marketo/skills/build-programs">“Email content is auto-generated, but Smart Campaign filters and flow steps remain manual.”</blockquote></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section class="cw-place" id="g-workfront-cw" aria-labelledby="g-workfront-cw-h">
+        <div class="cw-place-head"><h3 id="g-workfront-cw-h">Workfront + Coworker</h3><span class="cw-count">3 services</span></div>
+        <div class="cw-table">
+          <table role="table" aria-labelledby="g-workfront-cw-h">
+            <thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Service</th><th scope="col" role="columnheader">Where it comes from</th></tr></thead>
+            <tbody role="rowgroup">
+            <tr role="row"><th scope="row" role="rowheader">Coworker rollout and write access</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/workfront/using/basics/coworker-in-workfront/use-coworker-in-workfront" target="_blank" rel="noopener">Use CX Enterprise Coworker in Workfront | Adobe Workfront<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/workfront/using/basics/coworker-in-workfront/use-coworker-in-workfront">“Your Workfront administrator must enable the Write MCP tools option in your organization’s System Preferences before you can make any changes in Workfront through Coworker.”</blockquote></td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Workfront Fusion scenarios with Coworker</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-cx-coworker-modules" target="_blank" rel="noopener">Adobe CX Enterprise Coworker modules | Adobe Workfront<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-cx-coworker-modules">“The connector starts and checks Coworker requests. It does not monitor project changes or automatically save answers to another application. Add the appropriate trigger, storage, and follow-on modules to your scenario as needed.”</blockquote></td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Monthly Fusion scenario support through Coworker</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/workfront-fusion/using/set-up-and-manage-fusion/use-fusion-mcp-server/configure-fusion-mcp-server" target="_blank" rel="noopener">Configure the Adobe Workfront Fusion MCP server | Adobe Workfront<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/workfront-fusion/using/set-up-and-manage-fusion/use-fusion-mcp-server/configure-fusion-mcp-server">“Ask your Fusion administrator to enable write tools, or to grant you the required team role.”</blockquote></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section class="cw-place" id="g-cw-gspm" aria-labelledby="g-cw-gspm-h">
+        <div class="cw-place-head"><h3 id="g-cw-gspm-h">Coworker + GenStudio for Performance Marketing</h3><span class="cw-count">1 service</span></div>
+        <div class="cw-table">
+          <table role="table" aria-labelledby="g-cw-gspm-h">
+            <thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Service</th><th scope="col" role="columnheader">Where it comes from</th></tr></thead>
+            <tbody role="rowgroup">
+            <tr role="row"><th scope="row" role="rowheader">Coworker prompts for GenStudio reporting and drafts</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/ai-assistants/connect-ai-assistants" target="_blank" rel="noopener">Connect an AI Assistant | Adobe GenStudio for Performance Marketing<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/ai-assistants/connect-ai-assistants">“GenStudio for Performance Marketing tools are managed as a native connection in Adobe CX Enterprise Coworker.”</blockquote></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section class="cw-place" id="g-ca-cw" aria-labelledby="g-ca-cw-h">
+        <div class="cw-place-head"><h3 id="g-ca-cw-h">Content Analytics + Coworker</h3><span class="cw-count">2 services</span></div>
+        <div class="cw-table">
+          <table role="table" aria-labelledby="g-ca-cw-h">
+            <thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Service</th><th scope="col" role="columnheader">Where it comes from</th></tr></thead>
+            <tbody role="rowgroup">
+            <tr role="row"><th scope="row" role="rowheader">Coworker Chat on Content Analytics data</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/content-performance/ask-content-questions" target="_blank" rel="noopener">Ask Questions About Your Content with Coworker Chat | Adobe Coworker<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/content-performance/ask-content-questions">“Use Adobe CX Enterprise Coworker Chat to get accurate answers about your content from Adobe Content Analytics.”</blockquote></td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Content question playbook and team enablement</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/content-performance/ask-content-questions" target="_blank" rel="noopener">Ask Questions About Your Content with Coworker Chat | Adobe Coworker<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/content-performance/ask-content-questions">“When you ask about a specific image, include its URL or asset ID.”</blockquote></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section class="cw-place" id="g-planning-cw" aria-labelledby="g-planning-cw-h">
+        <div class="cw-place-head"><h3 id="g-planning-cw-h">Workfront Planning + Coworker</h3><span class="cw-count">2 services</span></div>
+        <div class="cw-table">
+          <table role="table" aria-labelledby="g-planning-cw-h">
+            <thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Service</th><th scope="col" role="columnheader">Where it comes from</th></tr></thead>
+            <tbody role="rowgroup">
+            <tr role="row"><th scope="row" role="rowheader">Coworker access and tool permissions for Planning</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-planning/adobe-workfront-planning-general-information/planning-cx-coworker-overview" target="_blank" rel="noopener">Adobe Workfront Planning CX Enterprise Coworker Overview | Adobe Workfront<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-planning/adobe-workfront-planning-general-information/planning-cx-coworker-overview">“Your Workfront administrator must select the Read-only and Write-only MCP tools in the System Preferences area of Setup.”</blockquote></td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Coworker prompts for Planning records</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-planning/adobe-workfront-planning-general-information/planning-cx-coworker-overview" target="_blank" rel="noopener">Adobe Workfront Planning CX Enterprise Coworker Overview | Adobe Workfront<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-planning/adobe-workfront-planning-general-information/planning-cx-coworker-overview">“In the Planning right rail, the Coworker panel operates in the context of the workspace, record type, or record page that you have open.”</blockquote></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section class="cw-place" id="g-cw-aa" aria-labelledby="g-cw-aa-h">
+        <div class="cw-place-head"><h3 id="g-cw-aa-h">Coworker + Adobe Analytics</h3><span class="cw-count">1 service</span></div>
+        <div class="cw-table">
+          <table role="table" aria-labelledby="g-cw-aa-h">
+            <thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Service</th><th scope="col" role="columnheader">Where it comes from</th></tr></thead>
+            <tbody role="rowgroup">
+            <tr role="row"><th scope="row" role="rowheader">Coworker Chat on Adobe Analytics report suites</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/analytics-chat" target="_blank" rel="noopener">Get Started Analyzing Data with Coworker Chat | Adobe Coworker<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/analytics-chat">“Select the Integrations tab, then make sure that cja-mcp and aa-mcp are available in your list of connected servers.”</blockquote></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section class="cw-place" id="g-moptimizer-cw" aria-labelledby="g-moptimizer-cw-h">
+        <div class="cw-place-head"><h3 id="g-moptimizer-cw-h">Marketo Optimizer + Coworker</h3><span class="cw-count">5 services</span></div>
+        <div class="cw-table">
+          <table role="table" aria-labelledby="g-moptimizer-cw-h">
+            <thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Service</th><th scope="col" role="columnheader">Where it comes from</th></tr></thead>
+            <tbody role="rowgroup">
+            <tr role="row"><th scope="row" role="rowheader">Coworker access and skills rollout in Marketo Optimizer</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/coworker/chat-interface" target="_blank" rel="noopener">Chat interface | Adobe Marketo Optimizer<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/coworker/chat-interface">“The system checks every skill or action in chat against the same permissions that the feature needs outside chat ...”</blockquote></td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Campaign brief template and programs built by Coworker</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/coworker/program-from-brief" target="_blank" rel="noopener">Create a Program from a Brief | Adobe Marketo Optimizer<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/coworker/program-from-brief">“... the Program Creation skill builds that entire structure end-to-end from your brief ...”</blockquote></td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Custom Coworker skills for your client&#x27;s processes</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/coworker/skills" target="_blank" rel="noopener">Coworker Skills | Adobe Marketo Optimizer<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/coworker/skills">“These skills answer product questions and let you build new custom skills.”</blockquote></td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Personas, intent model and AI decisioning data gaps</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/ai-decisioning/ai-decisioning-health" target="_blank" rel="noopener">AI-Decisioning Health | Adobe Marketo Optimizer<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/ai-decisioning/ai-decisioning-health">“Closing those gaps improves how AI decisioning scores and routes each person.”</blockquote></td></tr>
+            <tr role="row"><th scope="row" role="rowheader">Webinar programs with Coworker in Marketo Optimizer</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/coworker/webinar-creation" target="_blank" rel="noopener">Create and Promote Webinars | Adobe Marketo Optimizer<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/coworker/webinar-creation">“The chat interface lists what is left to configure in the journey canvas.”</blockquote></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section class="cw-place" id="g-plays-cja-aem-fsi" aria-labelledby="g-plays-cja-aem-fsi-h">
+        <div class="cw-place-head"><h3 id="g-plays-cja-aem-fsi-h">Brand Visibility plays</h3><span class="cw-count">1 service</span></div>
+        <p class="cw-place-sub">One shared setup on three plays: Brand Visibility + Customer Journey Analytics; Brand Visibility + Sites Optimizer and Edge Delivery Services; Brand Visibility + Brand Concierge. It covers workflow discovery, access and context checks, pilot acceptance and training.</p>
+        <div class="cw-table">
+          <table role="table" aria-labelledby="g-plays-cja-aem-fsi-h">
+            <thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Service</th><th scope="col" role="columnheader">Where it comes from</th></tr></thead>
+            <tbody role="rowgroup">
+            <tr role="row"><th scope="row" role="rowheader">Coworker shared setup and enablement</th><td role="cell" data-label="Where it comes from"><a class="cw-ext" href="https://experienceleague.adobe.com/en/docs/coworker/content/home" target="_blank" rel="noopener">Adobe CX Enterprise Coworker Overview | Adobe Coworker<span class="cw-sr"> (opens in a new tab)</span></a><blockquote cite="https://experienceleague.adobe.com/en/docs/coworker/content/home">“Onboarding: Adobe’s enterprise support or professional services team configures Coworker for your environment, sets up integrations with your Adobe applications, and defines governance and approval workflows.”</blockquote></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+</div></section>
+</main>
+<footer class="wrap footer cw-footer"><p>Checked on November 17, 2026. Every source is a public Adobe page. Every quote is word for word.</p><a href="#top">Back to top ↑</a></footer>
+<script>
+(function(){
+  var menu=document.querySelector('.menu-toggle'),nav=document.getElementById('nav');
+  if(!menu||!nav)return;
+  function setOpen(open){menu.setAttribute('aria-expanded',String(open));nav.classList.toggle('open',open);menu.querySelector('span').textContent=open?'\u2212':'+';}
+  menu.addEventListener('click',function(){setOpen(menu.getAttribute('aria-expanded')!=='true');});
+  nav.addEventListener('click',function(ev){if(ev.target.closest('a'))setOpen(false);});
+  document.addEventListener('keydown',function(ev){if(ev.key==='Escape'&&nav.classList.contains('open')){setOpen(false);menu.focus();}});
+})();
+</script>
+</body>
+</html>

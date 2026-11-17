@@ -1,0 +1,167 @@
+[
+ {
+  "verdict": "The quotes all hold up. I fetched each linked page fresh, and all 62 fetched quotes appear on their linked page word for word, curly quote marks included. All 62 link titles match the page's live HTML title. The Adobe Support and Services quote is a word-for-word prefix of the owner's paste (transcript line 6163). The page has no internal Adobe material and nothing from partners.adobe.com. All 60 ",
+  "issues": [
+   {
+    "severity": "medium",
+    "title": "\"286 Adobe pages read live\" counts 3 addresses that are the Coworker overview again",
+    "fix": "Say 283 Adobe pages in the metric strip and Step 1, or '286 addresses, 283 distinct pages'. The product guide pages become 196. Update process_facts and counts.pages_read_nov17_sweep in data.json to match, and rebuild."
+   },
+   {
+    "severity": "medium",
+    "title": "Step 6 merges two separate builds and their reviews into one claim",
+    "fix": "Narrow the claim to what it covers, for example: 'We built the 26 services, the connection and the six write-ups into a working copy. A second review of that copy found no defects, and the 33 test suites run on it all pass. The industry-neutral wording was built and checked separately.'"
+   },
+   {
+    "severity": "medium",
+    "title": "CW00's quote names Adobe's team and none of the work CW00 covers",
+    "fix": "Use the next bullet on the same Adobe page, verified on today's page: 'Access: Assign roles and access to Coworker features for your teams in the Admin Console.' Or keep the quote and add a one-line note like CW09's, for example: 'Adobe's onboarding configures Coworker; this shared setup readies the client's team around it.'"
+   },
+   {
+    "severity": "medium",
+    "title": "Four 'Partner-written Coworker Skills' rows quote a skill Adobe already ships",
+    "fix": "Add a one-line note under these groups, for example: 'Adobe ships the base skill quoted here; this service writes the client's own conventions and checks on top of it.' Or point these services at Adobe's What are skills page and quote, verified today: 'Rather than repeatedly explaining the same process, teams can use Skills to standardize common workflows, reporting methods, and analysis approaches across conversations and users.' That second option changes the tool's cited link, so it needs the owner's yes."
+   },
+   {
+    "severity": "medium",
+    "title": "Four rows use a feature description where the same Adobe page calls for the work directly",
+    "fix": "Swap in the stronger same-page sentences in data.json. The links do not change. Then rerun the quote check and rebuild the page and the standalone."
+   },
+   {
+    "severity": "low",
+    "title": "The Support and Services link text was never read from the page",
+    "fix": "Ask the owner to read the browser tab title and use it. Or label the link plainly: 'Adobe Support and Services (business.adobe.com)'."
+   },
+   {
+    "severity": "low",
+    "title": "CW04's link title ends with '| Adobe Analytics'",
+    "fix": "Optional: show the visible heading 'Manage Plugins and Marketplaces', or leave Adobe's title as it is."
+   },
+   {
+    "severity": "low",
+    "title": "The CW-FSI note says 'Renamed', but the rename is not saved yet",
+    "fix": "Reword it, for example: 'Renamed with the owner's approval on November 17 so it fits any industry. Until the change is saved, the live tool lists it as Coworker Skills for financial-services answer review.'"
+   },
+   {
+    "severity": "low",
+    "title": "'its 16 connections' leaves out Coworker's 17th connection",
+    "fix": "Say 'its 16 connections that carry services'."
+   },
+   {
+    "severity": "low",
+    "title": "'all 33 test suites pass' reads as the whole test set",
+    "fix": "Say 'the 33 test suites run on that copy all pass'."
+   },
+   {
+    "severity": "low",
+    "title": "Step 5 leaves out how CW08 and XB16 were checked",
+    "fix": "Add: 'and CW08 and XB16 had an independent review on November 17.' Optionally say in Step 1 or Step 3 that the 34 older services came from earlier research."
+   },
+   {
+    "severity": "low",
+    "title": "Four of the 'six RFI write-ups' are not Coworker services",
+    "fix": "Say 'six RFI write-ups, two of them for Coworker services'."
+   },
+   {
+    "severity": "low",
+    "title": "The Experience Context page never mentions Coworker",
+    "fix": "Optional: add a short note that Adobe's Governance Agent, used through Coworker, reads these rules. Or accept it as is."
+   },
+   {
+    "severity": "low",
+    "title": "The heading 'Adobe asks for this work.' says a little more than the quotes do",
+    "fix": "Consider 'Adobe says this work is needed.' The intro paragraph can stay as it is."
+   }
+  ]
+ },
+ {
+  "verdict": "Ready to show the owner, with one fix needed in the standalone file. The page I checked (cwev/site/coworker-evidence.html) looks and works like part of the brief at 1440x900, 1024x768 and 375x812. Its masthead is pixel-identical to index.html at all three sizes, and the computed styles of the context bar, masthead, nav, hero, headings, metric strip, sections and footer match. In the sidebar only t",
+  "issues": [
+   {
+    "severity": "medium",
+    "title": "Standalone: the 12 links back to the brief go nowhere when the file is opened on its own",
+    "fix": "Choose how the standalone will be used. (a) If it will only ever sit beside index.html, say so in its name or in a note, and treat the site copy as the deliverable. (b) If it is meant to be shared alone, change the 12 brief links in make_standalone.py: point them at the brief's shared address if one exists, or replace the sidebar links with a single line such as \"Part of the Partner growth brief. Open the brief for the other tabs.\" Then rerun the pixel compare, since the sidebar will change."
+   },
+   {
+    "severity": "low",
+    "title": "Quote lines run long at 1440",
+    "fix": "Add one line to the page's own style block, for example .cw-table blockquote{max-width:72ch}, or widen the Service column at wide screens (for example 36% above 1300 px). Both are local to coworker-evidence.html, so index.html stays untouched."
+   },
+   {
+    "severity": "low",
+    "title": "Two contrast shortfalls, both inherited from the brief",
+    "fix": "No change needed for this page; changing it alone would break the match with the brief. If wanted, fix it across the brief later, for example by darkening the eyebrow red to about #d40e00 and the nav labels to #6e6e6e."
+   },
+   {
+    "severity": "low",
+    "title": "The new tab shares the default nav icon with its neighbour Partner pilot",
+    "fix": "Optional. A distinct glyph needs one CSS rule that index.html would also have to load, which goes beyond the one-link rule. So leave it as is unless the owner wants a style line added to index.html."
+   },
+   {
+    "severity": "low",
+    "title": "\"Adobe asks for this work.\" leaves one word on its second line at 1024",
+    "fix": "Optional polish in the page's own style block, for example .cw-asks h2{text-wrap:balance}, which Chromium supports."
+   }
+  ]
+ },
+ {
+  "verdict": "Close, but not ready for the owner yet. The page looks right, matches the brief's look and the SOW Builder's names, and all 60 row quotes as shown are word for word in the saved reads (I checked them myself). Four things would lose a skeptical Adobe reader: (1) the heading \"Adobe asks for this work.\" claims more than the quotes say; (2) Step 5's \"outside review\" was two AI reviewers, and its \"clai",
+  "issues": [
+   {
+    "severity": "medium",
+    "title": "Heading 'Adobe asks for this work.' claims more than the quotes say",
+    "fix": "Heading: 'Adobe says Coworker needs this work.' Intro, so 'Adobe says Coworker needs' is not said twice: 'To work at full capacity, Coworker needs the right data foundations, governance, workflow design and team skills. That is services work. Adobe\u2019s own teams do it, and global systems integrators and agencies already build on Coworker.' Both are in the template in tools/build_page.py."
+   },
+   {
+    "severity": "medium",
+    "title": "Step 5: 'outside review' and 'every claim that held' mislead, and its date breaks the order",
+    "fix": "Label: 'Step 5 \u00b7 November 17'. Text: 'A separate review reread the Adobe pages behind the new services, 86 pages in all. For each service it checked the quote, the release status and any overlap with services already in the tool. It corrected 17, kept 9 and dropped none. Older services had earlier checks: a citation audit on November 6, and a November 12 review that looked for faults across the catalog and checked each one against the live Adobe page.' It names no tools and claims no outside people. Every number is already in process_facts."
+   },
+   {
+    "severity": "medium",
+    "title": "Step 6 mixes in non-Coworker work, uses builder jargon and will go out of date",
+    "fix": "'The creator approved the 26 new services and a new Coworker + Adobe Analytics connection. We built them into a test copy of the SOW Builder and RFI Builder. A second review found no defects, and all 33 test suites pass. Once the 26 go live, all 60 services are in the SOW Builder and 59 have an RFI Builder write-up.' That is 61 words, down from 72."
+   },
+   {
+    "severity": "medium",
+    "title": "The AXD10 quote argues against the service",
+    "fix": "Quote: 'The Figma user needs to create an access token in Figma and store it in the AEM service.' Keep the same link. The SOW Builder shows the old sentence as AXD10's evidence (build26/wt/canvas/catalog.json, lines.AXD10.evidence). Tell the owner, so the page and the tool can quote the same line."
+   },
+   {
+    "severity": "medium",
+    "title": "The CW05 and CW09 quotes do not show the service, and CW09's quote is used three times",
+    "fix": "CW05 quote: 'Watch videos and join live sessions to build your Coworker skills.' CW09 quote: 'Governance: Keep control through approval gates, permissions inherited from your Adobe organization, checks before actions run, and an audit trail.' Then clear CW09's note in data.json, set its basis to 'Follows from a documented feature' and adjust the two basis counts. Links stay the same, and the page still cites 46 pages with 63 quotes."
+   },
+   {
+    "severity": "low",
+    "title": "'the tool\u2019s owner' does not match how the brief names the author",
+    "fix": "Use 'the creator' in both places. The Step 4 and Step 6 texts in this review already do."
+   },
+   {
+    "severity": "low",
+    "title": "Step 4 is wordier than it needs to be",
+    "fix": "'A script matched all 190 finding quotes word for word against the saved pages. For this page we checked all 63 quotes again, and all 63 match. One site, Adobe Support and Services, blocks automated reads, so we checked its quote against the page text the creator pasted. We ignore only spacing and quote mark style.' That is 56 words."
+   },
+   {
+    "severity": "low",
+    "title": "The XG08 and XJ33 quotes describe the feature, not the work",
+    "fix": "XG08: 'Connect a supported AI assistant to GenStudio for Performance Marketing before you query performance data, assemble drafts, or publish approved ads.' XJ33: 'Review all actions that are proposed by Coworker before accepting them.' Keep the same links. Both old lines are the SOW Builder's evidence for these services, so tell the owner."
+   },
+   {
+    "severity": "low",
+    "title": "Evidence intro: 'its 16 connections' is loose, and one sentence can go",
+    "fix": "'60 services in 18 groups, in SOW Builder order: the Coworker card, the 16 connections that carry Coworker services, then the shared setup on three Brand Visibility plays. An ellipsis marks a partial quote.'"
+   },
+   {
+    "severity": "low",
+    "title": "Small cuts and one unclear name",
+    "fix": "Process intro: 'Six steps, from reading Adobe\u2019s pages to building the services into the SOW Builder.' Step 1 first sentence: 'We began with the 10 Adobe sources behind our Coworker Implementation Case.' Step 3 heading: 'Write the services'. Metric 1 label: 'Coworker services'."
+   },
+   {
+    "severity": "low",
+    "title": "The CW-FSI note leaves out the old name readers will see in the brief",
+    "fix": "Note text: 'Called \u201cCoworker Skills for financial-services answer review\u201d before November 17.'"
+   }
+  ]
+ }
+]
