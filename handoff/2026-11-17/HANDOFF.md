@@ -61,6 +61,12 @@ Read this first in the new chat. Everything below is on GitHub, so a new account
 - What the first look means for the design, to settle with Adam before anything is built: (1) count "similar customers" inside the client's kind of company, because ownership differs sharply by segment; (2) the fall-back for rare combinations reads low and needs a visible "rough" mark or a better rule; (3) "owns" in these files means a product line above a yearly-spend floor, so the tool must say so; (4) the creative and document file is too narrow for numbers; (5) the newest products have too few owners for a number of their own, so the goal order has to carry them; (6) both files end with the export tool's note that some data may have been omitted: Adam to check with the report's owner.
 - The propensity tab now says a first look was taken and that none of its numbers are on the page.
 
+**Adam on the data and the number (Nov 17, late)**
+- The rows he removed from the files were the smaller ones, mostly zero-dollar rows where the customer owned nothing.
+- No segment question in the tool. "Can we have it behind the scenes and no one could see it"; the segments may change in December; and "no propensity to buy score is ever perfect. It's directional at best." So: the partner is not asked for a segment, the number is presented as a guide, and segments are used only when the numbers are prepared and checked. A private mockup with a segment question was drawn and is dropped.
+- Drafted for his yes or no, not decided: a new product with too few owners shows no number; numbers from a rare combination are marked rough; numbers are labeled with what "owns" means; no numbers for creative and document products for now. The mockup `propensity/mockups/p3_*` and the tab show this as a proposal.
+- He has not said whether real counts may go on the brief's tab. Default: they wait, and they never go to GitHub.
+
 **Questions waiting for Adam**
 1. The ranked list on ready-made plays brings back an Add product button there. On Nov 14 he chose to take it off them (`canvas/data_step96.py`). Confirm he wants it back.
 2. When a partner adds a product on a ready-made play: does the play keep its name, or does the setup move to Create your own play? (Keeping the play is the bigger build; see `propensity/` notes.)

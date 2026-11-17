@@ -34,6 +34,7 @@ const CSS = `
 .pp-num{font-size:26px;font-weight:700;font-variant-numeric:tabular-nums;grid-row:span 2;align-self:center;letter-spacing:-.01em}
 .pp-why{grid-column:2;font-size:13.5px;color:#4a4a4a;line-height:1.38}
 .pp-why i{font-style:normal;color:#6b6b6b}
+.pp-nonum{grid-row:span 2;align-self:center;font-size:12.5px;font-weight:600;color:#6b6b6b;white-space:nowrap}
 .pp-fold{padding:11px 18px;border-top:1px solid #D9D9D9;font-weight:600;font-size:15px;display:flex;justify-content:space-between}
 .pp-fold span{font-weight:400;color:#4a4a4a}
 .pp-chips{display:flex;flex-wrap:wrap;gap:8px;padding:2px 18px 12px}
@@ -70,8 +71,8 @@ ${mock()}
 const row = (n, name, tag, why, num, count, next) => `
 <div class="pp-row"><span class="pp-rank">${n}</span>
 <span class="pp-name">${name}${next ? '<span class="pp-next">Next</span>' : ''}</span>
-<span class="pp-num">${num}</span>
-<span class="pp-why"><b>${tag}.</b> ${why}<br><i>${count}</i> \u00b7 <u>How this number was worked out</u></span></div>`;
+${num ? `<span class="pp-num">${num}</span>` : '<span class="pp-nonum">No number yet</span>'}
+<span class="pp-why"><b>${tag}.</b> ${why}<br><i>${count}</i>${num ? ' \u00b7 <u>How this number was worked out</u>' : ''}</span></div>`;
 
 const head = `<div class="hd"><div class="k">Add product</div><p>Ranked for your client’s goal. Brand Visibility and Customer Journey Analytics solve it, and both are on your canvas.</p></div>
 <div class="pp-goal"><span><b>Goal:</b> ${GOAL}</span><u>Change</u></div>`;
@@ -91,13 +92,14 @@ const folds = `<div class="pp-fold">More that connect to the goal <span>5 produc
 <div class="pp-fold">Not tied to this goal <span>20 products</span></div>
 <p class="pp-left"><b>Left out: Adobe Analytics.</b> Customer Journey Analytics is on your canvas, so Adobe Analytics is not suggested.</p>`;
 
-const def = '<p class="pp-def">The goal sets the order. The number is the share of similar customers who also own the product. It is for planning, not a forecast. Fewer than 30 customers own both products on this canvas, so these numbers set Brand Visibility aside and use the 673 customers who own Customer Journey Analytics.</p>';
+const def = '<p class="pp-def">The goal sets the order. The number is the share of similar customers who own the product at about $50,000 a year or more. It is a guide, not a forecast. Fewer than 30 customers own both products on this canvas, so these numbers set Brand Visibility aside and use the 673 customers who own Customer Journey Analytics. That makes them rough, and probably too low.</p>';
 
-// 2. The list. It ships only once the customer data is in (Adam, Nov 17), so every row has its number.
+// 2. The list. It ships only once the customer data is in (Adam, Nov 17). Established products show a number;
+// a new product with too few owners shows none. The number is a guide: Adam, "directional at best".
 // The goal still sets the order; the number sorts products under the same heading. All numbers are SAMPLE.
 const withData = head + mock(' <span class="pp-sample">Sample numbers</span> Made up for this picture. Real numbers come from the customer data, as summary counts only.') + def + `
 <div class="pp-grp">Builds on the goal</div>
-${row(1, 'Coworker', 'Builds on the goal', WHY.cw, '.06', 'Sample: 40 of 673', true)}
+${row(1, 'Coworker', 'Builds on the goal', WHY.cw, '', 'New product. Too few customers own it yet for a number.', true)}
 <div class="pp-grp">Connects to the goal</div>
 ${row(2, 'AEM Sites', 'Connects to the goal', WHY.aemsites, '.52', 'Sample: 352 of 673')}
 ${row(3, 'Target', 'Connects to the goal', WHY.target, '.45', 'Sample: 305 of 673')}
