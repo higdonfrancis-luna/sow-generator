@@ -1,0 +1,37 @@
+{
+  "note": "Draft, not in the tool. Rules Adam gave on Nov 17, 2026 for the ranked Add product list: a client does not go back to an older product once it owns the newer one that does the same job. Each rule only stops a suggestion. It never removes a product from a canvas, and Create your own play stays freeform. Product ids are the tool's own (canvas/catalog.json).",
+  "principle": "Any newer product that offers the same functionality as an older product: the client is not going to go backwards. (Adam, Nov 17)",
+  "rules": [
+    {
+      "when_on_canvas_any": ["cja"],
+      "never_suggest": ["aa"],
+      "adam": "I would never offer somebody Adobe Analytics who already owned Customer Journey Analytics.",
+      "one_way": "A client with Adobe Analytics can still be offered Customer Journey Analytics.",
+      "tool_today": "No goal calls for Adobe Analytics. The connection aa-cja carries two services (report suite data in CJA, migration to CJA), which fit the forward direction."
+    },
+    {
+      "when_on_canvas_any": ["ajo"],
+      "never_suggest": ["target"],
+      "adam": "If someone owns Journey Optimizer, they're not going to buy Target.",
+      "tool_today": "To settle with Adam: the tool documents a native connection ajo-target with the service 'Journey Optimizer offers in Target tests' (XA07), and two first-page chips add Target to a Journey Optimizer setup: 'My client wants to test store content' (abandoned-carts) and 'My client wants to start testing too' (cant-see-what-works)."
+    },
+    {
+      "when_on_canvas_any": ["eds", "so"],
+      "never_suggest": ["aemsites"],
+      "adam": "If someone owns Adobe Experience Manager cloud service or Edge Delivery or even Sites Optimizer I don't think they're going to buy AEM Sites.",
+      "tool_today": "To settle with Adam: the tool has three AEM products: 'AEM Sites' (its texts describe AEM Sites as a Cloud Service), 'AEM Sites with Edge Delivery Services' and 'Sites Optimizer'. It documents native connections aemsites-eds (five services, AEM authoring as the Edge Delivery content source) and aemsites-so (four services), and several first-page chips say the client already owns AEM Sites. How the customer data names the AEM products decides the mapping."
+    }
+  ],
+  "not_in_the_tool": [
+    {
+      "product": "Adobe Campaign",
+      "adam": "If someone owns Journey Optimizer or Marketo, they are not going to purchase Adobe Campaign. We are phasing Adobe Campaign out.",
+      "effect": "Adobe Campaign is not a product in the tool (left out on Nov 10), so the list can never suggest it. When the customer data is read, Campaign is not a candidate."
+    },
+    {
+      "product": "Adobe Commerce on-premises",
+      "adam": "If someone owns Adobe Commerce cloud service or Adobe Commerce Optimizer they're not going to then purchase Adobe Commerce on prem.",
+      "effect": "The tool has one product, 'Adobe Commerce', and no on-premises product, so the list can never suggest it. When the customer data is read, ask Adam whether on-premises owners count as owning Adobe Commerce."
+    }
+  ]
+}

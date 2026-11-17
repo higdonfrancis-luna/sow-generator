@@ -106,6 +106,8 @@ main h1,main h2,main h3,main .micro{text-wrap:balance}
 .pm-table thead th:first-child{width:25%}
 .pm-table thead th:nth-child(2){width:28%}
 .pm-table tbody td strong{color:var(--ink)}
+.pm-rules{max-width:920px}
+.pm-rules thead th:first-child{width:55%}
 .pm-shown{margin-top:12px;font-size:15px;line-height:1.55;max-width:920px}
 .pm-shown b{font-size:22px;letter-spacing:-.01em;color:var(--ink)}
 .pm-two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
@@ -174,7 +176,21 @@ main h1,main h2,main h3,main .micro{text-wrap:balance}
       <li><p class="micro">Step 5 · <span>Needs customer data</span></p><h3>Fall back when a combination is rare</h3><p>If fewer than <strong>30</strong> customers own every Adobe product on the canvas, the tool sets one product aside at a time until 30 or more remain, and says which it set aside. Products that neither solve the goal nor build on it are set aside first, then the goal’s own products. Within each kind, the product the fewest customers own goes first. If no product is left, the group is all customers. Expect this often when a canvas holds a new product.</p></li>
       <li><p class="micro">Step 6 · <span>Needs customer data</span></p><h3>Order the list, then re-rank</h3><p>The goal headings come first. Under a heading, the higher number comes first. Each time a product goes on or comes off the canvas, every number is worked out again. The goal stays the same.</p></li>
   </ol>
-  <p class="pm-note"><strong>Rules we set by hand.</strong> A high number does not always mean a good next step. Most customers who own Customer Journey Analytics also own Adobe Analytics, but a client with Customer Journey Analytics does not go back to Adobe Analytics. So when Customer Journey Analytics is on the canvas, the list never suggests Adobe Analytics, and it says so. The team keeps a short list of such rules.</p>
+  <div class="pm-example" id="rules">
+    <h3 id="rules-h">Rules we set by hand: never go backwards</h3>
+    <p>A high number does not always mean a good next step. A client does not go back to an older product once it owns the newer one that does the same job. So the list leaves these out, and says so each time. The team keeps the rules.</p>
+    <div class="cw-table pm-rules">
+      <table role="table" aria-labelledby="rules-h">
+        <thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">When the canvas holds</th><th scope="col" role="columnheader">The list never suggests</th></tr></thead>
+        <tbody role="rowgroup">
+        <tr role="row"><th scope="row" role="rowheader">Customer Journey Analytics</th><td role="cell" data-label="The list never suggests">Adobe Analytics</td></tr>
+        <tr role="row"><th scope="row" role="rowheader">Journey Optimizer</th><td role="cell" data-label="The list never suggests">Target</td></tr>
+        <tr role="row"><th scope="row" role="rowheader">AEM Sites with Edge Delivery Services, or Sites Optimizer</th><td role="cell" data-label="The list never suggests">AEM Sites</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="pm-shown">Each rule runs one way. A client with Adobe Analytics can still be offered Customer Journey Analytics. Adobe Campaign and Adobe Commerce on-premises are not in the tool, so the list can never suggest them.</p>
+  </div>
 </div></section>
 
 <section class="section cw-evidence" id="example"><div class="wrap">

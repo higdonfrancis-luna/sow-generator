@@ -41,6 +41,7 @@ const srv = http.createServer((q, r) => {
   await shot('m1_top', null, 1440, 1060);
   await shot('m2_in_short', '#short', 1440, 640);
   await shot('m3_logic', '#logic', 1440, 1010);
+  await shot('m3b_rules', '#rules', 1440, 620);
   await shot('m4_example', '#example', 1440, 1500);
   await shot('m5_meaning', '#meaning', 1440, 980);
   await shot('m6_proof', '#proof', 1440, 1160);
