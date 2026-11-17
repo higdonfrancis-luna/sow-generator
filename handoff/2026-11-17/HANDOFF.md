@@ -32,23 +32,51 @@ Read this first in the new chat. Everything below is on GitHub, so a new account
 ## Update from the second session (Nov 17, later)
 
 - **Branch:** this session works on `claude/sow-generator-handoff-517tq8`, built on top of `claude/zealous-edison-oko1nm`. Fetch it and build on it.
-- **Network:** the personal cloud environment `sow-generator` allows experienceleague.adobe.com, helpx.adobe.com and news.adobe.com, so quotes can be checked live.
-- **Nothing in the tool changed.** Everything below waits for Adam's yes on the pictures.
+- **Network:** the personal cloud environment `sow-generator` allows experienceleague.adobe.com, helpx.adobe.com and news.adobe.com, so quotes can be checked live with `curl` (WebFetch does not reach them).
+- **Nothing in the tool changed.** Everything below is work in progress and waits for Adam's yes on the pictures.
+- **Adam does not read service codes.** Say "the Coworker Chat on Adobe Analytics service", not "XL27".
 
 | Item | State |
 |---|---|
-| B. Coworker evidence page | Fix round done. Pictures, a one-file preview and the brief zip with the new tab were sent to Adam. Waiting for his yes. |
-| Small item 1 (XL27 ticked for new quotes) | Picture sent (`small_items/item1_xl27_today_vs_proposed.png`). Not built. |
-| Small item 2 ("Adobe's part:") | Picture sent (`small_items/item2_adobes_part_today_vs_proposed.png`). Not built. Two things to settle with Adam: the checklist download's Type column also says "Confirm with Adobe" (`rfp_answers.js`), and some items under the heading still say "Ask Adobe" or "Confirm". |
-| C. Propensity | Four mockups sent (`propensity/mockups/`), every number labeled SAMPLE. Waiting for Adam's picks and his data. |
+| A. Figma connects to four more products | Fix round done in a scratch copy: 162 connections, 569 services, every suite passes except the four known failures. Pictures sent. `figma/apply_figma.py` re-applies the whole change by content; notes in `figma/FIX_ROUND.md`; pictures in `figma/pictures/`. 93 of its 94 Adobe quotes matched a fresh live read; the one that did not (V70, Express add-ons overview) is not used by the change. Waiting for Adam's yes, and for his pick on the Express service (see FIX_ROUND.md, XF05). |
+| B. Coworker evidence tab | Fix round done. Pictures, a preview and the brief zip were sent. Waiting for Adam's yes. |
+| C. Propensity | Adam's new direction: the ranked Add product list goes on the **ready-made plays**; Create your own play stays freeform. Mockups redone on the Brand Visibility + CJA play (`propensity/mockups/p1` to `p3`). A new tab for the brief, "Propensity to buy", explains the method (`propensity/method_page/`). Both were reviewed twice by independent reviewers. Waiting for Adam's picks and his data. |
+| Small item 1 (the Coworker Chat on Adobe Analytics service ticked for new quotes) | Picture sent (`small_items/item1_xl27_today_vs_proposed.png`). Adam did not follow it; it was explained again in plain words. Not built. |
+| Small item 2 (one phrase, "Ask Adobe") | Adam: "Ask Adobe, confirm with Adobe, it's the same thing. Maybe we get consistent on it." Picture sent (`small_items/item2_ask_adobe_today_vs_proposed.png`): two short lists, "Ask Adobe:" and "Good to know:". Not built. The earlier lean, "Adobe's part:", is replaced by this. |
 
-**Evidence page fix round, what changed** (`evidence_page/coworker-evidence.html`, `data.json`):
+**Decided by this session (Adam: "I'll leave that to you")**
+- The tool's evidence sentences stay as they are. The evidence field is never shown on screen. 12 of the 46 evidence-page rows quote a different sentence from the same Adobe page than the tool holds, by design: the page picks the line that shows the work, the tool keeps the line that backs its own card wording (for example "native connection" on Coworker + GenStudio) and its RFI write-ups. Both sentences are word for word on the same Adobe page.
+- The Support and Services link reads "Adobe Support and Services (business.adobe.com)" (Adam: "sounds good").
+
+**Questions waiting for Adam**
+1. The ranked list on ready-made plays brings back an Add product button there. On Nov 14 he chose to take it off them (`canvas/data_step96.py`). Confirm he wants it back.
+2. When a partner adds a product on a ready-made play: does the play keep its name, or does the setup move to Create your own play? (Keeping the play is the bigger build; see `propensity/` notes.)
+3. His boss's example (the client owns CJA, Brand Visibility comes first) can only show as a ranked list on Create your own play, because the ready-made play with CJA already holds Brand Visibility. On that play the list starts with what comes after: Coworker.
+4. The order is by goal first, so a low number can sit above a high one. Confirm that is what he wants to show his boss.
+5. Tab name: "Propensity to buy" (his words) while the number means ownership until purchase dates exist. The page says so in its notice.
+6. Counting by hand (the page's method) or a statistical model (`propensity/design_model.md`).
+7. Exact or rounded customer counts; where the counting is done; who can open the tool (the handoff says behind an Adobe login, the repo configures none).
+8. The made-up-accounts test run was not saved with the project. Rebuild it only if his boss asks to see it.
+
+**Coworker evidence fix round, what changed** (`evidence_page/coworker-evidence.html`, `data.json`):
 - All 62 quotes on public Adobe pages were matched again, word for word, against a fresh live read of the 45 pages (`evidence_page/tools/fetch_pages.py`, then `verify.py`). The Adobe Support and Services quote stays checked against Adam's paste.
-- Better sentences from the same Adobe pages for CW00, CW05, CW09, AXD10, XG08 and XJ33. The links did not change. The tool's catalog still holds the old evidence sentence for AXD10, XG08 and XJ33; ask Adam whether the tool should quote the same line.
+- Better sentences from the same Adobe pages for CW00, CW05, CW09, AXD10, XG08 and XJ33. The links did not change.
 - Notes under the four "Partner-written Coworker Skills" rows, and the CW-FSI note gives the old name.
 - 283 distinct pages (286 addresses), the heading "Adobe says Coworker needs this work.", and shorter, more exact process steps 4, 5 and 6.
-- The Support and Services link reads "Adobe Support and Services (business.adobe.com)", because its title was never read from the page.
-- `evidence_page/tools/package.py` builds the zip and the one-file preview from a folder that holds the brief plus `coworker-evidence.html`. `pics.js` takes the pictures. The preview embeds Adobe fonts: never commit it.
+- Its nav now links the new "Propensity to buy" tab.
+
+**The brief's two new tabs, how to rebuild them**
+- The brief is not in GitHub. Unzip Adam's `brand-visibility-growth.zip` into a folder, copy in `evidence_page/coworker-evidence.html`, `propensity/method_page/propensity-method.html` and `propensity-mockup.png`, and add the two nav links to its `index.html` after "Evidence" (`evidence_page/brief_nav_change.diff` shows the first; the second is `<a href="propensity-method.html">Propensity to buy</a>` right after it).
+- `python3 propensity/method_page/build_method_page.py evidence_page/coworker-evidence.html propensity/method_page/propensity-method.html` rebuilds the propensity tab and copies its picture.
+- `evidence_page/tools/package.py` writes the zip and one click-through preview for each tab. The previews embed Adobe fonts: never commit them.
+- Pictures: `evidence_page/tools/pics.js`, `propensity/method_page/pics.js`, `propensity/mockups/propensity_mock.js`, `small_items/small_items.js` then `compose.py`.
+
+**"Ask Adobe": what the build would change, once Adam says yes**
+- `rfp_answers.js`: the notes box and the checklist download show two lists. "Ask Adobe" holds the notes that tell the partner to ask Adobe; "Good to know" holds the rest. The class `.rfp-confirm` stays.
+- Reword to "Ask Adobe": the two Brand Concierge notes and the Experience Platform regions note in `rfp_prototype/part3_research/statements.json` (never edit `rfp_facts.json`; it is built), and "or confirm it with Adobe" in `rfp_answers.js` (the no-connection note).
+- Leave alone: the Marketo data center and Workfront cluster notes (the client's own admin has the answer), "Check Adobe's pages", and every note about the client.
+- "Ask Adobe" must never reach a client document. The guards that keep partner wording out of the Word proposal, the client workbook and the statement of work do not match the new phrase yet: `rfp_proposal.js`, `qa/rfp_word_copy.js`, `qa/check_product_copy.py`, `rfp_prototype/kb_method/build_method.py`, `test_rfp_step53.js`, `test_rfp_step54.js`, `test_rfp_kb_round2.js`, `test_step86.js`, `rfp_prototype/chatgpt_round6/test_round6.js`. Add it to each.
+- **Found on the way, for a later picture:** a few client-read sentences still say "confirmed with Adobe" or similar, which step 86 missed: `index.html` near lines 258 (two, CDN log forwarding), 721 and 737; the partner-read hint near 711 and the grey example near 43; the Adobe Commerce hosting sentence and "from Adobe in writing" in `statements.json`. Bring them to Adam as their own picture.
 
 ## Saved today (Nov 17)
 
@@ -70,7 +98,7 @@ Read this first in the new chat. Everything below is on GitHub, so a new account
 ## Small items Adam leaned yes on (build each with a picture first)
 
 1. **Tick "Coworker Chat on Adobe Analytics report suites" (XL27) for new quotes only.** Saved quotes must keep their totals. That needs a new saved-defaults flag in the three places that write a canvas's saved defaults: the canvas page, the SOW steps' syncCanvas and the RFI hand-off. Do not bump `combinedDefaultsVersion`: that would replay older restores on current saves.
-2. **RFI Builder, partner-only notes box:** rename the heading "Confirm with Adobe:" to "Adobe's part:". This finishes step 86. Clients never see this box.
+2. **RFI Builder, partner-only notes box:** one phrase for asking Adobe. The earlier lean was to rename the heading "Confirm with Adobe:" to "Adobe's part:"; see the update above for the current proposal ("Ask Adobe" and "Good to know"). Clients never see this box.
 3. CW11's trial rule stays in the statement of work, which is Adam's pick. Nothing to do.
 
 ## In progress, not saved (files in this folder)
@@ -115,7 +143,7 @@ Read this first in the new chat. Everything below is on GitHub, so a new account
 ### C. Next-product propensity ranking, problem first (`propensity/`)
 
 - **The boss's idea plus Adam's follow-up:**
-  - On every canvas (the plays and Create your own play), first ask once: "What is your client trying to accomplish?", using the 23 preloaded problems in `canvas/problems.json`.
+  - On the ready-made plays (Adam, second session: Create your own play stays freeform), first ask once: "What is your client trying to accomplish?", using the 23 preloaded problems in `canvas/problems.json`.
   - Then an "Add product" list ranked by propensity to buy, shown as **.91**-style numbers, which re-ranks as products are added and always resolves to that first goal.
   - Example: the client owns Customer Journey Analytics and "can't tie AI traffic to revenue", so Brand Visibility ranks first.
 - **Files:** two finished designs (`design_transparent.md`, `design_model.md`) and the start of a third, hybrid one (`hybrid/`).

@@ -6,7 +6,7 @@ const http = require('http'), fs = require('fs'), path = require('path');
 const { open } = require(R + '/rfp_prototype/review_2026-11-09/harness.js');
 
 (async () => {
-  // Item 2: the partner-only notes box, today and with one consistent phrase, Ask Adobe (text swapped on the page for the picture only)
+  // Item 2: the partner-only notes box, today and proposed: one phrase, Ask Adobe, and two short lists (text changed on the page for the picture only)
   const h = await open({ scale: 2 });
   const r = await h.file(R + '/qa/rfp_fixtures/bank_rfp.xlsx');
   await h.select(r.questions.findIndex(x => x.label === '2.6'));
@@ -16,19 +16,24 @@ const { open } = require(R + '/rfp_prototype/review_2026-11-09/harness.js');
   await note.screenshot({ path: out + '/item2_today.png' });
   const swapped = await h.eval(() => {
     let n = 0;
-    for (const p of document.querySelectorAll('#rfp-answer .rfp-partner-note p')) {
-      if (p.textContent === 'Confirm with Adobe:') { p.textContent = 'Ask Adobe:'; n++; }
-    }
-    // the items under the heading that use another word for the same thing
+    const note = document.querySelector('#rfp-answer .rfp-partner-note');
+    const head = [...note.querySelectorAll('p')].find(p => p.textContent === 'Confirm with Adobe:');
+    const list = note.querySelector('.rfp-confirm');
+    // 1. one phrase inside the notes that are questions for Adobe
     const SWAPS = [
       [' until Adobe says which is current.', '. Ask Adobe which is current.'],
       ['Confirm the region your client needs is offered.', 'Ask Adobe if the region your client needs is offered.'],
-      ['Confirm your client\'s data center and pod.', 'Ask Adobe for your client\'s data center and pod.'],
     ];
-    for (const li of document.querySelectorAll('#rfp-answer .rfp-confirm li')) {
+    for (const li of list.querySelectorAll('li')) {
       for (const [a, b] of SWAPS) if (li.textContent.includes(a)) { li.textContent = li.textContent.replace(a, b); n++; }
     }
-    return n;
+    // 2. two short lists: the questions for Adobe, and the other notes
+    head.textContent = 'Ask Adobe:';
+    const head2 = head.cloneNode(false); head2.textContent = 'Good to know:';
+    const list2 = list.cloneNode(false);
+    for (const li of [...list.querySelectorAll('li')]) if (!/ask adobe/i.test(li.textContent)) list2.appendChild(li);
+    list.after(head2); head2.after(list2);
+    return { swaps: n, askAdobe: list.children.length, goodToKnow: list2.children.length };
   });
   console.log('texts swapped for the picture:', swapped);
   await note.screenshot({ path: out + '/item2_proposed.png' });

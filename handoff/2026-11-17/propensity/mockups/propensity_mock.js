@@ -19,9 +19,9 @@ const srv = http.createServer((q, s) => {
 });
 
 const CSS = `
-#add-menu.pp{max-height:none;width:580px;display:block}
+#add-menu.pp{max-height:none;width:590px;display:block}
 .pp-sample{display:inline-block;background:#FFF2B3;border:1px solid #C9A400;color:#5c4a00;font-size:11px;font-weight:700;letter-spacing:.08em;padding:2px 7px;border-radius:5px;text-transform:uppercase;white-space:nowrap}
-.pp-banner{margin:2px 18px 10px;padding:8px 12px;background:#FFF9DB;border:1px solid #C9A400;border-radius:10px;font-size:13.5px;line-height:1.35;color:#3d3200}
+.pp-banner{margin:2px 18px 10px;padding:8px 12px;background:#FFF9DB;border:1px solid #C9A400;border-radius:10px;font-size:13.5px;line-height:1.6;color:#3d3200}
 .pp-goal{margin:0 18px 10px;padding:9px 12px;border:1.5px solid #1C1C1C;border-radius:12px;font-size:14.5px;line-height:1.35;display:flex;gap:10px;align-items:baseline;justify-content:space-between}
 .pp-goal b{font-weight:700}
 .pp-goal u{color:#EB1000;font-weight:600;text-decoration:underline;white-space:nowrap}
@@ -47,19 +47,22 @@ const CSS = `
 `;
 
 const GOAL = 'My client can’t tie AI traffic to revenue';
-const CANVAS = 'On your canvas: Brand Visibility, Customer Journey Analytics.';
+const mock = extra => '<div class="pp-banner"><span class="pp-sample">Mockup</span> Ready-made plays have no Add product button today, and the ranked list is not built.' + (extra || '') + '</div>';
 
-// 1. The one-time question. The play's own problem comes first.
+// 1. The one-time question. The play's own problem comes first, then the other starter problems of the first page.
 const question = `
 <div class="hd"><div class="k">What is your client trying to accomplish?</div>
 <p>You answer once for this canvas. Every suggestion after this follows it.</p></div>
+${mock()}
 <div class="pp-sub">This play’s problem</div>
 <div class="pp-chips"><span class="pp-chip own">${GOAL}</span></div>
 <div class="pp-sub">Other problems</div>
 <div class="pp-chips">
 <span class="pp-chip">My client is missing from AI answers</span>
+<span class="pp-chip">My client’s website is slow</span>
+<span class="pp-chip">My client’s products are wrong in AI shopping answers</span>
+<span class="pp-chip">My client’s banking or insurance customers call about accounts, policies or rates</span>
 <span class="pp-chip">My client’s team spends too long pulling reports</span>
-<span class="pp-chip">My client can’t see which channels work</span>
 <span class="pp-chip all">See all 23 problems</span>
 </div>
 <div class="pp-or">Or describe it in your own words<div>For example: leaders want a monthly readout on AI traffic</div></div>`;
@@ -70,43 +73,57 @@ const row = (n, name, tag, why, num, count, next) => `
 ${num ? `<span class="pp-num">${num}</span>` : '<span></span>'}
 <span class="pp-why"><b>${tag}.</b> ${why}${count ? `<br><i>${count}</i>` : ''}</span></div>`;
 
-const head = `<div class="hd"><div class="k">Add product</div><p>Ranked for your client’s goal. ${CANVAS}</p></div>
+const head = `<div class="hd"><div class="k">Add product</div><p>Ranked for your client’s goal. Brand Visibility and Customer Journey Analytics solve it, and both are on your canvas.</p></div>
 <div class="pp-goal"><span><b>Goal:</b> ${GOAL}</span><u>Change</u></div>`;
 
-// 2. Day one: ranked only by what the tool already knows (the goal's refine chips, documented connections). No numbers.
-const dayOne = head + `
-<div class="pp-grp">Builds on the goal</div>
-${row(1, 'Coworker', 'Builds on the goal', 'My client’s leaders want readouts on request.', '', '', true)}
-<div class="pp-grp">Connects to the goal</div>
-${row(2, 'AEM Sites', 'Connects to the goal', 'Native connection to Brand Visibility. Platform connection to Customer Journey Analytics.')}
-${row(3, 'Adobe Commerce', 'Connects to the goal', 'Native connection to Brand Visibility. Platform connection to Customer Journey Analytics.')}
-${row(4, 'Journey Optimizer', 'Connects to the goal', 'Native connection to Customer Journey Analytics.')}
-${row(5, 'Target', 'Connects to the goal', 'Native connection to Customer Journey Analytics.')}
-${row(6, 'Adobe Analytics', 'Connects to the goal', 'Platform connection to Customer Journey Analytics.')}
-<div class="pp-fold">More that connect to the goal <span>6 products</span></div>
-<div class="pp-fold">Not tied to this goal <span>19 products</span></div>`;
+// The reasons use the canvas legend's own words: Native integration, Shared platform, Partner workflow.
+const WHY = {
+  cw: 'My client’s leaders want readouts on request. This needs CJA B2C edition.',
+  aa: 'Shared platform with Customer Journey Analytics.',
+  commerce: 'Native integration with Brand Visibility. Shared platform with Customer Journey Analytics.',
+  aemsites: 'Native integration with Brand Visibility (partner workflow with Edge Delivery Services). Shared platform with Customer Journey Analytics.',
+  bc: 'Partner workflow with Brand Visibility. Native integration with Customer Journey Analytics.',
+  ca: 'Native integration with Customer Journey Analytics.',
+  ajo: 'Native integration with Customer Journey Analytics.',
+  target: 'Native integration with Customer Journey Analytics.',
+};
+// For this goal and canvas the tool's files give 1 product that builds on the goal, 10 rows that connect to it
+// (AEM Sites' two deliveries are one row) and 20 products not tied to it.
+const folds = `<div class="pp-fold">More that connect to the goal <span>5 products</span></div>
+<div class="pp-fold">Not tied to this goal <span>20 products</span></div>`;
 
-const banner = '<div class="pp-banner"><span class="pp-sample">Sample numbers</span> Made up for this mockup. Real numbers come from the customer data, as summary counts only.</div>';
-const def = '<p class="pp-def">The goal sets the order. The number is the share of similar customers who also own the product. Fewer than 30 customers own both products on this canvas, so these numbers use the 673 customers who own Customer Journey Analytics.</p>';
-
-// 3. With data: the goal still sets the order; the number sorts products inside a group. All numbers are SAMPLE.
-const withData = head + banner + def + `
+// 2. Day one: no customer data. The goal sets the order; under a heading, products are in name order. No numbers.
+const dayOne = head + mock() + `
+<p class="pp-def">No customer data yet. The goal sets the order. Under a heading, products are in name order.</p>
 <div class="pp-grp">Builds on the goal</div>
-${row(1, 'Coworker', 'Builds on the goal', 'My client’s leaders want readouts on request. A new product, so few customers own it yet.', '.06', 'Sample: 40 of 673', true)}
+${row(1, 'Coworker', 'Builds on the goal', WHY.cw, '', '', true)}
 <div class="pp-grp">Connects to the goal</div>
-${row(2, 'Adobe Analytics', 'Connects to the goal', 'Platform connection to Customer Journey Analytics.', '.80', 'Sample: 539 of 673')}
-${row(3, 'AEM Sites', 'Connects to the goal', 'Native connection to Brand Visibility.', '.52', 'Sample: 352 of 673')}
-${row(4, 'Target', 'Connects to the goal', 'Native connection to Customer Journey Analytics.', '.45', 'Sample: 305 of 673')}
-${row(5, 'Journey Optimizer', 'Connects to the goal', 'Native connection to Customer Journey Analytics.', '.31', 'Sample: 210 of 673')}
-${row(6, 'Adobe Commerce', 'Connects to the goal', 'Native connection to Brand Visibility.', '.12', 'Sample: 81 of 673')}
-<div class="pp-fold">More that connect to the goal <span>6 products</span></div>
-<div class="pp-fold">Not tied to this goal <span>19 products</span></div>`;
+${row(2, 'Adobe Analytics', 'Connects to the goal', WHY.aa)}
+${row(3, 'Adobe Commerce', 'Connects to the goal', WHY.commerce)}
+${row(4, 'AEM Sites', 'Connects to the goal', WHY.aemsites)}
+${row(5, 'Brand Concierge', 'Connects to the goal', WHY.bc)}
+${row(6, 'Content Analytics', 'Connects to the goal', WHY.ca)}
+` + folds;
+
+const def = '<p class="pp-def">The goal sets the order. The number is the share of similar customers who also own the product. It is for planning, not a forecast. Fewer than 30 customers own both products on this canvas, so these numbers set Brand Visibility aside and use the 673 customers who own Customer Journey Analytics.</p>';
+
+// 3. With data: the goal still sets the order; the number sorts products under the same heading. All numbers are SAMPLE.
+const withData = head + mock(' <span class="pp-sample">Sample numbers</span> Made up for this picture. Real numbers come from the customer data, as summary counts only.') + def + `
+<div class="pp-grp">Builds on the goal</div>
+${row(1, 'Coworker', 'Builds on the goal', WHY.cw, '.06', 'Sample: 40 of 673', true)}
+<div class="pp-grp">Connects to the goal</div>
+${row(2, 'Adobe Analytics', 'Connects to the goal', WHY.aa, '.80', 'Sample: 539 of 673')}
+${row(3, 'AEM Sites', 'Connects to the goal', WHY.aemsites, '.52', 'Sample: 352 of 673')}
+${row(4, 'Target', 'Connects to the goal', WHY.target, '.45', 'Sample: 305 of 673')}
+${row(5, 'Journey Optimizer', 'Connects to the goal', WHY.ajo, '.31', 'Sample: 210 of 673')}
+${row(6, 'Adobe Commerce', 'Connects to the goal', WHY.commerce, '.12', 'Sample: 81 of 673')}
+` + folds;
 
 (async () => {
   await new Promise(res => srv.listen(0, res));
   const b = await chromium.launch();
   async function shot(name, html) {
-    const ctx = await b.newContext({ viewport: { width: 1500, height: 1180 }, deviceScaleFactor: 2 });
+    const ctx = await b.newContext({ viewport: { width: 1500, height: 1400 }, deviceScaleFactor: 2 });
     const p = await ctx.newPage();
     await p.goto('http://localhost:' + srv.address().port + '/');
     await p.waitForTimeout(500);
@@ -122,7 +139,8 @@ ${row(6, 'Adobe Commerce', 'Connects to the goal', 'Native connection to Brand V
     }, html);
     await p.waitForTimeout(250);
     const box = await p.evaluate(() => { const r = document.getElementById('add-menu').getBoundingClientRect(); return Math.round(r.bottom); });
-    await p.screenshot({ path: out + '/' + name + '.png', clip: { x: 0, y: 0, width: 1500, height: Math.min(1180, Math.max(box + 30, 560)) } });
+    await p.screenshot({ path: out + '/' + name + '.png', clip: { x: 0, y: 0, width: 1500, height: Math.min(1400, Math.max(box + 30, 560)) } });
+    if (name.startsWith('p3')) await (await p.$('#add-menu')).screenshot({ path: out + '/p3_list_only.png' });   // the picture the brief's tab shows
     console.log(name, '| play:', label, '| menu bottom', box);
     await ctx.close();
   }
