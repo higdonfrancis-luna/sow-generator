@@ -29,6 +29,27 @@ Read this first in the new chat. Everything below is on GitHub, so a new account
   - The subject line ends with `[skip netlify]`, a long-standing convention.
   - Work on the branch above, and never push to `main` without Adam's go.
 
+## Update from the second session (Nov 17, later)
+
+- **Branch:** this session works on `claude/sow-generator-handoff-517tq8`, built on top of `claude/zealous-edison-oko1nm`. Fetch it and build on it.
+- **Network:** the personal cloud environment `sow-generator` allows experienceleague.adobe.com, helpx.adobe.com and news.adobe.com, so quotes can be checked live.
+- **Nothing in the tool changed.** Everything below waits for Adam's yes on the pictures.
+
+| Item | State |
+|---|---|
+| B. Coworker evidence page | Fix round done. Pictures, a one-file preview and the brief zip with the new tab were sent to Adam. Waiting for his yes. |
+| Small item 1 (XL27 ticked for new quotes) | Picture sent (`small_items/item1_xl27_today_vs_proposed.png`). Not built. |
+| Small item 2 ("Adobe's part:") | Picture sent (`small_items/item2_adobes_part_today_vs_proposed.png`). Not built. Two things to settle with Adam: the checklist download's Type column also says "Confirm with Adobe" (`rfp_answers.js`), and some items under the heading still say "Ask Adobe" or "Confirm". |
+| C. Propensity | Four mockups sent (`propensity/mockups/`), every number labeled SAMPLE. Waiting for Adam's picks and his data. |
+
+**Evidence page fix round, what changed** (`evidence_page/coworker-evidence.html`, `data.json`):
+- All 62 quotes on public Adobe pages were matched again, word for word, against a fresh live read of the 45 pages (`evidence_page/tools/fetch_pages.py`, then `verify.py`). The Adobe Support and Services quote stays checked against Adam's paste.
+- Better sentences from the same Adobe pages for CW00, CW05, CW09, AXD10, XG08 and XJ33. The links did not change. The tool's catalog still holds the old evidence sentence for AXD10, XG08 and XJ33; ask Adam whether the tool should quote the same line.
+- Notes under the four "Partner-written Coworker Skills" rows, and the CW-FSI note gives the old name.
+- 283 distinct pages (286 addresses), the heading "Adobe says Coworker needs this work.", and shorter, more exact process steps 4, 5 and 6.
+- The Support and Services link reads "Adobe Support and Services (business.adobe.com)", because its title was never read from the page.
+- `evidence_page/tools/package.py` builds the zip and the one-file preview from a folder that holds the brief plus `coworker-evidence.html`. `pics.js` takes the pictures. The preview embeds Adobe fonts: never commit it.
+
 ## Saved today (Nov 17)
 
 | Commit | What |
