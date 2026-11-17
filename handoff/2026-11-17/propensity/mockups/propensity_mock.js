@@ -70,8 +70,8 @@ ${mock()}
 const row = (n, name, tag, why, num, count, next) => `
 <div class="pp-row"><span class="pp-rank">${n}</span>
 <span class="pp-name">${name}${next ? '<span class="pp-next">Next</span>' : ''}</span>
-${num ? `<span class="pp-num">${num}</span>` : '<span></span>'}
-<span class="pp-why"><b>${tag}.</b> ${why}${count ? `<br><i>${count}</i> \u00b7 <u>How this number was worked out</u>` : ''}</span></div>`;
+<span class="pp-num">${num}</span>
+<span class="pp-why"><b>${tag}.</b> ${why}<br><i>${count}</i> \u00b7 <u>How this number was worked out</u></span></div>`;
 
 const head = `<div class="hd"><div class="k">Add product</div><p>Ranked for your client’s goal. Brand Visibility and Customer Journey Analytics solve it, and both are on your canvas.</p></div>
 <div class="pp-goal"><span><b>Goal:</b> ${GOAL}</span><u>Change</u></div>`;

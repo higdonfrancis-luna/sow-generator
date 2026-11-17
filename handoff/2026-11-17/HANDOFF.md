@@ -40,13 +40,19 @@ Read this first in the new chat. Everything below is on GitHub, so a new account
 |---|---|
 | A. Figma connects to four more products | Fix round done in a scratch copy: 162 connections, 569 services, every suite passes except the four known failures. Pictures sent. `figma/apply_figma.py` re-applies the whole change by content; notes in `figma/FIX_ROUND.md`; pictures in `figma/pictures/`. 93 of its 94 Adobe quotes matched a fresh live read; the one that did not (V70, Express add-ons overview) is not used by the change. Waiting for Adam's yes, and for his pick on the Express service (see FIX_ROUND.md, XF05). |
 | B. Coworker evidence tab | Fix round done. Pictures, a preview and the brief zip were sent. Waiting for Adam's yes. |
-| C. Propensity | Adam's new direction: the ranked Add product list goes on the **ready-made plays**; Create your own play stays freeform. Mockups redone on the Brand Visibility + CJA play (`propensity/mockups/p1` to `p3`). A new tab for the brief, "Propensity to buy", explains the method (`propensity/method_page/`). Both were reviewed twice by independent reviewers. Waiting for Adam's picks and his data. |
+| C. Propensity | Adam's direction: the ranked Add product list goes on the **ready-made plays**; Create your own play stays freeform. He made more decisions on Nov 17 (see "Decided by Adam" below). Mockups on the Brand Visibility + CJA play: `propensity/mockups/p1_play_goal_question.png`, `p3_play_ranked_with_sample_numbers.png`, `p3_list_only.png` and `p3_list_phone.png`. There is no p2: the list without numbers was removed. A new tab for the brief, "Propensity to buy", explains the method (`propensity/method_page/`). Both were reviewed by independent reviewers. Waiting for Adam's picks and his data. |
 | Small item 1 (the Coworker Chat on Adobe Analytics service ticked for new quotes) | Picture sent (`small_items/item1_xl27_today_vs_proposed.png`). Adam did not follow it; it was explained again in plain words. Not built. |
 | Small item 2 (one phrase, "Ask Adobe") | Adam: "Ask Adobe, confirm with Adobe, it's the same thing. Maybe we get consistent on it." Picture sent (`small_items/item2_ask_adobe_today_vs_proposed.png`): two short lists, "Ask Adobe:" and "Good to know:". Not built. The earlier lean, "Adobe's part:", is replaced by this. |
 
 **Decided by this session (Adam: "I'll leave that to you")**
 - The tool's evidence sentences stay as they are. The evidence field is never shown on screen. 12 of the 46 evidence-page rows quote a different sentence from the same Adobe page than the tool holds, by design: the page picks the line that shows the work, the tool keeps the line that backs its own card wording (for example "native connection" on Coworker + GenStudio) and its RFI write-ups. Both sentences are word for word on the same Adobe page.
 - The Support and Services link reads "Adobe Support and Services (business.adobe.com)" (Adam: "sounds good").
+
+**Decided by Adam (Nov 17, propensity)**
+- **Never go backwards.** "Any newer product that offers the same functionality that an older product did: they're not going to go backwards." His rules, his words, the tool's product ids and what the tool pairs today are in `propensity/never_suggest_rules.json`. Set: with Customer Journey Analytics on the canvas, the list never suggests Adobe Analytics, and ends with a "Left out" line. To confirm with him: Journey Optimizer stops Target (the tool pairs them today), and which AEM Sites he means (the tool's AEM Sites is the cloud service). Adobe Campaign and Commerce on-premises are not in the tool. Nothing is built: the rules are only in the mockup, the tab and that file.
+- **No list before the data.** Partners never see the list without numbers. The list ships only after the customer data is loaded and checked. The "Day one" line in section C below no longer holds, and `propensity/hybrid/run_day_one.js` describes a view that will not ship.
+- `propensity/design_transparent.md` was written before these decisions.
+- **How long the data takes.** On file, as estimates only (`propensity/design_transparent.md`, section 12): 1 to 2 weeks on Adam's side (export, mapping review, data-owner sign-off) and about 7 to 10 working days of build, of which 2 to 3 days are the counting step. That estimate assumed a prototype that was not saved with the project. Adam's file lists one row per company per product, which is what the counting needs. He has not uploaded it yet.
 
 **Questions waiting for Adam**
 1. The ranked list on ready-made plays brings back an Add product button there. On Nov 14 he chose to take it off them (`canvas/data_step96.py`). Confirm he wants it back.
@@ -57,6 +63,8 @@ Read this first in the new chat. Everything below is on GitHub, so a new account
 6. Counting by hand (the page's method) or a statistical model (`propensity/design_model.md`).
 7. Exact or rounded customer counts; where the counting is done; who can open the tool (the handoff says behind an Adobe login, the repo configures none).
 8. The made-up-accounts test run was not saved with the project. Rebuild it only if his boss asks to see it.
+9. Should the "never go backwards" rules also apply on Create your own play? Today its Add product menu lists Adobe Analytics first when Customer Journey Analytics is on the canvas.
+10. If the customer data has no line for a product, should the list leave it out and say so, or show it marked "No data"?
 
 **Coworker evidence fix round, what changed** (`evidence_page/coworker-evidence.html`, `data.json`):
 - All 62 quotes on public Adobe pages were matched again, word for word, against a fresh live read of the 45 pages (`evidence_page/tools/fetch_pages.py`, then `verify.py`). The Adobe Support and Services quote stays checked against Adam's paste.
@@ -66,7 +74,7 @@ Read this first in the new chat. Everything below is on GitHub, so a new account
 - Its nav now links the new "Propensity to buy" tab.
 
 **The brief's two new tabs, how to rebuild them**
-- The brief is not in GitHub. Unzip Adam's `brand-visibility-growth.zip` into a folder, copy in `evidence_page/coworker-evidence.html`, `propensity/method_page/propensity-method.html` and `propensity-mockup.png`, and add the two nav links to its `index.html` after "Evidence" (`evidence_page/brief_nav_change.diff` shows the first; the second is `<a href="propensity-method.html">Propensity to buy</a>` right after it).
+- The brief is not in GitHub. Unzip Adam's `brand-visibility-growth.zip` into a folder, copy in `evidence_page/coworker-evidence.html`, `propensity/method_page/propensity-method.html`, `propensity-mockup.png` and `propensity-mockup-phone.png`, and add the two nav links to its `index.html` after "Evidence" (`evidence_page/brief_nav_change.diff` shows the first; the second is `<a href="propensity-method.html">Propensity to buy</a>` right after it).
 - `python3 propensity/method_page/build_method_page.py evidence_page/coworker-evidence.html propensity/method_page/propensity-method.html` rebuilds the propensity tab and copies its picture.
 - `evidence_page/tools/package.py` writes the zip and one click-through preview for each tab. The previews embed Adobe fonts: never commit them.
 - Pictures: `evidence_page/tools/pics.js`, `propensity/method_page/pics.js`, `propensity/mockups/propensity_mock.js`, `small_items/small_items.js` then `compose.py`.
@@ -148,7 +156,7 @@ Read this first in the new chat. Everything below is on GitHub, so a new account
   - Example: the client owns Customer Journey Analytics and "can't tie AI traffic to revenue", so Brand Visibility ranks first.
 - **Files:** two finished designs (`design_transparent.md`, `design_model.md`) and the start of a third, hybrid one (`hybrid/`).
 - **The plan to propose:**
-  - Day one, rank by what the tool knows for certain: the products each goal calls for, plus documented connections and services.
+  - Day one (overtaken: Adam decided on Nov 17 that partners never see the list without numbers), rank by what the tool knows for certain: the products each goal calls for, plus documented connections and services.
   - With Adam's data, add real propensity: co-ownership rates with a back-off for rare combinations, or a small calibrated model. Backtest it so .80 really means about 8 in 10.
   - Show the customer count next to each number.
 - **Data:** Adam found a large data set covering the marketing (digital experience) products and the Creative Cloud products. He will upload it into the chat. Never commit it.
