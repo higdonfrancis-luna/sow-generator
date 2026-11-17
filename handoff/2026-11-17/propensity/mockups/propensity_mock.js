@@ -43,7 +43,7 @@ const CSS = `
 .pp-sub{padding:4px 18px 6px;font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#6b6b6b}
 .pp-or{padding:0 18px 12px;font-size:14.5px;color:#4a4a4a}
 .pp-or div{margin-top:6px;border:1.5px solid #1C1C1C;border-radius:10px;padding:9px 12px;color:#8a8a8a}
-.pp-new{margin:0 0 6px 20px;border:2px dashed #C9A400;border-radius:12px;padding:3px}
+.pp-left{margin:0;padding:11px 18px 6px;border-top:1px solid #D9D9D9;font-size:13.5px;line-height:1.4;color:#4a4a4a}
 `;
 
 const GOAL = 'My client can’t tie AI traffic to revenue';
@@ -79,44 +79,30 @@ const head = `<div class="hd"><div class="k">Add product</div><p>Ranked for your
 // The reasons use the canvas legend's own words: Native integration, Shared platform, Partner workflow.
 const WHY = {
   cw: 'My client’s leaders want readouts on request. This needs CJA B2C edition.',
-  aa: 'Shared platform with Customer Journey Analytics.',
   commerce: 'Native integration with Brand Visibility. Shared platform with Customer Journey Analytics.',
   aemsites: 'Native integration with Brand Visibility (partner workflow with Edge Delivery Services). Shared platform with Customer Journey Analytics.',
-  bc: 'Partner workflow with Brand Visibility. Native integration with Customer Journey Analytics.',
-  ca: 'Native integration with Customer Journey Analytics.',
   ajo: 'Native integration with Customer Journey Analytics.',
   target: 'Native integration with Customer Journey Analytics.',
 };
 // For this goal and canvas the tool's files give 1 product that builds on the goal, 10 rows that connect to it
-// (AEM Sites' two deliveries are one row) and 20 products not tied to it.
+// (AEM Sites' two deliveries are one row) and 20 products not tied to it. Adobe Analytics is one of the 10 and
+// is left out by Adam's rule, so 9 remain: 4 shown and 5 folded.
 const folds = `<div class="pp-fold">More that connect to the goal <span>5 products</span></div>
-<div class="pp-fold">Not tied to this goal <span>20 products</span></div>`;
-
-// 2. Day one: no customer data. The goal sets the order; under a heading, products are in name order. No numbers.
-const dayOne = head + mock() + `
-<p class="pp-def">No customer data yet. The goal sets the order. Under a heading, products are in name order.</p>
-<div class="pp-grp">Builds on the goal</div>
-${row(1, 'Coworker', 'Builds on the goal', WHY.cw, '', '', true)}
-<div class="pp-grp">Connects to the goal</div>
-${row(2, 'Adobe Analytics', 'Connects to the goal', WHY.aa)}
-${row(3, 'Adobe Commerce', 'Connects to the goal', WHY.commerce)}
-${row(4, 'AEM Sites', 'Connects to the goal', WHY.aemsites)}
-${row(5, 'Brand Concierge', 'Connects to the goal', WHY.bc)}
-${row(6, 'Content Analytics', 'Connects to the goal', WHY.ca)}
-` + folds;
+<div class="pp-fold">Not tied to this goal <span>20 products</span></div>
+<p class="pp-left"><b>Left out: Adobe Analytics.</b> Customer Journey Analytics is on your canvas, so Adobe Analytics is not suggested.</p>`;
 
 const def = '<p class="pp-def">The goal sets the order. The number is the share of similar customers who also own the product. It is for planning, not a forecast. Fewer than 30 customers own both products on this canvas, so these numbers set Brand Visibility aside and use the 673 customers who own Customer Journey Analytics.</p>';
 
-// 3. With data: the goal still sets the order; the number sorts products under the same heading. All numbers are SAMPLE.
+// 2. The list. It ships only once the customer data is in (Adam, Nov 17), so every row has its number.
+// The goal still sets the order; the number sorts products under the same heading. All numbers are SAMPLE.
 const withData = head + mock(' <span class="pp-sample">Sample numbers</span> Made up for this picture. Real numbers come from the customer data, as summary counts only.') + def + `
 <div class="pp-grp">Builds on the goal</div>
 ${row(1, 'Coworker', 'Builds on the goal', WHY.cw, '.06', 'Sample: 40 of 673', true)}
 <div class="pp-grp">Connects to the goal</div>
-${row(2, 'Adobe Analytics', 'Connects to the goal', WHY.aa, '.80', 'Sample: 539 of 673')}
-${row(3, 'AEM Sites', 'Connects to the goal', WHY.aemsites, '.52', 'Sample: 352 of 673')}
-${row(4, 'Target', 'Connects to the goal', WHY.target, '.45', 'Sample: 305 of 673')}
-${row(5, 'Journey Optimizer', 'Connects to the goal', WHY.ajo, '.31', 'Sample: 210 of 673')}
-${row(6, 'Adobe Commerce', 'Connects to the goal', WHY.commerce, '.12', 'Sample: 81 of 673')}
+${row(2, 'AEM Sites', 'Connects to the goal', WHY.aemsites, '.52', 'Sample: 352 of 673')}
+${row(3, 'Target', 'Connects to the goal', WHY.target, '.45', 'Sample: 305 of 673')}
+${row(4, 'Journey Optimizer', 'Connects to the goal', WHY.ajo, '.31', 'Sample: 210 of 673')}
+${row(5, 'Adobe Commerce', 'Connects to the goal', WHY.commerce, '.12', 'Sample: 81 of 673')}
 ` + folds;
 
 (async () => {
@@ -151,7 +137,6 @@ ${row(6, 'Adobe Commerce', 'Connects to the goal', WHY.commerce, '.12', 'Sample:
     await ctx.close();
   }
   await shot('p1_play_goal_question', question);
-  await shot('p2_play_ranked_day_one', dayOne);
   await shot('p3_play_ranked_with_sample_numbers', withData);
   await b.close();
   srv.close();
