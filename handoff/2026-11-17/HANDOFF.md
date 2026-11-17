@@ -38,7 +38,7 @@ Read this first in the new chat. Everything below is on GitHub, so a new account
 | 195de3d, 211fdce | Brand Intelligence connects to Frame.io, Firefly Creative Production and Figma |
 | 6a96c44 | Coworker services and proof, the Workfront note, Brand Intelligence with Creative Cloud and Coworker |
 | 1f374b6 | Coworker: 26 more services, the Coworker + Adobe Analytics connection, RFI write-ups for all 563 services |
-| (next commit) | Brand Visibility + Brand Concierge in industry-neutral wording, with Adam's picks A to D (see below). If this commit is missing from the branch, run `bash handoff/2026-11-17/neutral/apply_neutral.sh <checkout>`: it edits by content, then builds. |
+| 5b51f88 | Brand Visibility + Brand Concierge in industry-neutral wording, with Adam's picks A to D (see below). It was applied with `handoff/2026-11-17/neutral/apply_neutral.sh`, which edits by content and then builds. |
 
 **Industry-neutral wording, Adam's picks:**
 - A: keep the card line "Two products, new sales pursuit".
