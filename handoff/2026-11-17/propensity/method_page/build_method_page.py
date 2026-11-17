@@ -265,7 +265,7 @@ MAIN = '''<main id="main">
         </ul>
       </article>
   </div>
-  <p class="pm-note"><strong>First lessons from real data, November 17.</strong> The number brings back long-established products, not new ones, so only the client’s goal can put a new product on the list. Proposed next, for Adam to decide: show numbers for established products only, and say they mean a product line above a set yearly size; mark a number from a rare combination as rough, because it reads low; and show no number for creative and document products for now, because the first files are too narrow for them.</p>
+  <p class="pm-note"><strong>First lessons from real data, November 17.</strong> The number brings back long-established products, not new ones, so only the client’s goal can put a new product on the list. Decided with Adam: established products show a number, and a new product with too few owners shows “No number yet”. A number from a rare combination is marked as rough, because it reads low. Creative and document products show no number for now, because the first files are too narrow for them. The partner is never asked for the client’s segment.</p>
   <p class="pm-note"><strong>What comes next.</strong> First the open choices. Then the customer data. Then the checks. Partners see the list only after the checks are done, the privacy check passes and the data owner signs off. If the numbers fail their checks, the list shows only the share of all customers.</p>
 </div></section>
 </main>'''

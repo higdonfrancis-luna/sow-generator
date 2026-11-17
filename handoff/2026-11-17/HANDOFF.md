@@ -64,7 +64,9 @@ Read this first in the new chat. Everything below is on GitHub, so a new account
 **Adam on the data and the number (Nov 17, late)**
 - The rows he removed from the files were the smaller ones, mostly zero-dollar rows where the customer owned nothing.
 - No segment question in the tool. "Can we have it behind the scenes and no one could see it"; the segments may change in December; and "no propensity to buy score is ever perfect. It's directional at best." So: the partner is not asked for a segment, the number is presented as a guide, and segments are used only when the numbers are prepared and checked. A private mockup with a segment question was drawn and is dropped.
-- Drafted for his yes or no, not decided: a new product with too few owners shows no number; numbers from a rare combination are marked rough; numbers are labeled with what "owns" means; no numbers for creative and document products for now. The mockup `propensity/mockups/p3_*` and the tab show this as a proposal.
+- **Decided (Adam: "Above looks good"):** a new product with too few owners leads its heading with "No number yet"; established products show a number, called a guide; numbers from a rare combination are marked rough; no numbers for creative and document products for now. Picture: `propensity/mockups/p3_list_only.png`. Not built.
+- **Never show a dollar figure to partners.** Adam: "I'm not gonna mention $50,000 or more to them." The counts come from product lines above the size floor of his files; that stays a note for whoever prepares the numbers, not text in the tool.
+- **Segments stay behind the scenes** (confirmed twice). No segment names in the tool.
 - He has not said whether real counts may go on the brief's tab. Default: they wait, and they never go to GitHub.
 
 **Questions waiting for Adam**

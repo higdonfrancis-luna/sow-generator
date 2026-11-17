@@ -92,7 +92,7 @@ const folds = `<div class="pp-fold">More that connect to the goal <span>5 produc
 <div class="pp-fold">Not tied to this goal <span>20 products</span></div>
 <p class="pp-left"><b>Left out: Adobe Analytics.</b> Customer Journey Analytics is on your canvas, so Adobe Analytics is not suggested.</p>`;
 
-const def = '<p class="pp-def">The goal sets the order. The number is the share of similar customers who own the product at about $50,000 a year or more. It is a guide, not a forecast. Fewer than 30 customers own both products on this canvas, so these numbers set Brand Visibility aside and use the 673 customers who own Customer Journey Analytics. That makes them rough, and probably too low.</p>';
+const def = '<p class="pp-def">The goal sets the order. The number is the share of similar customers who also own the product. It is a guide, not a forecast. Fewer than 30 customers own both products on this canvas, so these numbers set Brand Visibility aside and use the 673 customers who own Customer Journey Analytics. That makes them rough, and probably too low.</p>';
 
 // 2. The list. It ships only once the customer data is in (Adam, Nov 17). Established products show a number;
 // a new product with too few owners shows none. The number is a guide: Adam, "directional at best".
