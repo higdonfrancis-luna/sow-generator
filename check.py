@@ -16,7 +16,7 @@ EXPECTED_ORDER = ['cja', 'commerce', 'aem', 'fsi', 'abv', 'coworker']
 EXPECTED_ONE_TIME_HOURS = {'cja': 232, 'commerce': 248, 'aem': 1808, 'fsi': 768, 'abv': 168, 'coworker': 156}  # step 18: Commerce without L03, FSI without C04; step 45: CDN log forwarding (OX1, 16 h) on every Brand Visibility play
 EXPECTED_MONTHLY_HOURS = {'cja': 104, 'commerce': 104, 'aem': 120, 'fsi': 104, 'abv': 104, 'coworker': 32}
 EXPECTED_STARTERS = {'cja': ['L01', 'L02', 'C01', 'C06', 'OX1', 'O01', 'O02'], 'commerce': ['L01', 'L02', 'C02', 'C07', 'OX1', 'O01', 'O02'], 'aem': ['L01', 'L02', 'A04', 'A01', 'A02', 'A03', 'A05', 'SO1', 'C03', 'OX1', 'O01', 'SO2', 'O02'], 'fsi': ['L01', 'L02', 'F02', 'OX1', 'O01', 'O02'], 'abv': ['L01', 'L02', 'C05', 'OX1', 'O01', 'O02'], 'coworker': ['CW01', 'CW02', 'CW03', 'CW07', 'CW05', 'CW06']}
-EXPECTED_OPTIONAL = {'cja': 5, 'commerce': 6, 'aem': 5, 'fsi': 6, 'abv': 5, 'coworker': 2}
+EXPECTED_OPTIONAL = {'cja': 5, 'commerce': 6, 'aem': 5, 'fsi': 6, 'abv': 5, 'coworker': 6}  # Nov 17: Coworker offers CW04, CW08, CW09, CW10, CW11 and X01
 
 results = []
 

@@ -824,6 +824,51 @@
       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/experience-production/figma-to-visual-content-fragments",
       "title": "Experience League: Figma to Visual Content Fragments Skill"
      }
+    },
+    {
+     "id": "AXD13",
+     "name": "Dispatcher, security and vulnerability fixes from Coworker findings",
+     "unit": "one-time",
+     "low": 24,
+     "base": 48,
+     "high": 96,
+     "default": false,
+     "scope": "Use Coworker's Dispatcher Insights on your client's production and stage environments (a seven-day log window), with the Dispatcher configuration and related AEM code shared for review, and the Governance Agent's vulnerability list, to agree a prioritized fix list: cache rules and headers, filters and routing, redirects, security headers, permission-sensitive caching, CSRF and CORS settings, and affected components to patch or upgrade. Implement the agreed fixes in your client's code, deploy through Cloud Manager, and ask Coworker to reassess the logs or live URLs.",
+     "evidence": "After you apply and deploy a change, ask Coworker to reassess the available logs or live URL behavior.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/development/use-cases",
+      "title": "Experience League: Development Agentic Capabilities Overview"
+     }
+    },
+    {
+     "id": "AXD14",
+     "name": "Content Fragment readiness fixes with Coworker",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 64,
+     "default": false,
+     "scope": "Run Coworker's Content Fragment inspection on up to three of your client's fragment folders before a semantic search, translation, headless or publishing launch, then work through its human-reviewed remediation steps: fix the model, metadata, schema and reference issues, resolve risky dependencies before deletes, and agree the tags and review step for Coworker's bulk fragment edits. Rerun the checks until the folders pass.",
+     "evidence": "Finally it provides assessments with guided, human-reviewed remediation steps.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/experience-production/use-cases",
+      "title": "Experience League: Experience Production Agentic Capabilities Overview"
+     }
+    },
+    {
+     "id": "AXD15",
+     "name": "Brand rules in Experience Context with a site audit",
+     "unit": "one-time",
+     "low": 24,
+     "base": 48,
+     "high": 96,
+     "default": false,
+     "scope": "Build your client's Experience Context for one brand: gather the style guide, claim rules, positioning and design standards, import up to three brand policies from PDF or page URLs, review the rules and checks the Governance Agent extracts, add up to three segments (such as markets, audiences or sub-brands) over global defaults, enter the design system's colors and typography, map the domains and set everything to Active. Run a batch analysis of up to 50 existing pages, report aligned and non-aligned pages, and agree a fix plan and owners for rule updates.",
+     "evidence": "New entities are created as Draft by default, so you must set an entity to Active to put it into effect.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-governance/experience-context",
+      "title": "Experience League: Experience Context"
+     }
     }
    ],
    "no_services": false
@@ -890,6 +935,21 @@
      "source": {
       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/content-advisor/discovery/use-cases",
       "title": "Experience League: Content Discovery Agentic Capabilities Overview"
+     }
+    },
+    {
+     "id": "AXD16",
+     "name": "Asset rights, Content Hub access rules and permission fixes",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 64,
+     "default": false,
+     "scope": "Use the AEM Governance Agent in Coworker to find your client's expired, expiring and undated assets in up to three folder trees, then add expiry dates and usage rights metadata to them in bulk in AEM Assets and set a review routine for assets about to expire. Design and create up to 10 Content Hub attribute-based access rules for groups, regions or agencies with the Governance Agent, written as ALLOW rules on IMS Group IDs and including a rule for each group that must see all assets, since Content Hub denies access to groups no rule covers. Apply the least-privilege group and ACL changes the Governance Agent recommends after diagnosing your client's repository permissions, since it does not change them itself.",
+     "evidence": "The agentic capability is read-only: it diagnoses permissions and recommends changes, but it does not modify access control lists, groups, or content on your behalf.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-governance/overview",
+      "title": "Experience League: Governance Agent Overview"
      }
     }
    ],
@@ -1146,6 +1206,7 @@
   "Hours are our estimates for a mid-market client; Adobe publishes none. AXE01 matches AXA03 (8/16/32), AXE02 sits near XB15 and AXA02 (24/48/80), and AXE03 matches XA12 (16/32/56).",
   "Adam's named pairs are in other batches: AEM Assets with Workfront and CJA with AEM Sites. For this batch's AEM Sites with Workfront, Workfront's native AEM integration is with AEM Assets, not Sites; the Sites link is the Universal Editor extension, the Fusion AEM MCP connector, and Content Fragments through Content Advisor.",
   "Every page cited was downloaded on Oct 31 2026 with curl, and every quote in the JSON and these notes was checked by script against the page text (whitespace and curly quotes normalized), together with negative checks on the pages behind not_documented and a parse of the AEM integrations grid: 171 checks passed, 0 failed. business.adobe.com refused every fetch (503) and is not used as a source; the Community post was read with a web fetch only.",
-  "Files: /tmp/claude-0/-home-user-warroom/432cd4fe-7682-5283-bb86-965652091bf2/scratchpad/aem_research/batch_E.json (this result, with the full trail), pages and text in /tmp/claude-0/-home-user-warroom/432cd4fe-7682-5283-bb86-965652091bf2/scratchpad/aem_research/batch_E/, builder and checker in /tmp/claude-0/-home-user-warroom/432cd4fe-7682-5283-bb86-965652091bf2/scratchpad/aem_research/batch_E/scripts/ (python3 -I verify_batch_E.py <batch_E dir> <batch_E.json> prints ALL BATCH E CHECKS PASSED). Nothing under /home/user/warroom was changed."
+  "Files: /tmp/claude-0/-home-user-warroom/432cd4fe-7682-5283-bb86-965652091bf2/scratchpad/aem_research/batch_E.json (this result, with the full trail), pages and text in /tmp/claude-0/-home-user-warroom/432cd4fe-7682-5283-bb86-965652091bf2/scratchpad/aem_research/batch_E/, builder and checker in /tmp/claude-0/-home-user-warroom/432cd4fe-7682-5283-bb86-965652091bf2/scratchpad/aem_research/batch_E/scripts/ (python3 -I verify_batch_E.py <batch_E dir> <batch_E.json> prints ALL BATCH E CHECKS PASSED). Nothing under /home/user/warroom was changed.",
+  "Nov 17 2026 (Adam: \"yes!\"): Coworker services approved from the Coworker review, each read on its Adobe page and checked by a second reader, with its quote found word for word (record: canvas/research/coworker_2026-11-17/services.json). Hours are our own estimates; Adobe publishes none. All start off, so saved canvases keep their totals. Added here: AXD13, AXD14, AXD15, AXD16."
  ]
 }

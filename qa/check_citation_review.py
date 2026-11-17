@@ -85,7 +85,8 @@ SUPPORT_QUOTE = ('Getting it to work at full capacity requires the right data fo
                  'skills. Adobe Support and Services helps you address all these needs, with Premium Learning building team capabilities, '
                  'Ultimate Success providing strategic guidance, and Integrated Services and Custom Services handling hands-on configuration '
                  'and deployment.')
-for lid in ('CW01', 'CW02', 'CW03', 'CW04', 'CW05', 'CW06', 'CW07', 'CW08', 'CW-CJA', 'CW-AEM'):
+# Nov 17 2026 (Adam: "yes!"): Coworker's three new services a partner lists, CW09 to CW11, carry it the same way.
+for lid in ('CW01', 'CW02', 'CW03', 'CW04', 'CW05', 'CW06', 'CW07', 'CW08', 'CW09', 'CW10', 'CW11', 'CW-CJA', 'CW-AEM'):
     cited = [r for r in templates[lid].get('references') or [] if r.get('url') == SUPPORT]
     assert len(cited) == 1 and cited[0].get('quote') == SUPPORT_QUOTE, f'{lid}: the Adobe Support and Services reference or its quote is missing'
     assert cited[0].get('partner') is True, f'{lid}: the Adobe Support and Services reference is not marked as partner proof'

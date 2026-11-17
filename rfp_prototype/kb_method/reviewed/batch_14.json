@@ -1,0 +1,137 @@
+[
+ {
+  "id": "EDC01",
+  "steps": [
+   "Agree with your analytics team the page and block events to measure, and list what your current tracking already captures so nothing is counted twice.",
+   "Add tracking for the agreed events to your Edge Delivery pages and blocks, using your existing consent controls, Web SDK and datastream.",
+   "Test with consent given, refused and not yet answered, then trace sample events to the dataset and your CJA data view."
+  ],
+  "deliverables": [
+   "Event list for pages and blocks",
+   "Page and block events on your Edge Delivery pages",
+   "Test results for consent and for sample events"
+  ],
+  "asks": [
+   "Your consent controls, Web SDK, event schema, datastream, dataset, CJA connection and data view already in place",
+   "An analytics contact to agree the events and check them in CJA",
+   "Permission to add tracking to your Edge Delivery pages"
+  ],
+  "risk": "Interactions collected without a visitor's consent: we send the new events only when your existing consent controls allow it, and test each consent case before sign-off.",
+  "outcome": "The agreed page and block interactions on your Edge Delivery pages reach your CJA data view, collected according to each visitor's consent.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XK14",
+  "steps": [
+   "Agree with your review leads at which step of your Frame.io reviews the brand validation results are read, and by whom.",
+   "Agree with your review leads what happens to an asset that fails before sign-off, and write both decisions into a one-page review guide.",
+   "Try the agreed steps on one real review in Frame.io with your review leads, and adjust the guide from what the trial shows."
+  ],
+  "deliverables": [
+   "Agreed review step for brand validation results",
+   "One-page guide for assets that fail",
+   "Trial on one real Frame.io review"
+  ],
+  "asks": [
+   "Review leads who can agree how your reviews run in Frame.io for Business",
+   "One real review in Frame.io to try the agreed steps on"
+  ],
+  "risk": "Assets signed off before anyone reads the brand results: we set the review step where they are read, and try it on one real review first.",
+  "outcome": "Your reviewers read the brand validation results in Frame.io at an agreed step of each review, with an agreed path for assets that fail before sign-off.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "XK15",
+  "steps": [
+   "Agree with your production lead which production workflows have their outputs validated against your brand guidelines, and the volume each one runs at.",
+   "Estimate the Operations the brand checks use at the planned volume, from each Skill's consumption rate in the Rate Card, and share the estimate with your production lead.",
+   "Run a test batch through one workflow and check that the validation results reach your reviewers in Frame.io for review and sign-off.",
+   "Agree with your production lead which failed outputs are rerun before review, and record that rule for each workflow."
+  ],
+  "deliverables": [
+   "List of workflows whose outputs are checked",
+   "Operations estimate at the planned volume",
+   "Test batch with results in Frame.io",
+   "Rerun rule for failed outputs"
+  ],
+  "asks": [
+   "A production lead who knows your workflows and their planned volumes",
+   "The Rate Card for the Operations you license, with each Skill's consumption rate",
+   "Reviewers with access to Frame.io to look at the test results"
+  ],
+  "risk": "Brand checks using more Operations than you planned for: we estimate them at your planned volume and test on one batch before the checks go wider.",
+  "outcome": "Outputs of the production workflows you choose are validated automatically against your brand guidelines, with results in Frame.io for review and sign-off and an agreed rerun rule.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XK16",
+  "steps": [
+   "Train your designers to run the Adobe Brand Intelligence plugin in Figma: choose the context, such as channel, audience and product data, and set the number of variants.",
+   "Review what the plugin assembles with your designers on a real campaign, adjusting single assets or regenerating with other assembly options, starting with two or three variants.",
+   "Agree with your designers and review leads how finished variants go on to review, and write it into a one-page guide for the team."
+  ],
+  "deliverables": [
+   "Training for designers on the Figma plugin",
+   "Practice variants reviewed with your designers",
+   "One-page guide to sending variants to review"
+  ],
+  "asks": [
+   "Designers with access to the Adobe Brand Intelligence plugin in Figma",
+   "Your prepared Figma templates, with contexts and assembly options already configured for your brand",
+   "A real campaign your designers can practice on"
+  ],
+  "risk": "Variants that miss what the campaign needs: we train designers to review each result against it, adjust single assets or regenerate, before the agreed hand-off to review.",
+  "outcome": "Your designers create on-brand variants in Figma with the Adobe Brand Intelligence plugin, review and adjust them, and send finished variants to review the agreed way.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "CW08",
+  "steps": [
+   "Agree with your team the pilot users and the AI platform for Coworker: one you already use, from Microsoft 365 Copilot, ChatGPT, Claude, Gemini Enterprise or Databricks Genie One.",
+   "Help your platform administrators approve and deploy Coworker for the pilot users, following Adobe's setup steps for that platform.",
+   "Test prompts from your own work with each pilot user under their own Adobe permissions, and show your team what Coworker answers there and what stays in the Coworker interface."
+  ],
+  "deliverables": [
+   "Coworker approved and deployed for your pilot users",
+   "Tested prompt set",
+   "Short guide to what Coworker answers in the platform"
+  ],
+  "asks": [
+   "Your administrators for the AI platform, to approve and deploy Coworker",
+   "Pilot users with Coworker access in Adobe and access to the platform",
+   "Questions your team asks every week, to turn into test prompts"
+  ],
+  "risk": "Users expecting the full Coworker interface in their AI platform: our guide shows that answers there are read-only insights and what stays in the Coworker interface.",
+  "outcome": "Your pilot users ask Coworker questions in the AI platform they already use and get answers that match the data they can see in their Adobe applications.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "XB16",
+  "steps": [
+   "Agree with your Fusion administrator whether Coworker connects with a service account or a personal account, since Coworker can change whatever that account can.",
+   "Build the agreed scenario around Run a Prompt and Get Execution Status, with its trigger, a prompt mapped from earlier modules, and the storage and follow-on modules it needs.",
+   "Route results that need input or approval to a person, save Task IDs for long tasks, and set error handling that never resends a prompt whose outcome is uncertain.",
+   "Test the scenario on real cases with your process owner, checking that each completed run did its business action, since a completed status does not guarantee it."
+  ],
+  "deliverables": [
+   "Coworker connection in Workfront Fusion on the agreed account",
+   "Tested scenario around Run a Prompt and Get Execution Status",
+   "Routing for results that need input or approval",
+   "Test record of real cases and their business actions"
+  ],
+  "asks": [
+   "A decision on the account Coworker connects with, and its access",
+   "Access to Workfront Fusion and the systems the scenario reads and writes",
+   "A process owner to agree the scenario and check test results"
+  ],
+  "risk": "Changes beyond what you intended: the modules cannot restrict individual tools, so Coworker connects with an account whose access you choose, and approvals go to a person.",
+  "outcome": "A tested Fusion scenario sends prompts to Coworker on the agreed trigger and uses its answers, routing anything that needs input or approval to a person.",
+  "kind": "task",
+  "phase": "build"
+ }
+]

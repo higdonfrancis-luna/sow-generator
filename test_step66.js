@@ -50,28 +50,32 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
   // EDC01 "Measure Edge Delivery page and block interactions": 152 connections and 532 services, and still 34 Adobe products and 9 outside systems
   const edc = conn['eds-cja'];
   // Nov 17 2026 (Adam: "yes for both"): Brand Intelligence + Creative Cloud and Brand Intelligence + Coworker, two connections with no services: 157 connections
-  ok(cat.products.length === 34 && cat.outside === 10 && cat.conns.length === 157 && Object.keys(cat.lines).length === 537 &&
+  // Nov 17 2026 (Adam: "yes!"): 26 Coworker services, all optional (CW09 to CW11 on Coworker, 23 on its connections), and the new
+  // Coworker + Adobe Analytics connection (cw-aa) with one of them: 158 connections and 563 services
+  ok(cat.products.length === 34 && cat.outside === 10 && cat.conns.length === 158 && Object.keys(cat.lines).length === 563 &&
     !!edc && edc.a === 'eds' && edc.b === 'cja' && edc.lines.join() === '' && edc.more.join() === 'EDC01' && !!cat.lines.EDC01 && cat.lines.EDC01.name === 'Measure Edge Delivery page and block interactions',
-    'the catalog holds 34 Adobe products, 10 outside systems, 157 connections and 537 services (Brand Intelligence added Creative Cloud and Coworker, with no services of their own; Coworker added two optional services, Coworker set up in an AI platform and Workfront Fusion scenarios with Coworker; Brand Intelligence added Frame.io, Firefly Creative Production and Figma, each with one optional service; step 85: Adobe Commerce + CRM and eight services; the reviewed canvas added Edge Delivery Services + Customer Journey Analytics with one optional service, EDC01)',
+    'the catalog holds 34 Adobe products, 10 outside systems, 158 connections and 563 services (Coworker added 26 optional services, three of its own and 23 on its connections, and Coworker + Adobe Analytics with one of them; Brand Intelligence added Creative Cloud and Coworker, with no services of their own; Coworker added two optional services, Coworker set up in an AI platform and Workfront Fusion scenarios with Coworker; Brand Intelligence added Frame.io, Firefly Creative Production and Figma, each with one optional service; step 85: Adobe Commerce + CRM and eight services; the reviewed canvas added Edge Delivery Services + Customer Journey Analytics with one optional service, EDC01)',
     [cat.products.length, cat.outside, cat.conns.length, Object.keys(cat.lines).length, edc ? [edc.a, edc.b, edc.lines.join('+'), edc.more.join('+')].join('/') : 'no eds-cja', (cat.lines.EDC01 || {}).name || 'no EDC01'].join());
   ok(four.sort().join() === 'aa,acrobat,acrobatsign,mmeasure' && four.every(id => byId[id] && byId[id].name === FOUR[id].name && byId[id].lines.join() === FOUR[id].lines.filter(l => l.default).map(l => l.id).join() &&
     byId[id].more.join() === FOUR[id].lines.filter(l => !l.default).map(l => l.id).join()), 'Adobe Analytics, Marketo Measure, Acrobat and Acrobat Services, and Acrobat Sign are in it, with their services starting and optional as proposed', four.join());
   ok(four.reduce((t, id) => t + byId[id].lines.length + byId[id].more.length, 0) === 42, 'the four hold 42 services of their own');
-  ok(PAIRS.length === 20 && PAIRS.every(id => conn[id] && [...conn[id].lines, ...conn[id].more].sort().join() === WANT[id].lines.map(l => l.id).sort().join()) &&
-    PAIRS.reduce((t, id) => t + conn[id].lines.length + conn[id].more.length, 0) === 32, 'the 20 connections are in it, with 32 services between them', PAIRS.filter(id => !conn[id]).join());
+  // Nov 17 2026 (Adam: "yes!"): Coworker + Adobe Analytics (cw-aa), left out of this wave on Nov 10, joins its research file with one optional service (XL27)
+  ok(PAIRS.length === 21 && PAIRS.every(id => conn[id] && [...conn[id].lines, ...conn[id].more].sort().join() === WANT[id].lines.map(l => l.id).sort().join()) &&
+    PAIRS.reduce((t, id) => t + conn[id].lines.length + conn[id].more.length, 0) === 33, 'the 21 connections are in it (Coworker + Adobe Analytics since Nov 17), with 33 services between them', PAIRS.filter(id => !conn[id]).join());
   const theirs = cat.conns.filter(c => four.includes(c.a) || four.includes(c.b)).map(c => c.id);
-  ok(theirs.length === 20 && !theirs.some(id => id.split('-').includes('bv')), 'nothing more, and none of the four connects to Brand Visibility: Adobe Analytics has no Brand Visibility line', theirs.join());
-  ok(!theirs.some(id => id.split('-').includes('cw')), 'no Coworker card came with this wave ("Let\'s just skip those")');
+  ok(theirs.length === 21 && !theirs.some(id => id.split('-').includes('bv')), 'nothing more, and none of the four connects to Brand Visibility: Adobe Analytics has no Brand Visibility line', theirs.join());
+  ok(theirs.filter(id => id.split('-').includes('cw')).join() === 'cw-aa' && WANT['cw-aa'] && WANT['cw-aa'].kind === 'native' && conn['cw-aa'].lines.join() === '' && conn['cw-aa'].more.join() === 'XL27',
+    'no Coworker card came with this wave ("Let\'s just skip those"), until Coworker + Adobe Analytics on Nov 17 (Adam: "yes!"): native, with one optional service', theirs.filter(id => id.split('-').includes('cw')).join());
   ok(GONE.every(id => !byId[id]) && !cat.conns.some(c => GONE.includes(c.a) || GONE.includes(c.b)), 'Audience Manager, Adobe Campaign, Adobe Advertising and AEM Guides are not in the tool, nor any connection to them');
   ok(FILES.every(f => f.left_out.some(x => /^Adam, Nov 10 2026/.test(x.why))), 'what Adam left out is on record in each research file, with his words');
   ok(cat.plays.filter(x => !x.startsWith('custom')).join('|') === 'abv:bv|cja:bv+cja|commerce:bv+commerce|aem:bv+so+eds|fsi:bv+bc|coworker:cw', 'the six plays on the front page are unchanged', cat.plays.join('|'));
 
-  // the voice rules of step 47, on the 20 connections
+  // the voice rules of step 47, on the 21 connections
   const voice = await p.evaluate(ids => { const bare = s => /\b[Tt]he client(?![-\w])|\b[Cc]lients\b|\b[Yy]our\b(?! client)/.test(s.replace(/Your client|your client/g, '')), order = /(^|[;.(:]\s*|\bso\s+)(confirm|prove it)\b/i;
     const cs = CAT.connections.filter(c => ids.includes(c.id));
     return {card: cs.flatMap(c => [c.how, c.label, c.availability, ...(c.prereqs || []), ...(c.flows || []).map(f => f.what), c.gain && c.gain.title, c.gain && c.gain.text].filter(x => typeof x === 'string' && bare(x)).map(x => c.id + ': ' + x.slice(0, 70))),
       sow: cs.flatMap(c => [c.sowAvailability || c.availability, ...(c.sowPrereqs || c.prereqs || [])].filter(x => typeof x === 'string' && order.test(x)).map(x => c.id + ': ' + x.slice(0, 70)))}; }, PAIRS);
-  ok(!voice.card.length && !voice.sow.length, 'the 20 connections keep the voice rules: "your client" on the card, conditions (not instructions) for the statement of work', JSON.stringify(voice));
+  ok(!voice.card.length && !voice.sow.length, 'the 21 connections keep the voice rules: "your client" on the card, conditions (not instructions) for the statement of work', JSON.stringify(voice));
 
   // 2. Create your own play: the menu and the four product cards
   await p.click('#picker [data-play="custom"]'); await p.waitForTimeout(400);
@@ -94,21 +98,21 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
   ok(/Needs PDF Services API/.test(rowOf('acrobat', 'AB04')) && /Also needs Salesforce or Microsoft Dynamics/.test(rowOf('mmeasure', 'MZ02')) && /Also needs Workday/.test(rowOf('acrobatsign', 'SG12')),
     'a service that needs a license or an outside system says so in a tag (PDF Services API, the CRM, Workday)');
 
-  // 3. the 20 connection cards, each on a canvas of its own two products
+  // 3. the 21 connection cards, each on a canvas of its own two products
   const cards = {};
   for (const id of PAIRS) { const q = await own([conn[id].a, conn[id].b]); await openCard(q, `.ib[data-c="${id}"]`); cards[id] = await readCard(q); await q.context().close(); }
-  ok(PAIRS.every(id => cards[id].rows.map(r => r.id).join() === [...conn[id].lines, ...conn[id].more].join()), 'each of the 20 connection cards lists its own services', PAIRS.filter(id => cards[id].rows.map(r => r.id).join() !== [...conn[id].lines, ...conn[id].more].join()).join());
+  ok(PAIRS.every(id => cards[id].rows.map(r => r.id).join() === [...conn[id].lines, ...conn[id].more].join()), 'each of the 21 connection cards lists its own services', PAIRS.filter(id => cards[id].rows.map(r => r.id).join() !== [...conn[id].lines, ...conn[id].more].join()).join());
   // step 86: a connection whose availability was only a caveat has none now and its card shows no Availability line; the others show their own line, word for word
-  const NOAV = ['mmeasure-aa', 'aa-eds', 'acrobatsign-aemforms', 'acrobatsign-workfront', 'acrobatsign-marketo', 'acrobat-acrobatsign', 'acrobat-workfront', 'acrobat-aemsites', 'acrobat-aa'];
+  const NOAV = ['mmeasure-aa', 'aa-eds', 'acrobatsign-aemforms', 'acrobatsign-workfront', 'acrobatsign-marketo', 'acrobat-acrobatsign', 'acrobat-workfront', 'acrobat-aemsites', 'acrobat-aa', 'cw-aa'];
   const CAVEAT = /Not stated by Adobe|Not stated on|Adobe says|Adobe documents|Adobe states|Adobe's programs page|confirm with Adobe|Adobe confirms|enabled by Adobe|provisioned for A4T by Adobe|AEM Engineering/i;
   const avBad = PAIRS.filter(id => !(NOAV.includes(id) ? conn[id].av === '' && !/Availability:/.test(cards[id].text) : conn[id].av.length > 20 && cards[id].text.includes('Availability: ' + conn[id].av)) ||
     CAVEAT.test(cards[id].text) || !conn[id].prereqs.length || !/BEFORE IT WORKS/i.test(cards[id].text) || !cards[id].text.includes(conn[id].prereqs[0]) || !/WHAT YOU GET TOGETHER/i.test(cards[id].text) || !/HOW IT CONNECTS/i.test(cards[id].text));
   ok(!avBad.length && cards['aa-target'].text.includes('Availability: Automated Personalization activities are not supported.') && cards['aa-target'].text.includes('Licenses for both Adobe Analytics and Target') &&
     cards['acrobat-express'].text.includes('Availability: Needs an Acrobat Studio, Acrobat Pro or Acrobat Standard subscription.') && cards['acrobatsign-workfront'].text.includes('Workfront Fusion, which is an additional purchase on Select and Prime packages'),
-    'and each says what kind it is, what it needs first, what the two give together and how they connect; 11 keep a factual availability line, 9 show none, and no card carries an availability caveat', avBad.join());
+    'and each says what kind it is, what it needs first, what the two give together and how they connect; 11 keep a factual availability line, 10 show none (Coworker + Adobe Analytics among them), and no card carries an availability caveat', avBad.join());
   ok(/A4T/.test(cards['aa-target'].text) && /Ultimate/.test(cards['mmeasure-rtcdp'].text), 'Adobe Analytics + Target is Analytics for Target, and Marketo Measure + Real-Time CDP says it is for Ultimate');
   const everything = [...shown.map(x => x[1].text), ...PAIRS.map(id => cards[id].text)].join('\n');
-  ok(!LABELS.test(everything), 'none of the 24 cards says beta, early access, limited availability, coming soon or end of life', (everything.match(LABELS) || [''])[0]);
+  ok(!LABELS.test(everything), 'none of the 25 cards says beta, early access, limited availability, coming soon or end of life', (everything.match(LABELS) || [''])[0]);
   ok(/your client/.test(everything) && !/\bthe Client\b/.test(everything), 'the cards speak to the partner ("your client"), never in the Client\'s voice');
   ok(!/Brand Visibility/.test(shown.find(x => x[0] === 'aa')[1].text + PAIRS.filter(id => /(^|-)aa(-|$)/.test(id)).map(id => cards[id].text).join('\n')), 'no Adobe Analytics card names Brand Visibility');
 

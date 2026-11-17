@@ -173,8 +173,9 @@ const unNoted = (where, s) => where === 'workfront-cw.how' ? s.replace(ADOBE_NOT
     const panel = await q.textContent('#services-panel');
     await q.click('[data-step="document"]'); await q.waitForTimeout(500);
     const wdoc = await q.textContent('#sow-preview');
-    ok(wl.length === 2 && wrows.every(a => /^Prerequisites for Workfront \+ Coworker: /.test(a)) && /Workfront Fusion scenarios with Coworker/.test(wdoc) && !ADOBE_WORDS.test(wrows.join(' ') + panel + wdoc) && !/health care|confirm eligibility/i.test(wdoc),
-      'and the statement of work for its two services, and the Services step, carry no industry note', wrows.map(a => a.slice(0, 120)).join(' | '));
+    // Nov 17 2026 (Adam: "yes!"): Workfront + Coworker gained Monthly Fusion scenario support through Coworker (XB17), a third service
+    ok(wl.length === 3 && wrows.every(a => /^Prerequisites for Workfront \+ Coworker: /.test(a)) && /Workfront Fusion scenarios with Coworker/.test(wdoc) && !ADOBE_WORDS.test(wrows.join(' ') + panel + wdoc) && !/health care|confirm eligibility/i.test(wdoc),
+      'and the statement of work for its three services, and the Services step, carry no industry note', wrows.map(a => a.slice(0, 120)).join(' | '));
     await q.context().close(); }
 
   // 5. a saved draft follows: the page's own wording rules turn each old play-service text into the new one

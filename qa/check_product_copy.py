@@ -1,6 +1,6 @@
 """No customer-facing release labels, forecasts or product-release dates; Client dates are kept.
 
-Reads the data the two pages ship: the SOW tool's 45 templates (with their size bands and the name and
+Reads the data the two pages ship: the SOW tool's 48 templates (with their size bands and the name and
 assumption pairs applied outside a play), the 159 research service definitions, the canvas catalog and the
 problem picker. The rendered pages and downloads are checked separately by check_rendered_copy.js.
 """
@@ -70,7 +70,14 @@ assert not found, f'{len(found)} release label(s) or date(s) in shipped product 
 # with Coworker) adds a service definition and a canvas service
 # Nov 17 2026 (Adam: "yes for both"): Brand Intelligence + Creative Cloud and Brand Intelligence + Coworker add two connections and
 # no service
-assert len(templates) == 45 and len(concepts) == 494 and len(canvas['connections']) == 157 and len(canvas['lines']) == 537, (len(templates), len(concepts), len(canvas['connections']), len(canvas['lines']))
+# Nov 17 2026 (Adam: "yes!"): 26 Coworker services. Three are Coworker's own (CW09 to CW11), templates and canvas services; 23 sit
+# on Coworker's connections as service definitions and canvas services, one of them (XL27) on the new Coworker + Adobe Analytics
+# connection (cw-aa)
+assert len(templates) == 48 and len(concepts) == 517 and len(canvas['connections']) == 158 and len(canvas['lines']) == 563, (len(templates), len(concepts), len(canvas['connections']), len(canvas['lines']))
+NOV17 = ['CW09', 'CW10', 'CW11', 'XA28', 'XA29', 'XA30', 'XA31', 'XL27', 'XA32', 'XA33', 'XA34', 'XA35', 'XA36', 'XA37', 'XA38', 'XA39', 'XA40',
+         'AXD13', 'AXD14', 'AXD15', 'AXD16', 'XB17', 'XB18', 'XB19', 'XQ09', 'XQ10']
+assert all(i in canvas['lines'] for i in NOV17) and all((i in concepts) == (not i.startswith('CW')) for i in NOV17), 'a Nov 17 Coworker service is missing'
+assert any(x['id'] == 'cw-aa' and x['more'] == ['XL27'] for x in canvas['connections']), 'Coworker + Adobe Analytics is missing, or its service no longer starts off'
 assert all(i in concepts and i in canvas['lines'] for i in ('CE01', 'CE02', 'CE03', 'CE04', 'CE05', 'CE06', 'CE07', 'XR01')), 'a step 85 Commerce service is missing'
 assert any(x['id'] == 'commerce-crm' for x in canvas['connections']), 'Adobe Commerce + CRM is missing'
 
@@ -78,8 +85,12 @@ assert any(x['id'] == 'commerce-crm' for x in canvas['connections']), 'Adobe Com
 # nothing shipped says trial, free trial or paid offer about Brand Visibility, and no sentence names Adobe Analytics as a way to
 # feed Brand Visibility. Sites Optimizer's and Coworker's own trial wording stays (different products), as do Adobe's page titles.
 TRIAL = re.compile(r"\btrials?\b|\bpaid (?:Brand Visibility )?offer(?:ing)?\b|\bpaid Brand Visibility\b", re.I)
+# Nov 17 2026: Coworker trial value sprint (CW11) is Coworker's own trial, Adobe's usage-bound CX Enterprise Coworker Trial, in the
+# words of its verified text; no Brand Visibility trial comes with it
 TRIAL_OK = re.compile(r"Sites Optimizer trial|Trial sites authored in Google Drive or SharePoint need the ASO-EDS-Autofix-Users IMS group"
-                      r"|Adobe's trial page says headless delivery is not supported", re.I)
+                      r"|Adobe's trial page says headless delivery is not supported"
+                      r"|Coworker trial|trial's AI credits|Adobe decides trial eligibility|the trial is not open to customers|The trial gives a one-time allotment"
+                      r"|for the whole trial|what Adobe enables for the trial", re.I)
 AA_FEED = re.compile(r"Brand Visibility|Business Impact|LLM Optimizer")
 
 
@@ -187,7 +198,11 @@ KEPT = {'cw-cja': ['Coworker Chat license', 'CJA B2C edition'],
         'planning-cw': ['Coworker enabled for the organization by the main Workfront administrator'],
         'moptimizer-cw': ['The conversational experience permission for each user who works in Coworker, plus the Manage or View permission of every feature a skill touches'],
         # Nov 17: a connection with no services of its own, so nothing prints its prerequisites in a statement of work
-        'cw-brandintel': ['Coworker Chat license', 'Adobe Brand Intelligence licensed and onboarded, with the Validate add-on']}
+        'cw-brandintel': ['Coworker Chat license', 'Adobe Brand Intelligence licensed and onboarded, with the Validate add-on'],
+        # Nov 17 (Adam: "yes!"): Coworker + Adobe Analytics, with its licenses, Adobe's aa-mcp integration and the MCP permission items
+        'cw-aa': ['Coworker Chat license', 'Adobe Analytics license',
+                  "The aa-mcp integration in Coworker's list of connected servers (Customizations, Integrations tab); if it is not listed, add it with Add server",
+                  'MCP Read-only Access, or MCP Full Access to also create segments, calculated metrics or projects, in an Adobe Analytics product profile for each user; product administrators get full MCP access automatically']}
 cards = {x['id']: x for x in canvas['connections']}
 assert sorted(KEPT) == sorted(x['id'] for x in canvas['connections'] if 'cw' in (x['a'], x['b'])), 'the Coworker connections changed'
 lost = [(i, p) for i, ps in KEPT.items() for p in ps if p not in cards[i].get('prereqs', [])]

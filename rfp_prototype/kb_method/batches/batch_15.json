@@ -1,0 +1,983 @@
+{
+ "batch": "15",
+ "services": [
+  {
+   "id": "CW09",
+   "name": "Coworker governance and access policy",
+   "owner": [
+    "Coworker"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 56
+   },
+   "scope": "Define how the Client runs Coworker beyond the pilot, for up to three teams: the organization-wide access setting and the user and group overrides, Coworker user groups for the agreed teams, the roles those groups hold in the connected applications, which task types must use Plan mode and who approves them, which actions are allowed in which sandbox (including deletes and moving objects between sandboxes), whether users may add their own servers and install or remove plugins, the memory rules, the audit review routine and an AI credit plan for the agreed use cases.",
+   "adobe_quote": "Onboarding: Adobe’s enterprise support or professional services team configures Coworker for your environment, sets up integrations with your Adobe applications, and defines governance and approval workflows.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Adobe CX Enterprise Coworker Overview",
+    "url": "https://experienceleague.adobe.com/en/docs/coworker/content/home"
+   },
+   "template_deliverable": "Coworker operating policy, access model with user groups and overrides, action and approval rules by application and sandbox, server and plugin rules for users, memory and audit routines, AI credit plan, and joiner and leaver steps.",
+   "template_acceptance": "The Client's administrators and governance owner approve the policy, the agreed groups and overrides are in place, and tests show users reach only what their application roles allow.",
+   "template_assumptions": "Coworker is provisioned and the pilot is accepted or under way. A Coworker administrator (a System Admin, or a Product Admin of Experience Platform) applies the settings. Where Adobe's onboarding team has already defined governance and approval workflows, this service builds on that work. Coworker user groups are separate from Admin Console groups and are kept in Coworker. AI credit rates are Adobe's and can change.",
+   "template_exclusions": "Pilot access and context validation already in Coworker access and business context, broad permission cleanup in the connected applications, sandbox and data usage policy setup (Governance, access and sandbox setup), Adobe-owned provisioning and ongoing administration.",
+   "template_basis": "Up to three teams beyond the pilot, with their access model, action and approval rules, memory and audit routines and one AI credit plan.",
+   "product_facts": [
+    "Coworker is Adobe's AI-powered teammate for customer experience and marketing workflows. You describe a goal in plain language, and it plans the work, executes it across your Adobe and connected systems, validates the results and brings the finished work back for your approval.",
+    "Coworker lets your teams ask for insights, content and actions across your Adobe applications in natural language.",
+    "We would tailor Coworker to the way your teams work with skills: reusable playbooks that standardize common workflows, reporting methods and analysis approaches, so nobody has to explain the same process again.",
+    "You keep control through approval gates, permissions inherited from your Adobe organization, checks before actions run and an audit trail. Skills do not store customer data: data access stays governed through your connected Adobe applications, permissions and organizational controls.",
+    "Coworker acts across Adobe and external systems through governed access, using built-in connectors or your own. An external tool or service is connected by adding it as a server.",
+    "As Coworker takes on a task you can watch it reason and progress. It validates the results and brings the finished work back to you for approval.",
+    "Access: Assign roles and access to Coworker features for your teams in the Admin Console.",
+    "Governance: Keep control through approval gates, permissions inherited from your Adobe organization, checks before actions run, and an audit trail.",
+    "Coworker access is controlled by an organization-wide setting and optional user or group overrides.",
+    "A Coworker administrator is a user assigned as either a System Admin for the organization or as a Product Admin of Adobe Experience Platform in Adobe Admin Console.",
+    "Coworker user groups are separate from Adobe Admin Console groups.",
+    "Coworker respects permissions in compatible applications.",
+    "Use Plan mode for complex tasks or tasks that change data. When Plan mode is on, Coworker Chat proposes a plan and waits for your approval before it carries it out.",
+    "How to determine whether users can install or remove plugins themselves",
+    "Memory is designed for personalization, not as a system of record.",
+    "Audit gives administrators a record of the actions Coworker takes across their organization.",
+    "An AI credit is a usage-based metric that quantifies the execution of actions or jobs."
+   ]
+  },
+  {
+   "id": "CW10",
+   "name": "Custom MCP server for a Client system",
+   "owner": [
+    "Coworker"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 32,
+    "base": 64,
+    "high": 120
+   },
+   "scope": "Design, build and host one MCP server that gives Coworker governed access to a Client system with no built-in connector, such as an internal API, a product catalog or a ticketing tool: up to six tools, read-only by default with any write tools behind confirmation, the authentication method and headers Coworker sends, and the tool timeout. Register it in Coworker as a server, test each tool with authorized and unauthorized users, and document who may add servers.",
+   "adobe_quote": "MCP connectors: Act across Adobe and external systems through governed access, using built-in connectors or your own.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Adobe CX Enterprise Coworker Overview",
+    "url": "https://experienceleague.adobe.com/en/docs/coworker/content/home"
+   },
+   "template_deliverable": "The MCP server code and hosting setup, its tool list with read and write scope, the Coworker server registration, security and test evidence, and run and removal instructions.",
+   "template_acceptance": "Authorized users complete the agreed tasks through the new tools in Coworker, unauthorized requests are refused, and the Client's security owner approves the server.",
+   "template_assumptions": "The Client provides the system's API documentation, a test environment, credentials and a hosting location it owns. The Client's security team reviews the integration, since connecting an MCP server to Adobe products is a configuration the Client chooses and must evaluate. Coworker reaches the server over SSE or HTTP at the URL it is given. In Coworker, each user adds servers on the Integrations tab of their Customizations, so pilot users add it there unless the Client's administrators share it in a plugin, which is priced in Package Skills and connections as a plugin.",
+   "template_exclusions": "Changes to the Client's system or API, more than one system, ongoing hosting and support, Adobe's built-in connectors (Approved Coworker connection or plugin) and plugin packaging (Package Skills and connections as a plugin).",
+   "template_basis": "One MCP server for one system with no built-in connector, with up to six tools, read-only by default.",
+   "product_facts": [
+    "Coworker is Adobe's AI-powered teammate for customer experience and marketing workflows. You describe a goal in plain language, and it plans the work, executes it across your Adobe and connected systems, validates the results and brings the finished work back for your approval.",
+    "Coworker lets your teams ask for insights, content and actions across your Adobe applications in natural language.",
+    "We would tailor Coworker to the way your teams work with skills: reusable playbooks that standardize common workflows, reporting methods and analysis approaches, so nobody has to explain the same process again.",
+    "You keep control through approval gates, permissions inherited from your Adobe organization, checks before actions run and an audit trail. Skills do not store customer data: data access stays governed through your connected Adobe applications, permissions and organizational controls.",
+    "Coworker acts across Adobe and external systems through governed access, using built-in connectors or your own. An external tool or service is connected by adding it as a server.",
+    "As Coworker takes on a task you can watch it reason and progress. It validates the results and brings the finished work back to you for approval.",
+    "To connect Coworker Chat to an external tool or service, add it as a server under Customizations > User > Integrations.",
+    "Connection type: Select the protocol that the server uses to communicate with Coworker Chat, either SSE (server-sent events) or HTTP. The default is SSE.",
+    "Tool timeout (seconds): Set how long Coworker Chat waits for a tool on this server to respond before it stops the request.",
+    "Authentication: Select how Coworker Chat proves its identity to the server.",
+    "Headers: Click Add header to send extra HTTP headers, such as an API key, with every request to the server.",
+    "Connecting MCP clients or servers to Adobe products is a customer-elected configuration. Customers are responsible for evaluating the security and suitability of any MCP integration."
+   ]
+  },
+  {
+   "id": "CW11",
+   "name": "Coworker trial value sprint",
+   "owner": [
+    "Coworker"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 24,
+    "high": 40
+   },
+   "scope": "For a Client that Adobe has accepted into the usage-bound Coworker trial, choose up to three use cases with the business owners, prepare the data access and example prompts, run them with up to 10 pilot users within the trial's AI credits, track use on the license usage dashboard, and report the time saved, the quality of results and the open issues for the Client's purchase decision.",
+   "adobe_quote": "Certain eligible CX Enterprise customers may have access to a usage-bound trial to experience the value of Adobe’s agentic AI offerings in their own environment before making the commitment to purchase.",
+   "license": "",
+   "source": {
+    "title": "Experience League: CX Enterprise Coworker Trial",
+    "url": "https://experienceleague.adobe.com/en/docs/cx-enterprise-ai/experience-cloud-ai/agents/trial"
+   },
+   "template_deliverable": "Use case briefs, a credit budget for each use case, run logs with example results, and a value report with recommendations for a paid rollout.",
+   "template_acceptance": "The Client's sponsor accepts the value report, and each use case shows its measured result against the agreed success measure.",
+   "template_assumptions": "Adobe decides trial eligibility, and the trial is not open to customers who have or had a license to Experience Platform Agents AI Credits. The trial gives a one-time allotment of up to 10,000 AI credits and ends when they are used or the Client buys more. For a limited introductory period each Coworker input uses 25 AI credits, about 400 inputs for the whole trial; Adobe can change the rate. Users act only within their existing product permissions. Pilot users are a training scope, not a seat limit.",
+   "template_exclusions": "Skill building (Build reusable Coworker Skills), connections (Approved Coworker connection or plugin), what Adobe enables for the trial, the paid rollout and any license or credit purchase.",
+   "template_basis": "Up to three use cases and up to 10 pilot users, run within the trial's AI credits.",
+   "product_facts": [
+    "Coworker is Adobe's AI-powered teammate for customer experience and marketing workflows. You describe a goal in plain language, and it plans the work, executes it across your Adobe and connected systems, validates the results and brings the finished work back for your approval.",
+    "Coworker lets your teams ask for insights, content and actions across your Adobe applications in natural language.",
+    "We would tailor Coworker to the way your teams work with skills: reusable playbooks that standardize common workflows, reporting methods and analysis approaches, so nobody has to explain the same process again.",
+    "You keep control through approval gates, permissions inherited from your Adobe organization, checks before actions run and an audit trail. Skills do not store customer data: data access stays governed through your connected Adobe applications, permissions and organizational controls.",
+    "Coworker acts across Adobe and external systems through governed access, using built-in connectors or your own. An external tool or service is connected by adding it as a server.",
+    "As Coworker takes on a task you can watch it reason and progress. It validates the results and brings the finished work back to you for approval.",
+    "You can track your AI Credits using the license usage dashboard in the Adobe Experience Platform UI.",
+    "Only administrators and users with the appropriate permissions can view your usage information.",
+    "Coworker Chat operates under user guidance and oversight, and respects your organization’s existing product-level access controls."
+   ]
+  },
+  {
+   "id": "XA28",
+   "name": "Implementation plan from Coworker, checked against the tenant",
+   "owner": [
+    "Coworker + Customer Journey Analytics"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 12,
+    "base": 20,
+    "high": 40
+   },
+   "scope": "Run Coworker's implementation guide skill with your client's team for one path (Customer Journey Analytics from scratch, the Adobe Analytics upgrade, Content Analytics, Marketing Campaign Analytics or Streaming Media), check each planned step against the live tenant (licenses, sandboxes, schemas, datasets, report suites and permissions), correct the owners and effort, and import the plan into Workfront or Jira as the delivery plan.",
+   "adobe_quote": "These skills don’t access your Adobe systems or make any changes. They help you plan your implementation. They don’t perform it or verify it against a live tenant.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Plan Your Customer Journey Analytics or Streaming Media Implementation with Coworker",
+    "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/intelligent-implementation-and-administration/implementation-guide"
+   },
+   "connection_how": [
+    "Coworker Chat reads Customer Journey Analytics through Adobe's cja-mcp integration, with each person's own permissions. The Skills we build turn your agreed AI-channel measures in a validated data view into a repeatable readout."
+   ],
+   "product_facts": [
+    "Customer Journey Analytics brings Analysis Workspace to the data in Adobe Experience Platform, so journeys can be analyzed across channels in one reporting view.",
+    "Customer Journey Analytics measures the results across channels.",
+    "In Customer Journey Analytics your data can be viewed and analyzed in sequence across channels: data from your call center, point-of-sale systems and online properties is combined into a single reporting view.",
+    "Results are measured in Customer Journey Analytics, used as the reporting source for Target's A/B activities: its Experimentation panel compares the variations and reports each one's lift over the baseline, and the confidence in it, on the success metrics you choose.",
+    "Coworker is Adobe's AI-powered teammate for customer experience and marketing workflows. You describe a goal in plain language, and it plans the work, executes it across your Adobe and connected systems, validates the results and brings the finished work back for your approval.",
+    "Coworker lets your teams ask for insights, content and actions across your Adobe applications in natural language.",
+    "Basic details about your current environment, such as whether you have an existing Adobe Analytics implementation, your licensing status, or your planned data ingestion path.",
+    "Get a personalized, ordered plan for standing up Customer Journey Analytics from scratch, including owners, effort estimates, and dependencies for each step.",
+    "Steps formatted with story points, priority, and labels for import into Jira",
+    "Steps formatted with durations and predecessors for import into Workfront"
+   ]
+  },
+  {
+   "id": "XA29",
+   "name": "Adobe Analytics and CJA data validation and fixes",
+   "owner": [
+    "Coworker + Customer Journey Analytics"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 48,
+    "high": 96
+   },
+   "scope": "After your client completes the upgrade steps, run Coworker's validation skill on up to three report suite and data view pairs (a full audit compares up to 40 metrics and 20 dimensions), check each suggested action, and fix the causes in Experience Platform, Adobe Analytics or the data view, such as bot filtering, session settings, marketing channel derived fields, duplicate datasets or field mappings. Rerun until each pair reaches the agreed matching rate, and document the differences that are expected by design, such as device-based visitors against people.",
+   "adobe_quote": "Verify that the suggested actions are valid, then resolve them in Adobe Experience Platform or Adobe Analytics.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Validate Adobe Analytics to Customer Journey Analytics Data",
+    "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/intelligent-implementation-and-administration/data-validation-aa-cja"
+   },
+   "connection_how": [
+    "Coworker Chat reads Customer Journey Analytics through Adobe's cja-mcp integration, with each person's own permissions. The Skills we build turn your agreed AI-channel measures in a validated data view into a repeatable readout."
+   ],
+   "product_facts": [
+    "Customer Journey Analytics brings Analysis Workspace to the data in Adobe Experience Platform, so journeys can be analyzed across channels in one reporting view.",
+    "Customer Journey Analytics measures the results across channels.",
+    "In Customer Journey Analytics your data can be viewed and analyzed in sequence across channels: data from your call center, point-of-sale systems and online properties is combined into a single reporting view.",
+    "Results are measured in Customer Journey Analytics, used as the reporting source for Target's A/B activities: its Experimentation panel compares the variations and reports each one's lift over the baseline, and the confidence in it, on the success metrics you choose.",
+    "Coworker is Adobe's AI-powered teammate for customer experience and marketing workflows. You describe a goal in plain language, and it plans the work, executes it across your Adobe and connected systems, validates the results and brings the finished work back for your approval.",
+    "Coworker lets your teams ask for insights, content and actions across your Adobe applications in natural language.",
+    "Follow the steps on this page only after you complete all previous upgrade steps.",
+    "You can validate individual metrics or dimensions, or you can validate all metrics and dimensions that are included in the report suite and data view.",
+    "Compare up to 40 Adobe Analytics metrics and 20 dimensions with their Customer Journey Analytics counterparts in a single run.",
+    "Some variance is expected and doesn’t indicate a problem with your upgrade to Customer Journey Analytics.",
+    "Adobe Analytics counts device-based visitors, while Customer Journey Analytics counts people, using cross-device identity stitching.",
+    "Adobe Analytics filters bots by default, while Customer Journey Analytics bot filtering is opt-in.",
+    "View access to the Adobe Analytics report suite and the Customer Journey Analytics data view being compared",
+    "Resolving the underlying cause of a data discrepancy"
+   ]
+  },
+  {
+   "id": "XA30",
+   "name": "Coworker analytics enablement on CJA data views",
+   "owner": [
+    "Coworker + Customer Journey Analytics"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 56
+   },
+   "scope": "Set up the organization-level practices Adobe recommends for analysis in Coworker, for up to two teams: coach an analyst from your client's team as the Coworker champion, agree the approved dimensions, metrics and segments in each data view and tidy their names and descriptions so prompts can name them exactly, write a library of up to 20 vetted prompts and one Skill that directs Coworker to the approved components, store each team's data view in memory, and teach users when to ask for a quick answer and when to work through a deeper analysis.",
+   "adobe_quote": "Create a library of vetted prompts and skills that correlate with the data and components that are available to users.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Analyze Analytics Data with Adobe CX Enterprise Coworker Chat",
+    "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/analytics-overview"
+   },
+   "connection_how": [
+    "Coworker Chat reads Customer Journey Analytics through Adobe's cja-mcp integration, with each person's own permissions. The Skills we build turn your agreed AI-channel measures in a validated data view into a repeatable readout."
+   ],
+   "product_facts": [
+    "Customer Journey Analytics brings Analysis Workspace to the data in Adobe Experience Platform, so journeys can be analyzed across channels in one reporting view.",
+    "Customer Journey Analytics measures the results across channels.",
+    "In Customer Journey Analytics your data can be viewed and analyzed in sequence across channels: data from your call center, point-of-sale systems and online properties is combined into a single reporting view.",
+    "Results are measured in Customer Journey Analytics, used as the reporting source for Target's A/B activities: its Experimentation panel compares the variations and reports each one's lift over the baseline, and the confidence in it, on the success metrics you choose.",
+    "Coworker is Adobe's AI-powered teammate for customer experience and marketing workflows. You describe a goal in plain language, and it plans the work, executes it across your Adobe and connected systems, validates the results and brings the finished work back for your approval.",
+    "Coworker lets your teams ask for insights, content and actions across your Adobe applications in natural language.",
+    "Appoint an analyst from your organization as a Coworker champion.",
+    "Create one or more skills that direct Coworker Chat to use only those components that you want used in analyses.",
+    "Educate users on when to ask Coworker Chat for a quick answer versus when to use it for deep thought work.",
+    "Reference components by their exact name.",
+    "Coworker Chat inherits permissions from Customer Journey Analytics or Adobe Analytics.",
+    "Sharing a saved skill with other users automatically (organization-level skill libraries require admin setup)",
+    "Add standard directions to the Coworker Chat memory."
+   ]
+  },
+  {
+   "id": "XA31",
+   "name": "Streaming Media collection from the Coworker plan",
+   "owner": [
+    "Coworker + Customer Journey Analytics"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 40,
+    "base": 80,
+    "high": 160
+   },
+   "scope": "Instrument your client's video or audio players for Streaming Media collection on the Edge, from the plan Coworker's implementation guide skill produces: configure the datastream and the XDM schema and dataset for media events, implement the SDK or API on up to two player platforms, map the media event model, add the media components to the CJA data view where CJA reports, and check that sessions, pings and completions reach CJA or Adobe Analytics reporting.",
+   "adobe_quote": "Get an implementation plan for Streaming Media collection on the Edge, covering datastream configuration, per-platform SDK/API implementation, and the media event model, so you correctly instrument sessions, pings, and completions for Customer Journey Analytics and/or Adobe Analytics reporting.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Plan Your Customer Journey Analytics or Streaming Media Implementation with Coworker",
+    "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/intelligent-implementation-and-administration/implementation-guide"
+   },
+   "connection_how": [
+    "Coworker Chat reads Customer Journey Analytics through Adobe's cja-mcp integration, with each person's own permissions. The Skills we build turn your agreed AI-channel measures in a validated data view into a repeatable readout."
+   ],
+   "product_facts": [
+    "Customer Journey Analytics brings Analysis Workspace to the data in Adobe Experience Platform, so journeys can be analyzed across channels in one reporting view.",
+    "Customer Journey Analytics measures the results across channels.",
+    "In Customer Journey Analytics your data can be viewed and analyzed in sequence across channels: data from your call center, point-of-sale systems and online properties is combined into a single reporting view.",
+    "Results are measured in Customer Journey Analytics, used as the reporting source for Target's A/B activities: its Experimentation panel compares the variations and reports each one's lift over the baseline, and the confidence in it, on the success metrics you choose.",
+    "Coworker is Adobe's AI-powered teammate for customer experience and marketing workflows. You describe a goal in plain language, and it plans the work, executes it across your Adobe and connected systems, validates the results and brings the finished work back for your approval.",
+    "Coworker lets your teams ask for insights, content and actions across your Adobe applications in natural language.",
+    "They don’t perform it or verify it against a live tenant."
+   ]
+  },
+  {
+   "id": "XL27",
+   "name": "Coworker Chat on Adobe Analytics report suites",
+   "owner": [
+    "Coworker + Adobe Analytics"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 12,
+    "base": 24,
+    "high": 40
+   },
+   "scope": "Give your client's pilot users Adobe Analytics MCP access in their product profiles (MCP Read-only Access for analysis, or MCP Full Access where they may also create segments, calculated metrics or projects), check that the aa-mcp integration is connected in Coworker, agree the report suite each team uses and store it in memory, compare the first answers with Analysis Workspace, and write the starter prompts and one Skill that keeps Coworker on the approved components, including root cause questions about a known metric over a known period.",
+   "adobe_quote": "Select the Integrations tab, then make sure that cja-mcp and aa-mcp are available in your list of connected servers.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Get started analyzing data with Coworker Chat",
+    "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/analytics-chat"
+   },
+   "connection_how": [
+    "Coworker Chat reads your Adobe Analytics report suites through Adobe's aa-mcp integration, with each person's own permissions, and opens the visualizations it builds in Analysis Workspace."
+   ],
+   "product_facts": [
+    "Adobe Analytics gathers data from your digital customer interactions and turns it into actionable insights, with in-depth analysis and versatile reporting. Its Analysis Workspace is a drag-and-drop interface for building analyses and sharing them.",
+    "Adobe Analytics collects the data from your website and apps and reports on it.",
+    "Adobe Analytics needs code in your website or app to send it data. We would start from a solution design document, the blueprint that translates what your stakeholders need into Analytics variables, and implement with the Web SDK extension, Adobe's standardized and recommended method.",
+    "Coworker is Adobe's AI-powered teammate for customer experience and marketing workflows. You describe a goal in plain language, and it plans the work, executes it across your Adobe and connected systems, validates the results and brings the finished work back for your approval.",
+    "Coworker lets your teams ask for insights, content and actions across your Adobe applications in natural language.",
+    "We would tailor Coworker to the way your teams work with skills: reusable playbooks that standardize common workflows, reporting methods and analysis approaches, so nobody has to explain the same process again.",
+    "Coworker Chat inherits permissions from Customer Journey Analytics or Adobe Analytics. You can access only those data views, report suites, dimensions, metrics, and segments available to you in Analysis Workspace.",
+    "It’s a good practice to add your preferred data views or report suites as preferences in Coworker’s memory.",
+    "After Coworker creates a visualization, you can open it in Analysis Workspace for deeper analysis and granular control.",
+    "Determine which permission item you need: MCP Read-only Access to query data, or MCP Full Access to also create or update components.",
+    "Adobe Analytics and Customer Journey Analytics product administrators automatically receive full MCP access for their respective products, even when neither MCP permission item is explicitly assigned in their product profiles.",
+    "Contact a system administrator or product administrator within your organization.",
+    "Investigate a change in a known metric over a known period",
+    "Create one or more skills that direct Coworker Chat to use only those components that you want used in analyses."
+   ]
+  },
+  {
+   "id": "XA32",
+   "name": "Experience Platform health check fixes with Coworker",
+   "owner": [
+    "Coworker + Real-Time CDP"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 48,
+    "high": 96
+   },
+   "scope": "Start from Coworker's view of the latest health check results for up to two of your client's sandboxes, let Coworker fix the issue types it supports after your client approves each change (identity namespace descriptions, duplicate and default merge policy names, and schemas missing the audit field group), and fix the other failed checks by hand, such as schema and identity configuration, TTL and lookback settings, segmentation and dataset limits, destination schedules, failing scheduled queries and source credentials. Add descriptions to the XDM fields teams target on so Coworker's field discovery finds them, rerun the checks and hand over a prioritized list of what is left.",
+   "adobe_quote": "These issues are difficult to detect and often require specialized expertise to diagnose.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Health Checks (Experience Platform)",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-platform/run-and-operate/health-checks/overview"
+   },
+   "connection_how": [
+    "Coworker Chat works with Real-Time CDP B2C from Coworker's workspace, helping teams create, optimize and analyze audiences in natural language."
+   ],
+   "product_facts": [
+    "Real-Time CDP brings known and anonymous data from your systems together into customer profiles, builds audiences from them and activates those audiences across channels.",
+    "Real-Time CDP brings known and anonymous customer data together into profiles and builds the audiences.",
+    "A customer becomes known when they sign in: the site sends a person-level identifier, such as a CRM ID or a hashed email, with the visit, and Experience Platform stitches it into their profile.",
+    "Real-Time CDP's Adobe Target destination makes those audiences available to Target for same-page and next-page personalization, with governance and privacy support, using a datastream.",
+    "Consent and data-use rules travel with the data: the Web SDK sends or discards data according to each visitor's consent, and Experience Platform enforces the data usage policies you enable when audiences are activated. We would keep sensitive attributes out of those audiences unless you approve them, and never use personalization to decide eligibility or pricing.",
+    "Coworker is Adobe's AI-powered teammate for customer experience and marketing workflows. You describe a goal in plain language, and it plans the work, executes it across your Adobe and connected systems, validates the results and brings the finished work back for your approval.",
+    "To access health checks, you need the View Health Checks access control permission.",
+    "The Last daily health scan completed on timestamp shows when the most recent scan ran.",
+    "You can also view your latest health check results and remediate select issues through Coworker Chat.",
+    "View the latest health check assessment for your sandbox, drill into a failing check, and see the affected entities",
+    "Fix flagged identity namespace, merge policy, and schema issues directly from chat, with your approval before any change is made"
+   ]
+  },
+  {
+   "id": "XA33",
+   "name": "Data lake retention review with Coworker",
+   "owner": [
+    "Coworker + Real-Time CDP"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 24,
+    "high": 48
+   },
+   "scope": "Use Coworker's Data Management Agent to list your client's large, unused or forgotten Experience Event datasets in up to two sandboxes, check how actively each is used and model the effect of a retention period, then review up to 15 shortlisted datasets with the data owners against business and legal retention needs, choose another data lifecycle tool where a whole dataset or another store must be cleaned, and apply the approved retention policies after Coworker's impact preview.",
+   "adobe_quote": "We recommend reviewing the available details and applying your business context before taking action.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Manage Data Lake Retention",
+    "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-management/manage-data-lake-retention"
+   },
+   "connection_how": [
+    "Coworker Chat works with Real-Time CDP B2C from Coworker's workspace, helping teams create, optimize and analyze audiences in natural language."
+   ],
+   "product_facts": [
+    "Real-Time CDP brings known and anonymous data from your systems together into customer profiles, builds audiences from them and activates those audiences across channels.",
+    "Real-Time CDP brings known and anonymous customer data together into profiles and builds the audiences.",
+    "A customer becomes known when they sign in: the site sends a person-level identifier, such as a CRM ID or a hashed email, with the visit, and Experience Platform stitches it into their profile.",
+    "Real-Time CDP's Adobe Target destination makes those audiences available to Target for same-page and next-page personalization, with governance and privacy support, using a datastream.",
+    "Consent and data-use rules travel with the data: the Web SDK sends or discards data according to each visitor's consent, and Experience Platform enforces the data usage policies you enable when audiences are activated. We would keep sensitive attributes out of those audiences unless you approve them, and never use personalization to decide eligibility or pricing.",
+    "Coworker is Adobe's AI-powered teammate for customer experience and marketing workflows. You describe a goal in plain language, and it plans the work, executes it across your Adobe and connected systems, validates the results and brings the finished work back for your approval.",
+    "Coworker uses the Data Management Agent to surface datasets worth investigating, analyze how actively a dataset is used, model the impact of a retention period, and, when appropriate, help you manage its data lake retention policy.",
+    "You also need access to the Data Management Agent and the required Adobe Experience Platform permissions.",
+    "The metrics shown are intended to provide helpful signals and may not represent all factors relevant to your decision. We recommend reviewing the available details and applying your business context before taking action.",
+    "If you need to remove an entire dataset or manage data in another Experience Platform store, see Choose the right data lifecycle management capability.",
+    "Coworker shows the estimated impact by row count and storage size.",
+    "The skill shows you the proposed impact before any change is applied.",
+    "Every retention policy change is recorded in an audit trail, including when a policy is set, changed, or removed."
+   ]
+  },
+  {
+   "id": "XA34",
+   "name": "Monthly data quality checks with Coworker",
+   "owner": [
+    "Coworker + Real-Time CDP"
+   ],
+   "unit": "monthly",
+   "hours": {
+    "low": 8,
+    "base": 16,
+    "high": 32
+   },
+   "scope": "Each month, run Coworker's Data Validation skill on up to 10 of your client's critical datasets and their key identity and event fields, check streaming capacity and breaches for the agreed sandboxes, follow up flagged values with Query Service where a sample is not enough, log regressions with their cause, and agree fixes to mappings or source data with the data owners.",
+   "adobe_quote": "Run ongoing data stewardship checks on critical datasets to catch regressions early.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Validate Your Experience Platform Data with Coworker",
+    "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/intelligent-implementation-and-administration/data-validation-aep"
+   },
+   "connection_how": [
+    "Coworker Chat works with Real-Time CDP B2C from Coworker's workspace, helping teams create, optimize and analyze audiences in natural language."
+   ],
+   "product_facts": [
+    "Real-Time CDP brings known and anonymous data from your systems together into customer profiles, builds audiences from them and activates those audiences across channels.",
+    "Real-Time CDP brings known and anonymous customer data together into profiles and builds the audiences.",
+    "A customer becomes known when they sign in: the site sends a person-level identifier, such as a CRM ID or a hashed email, with the visit, and Experience Platform stitches it into their profile.",
+    "Real-Time CDP's Adobe Target destination makes those audiences available to Target for same-page and next-page personalization, with governance and privacy support, using a datastream.",
+    "Consent and data-use rules travel with the data: the Web SDK sends or discards data according to each visitor's consent, and Experience Platform enforces the data usage policies you enable when audiences are activated. We would keep sensitive attributes out of those audiences unless you approve them, and never use personalization to decide eligibility or pricing.",
+    "Coworker is Adobe's AI-powered teammate for customer experience and marketing workflows. You describe a goal in plain language, and it plans the work, executes it across your Adobe and connected systems, validates the results and brings the finished work back for your approval.",
+    "Sampling only: the skill validates a sample of the dataset (typically the most recent 1,000 rows), not the entire dataset.",
+    "Read-only: the skill doesn’t change your data or its schema.",
+    "If your validation needs are more exhaustive or require complex business logic, supplement these results with additional tools such as Query Service or Data Prep validations.",
+    "Check current and historical streaming usage, capacity, and breach status across sandboxes"
+   ]
+  },
+  {
+   "id": "XA35",
+   "name": "Journeys built with Coworker: readiness, finishing and checks",
+   "owner": [
+    "Coworker + Journey Optimizer"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 40,
+    "high": 72
+   },
+   "scope": "Prepare your client's team to build journeys with Coworker's Journey Create skill: give practitioners the Manage Journeys, View Journey Events, Data Sources and Actions, View Segments and Manage Segments permissions and keep others read-only, confirm the audiences, events and data sources exist, name custom actions so prompts can call them exactly, and pilot up to five journeys from prompts or flowchart images. Finish in the journey canvas what Journey Create does not set, such as A/B tests, dataset lookups, wave sending, schedule recurrence, audience namespaces and custom action field mapping, then check each expression, run Coworker's quick simulation and a manual simulation or test mode, and publish.",
+   "adobe_quote": "Make sure to check and validate any expressions that Journey Skills create to ensure that the correct fields and values are used.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Coworker for journeys (Journey Optimizer)",
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/orchestrate-journeys/journeys-coworker-skills"
+   },
+   "connection_how": [
+    "Coworker Chat works with Journey Optimizer B2C from Coworker's workspace: Adobe's journey skills create journeys from a prompt or a flowchart (Journey Create) and check fallout, conflicts and anomalies."
+   ],
+   "product_facts": [
+    "Journey Optimizer is Adobe's application for creating and delivering connected, personalized customer experiences across your channels. It is built on Adobe Experience Platform and its real-time customer profile, and runs both real-time journeys and scheduled campaigns.",
+    "Journey Optimizer orchestrates the journeys and campaigns and delivers the messages across channels.",
+    "We would set Journey Optimizer up in the order Adobe documents: the environment first, with a development sandbox for building and testing and a production sandbox for sending, each with its own channel configurations. Journeys are tested with test profiles before activation.",
+    "A journey automates a real-time, multi-step sequence of interactions; a campaign sends a scheduled or API-triggered message to an audience. Messages are delivered through channels like email, mobile messages, push notifications and direct mail.",
+    "Journey Optimizer tracks customer engagement and campaign performance with reports, and its reporting is integrated with Customer Journey Analytics for a clearer view of performance metrics.",
+    "When messages are sent from journeys or campaigns, your customers must always be able to unsubscribe; once they do, their profiles are automatically removed from the audience of future marketing messages. Access labels control which users can reach specific journeys, campaigns and channel configurations.",
+    "Manage Journeys: This permission lets you create new journeys directly in Coworker.",
+    "Custom Actions: If you are using custom actions in your workflow you need to specify that you are using a custom action along with the exact name of the custom action.",
+    "Validate Expressions: Make sure to check and validate any expressions that Journey Skills create to ensure that the correct fields and values are used.",
+    "Prepare Audiences: Ensure your target audiences are already created and properly segmented.",
+    "Upload a reference image into Coworker and ask to create a journey using the image as reference.",
+    "The page states that Journey Create does not support cross-journey orchestration, A/B testing configuration, or custom action field mapping.",
+    "This feature currently only supports the Quick Simulation flow, and does not fully replace the Journey Optimizer manual simulation experience."
+   ]
+  },
+  {
+   "id": "XA36",
+   "name": "Journey inventory and channel setup cleanup with Coworker",
+   "owner": [
+    "Coworker + Journey Optimizer"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 56
+   },
+   "scope": "Run Coworker's journey hygiene, custom action error and channel configuration checks on one of your client's sandboxes, then clean up what they find: rename journeys, actions and events with missing, generic or similar names, close old live journeys to new entrances, delete the stale drafts and finished journeys your client no longer needs, move what stays into folders with tags, split oversized journeys, fix the endpoints, authentication or payloads behind failing custom actions, and correct sender, reply-to, subdomain, IP pool and unsubscribe settings in Journey Optimizer, since Channel Operation only reads them.",
+   "adobe_quote": "Get recommendations to clean up and stabilize your journey inventory.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Coworker for journeys (Journey Optimizer)",
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/orchestrate-journeys/journeys-coworker-skills"
+   },
+   "connection_how": [
+    "Coworker Chat works with Journey Optimizer B2C from Coworker's workspace: Adobe's journey skills create journeys from a prompt or a flowchart (Journey Create) and check fallout, conflicts and anomalies."
+   ],
+   "product_facts": [
+    "Journey Optimizer is Adobe's application for creating and delivering connected, personalized customer experiences across your channels. It is built on Adobe Experience Platform and its real-time customer profile, and runs both real-time journeys and scheduled campaigns.",
+    "Journey Optimizer orchestrates the journeys and campaigns and delivers the messages across channels.",
+    "We would set Journey Optimizer up in the order Adobe documents: the environment first, with a development sandbox for building and testing and a production sandbox for sending, each with its own channel configurations. Journeys are tested with test profiles before activation.",
+    "A journey automates a real-time, multi-step sequence of interactions; a campaign sends a scheduled or API-triggered message to an audience. Messages are delivered through channels like email, mobile messages, push notifications and direct mail.",
+    "Journey Optimizer tracks customer engagement and campaign performance with reports, and its reporting is integrated with Customer Journey Analytics for a clearer view of performance metrics.",
+    "When messages are sent from journeys or campaigns, your customers must always be able to unsubscribe; once they do, their profiles are automatically removed from the audience of future marketing messages. Access labels control which users can reach specific journeys, campaigns and channel configurations.",
+    "Identify journeys with missing or generic names. Find stale draft journeys that are more than 30 days old, have never been published, and have not been modified.",
+    "Identify when custom actions are failing or error rates spike within a journey.",
+    "View Journeys: This permission lets you view insights into the journey directly in Coworker.",
+    "Channel Operation is read-only. It does not create, update, or delete channel configurations.",
+    "Use it to quickly check sender domains, unsubscribe settings, IP pools, and other settings before using a channel configuration in a journey or campaign.",
+    "You cannot restart or delete a closed or stopped journey. You can create a new version of it or duplicate it.",
+    "Only finished journeys can be deleted.",
+    "Closing a journey manually ensures that customers who already entered the journey can finish their path but new users are not able to enter the journey.",
+    "If you want to end to a journey, best practice is to close it.",
+    "Move to folder - Move selected journeys into a folder.",
+    "Edit tags - Edit the tags assigned to selected journeys.",
+    "Delete - Permanently delete selected journeys."
+   ]
+  },
+  {
+   "id": "XA37",
+   "name": "Custom outbound channel with Channel Builder",
+   "owner": [
+    "Coworker + Journey Optimizer"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 40,
+    "high": 72
+   },
+   "scope": "Connect one messaging service your client uses that Journey Optimizer does not support natively (for example WeChat, Kakao Talk or a proprietary SMS gateway) to Journey Optimizer as a custom channel with Coworker's Channel Builder skill: the endpoint, headers and authentication, the throttling policy and the message payload. Test each payload scenario while the channel is still a draft, activate it, set up its API credentials where it uses authentication, its channel configuration and, where link tracking is needed, a delegated subdomain, and use it in a first journey or campaign.",
+   "adobe_quote": "To be able to use a custom channel in campaigns and journeys, an administrator must first create the channel. This involves defining the endpoint, authentication, throttling policy, and message payload structure. You can create the channel manually in the Channel Builder, as described below, or with the Channel Builder skill in Coworker.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Create a custom channel (Journey Optimizer)",
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/channels/custom-channel/configure-custom-channel/create-custom-channel"
+   },
+   "connection_how": [
+    "Coworker Chat works with Journey Optimizer B2C from Coworker's workspace: Adobe's journey skills create journeys from a prompt or a flowchart (Journey Create) and check fallout, conflicts and anomalies."
+   ],
+   "product_facts": [
+    "Journey Optimizer is Adobe's application for creating and delivering connected, personalized customer experiences across your channels. It is built on Adobe Experience Platform and its real-time customer profile, and runs both real-time journeys and scheduled campaigns.",
+    "Journey Optimizer orchestrates the journeys and campaigns and delivers the messages across channels.",
+    "We would set Journey Optimizer up in the order Adobe documents: the environment first, with a development sandbox for building and testing and a production sandbox for sending, each with its own channel configurations. Journeys are tested with test profiles before activation.",
+    "A journey automates a real-time, multi-step sequence of interactions; a campaign sends a scheduled or API-triggered message to an audience. Messages are delivered through channels like email, mobile messages, push notifications and direct mail.",
+    "Journey Optimizer tracks customer engagement and campaign performance with reports, and its reporting is integrated with Customer Journey Analytics for a clearer view of performance metrics.",
+    "When messages are sent from journeys or campaigns, your customers must always be able to unsubscribe; once they do, their profiles are automatically removed from the audience of future marketing messages. Access labels control which users can reach specific journeys, campaigns and channel configurations.",
+    "To access the Channel Builder, create and manage custom channels, you must have the View custom channels and Manage custom channels permissions granted.",
+    "Your external messaging system must expose an HTTPS endpoint that Journey Optimizer can call via HTTP POST.",
+    "While the channel is in Draft status, use the Test connection button on top of the screen to send a test request to your endpoint and validate the end-to-end connection.",
+    "Check your external system’s logs to confirm that the request was received with the expected authentication and payload.",
+    "After a channel is activated, only the following fields remain editable: name, description, icon, throttling, and retry configuration. Endpoint URL, headers, query parameters, authentication, and payload structure are locked.",
+    "Set up API credentials (if the channel uses authentication)",
+    "When you test the connection, Coworker asks which payload scenario to run before it executes the test.",
+    "Custom channels are available in journeys, orchestrated campaigns and Marketing (action and API-triggered) campaigns. They are not available in transactional campaign types."
+   ]
+  },
+  {
+   "id": "XA38",
+   "name": "Email content production with Coworker's content skills",
+   "owner": [
+    "Coworker + Journey Optimizer"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 40,
+    "high": 72
+   },
+   "scope": "Set up and pilot Coworker's Channel Content skills for your client's email work: check that the approved brand guidelines (voice, imagery and legal) are published where the Brand Lookup skill finds them, set up the reusable email design system Coworker maintains, store the Figma access token in Coworker's secrets and agree frame conventions for Build Email from Figma, define the brand, compliance, design and accessibility (WCAG 2.1 AA) reviews each email passes, and agree how approved content is saved into Journey Optimizer templates. Pilot up to five emails from brief to saved draft and fix the template issues the reviews find.",
+   "adobe_quote": "Request all relevant reviews: Ask for brand, compliance, design, and accessibility review before treating content as send-ready.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Coworker for content management (Journey Optimizer)",
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/content-management-coworker-skills"
+   },
+   "connection_how": [
+    "Coworker Chat works with Journey Optimizer B2C from Coworker's workspace: Adobe's journey skills create journeys from a prompt or a flowchart (Journey Create) and check fallout, conflicts and anomalies."
+   ],
+   "product_facts": [
+    "Journey Optimizer is Adobe's application for creating and delivering connected, personalized customer experiences across your channels. It is built on Adobe Experience Platform and its real-time customer profile, and runs both real-time journeys and scheduled campaigns.",
+    "Journey Optimizer orchestrates the journeys and campaigns and delivers the messages across channels.",
+    "We would set Journey Optimizer up in the order Adobe documents: the environment first, with a development sandbox for building and testing and a production sandbox for sending, each with its own channel configurations. Journeys are tested with test profiles before activation.",
+    "A journey automates a real-time, multi-step sequence of interactions; a campaign sends a scheduled or API-triggered message to an audience. Messages are delivered through channels like email, mobile messages, push notifications and direct mail.",
+    "Journey Optimizer tracks customer engagement and campaign performance with reports, and its reporting is integrated with Customer Journey Analytics for a clearer view of performance metrics.",
+    "When messages are sent from journeys or campaigns, your customers must always be able to unsubscribe; once they do, their profiles are automatically removed from the audience of future marketing messages. Access labels control which users can reach specific journeys, campaigns and channel configurations.",
+    "Review before saving: Evaluate and edit generated content before asking Coworker to save it back to Adobe Journey Optimizer or another supported activation solution.",
+    "Finds, resolves, and applies approved brand guidelines, including voice, imagery, and legal, ahead of any workflow that generates or evaluates on-brand content.",
+    "Builds final email HTML directly from a live Figma frame when its copy, layout, and imagery are what should ship unchanged, with no separate layout plan involved.",
+    "Sign in to Coworker and go to Settings > Secrets.",
+    "Saves approved campaign content as a draft asset or fills it into its source template in Adobe Journey Optimizer or another supported solution.",
+    "Update our email design system with these approved brand colors",
+    "Runs a WCAG 2.1 AA accessibility audit."
+   ]
+  },
+  {
+   "id": "XA39",
+   "name": "Loyalty Challenges setup with Coworker",
+   "owner": [
+    "Coworker + Journey Optimizer"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 40,
+    "base": 72,
+    "high": 120
+   },
+   "scope": "Set up your client's Loyalty Challenges program so challenges can be built with Coworker: Loyalty roles (custom roles with Loyalty permissions in non-production sandboxes), the reward providers, event mappings, product inventory, exclusions and identity settings in Loyalty configurations, and the eligible audiences in Experience Platform. Build up to three first challenges with Coworker's Loyalty Challenge Management skill, write the challenge messages and content cards it does not fully automate, and review each challenge and its generated journey before publishing.",
+   "adobe_quote": "Before challenges can be authored, an administrator configures the program foundations: reward providers, event mappings that map customer actions to task completions, product inventory, and exclusion lists.",
+   "license": "Journey Optimizer Loyalty",
+   "source": {
+    "title": "Experience League: Get started with Loyalty Challenges",
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/loyalty-challenges/get-started"
+   },
+   "connection_how": [
+    "Coworker Chat works with Journey Optimizer B2C from Coworker's workspace: Adobe's journey skills create journeys from a prompt or a flowchart (Journey Create) and check fallout, conflicts and anomalies."
+   ],
+   "product_facts": [
+    "Journey Optimizer is Adobe's application for creating and delivering connected, personalized customer experiences across your channels. It is built on Adobe Experience Platform and its real-time customer profile, and runs both real-time journeys and scheduled campaigns.",
+    "Journey Optimizer orchestrates the journeys and campaigns and delivers the messages across channels.",
+    "We would set Journey Optimizer up in the order Adobe documents: the environment first, with a development sandbox for building and testing and a production sandbox for sending, each with its own channel configurations. Journeys are tested with test profiles before activation.",
+    "A journey automates a real-time, multi-step sequence of interactions; a campaign sends a scheduled or API-triggered message to an audience. Messages are delivered through channels like email, mobile messages, push notifications and direct mail.",
+    "Journey Optimizer tracks customer engagement and campaign performance with reports, and its reporting is integrated with Customer Journey Analytics for a clearer view of performance metrics.",
+    "When messages are sent from journeys or campaigns, your customers must always be able to unsubscribe; once they do, their profiles are automatically removed from the audience of future marketing messages. Access labels control which users can reach specific journeys, campaigns and channel configurations.",
+    "For non-Prod sandboxes, your administrator must create a custom role with the required Loyalty permissions.",
+    "Ensure the target audience you need exists in Adobe Experience Platform before creating your challenge.",
+    "Once configured, they publish the challenge, generate the auto-built journey, and publish it to make the challenge live.",
+    "Once a challenge is live, built-in reporting dashboards provide challenge-level metrics: audience funnel performance, task completion rates, reward issuance, and revenue impact.",
+    "Use Loyalty Challenge Management to define challenge audiences, actions, timing, and rewards.",
+    "Full content authoring automation for challenge messaging in all cases",
+    "Customers with a Loyalty license can access these loyalty skills, even if they do not have an additional Coworker license."
+   ]
+  },
+  {
+   "id": "XA40",
+   "name": "Target program audit and cleanup with Coworker",
+   "owner": [
+    "Coworker + Target"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 64
+   },
+   "scope": "Run Coworker's Target program audit and Recommendations checks on your client's account, then clean up what they find: resolve collisions and priority conflicts between activities, fix misconfigured activities, archive stale activities and remove the audiences and offers no activity uses, fix the feeds, catalog attributes and criteria behind empty or stale recommendations, and give Coworker your client's past test history as a CSV so its next-test advice draws on your client's own learnings.",
+   "adobe_quote": "Audits Target programs for risks, collisions, misconfigurations, hygiene issues, and quick wins.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Coworker skills for Adobe Target",
+    "url": "https://experienceleague.adobe.com/en/docs/target/using/introduction/coworker-skills"
+   },
+   "connection_how": [
+    "Coworker Chat is available in Target, both in its own window and inside the Target interface."
+   ],
+   "product_facts": [
+    "Adobe Target personalizes experiences across web, mobile and other digital channels: A/B tests compare experiences, and Experience Targeting delivers content to a specific audience by rules you define.",
+    "Target delivers the personalized experiences on the site and tests them.",
+    "Real-Time CDP's Adobe Target destination makes those audiences available to Target for same-page and next-page personalization, with governance and privacy support, using a datastream.",
+    "Results are measured in Customer Journey Analytics, used as the reporting source for Target's A/B activities: its Experimentation panel compares the variations and reports each one's lift over the baseline, and the confidence in it, on the success metrics you choose.",
+    "Coworker is Adobe's AI-powered teammate for customer experience and marketing workflows. You describe a goal in plain language, and it plans the work, executes it across your Adobe and connected systems, validates the results and brings the finished work back for your approval.",
+    "Coworker lets your teams ask for insights, content and actions across your Adobe applications in natural language.",
+    "Diagnoses Recommendations delivery, configuration, catalog, and feed issues.",
+    "Describe what you want to do in Coworker Chat, then review the returned recommendations, configuration, or analysis before taking action.",
+    "Retrieve hypotheses, learnings, outcomes, and treatments from past experiments, find prior experiments by topic, or ingest an external CSV to enrich results",
+    "Trace the activity, criteria, feed, collection, and design chain to explain why Recommendations are empty, stale, or not showing"
+   ]
+  },
+  {
+   "id": "AXD13",
+   "name": "Dispatcher, security and vulnerability fixes from Coworker findings",
+   "owner": [
+    "AEM Sites + Coworker"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 48,
+    "high": 96
+   },
+   "scope": "Use Coworker's Dispatcher Insights on your client's production and stage environments (a seven-day log window), with the Dispatcher configuration and related AEM code shared for review, and the Governance Agent's vulnerability list, to agree a prioritized fix list: cache rules and headers, filters and routing, redirects, security headers, permission-sensitive caching, CSRF and CORS settings, and affected components to patch or upgrade. Implement the agreed fixes in your client's code, deploy through Cloud Manager, and ask Coworker to reassess the logs or live URLs.",
+   "adobe_quote": "After you apply and deploy a change, ask Coworker to reassess the available logs or live URL behavior.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Development Agentic Capabilities Overview",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/development/use-cases"
+   },
+   "connection_how": [
+    "Coworker Chat works in AEM Sites. From a plain-language prompt it drafts and updates pages, on Page Editor sites as on Edge Delivery sites, builds Visual Content Fragments from Figma and helps your developers with Cloud Manager and the Dispatcher."
+   ],
+   "product_facts": [
+    "AEM Sites as a Cloud Service is built on Adobe's Core Components and page templates, with code deployed through Cloud Manager and pages edited visually in the Universal Editor.",
+    "AEM Sites is where the site is built, on Adobe's Core Components and page templates, and where your authors edit its pages.",
+    "We would implement AEM Sites as a Cloud Service. Code is deployed through Cloud Manager, Adobe's one route for it, so every release passes the same code quality checks.",
+    "We would start with discovery: a review of your current site's content, templates and integrations, a named team with agreed roles, and the measures of success.",
+    "How your existing content moves depends on where it sits today. From an existing AEM instance, Adobe's Content Transfer Tool moves it across. From another CMS, we would export the content, map it to the new templates and load it into AEM, agreeing the mapping and tooling with you in discovery.",
+    "For go-live we would plan a content freeze for the final content top-up, check the migrated content with you, test in the stage environment, which has the same sizing as production, and run user acceptance testing on a test subdomain before the DNS cutover, with redirects for retired URLs and rollback criteria agreed beforehand.",
+    "For environment-specific analysis, identify the environment and time period (within a seven-day log window) you want to investigate.",
+    "Currently, the skill does not access your source repository so for configuration and code reviews, paste or upload the relevant files.",
+    "CDN cache purges, edge traffic-filter rule authoring, and changes to Adobe-managed infrastructure settings are outside its scope.",
+    "Review these OSGi CSRF and CORS configurations alongside the Dispatcher rules I’ve shared.",
+    "The AEM Governance Agent can list known vulnerabilities across one or more AEM instances, including their severity and affected components."
+   ]
+  },
+  {
+   "id": "AXD14",
+   "name": "Content Fragment readiness fixes with Coworker",
+   "owner": [
+    "AEM Sites + Coworker"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 64
+   },
+   "scope": "Run Coworker's Content Fragment inspection on up to three of your client's fragment folders before a semantic search, translation, headless or publishing launch, then work through its human-reviewed remediation steps: fix the model, metadata, schema and reference issues, resolve risky dependencies before deletes, and agree the tags and review step for Coworker's bulk fragment edits. Rerun the checks until the folders pass.",
+   "adobe_quote": "Finally it provides assessments with guided, human-reviewed remediation steps.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Experience Production Agentic Capabilities Overview",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/experience-production/use-cases"
+   },
+   "connection_how": [
+    "Coworker Chat works in AEM Sites. From a plain-language prompt it drafts and updates pages, on Page Editor sites as on Edge Delivery sites, builds Visual Content Fragments from Figma and helps your developers with Cloud Manager and the Dispatcher."
+   ],
+   "product_facts": [
+    "AEM Sites as a Cloud Service is built on Adobe's Core Components and page templates, with code deployed through Cloud Manager and pages edited visually in the Universal Editor.",
+    "AEM Sites is where the site is built, on Adobe's Core Components and page templates, and where your authors edit its pages.",
+    "We would implement AEM Sites as a Cloud Service. Code is deployed through Cloud Manager, Adobe's one route for it, so every release passes the same code quality checks.",
+    "We would start with discovery: a review of your current site's content, templates and integrations, a named team with agreed roles, and the measures of success.",
+    "How your existing content moves depends on where it sits today. From an existing AEM instance, Adobe's Content Transfer Tool moves it across. From another CMS, we would export the content, map it to the new templates and load it into AEM, agreeing the mapping and tooling with you in discovery.",
+    "For go-live we would plan a content freeze for the final content top-up, check the migrated content with you, test in the stage environment, which has the same sizing as production, and run user acceptance testing on a test subdomain before the DNS cutover, with redirects for retired URLs and rollback criteria agreed beforehand.",
+    "Evaluates content quality, metadata, structure, schema compliance, and references to surface issues affecting search, publishing, translation, or headless delivery.",
+    "Analyzes dependencies across Content Fragments, collections, assets, models, and pages to identify risks and recommend safe actions.",
+    "Use natural language to manage a single Content Fragment or hundreds at once."
+   ]
+  },
+  {
+   "id": "AXD15",
+   "name": "Brand rules in Experience Context with a site audit",
+   "owner": [
+    "AEM Sites + Coworker"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 48,
+    "high": 96
+   },
+   "scope": "Build your client's Experience Context for one brand: gather the style guide, claim rules, positioning and design standards, import up to three brand policies from PDF or page URLs, review the rules and checks the Governance Agent extracts, add up to three segments (such as markets, audiences or sub-brands) over global defaults, enter the design system's colors and typography, map the domains and set everything to Active. Run a batch analysis of up to 50 existing pages, report aligned and non-aligned pages, and agree a fix plan and owners for rule updates.",
+   "adobe_quote": "New entities are created as Draft by default, so you must set an entity to Active to put it into effect.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Experience Context",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-governance/experience-context"
+   },
+   "connection_how": [
+    "Coworker Chat works in AEM Sites. From a plain-language prompt it drafts and updates pages, on Page Editor sites as on Edge Delivery sites, builds Visual Content Fragments from Figma and helps your developers with Cloud Manager and the Dispatcher."
+   ],
+   "product_facts": [
+    "AEM Sites as a Cloud Service is built on Adobe's Core Components and page templates, with code deployed through Cloud Manager and pages edited visually in the Universal Editor.",
+    "AEM Sites is where the site is built, on Adobe's Core Components and page templates, and where your authors edit its pages.",
+    "We would implement AEM Sites as a Cloud Service. Code is deployed through Cloud Manager, Adobe's one route for it, so every release passes the same code quality checks.",
+    "We would start with discovery: a review of your current site's content, templates and integrations, a named team with agreed roles, and the measures of success.",
+    "How your existing content moves depends on where it sits today. From an existing AEM instance, Adobe's Content Transfer Tool moves it across. From another CMS, we would export the content, map it to the new templates and load it into AEM, agreeing the mapping and tooling with you in discovery.",
+    "For go-live we would plan a content freeze for the final content top-up, check the migrated content with you, test in the stage environment, which has the same sizing as production, and run user acceptance testing on a test subdomain before the DNS cutover, with redirects for retired URLs and rollback criteria agreed beforehand.",
+    "Many entities carry a Status, and the agentic capabilities use only Active ones. New entities are created as Draft by default, so you must set an entity to Active to put it into effect.",
+    "Instead of rewriting your guidelines in a technical format, you import them in their original form, a policy document (PDF) and/or a page URL, and the Governance Agent reads them and extracts everything it can into your Experience Context.",
+    "Segments are what let you set a global default and then layer market- or audience-specific overrides on top.",
+    "The Design System captures your brand’s visual standards, colors and typography, so generated experiences look on-brand.",
+    "A domain defines which URLs a brand’s checks apply to, for example a pattern like *.example.com.",
+    "Batch analysis runs your checks against a set of existing pages, so you can validate content you already have.",
+    "Summary cards for Total Pages evaluated, Aligned Pages and Non-Aligned Pages (whether pages meet brand standards), and the overall Pass Rate"
+   ]
+  },
+  {
+   "id": "AXD16",
+   "name": "Asset rights, Content Hub access rules and permission fixes",
+   "owner": [
+    "AEM Assets + Coworker"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 64
+   },
+   "scope": "Use the AEM Governance Agent in Coworker to find your client's expired, expiring and undated assets in up to three folder trees, then add expiry dates and usage rights metadata to them in bulk in AEM Assets and set a review routine for assets about to expire. Design and create up to 10 Content Hub attribute-based access rules for groups, regions or agencies with the Governance Agent, written as ALLOW rules on IMS Group IDs and including a rule for each group that must see all assets, since Content Hub denies access to groups no rule covers. Apply the least-privilege group and ACL changes the Governance Agent recommends after diagnosing your client's repository permissions, since it does not change them itself.",
+   "adobe_quote": "The agentic capability is read-only: it diagnoses permissions and recommends changes, but it does not modify access control lists, groups, or content on your behalf.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Governance Agent Overview",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-governance/overview"
+   },
+   "connection_how": [
+    "AEM's Onboarding, Content Discovery and Content Optimization capabilities work through Coworker Chat. Coworker sets up folders, tags and metadata forms once the user confirms, finds assets by metadata or theme and can filter to approved ones, and makes channel-ready renditions where you have a Dynamic Media license, Dynamic Media with OpenAPI and approved assets."
+   ],
+   "product_facts": [
+    "AEM Assets as a Cloud Service is Adobe's cloud-native solution for digital asset management and Dynamic Media. It helps you maximize the value of your digital assets across creation, management and delivery.",
+    "AEM Assets is the repository where your digital assets are managed, enriched and delivered.",
+    "To bring your existing library across, Bulk Import lets administrators import large numbers of assets directly from an external data source in a single operation. AEM applies smart tags to uploaded assets automatically, by default.",
+    "People find the right asset through smart tags, customized metadata and enhanced search. Metadata forms let you add your own business-specific fields to an asset's details page, and we would agree those fields with you before the assets are loaded.",
+    "For distribution, Content Hub centralizes and distributes approved brand and marketing content. Only assets marked Approved in AEM Assets become available there.",
+    "Asset reports show how the system is used, how users interact with assets and which assets are shared.",
+    "Find me assets without an expiry date",
+    "Recommend groups for a grant: Suggest which existing groups are best suited to receive a privilege, so you can apply changes following the principle of least privilege.",
+    "ABAC rules apply only to assets approved for Content Hub.",
+    "Do not define DENY rules. Always convert DENY rules into ALLOW rules.",
+    "ABAC rules are applied to user groups using the Identity Management System (IMS) Group ID, which is available in the Admin Console.",
+    "ABAC operates on a default-deny principle.",
+    "Ensure that metadata values used for access rules, such as brand, region, and product, are maintained consistently across assets.",
+    "With AI Assistant in Content Hub, powered by the AEM Governance Agent, you can create and manage ABAC (Attribute-Based Access Control) rules directly in Content Hub using natural language."
+   ]
+  },
+  {
+   "id": "XB17",
+   "name": "Monthly Fusion scenario support through Coworker",
+   "owner": [
+    "Workfront + Coworker"
+   ],
+   "unit": "monthly",
+   "hours": {
+    "low": 8,
+    "base": 16,
+    "high": 32
+   },
+   "scope": "Have your client's Fusion administrator turn on MCP access and decide who gets the write tools and which team roles, then each month use Coworker with Fusion to list failed and warning executions for up to 20 scenarios, explain the errors, check which scenarios depend on a connection, webhook or data store before changing it, fix the failing scenarios and expired connections, and report the month's failures, fixes and open risks.",
+   "adobe_quote": "Ask your Fusion administrator to enable write tools, or to grant you the required team role.",
+   "license": "Workfront Fusion (part of Workfront Ultimate and of Workflow plus Automation and Integration packages; Prime and Select without Automation and Integration need it bought separately)",
+   "source": {
+    "title": "Experience League: Configure the Adobe Workfront Fusion MCP server",
+    "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/set-up-and-manage-fusion/use-fusion-mcp-server/configure-fusion-mcp-server"
+   },
+   "connection_how": [
+    "CX Enterprise Coworker Chat runs inside Workfront within each user's permissions. It is read-only until your Workfront system administrator turns on the Write MCP tools option."
+   ],
+   "product_facts": [
+    "Workfront is Adobe's suite of cloud-based applications for planning, project management, collaboration and resource management. It organizes, prioritizes, tracks and manages both your work and your resources.",
+    "Workfront organizes, prioritizes, tracks and manages the work and its resources.",
+    "We would set up request queues, so every request is submitted the same way and follows the same path to completion, with routing rules that send each one to a user, job role, team or project, and project templates that capture your repeatable processes.",
+    "Reviews and approvals can be one-time or come from reusable approval templates, with multi-stage approvals and parallel paths, and comprehensive audit logging keeps a complete governance trail.",
+    "Workfront organizes information in reports, places multiple reports on a dashboard and lets you share both reports and dashboards with others.",
+    "Access is governed at two levels: your Workfront administrator sets the access levels, and within those levels people share objects with view, contribute or manage permissions.",
+    "MCP access is turned off for your Fusion organization.",
+    "Fusion is built into Coworker, so you don’t need to enter an MCP URL or register an OAuth app.",
+    "Destructive actions, such as delete, clear queue, or overwrite, always ask for confirmation.",
+    "The agent acts as you, using your Fusion role and team permissions.",
+    "Finds scenarios that reference a given webhook, data store, data structure, connection, key, or scenario. Useful for impact analysis before changing or deleting a resource.",
+    "Filter by status (for example status==3 for errors, status==2 for warnings), timestamp, duration, bundles, operations, transfer.",
+    "Which connections expire in the next 30 days, and which scenarios use them?"
+   ]
+  },
+  {
+   "id": "XB18",
+   "name": "Organizational Rules for Coworker in Marketo Engage",
+   "owner": [
+    "Marketo Engage + Coworker"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 12,
+    "base": 24,
+    "high": 40
+   },
+   "scope": "Write your client's Organizational Rules for Coworker in Marketo Engage, starting from Adobe's defaults: naming patterns for programs, emails and Smart Campaigns, required folders, tokens and reports, and compliance rules such as unsubscribe links, footer details, UTM parameters and exclusion filters. Set the global rules and up to three workspace overrides, version them, test them with Validate Programs on real programs, and tune rules that block good programs.",
+   "adobe_quote": "Every Marketo Engage environment includes default Organizational Rules. You can customize them to reflect your organization’s specific governance needs.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Organizational rules (Coworker for Marketo Engage)",
+    "url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/coworker-for-marketo/organizational-rules"
+   },
+   "connection_how": [
+    "Coworker for Marketo Engage adds agent skills inside Marketo Engage that build programs, investigate leads, validate programs and import leads. Users need access set up."
+   ],
+   "product_facts": [
+    "There are two documented routes. The simpler one: forms built in Marketo Engage are embedded on the site's pages with Marketo's own embed code, so each submission is a Marketo form fill. We would place the embed in a reusable page component, agree the fields, consent wording and validation with you, and collect only the data you approve. Marketo's form prefill does not work with the embed code.",
+    "The fuller one: AEM Forms adaptive forms with the Submit to Marketo Engage action, which add a rule editor, prefill and a PDF record of each submission, and can connect to Adobe Sign for e-signatures. We would use embedded Marketo forms for standard lead capture and adaptive forms where a form needs that logic.",
+    "Marketo Engage is Adobe's marketing automation platform, a single solution that lets you attract, segment and nurture your customers. Each marketing initiative runs as a program.",
+    "Marketo Engage runs the marketing programs that attract, segment and nurture your customers.",
+    "We would configure the admin settings, including CNAMEs and Marketo's JavaScript tracking code, Munchkin, which tracks the people who visit your website so that automated campaigns can react to their visits. We would test the automation workflows and the data sync before launch.",
+    "Campaigns run as Smart Campaigns. A Smart List defines who you want to target, using filters and triggers, and the flow sets the steps the campaign performs, including wait steps and split choices.",
+    "Organizational Rules define your marketing operations standards and governance requirements in a single document that guides CX Enterprise Coworker for Marketo Engage across program creation, campaign planning, and validation workflows.",
+    "Naming conventions for programs, emails, and Smart Campaigns",
+    "Compliance requirements (unsubscribe links, UTM parameters, exclusion filters)",
+    "Admin Permissions Required",
+    "Update the version number when you make changes.",
+    "Rules that are too strict may slow program creation.",
+    "Communicate changes: When you update Organizational Rules, let your marketing ops team know what changed and why.",
+    "Rules define what CX Enterprise Coworker for Marketo Engage checks when validating programs before activation.",
+    "Global rules apply to all workspaces. Workspace rules override global settings."
+   ]
+  },
+  {
+   "id": "XB19",
+   "name": "Monthly program builds with Coworker in Marketo Engage",
+   "owner": [
+    "Marketo Engage + Coworker"
+   ],
+   "unit": "monthly",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 56
+   },
+   "scope": "Each month, turn up to four of your client's campaign briefs into Marketo Engage programs with Coworker: plan each with Plan Campaigns, build it from the right template with Build Programs, then finish what stays manual (Smart List filters for the real segments, flow steps, placeholder emails and dynamic content), run the manual checks Coworker flags and Validate Programs against your client's rules, and activate after approval.",
+   "adobe_quote": "Email content is auto-generated, but Smart Campaign filters and flow steps remain manual.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Build programs (Coworker for Marketo Engage)",
+    "url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/coworker-for-marketo/skills/build-programs"
+   },
+   "connection_how": [
+    "Coworker for Marketo Engage adds agent skills inside Marketo Engage that build programs, investigate leads, validate programs and import leads. Users need access set up."
+   ],
+   "product_facts": [
+    "There are two documented routes. The simpler one: forms built in Marketo Engage are embedded on the site's pages with Marketo's own embed code, so each submission is a Marketo form fill. We would place the embed in a reusable page component, agree the fields, consent wording and validation with you, and collect only the data you approve. Marketo's form prefill does not work with the embed code.",
+    "The fuller one: AEM Forms adaptive forms with the Submit to Marketo Engage action, which add a rule editor, prefill and a PDF record of each submission, and can connect to Adobe Sign for e-signatures. We would use embedded Marketo forms for standard lead capture and adaptive forms where a form needs that logic.",
+    "Marketo Engage is Adobe's marketing automation platform, a single solution that lets you attract, segment and nurture your customers. Each marketing initiative runs as a program.",
+    "Marketo Engage runs the marketing programs that attract, segment and nurture your customers.",
+    "We would configure the admin settings, including CNAMEs and Marketo's JavaScript tracking code, Munchkin, which tracks the people who visit your website so that automated campaigns can react to their visits. We would test the automation workflows and the data sync before launch.",
+    "Campaigns run as Smart Campaigns. A Smart List defines who you want to target, using filters and triggers, and the flow sets the steps the campaign performs, including wait steps and split choices.",
+    "The template program should contain at least one email and one Smart Campaign.",
+    "You must manually configure Smart List filters to target your actual segments after the program is created.",
+    "After you complete all manual refinements (configure Smart Campaign logic, finalize filters, customize email content), run Validate programs to ensure your changes comply with your Organizational Rules before activating.",
+    "Replace placeholder email assets with your actual content.",
+    "It does not create anything in Marketo Engage.",
+    "When CX Enterprise Coworker for Marketo Engage encounters something it cannot validate, it flags it as a manual review step in the workflow."
+   ]
+  },
+  {
+   "id": "XQ09",
+   "name": "Personas, intent model and AI decisioning data gaps",
+   "owner": [
+    "Marketo Optimizer + Coworker"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 56
+   },
+   "scope": "Prepare the data Marketo Optimizer's AI decisioning reads: define up to 10 personas from your client's person attributes in the persona mapping panel, set and activate the intent model's activity weights with Coworker's Intent configuration skill and check the results with Analyze intent, then use AI-decisioning health to find coverage gaps across demographic, firmographic, technographic, psychographic, persona and intent data and agree an enrichment plan for them.",
+   "adobe_quote": "Closing those gaps improves how AI decisioning scores and routes each person.",
+   "license": "",
+   "source": {
+    "title": "Experience League: AI-Decisioning Health (Marketo Optimizer)",
+    "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/ai-decisioning/ai-decisioning-health"
+   },
+   "connection_how": [
+    "Coworker is the chat panel inside Marketo Optimizer. Your marketers describe what they need or upload a campaign brief, and Coworker sets up the program, lists and journeys for them to review. It can only do what each person's permissions allow, and it creates nothing until that person says to go ahead."
+   ],
+   "product_facts": [
+    "Coworker is Adobe's AI-powered teammate for customer experience and marketing workflows. You describe a goal in plain language, and it plans the work, executes it across your Adobe and connected systems, validates the results and brings the finished work back for your approval.",
+    "Coworker lets your teams ask for insights, content and actions across your Adobe applications in natural language.",
+    "We would tailor Coworker to the way your teams work with skills: reusable playbooks that standardize common workflows, reporting methods and analysis approaches, so nobody has to explain the same process again.",
+    "You keep control through approval gates, permissions inherited from your Adobe organization, checks before actions run and an audit trail. Skills do not store customer data: data access stays governed through your connected Adobe applications, permissions and organizational controls.",
+    "Coworker acts across Adobe and external systems through governed access, using built-in connectors or your own. An external tool or service is connected by adding it as a server.",
+    "As Coworker takes on a task you can watch it reason and progress. It validates the results and brings the finished work back to you for approval.",
+    "AI-decisioning health checks the data that powers personalization in Adobe Marketo Optimizer.",
+    "Next to the highlights, a radar chart plots overall Coverage across six dimensions: demographic, firmographic, technographic, psychographic, persona, and intent.",
+    "Only one model can be Active at any time: the one currently driving the scoring.",
+    "Saving prompts you to activate the model now. Confirming replaces the current Active model, which is demoted automatically.",
+    "Intent reports require the View B2B Intent Reports permission.",
+    "You can have up to 20 personas defined in the Persona mapping list.",
+    "Open the Persona mapping panel from the Coworker chat interface."
+   ]
+  },
+  {
+   "id": "XQ10",
+   "name": "Webinar programs with Coworker in Marketo Optimizer",
+   "owner": [
+    "Marketo Optimizer + Coworker"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 56
+   },
+   "scope": "Set up your client's first interactive webinar with Coworker: create the webinar in its program at the licensed capacity, design the registration page and room in the Adobe Connect design surface, build the promotion and post-webinar journeys Coworker drafts, finish what it lists as left to configure (the journey audience, the invitation email, the registration form event filter and the member status steps), test and publish, and leave a reusable webinar program for later events.",
+   "adobe_quote": "The chat interface lists what is left to configure in the journey canvas.",
+   "license": "the Marketo Optimizer webinar license",
+   "source": {
+    "title": "Experience League: Create and Promote Webinars (Marketo Optimizer)",
+    "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/coworker/webinar-creation"
+   },
+   "connection_how": [
+    "Coworker is the chat panel inside Marketo Optimizer. Your marketers describe what they need or upload a campaign brief, and Coworker sets up the program, lists and journeys for them to review. It can only do what each person's permissions allow, and it creates nothing until that person says to go ahead."
+   ],
+   "product_facts": [
+    "Coworker is Adobe's AI-powered teammate for customer experience and marketing workflows. You describe a goal in plain language, and it plans the work, executes it across your Adobe and connected systems, validates the results and brings the finished work back for your approval.",
+    "Coworker lets your teams ask for insights, content and actions across your Adobe applications in natural language.",
+    "We would tailor Coworker to the way your teams work with skills: reusable playbooks that standardize common workflows, reporting methods and analysis approaches, so nobody has to explain the same process again.",
+    "You keep control through approval gates, permissions inherited from your Adobe organization, checks before actions run and an audit trail. Skills do not store customer data: data access stays governed through your connected Adobe applications, permissions and organizational controls.",
+    "Coworker acts across Adobe and external systems through governed access, using built-in connectors or your own. An external tool or service is connected by adding it as a server.",
+    "As Coworker takes on a task you can watch it reason and progress. It validates the results and brings the finished work back to you for approval.",
+    "The chat pane lists your available webinar licenses (for example, a high-capacity add-on with its capacity value) and asks which one to use.",
+    "Select Design your webinar to open the webinar setup page, where you configure content, layout, and registration settings in the embedded Adobe Connect design surface.",
+    "Select the Listen for an event node and click Edit event. Set the event filter for the registration form on the Fills Out Form event.",
+    "Verify the Change webinar member status fields on each status-change node.",
+    "An Attended branch (for example, a reply and resources Send email node)"
+   ]
+  }
+ ]
+}

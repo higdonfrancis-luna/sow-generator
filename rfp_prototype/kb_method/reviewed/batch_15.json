@@ -1,0 +1,622 @@
+[
+ {
+  "id": "CW09",
+  "steps": [
+   "Agree the teams joining after the pilot with your administrators and governance owner, then set the organization-wide access setting, user and group overrides and a Coworker user group per team.",
+   "Map the roles each group holds in your connected applications, and agree which task types must use Plan mode, who approves them and which actions each sandbox allows, deletes included.",
+   "Write the rules for adding servers and installing or removing plugins, the memory rules, the audit review routine, joiner and leaver steps and an AI credit plan.",
+   "Test with users from each group that they reach only what their application roles allow, and bring the policy to your administrators and governance owner for approval."
+  ],
+  "deliverables": [
+   "Coworker operating policy",
+   "Access model with user groups and overrides",
+   "Action and approval rules by application and sandbox",
+   "Server, plugin, memory and audit rules",
+   "AI credit plan, and joiner and leaver steps"
+  ],
+  "asks": [
+   "A Coworker administrator, a System Admin or a Product Admin of Experience Platform, to apply the settings",
+   "A governance owner to agree the action rules and approve the policy",
+   "Any governance and approval workflows Adobe's onboarding team has defined, so we build on them"
+  ],
+  "risk": "Changes to your data that no one checked first: we agree which tasks must use Plan mode, where Coworker waits for approval, and which actions each sandbox allows.",
+  "outcome": "Your agreed teams use Coworker under an approved policy, with access set by group, agreed actions and approvals in each application and sandbox, and an AI credit plan.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "CW10",
+  "steps": [
+   "Agree with your system owner and security team the tools the server offers, read-only by default, and which write tools must ask for confirmation before they act.",
+   "Build and host the MCP server in a location you own, with the authentication method and headers Coworker sends and a tool timeout that suits your system.",
+   "Register it in Coworker as a server, over SSE or HTTP at its URL, and test each tool with authorized and unauthorized users.",
+   "Hand over the code, the tool list with its read and write scope, the run and removal instructions and a record of who may add servers."
+  ],
+  "deliverables": [
+   "MCP server code and hosting setup",
+   "Tool list with read and write scope",
+   "Coworker server registration",
+   "Security and test evidence",
+   "Run and removal instructions"
+  ],
+  "asks": [
+   "Your system's API documentation, a test environment and credentials",
+   "A hosting location you own for the server",
+   "Your security owner to review the integration and approve the server"
+  ],
+  "risk": "A tool that changes your system without a check: tools are read-only by default, write tools ask for confirmation, and we test that unauthorized requests are refused.",
+  "outcome": "Authorized users complete the agreed tasks in your system through Coworker, on a server your security owner has approved, and unauthorized requests are refused.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "CW11",
+  "steps": [
+   "Choose the use cases for your usage-bound Coworker trial with your business owners, and agree a success measure and a credit budget for each one.",
+   "Prepare the data access and example prompts for each use case, checking that each pilot user acts only within their existing product permissions.",
+   "Run the use cases with your pilot users within the Coworker trial's AI credits, tracking use on the license usage dashboard and logging example results.",
+   "Report the time saved, the quality of results and the open issues against each success measure, with recommendations for your purchase decision."
+  ],
+  "deliverables": [
+   "Use case briefs with success measures",
+   "Credit budget for each use case",
+   "Run logs with example results",
+   "Value report with rollout recommendations"
+  ],
+  "asks": [
+   "Business owners to choose the use cases and agree how success is measured",
+   "Pilot users with time to run the use cases",
+   "An administrator who can view AI credit usage on the license usage dashboard"
+  ],
+  "risk": "Using up the Coworker trial's AI credits before every use case is tested: we set a credit budget for each use case and track use on the license usage dashboard.",
+  "outcome": "Your sponsor has a value report showing each use case's measured result against its success measure, to decide on a purchase from results in your own environment.",
+  "kind": "task",
+  "phase": "discovery"
+ },
+ {
+  "id": "XA28",
+  "steps": [
+   "Run Coworker's implementation guide skill with your team for the agreed path, answering its discovery questions about your environment, licensing and planned data ingestion.",
+   "Check each planned step against your live tenant's licenses, sandboxes, schemas, datasets, report suites and permissions, and correct the owners and effort where they differ.",
+   "Import the checked plan into Workfront or Jira, and agree with your project owner the owner and the delivering service for every step."
+  ],
+  "deliverables": [
+   "Checked plan with owners, effort and dependencies",
+   "List of steps the tenant check changed",
+   "Plan imported into Workfront or Jira"
+  ],
+  "asks": [
+   "People with access to your tenant's licenses, sandboxes, schemas, datasets, report suites and permissions",
+   "A project owner to approve the plan and name each step's owner",
+   "A choice of Workfront or Jira for the delivery plan"
+  ],
+  "risk": "A plan that does not match what your tenant really holds: the skill does not read your systems, so we check every step against the live tenant before approval.",
+  "outcome": "Your project owner approves a delivery plan in Workfront or Jira, checked against your live tenant, where every step names an owner and the service that delivers it.",
+  "kind": "task",
+  "phase": "discovery"
+ },
+ {
+  "id": "XA29",
+  "steps": [
+   "Once your upgrade steps are complete, agree with your analytics owner the report suite and data view pairs to validate and the matching rate each must reach.",
+   "Run Coworker's validation skill on each pair, a single metric or dimension or a full audit of up to 40 metrics and 20 dimensions, and check each suggested action.",
+   "Fix the causes in Experience Platform, Adobe Analytics or the data view, such as bot filtering, session settings, marketing channel derived fields or duplicate datasets, and rerun.",
+   "Document the differences that are expected by design, such as device-based visitors against people, and record your analytics owner's sign-off for relying on CJA."
+  ],
+  "deliverables": [
+   "Validation results before and after",
+   "Fix log",
+   "Expected differences explained for stakeholders",
+   "Sign-off record for relying on CJA"
+  ],
+  "asks": [
+   "Users who can view both the report suite and the data view",
+   "An analytics owner to agree the matching rate and sign off the results"
+  ],
+  "risk": "Chasing every last difference when some variance is expected: we fix real causes and document the differences that come from design, such as device-based visitors against people.",
+  "outcome": "Each agreed pair reaches the agreed matching rate, or every remaining gap is explained and accepted, so your teams can rely on CJA data.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "XA30",
+  "steps": [
+   "Coach an analyst from your team as the Coworker champion, and agree with them the approved dimensions, metrics and segments in each team's data view.",
+   "Tidy the names and descriptions of those components in CJA so prompts can name them exactly, and write a library of vetted prompts built on them.",
+   "Write one Skill that directs Coworker to the approved components, test it against the prompt library, and store each team's data view in Coworker's memory.",
+   "Teach your users when to ask Coworker for a quick answer and when to work through a deeper analysis, using your own prompts and data."
+  ],
+  "deliverables": [
+   "Approved component list for each data view",
+   "Vetted prompt library",
+   "Component Skill with test evidence",
+   "Memory preferences and a short user guide"
+  ],
+  "asks": [
+   "An analyst to act as your Coworker champion and approve the library and Skill",
+   "View access for your users to the agreed data views",
+   "An administrator to set up your organization's skill library, so the Skill reaches every team"
+  ],
+  "risk": "Answers built from the wrong or unapproved components: the Skill directs Coworker to your approved components, and each team's data view is stored in memory.",
+  "outcome": "Your pilot users get answers built from your approved components for every prompt in the vetted library, with a Skill and library your champion has approved.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "XA31",
+  "steps": [
+   "Start from the Streaming Media plan Coworker's implementation guide skill produced, and agree with your video team the player platforms and media events to collect.",
+   "Configure the datastream and the XDM schema and dataset for media events, then implement the SDK or API in each agreed player and map the media event model.",
+   "Add the media components to your CJA data view where CJA reports, so your analysts can use the new media data.",
+   "Run test sessions on each platform and check that starts, pings and completions reach your CJA or Adobe Analytics reports, recording the evidence."
+  ],
+  "deliverables": [
+   "Configured datastream, schema and dataset",
+   "Player implementation on each agreed platform",
+   "Media event mapping and data view components",
+   "Test evidence and reporting check"
+  ],
+  "asks": [
+   "Developer access to your player code on each agreed platform",
+   "A video team contact to agree the events and check the test sessions",
+   "Your Streaming Media plan from Coworker's implementation guide skill, if you already have one"
+  ],
+  "risk": "Media data that never reaches reporting: we run test sessions on each platform and check starts, pings and completions in your reports before sign-off.",
+  "outcome": "Your media players on the agreed platforms send Streaming Media data on the Edge, and test sessions show starts, pings and completions in your CJA or Adobe Analytics reports.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XL27",
+  "steps": [
+   "Add MCP Read-only Access to your pilot users' Adobe Analytics product profiles, or MCP Full Access where they may also create segments, calculated metrics or projects.",
+   "Check that the aa-mcp integration is connected in Coworker, agree the report suite each team uses, and store it as a preference in Coworker's memory.",
+   "Write starter prompts, including root cause questions about a known metric over a known period, and compare the first answers with the same reports in Analysis Workspace.",
+   "Write and test one Skill that keeps Coworker on your approved components, and give your pilot users a short guide."
+  ],
+  "deliverables": [
+   "Permission and integration check",
+   "Memory preferences for each team",
+   "Prompt set with Workspace comparisons",
+   "Tested component Skill",
+   "Short user guide"
+  ],
+  "asks": [
+   "A system or product administrator to add MCP permission items to product profiles",
+   "Your pilot users and the report suite each team uses",
+   "The reports your teams trust today, to compare the first answers against"
+  ],
+  "risk": "Answers that differ from the reports your teams already trust: we compare the first answers with Analysis Workspace, and a Skill keeps Coworker on your approved components.",
+  "outcome": "Your pilot users ask Coworker about your Adobe Analytics report suites in plain language, within their own permissions, and its answers match Analysis Workspace for the agreed reports.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XA32",
+  "steps": [
+   "Review the latest health check results for the agreed sandboxes in Coworker with your platform owner, and agree which failed checks to fix.",
+   "Let Coworker fix the issue types it supports after you approve each change: identity namespace descriptions, duplicate and default merge policy names, and schemas missing the audit field group.",
+   "Fix the other failed checks by hand, such as schema and identity configuration, TTL and lookback settings, destination schedules, scheduled queries and source credentials.",
+   "Add descriptions to the XDM fields your teams target on, confirm the fixes on the next daily scan, and hand over a prioritized list of open issues with owners."
+  ],
+  "deliverables": [
+   "Health check results before and after",
+   "Change log for each fix",
+   "Descriptions added to XDM fields",
+   "Prioritized list of open issues with owners"
+  ],
+  "asks": [
+   "Users with permission to view health checks and the Experience Platform permissions each fix needs",
+   "A platform owner to approve each change and the remaining list",
+   "A development sandbox to try changes to identity linking or merge behavior first"
+  ],
+  "risk": "A fix that changes how profiles link or merge in production: we try those changes in a development sandbox first, and you approve every change before it is made.",
+  "outcome": "The agreed failed health checks pass on the next daily scan, and your platform owner has a prioritized list of what is left, each item with an owner.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XA33",
+  "steps": [
+   "Use Coworker's Data Management Agent to list the large, unused or forgotten Experience Event datasets in the agreed sandboxes, and agree a shortlist with your data owners.",
+   "Check how actively each shortlisted dataset is used, and model the effect of a retention period on it, by row count and storage size.",
+   "Review each dataset with its owner against your business and legal retention needs, and choose another data lifecycle tool where a whole dataset must go.",
+   "Apply the approved retention policies after reviewing Coworker's impact preview, and record each one with its audit log entry and the owner's sign-off."
+  ],
+  "deliverables": [
+   "Dataset shortlist with usage and impact evidence",
+   "Retention decisions signed by the data owners",
+   "Applied policies with their audit log entries"
+  ],
+  "asks": [
+   "Data owners who can decide retention for each shortlisted dataset",
+   "Access to the Data Management Agent, and permissions for the datasets and retention actions",
+   "Your business and legal retention requirements for event data"
+  ],
+  "risk": "Removing data a team still needs: usage signals may not cover every factor, so each data owner signs every decision before a policy is applied.",
+  "outcome": "Each approved retention policy shows in its dataset's settings and audit log, and your data owners have signed every decision behind it.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XA34",
+  "steps": [
+   "Each month, run Coworker's Data Validation skill on your agreed critical datasets and their key identity and event fields, and check streaming capacity and breaches for each sandbox.",
+   "Follow up flagged values with Query Service where a sample is not enough, and log each regression with its cause in the monthly data quality log.",
+   "Agree fixes to mappings or source data with your data owners, check fixed fields on the next run, and review the volume with you after three months."
+  ],
+  "deliverables": [
+   "Monthly data quality log by dataset and field",
+   "Capacity status for each sandbox",
+   "Regressions found and fixed",
+   "Open actions with owners"
+  ],
+  "asks": [
+   "The critical datasets and their key identity and event fields to check",
+   "Data owners who agree fixes and their dates each month",
+   "Your change control process for fixes to mappings and source data"
+  ],
+  "risk": "A regression missed because the skill reads only a sample: where a sample is not enough, we supplement its results with Query Service checks.",
+  "outcome": "Each month your agreed critical datasets are checked, every regression has an owner and a fix date, and fixed fields pass on the next run.",
+  "kind": "task",
+  "phase": "after launch"
+ },
+ {
+  "id": "XA35",
+  "steps": [
+   "Give your practitioners the Manage Journeys, View Journey Events, Data Sources and Actions, View Segments and Manage Segments permissions, and keep other users read-only.",
+   "Check that your audiences, events and data sources exist, name your custom actions so prompts can call them exactly, and write a prompt guide for journey requests.",
+   "Pilot journeys from prompts or flowchart images, then finish in the journey canvas what Journey Create does not set, such as A/B tests, dataset lookups and custom action field mapping.",
+   "Check every expression, run Coworker's quick simulation and then a manual simulation or test mode, and publish each journey once your journey owner approves the checklist."
+  ],
+  "deliverables": [
+   "Role setup record and readiness checklist",
+   "Prompt guide for journey requests",
+   "Finished and tested pilot journeys",
+   "Pre-publish checklist"
+  ],
+  "asks": [
+   "Configured journey events, data sources and custom actions, with your audiences already created",
+   "A journey owner to approve the pre-publish checklist",
+   "Journey requests from your team to pilot, as prompts or flowcharts"
+  ],
+  "risk": "A journey published with the wrong fields or values: we check every expression Coworker creates, and a quick simulation never replaces a manual simulation or test mode.",
+  "outcome": "Your practitioners build journeys from prompts or flowcharts with Coworker, finish them in the journey canvas, and publish only after the agreed simulation and test cases pass.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XA36",
+  "steps": [
+   "Run Coworker's journey hygiene, custom action error and channel configuration checks on the agreed sandbox, and agree with your Journey Optimizer owner what to clean up.",
+   "Rename journeys, actions and events with missing, generic or similar names, close old live journeys to new entrances, and delete the stale drafts and finished journeys you no longer need.",
+   "Move the journeys that stay into folders with tags, split oversized journeys, and fix the endpoints, authentication or payloads behind failing custom actions.",
+   "Correct sender, reply-to, subdomain, IP pool and unsubscribe settings in Journey Optimizer, since Channel Operation only reads them, then rerun the checks to confirm the fixes."
+  ],
+  "deliverables": [
+   "Hygiene and channel findings before and after",
+   "Change log",
+   "Naming rules for journeys, actions and events",
+   "Open items with owners"
+  ],
+  "asks": [
+   "Users with journey view and manage permissions and access to your channel configurations",
+   "A Journey Optimizer owner to decide what to keep and approve the remaining list",
+   "Your approval for each change to a live journey"
+  ],
+  "risk": "Cutting off customers already in a journey: we close old live journeys to new entrances instead of stopping them, and live changes go through new versions you approve.",
+  "outcome": "A rerun of the hygiene and channel checks shows the agreed items fixed, and your journey inventory follows agreed naming, folders and tags.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XA37",
+  "steps": [
+   "Agree with your messaging team the service to connect, its HTTPS endpoint, headers and authentication method, the throttling policy, the message payload and every payload scenario you send.",
+   "Create the custom channel with Coworker's Channel Builder skill, and test each payload scenario while the channel is still a draft, checking your provider's logs.",
+   "Activate the channel, then set up its API credentials where it uses authentication, its channel configuration and, where link tracking is needed, a delegated subdomain.",
+   "Use the channel in a first journey or campaign, and check that test messages reach your provider for each agreed payload scenario."
+  ],
+  "deliverables": [
+   "Active custom channel with API credentials and channel configuration",
+   "Channel configuration record",
+   "Payload test results",
+   "First journey or campaign using the channel"
+  ],
+  "asks": [
+   "Your provider's HTTPS endpoint, its API documentation and test credentials",
+   "Administrators with the View custom channels and Manage custom channels permissions",
+   "Access to your provider's logs to confirm each test request arrived"
+  ],
+  "risk": "A payload or endpoint error found after activation, when those fields are locked: we test every payload scenario while the channel is still a draft.",
+  "outcome": "Your messaging service works as an active custom channel in Journey Optimizer, tested for each payload scenario and sending from a live journey or campaign.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XA38",
+  "steps": [
+   "Check that your approved brand guidelines for voice, imagery and legal are published where the Brand Lookup skill finds them, and set up the reusable email design system Coworker maintains.",
+   "Store the Figma access token in Coworker's secrets and agree frame conventions with your designers, so Build Email from Figma builds from frames as they should ship.",
+   "Define the brand, compliance, design and accessibility (WCAG 2.1 AA) reviews each email passes, and agree how approved content is saved into your Journey Optimizer templates.",
+   "Pilot emails from brief to saved draft with your content team, and fix the template issues the reviews find before your content owner approves the guide."
+  ],
+  "deliverables": [
+   "Content production guide",
+   "Design system entries",
+   "Review checklist for each email",
+   "Pilot emails saved as drafts",
+   "Template fixes"
+  ],
+  "asks": [
+   "Your approved brand guidelines and your existing email templates and fragments",
+   "A Figma access token and designers to agree the frame conventions",
+   "A content owner to approve the guide and the pilot emails"
+  ],
+  "risk": "Generated content treated as ready too early: every email passes the agreed brand, compliance, design and accessibility reviews, and is reviewed before it is saved.",
+  "outcome": "Your team produces emails with Coworker from brief to saved draft, each passing the agreed reviews and saved into the right Journey Optimizer template.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XA39",
+  "steps": [
+   "Set up Loyalty roles with your administrator, including custom roles with Loyalty permissions in non-production sandboxes, and check that the eligible audiences exist in Experience Platform.",
+   "Configure the reward providers, event mappings, product inventory, exclusions and identity settings in Loyalty configurations, with your loyalty platform team.",
+   "Build the first challenges with Coworker's Loyalty Challenge Management skill, and write the challenge messages and content cards it does not fully automate.",
+   "Review each challenge and its generated journey with your loyalty lead before publishing, then check that test members complete the tasks and receive the reward."
+  ],
+  "deliverables": [
+   "Configured Loyalty Challenges program",
+   "Loyalty role setup",
+   "First published challenges with their messages",
+   "Prompt guide for future challenges"
+  ],
+  "asks": [
+   "Reward fulfillment APIs and loyalty events from your loyalty platform",
+   "An administrator to assign Loyalty roles in each sandbox",
+   "A loyalty lead to agree the first challenges and approve them before publishing"
+  ],
+  "risk": "Members who do not receive a reward they earned: we review each challenge and its generated journey before publishing, and check with test members that rewards arrive through your provider.",
+  "outcome": "Your team builds loyalty challenges with Coworker on a configured program, and the first challenges are live with their messages and reporting in the loyalty dashboards.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XA40",
+  "steps": [
+   "Run Coworker's Target program audit and Recommendations checks on your account, and agree with your Target owner which findings to fix.",
+   "Resolve collisions and priority conflicts between activities and fix misconfigured ones, agreeing each change to a live activity with its owner first.",
+   "Archive stale activities, remove the audiences and offers no activity uses, and fix the feeds, catalog attributes and criteria behind empty or stale recommendations.",
+   "Give Coworker your past test history as a CSV, so its next-test advice draws on your own learnings, then rerun the audit to confirm the fixes."
+  ],
+  "deliverables": [
+   "Audit findings before and after",
+   "Change log",
+   "Cleaned activity, audience and offer inventory",
+   "Recommendations fixes",
+   "Loaded test history"
+  ],
+  "asks": [
+   "Users with Target roles that allow the agreed changes",
+   "Activity owners to agree each change to a live activity",
+   "Your past test history from your own records, as a CSV"
+  ],
+  "risk": "Changing a live activity someone relies on: we agree each change to a live activity with its owner first, and rerun the audit to confirm the result.",
+  "outcome": "A rerun of the audit shows the agreed findings resolved, your Target inventory is clean, and Coworker's next-test advice draws on your own test history.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AXD13",
+  "steps": [
+   "Run Coworker's Dispatcher Insights on your production and stage environments within its seven-day log window, sharing your Dispatcher configuration and related AEM code for review.",
+   "Add the Governance Agent's vulnerability list, and agree with your AEM owner a prioritized fix list: cache rules and headers, filters and routing, redirects, security headers and affected components.",
+   "Implement the agreed fixes in your code, including permission-sensitive caching and CSRF and CORS settings, and deploy them through Cloud Manager.",
+   "Ask Coworker to reassess the logs or live URLs after each deployment, and record before and after evidence and the items outside your control."
+  ],
+  "deliverables": [
+   "Prioritized findings",
+   "Code and configuration changes",
+   "Deployment records",
+   "Before and after evidence from Coworker",
+   "List of items outside your control"
+  ],
+  "asks": [
+   "Developers with Cloud Manager access to deploy and to share the Dispatcher configuration and code",
+   "An AEM owner to agree the fix list and approve the remaining items"
+  ],
+  "risk": "A fix that breaks caching or access on the live site: we try each change on stage first, deploy through Cloud Manager and ask Coworker to reassess afterwards.",
+  "outcome": "The agreed Dispatcher, security and vulnerability fixes are live in production, and Coworker's reassessment shows the targeted issues resolved.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AXD14",
+  "steps": [
+   "Agree with your content owner the fragment folders and the launch they must be ready for: semantic search, translation, headless delivery or publishing.",
+   "Run Coworker's Content Fragment inspection on each folder, and work through its human-reviewed remediation steps for model, metadata, schema and reference issues.",
+   "Check dependencies before any delete, resolve the risky ones, and agree the tags and review step for Coworker's bulk fragment edits.",
+   "Rerun the checks until each folder passes, testing model changes that affect live delivery on a lower environment first."
+  ],
+  "deliverables": [
+   "Readiness results before and after",
+   "Change log",
+   "Dependency notes",
+   "Bulk edit rules"
+  ],
+  "asks": [
+   "Access to the agreed Content Fragment models and folders",
+   "A content owner to approve the bulk edit rules",
+   "A lower environment to test model changes that affect live delivery"
+  ],
+  "risk": "Deleting a fragment that other content still uses: we check dependencies before any delete and resolve the risky ones first.",
+  "outcome": "Each agreed fragment folder passes the readiness checks for your planned launch, and your team edits fragments in bulk under agreed tags and a review step.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AXD15",
+  "steps": [
+   "Gather your style guide, claim rules, positioning and design standards with your brand owner, and import your brand policies from PDF or page URLs.",
+   "Review the rules and checks the Governance Agent extracts, add segments such as markets, audiences or sub-brands over your global defaults, and enter your design system's colors and typography.",
+   "Map your domains, and set the brand, rules, checks and domains to Active, since new entities start as Draft and only Active ones are used.",
+   "Run a batch analysis of existing pages, report aligned and non-aligned pages, and agree with your brand owner a fix plan and owners for rule updates."
+  ],
+  "deliverables": [
+   "Populated Experience Context for your brand",
+   "Import review log",
+   "Batch analysis results with a fix plan",
+   "Rule ownership and update routine"
+  ],
+  "asks": [
+   "Your current brand documents: style guide, claim rules, positioning and design standards",
+   "A brand owner to approve the rules and checks and own their updates",
+   "The domains and existing pages for the batch analysis"
+  ],
+  "risk": "Rules that look set up but never apply: new entities start as Draft, so we set each to Active and confirm the checks run on your domain.",
+  "outcome": "Brand checks run on your agreed domain from an approved Experience Context, and the batch analysis of existing pages is your baseline for fixes.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AXD16",
+  "steps": [
+   "Find expired, expiring and undated assets in the agreed folders with the AEM Governance Agent in Coworker, and add expiry dates and usage rights metadata to them in bulk.",
+   "Set a review routine for assets about to expire with your rights owner, based on your own rights terms.",
+   "Create Content Hub access rules for your groups, regions or agencies as ALLOW rules on IMS Group IDs, with a rule for every group that must see all assets.",
+   "Apply the least-privilege group and ACL changes the Governance Agent recommends after diagnosing your repository permissions, then test with users from each group."
+  ],
+  "deliverables": [
+   "Rights metadata updates",
+   "Expiry review routine",
+   "Content Hub access rules with test results",
+   "Permission change log"
+  ],
+  "asks": [
+   "Your rights terms and access policy for the agreed folders",
+   "The IMS Group IDs and the groups that must see all assets",
+   "Test users from each group to check what they can see"
+  ],
+  "risk": "Groups locked out of Content Hub: groups no rule covers are denied access, so we add a rule for each group that must see all assets and test with users.",
+  "outcome": "Agreed assets carry expiry dates and rights metadata, your groups see only the assets their rules allow in Content Hub, and permission changes pass your access review.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XB17",
+  "steps": [
+   "Each month, list the failed and warning executions of the agreed scenarios with Coworker, and have it explain each error.",
+   "Check which scenarios depend on a connection, webhook or data store before changing it, then fix the failing scenarios and expired connections.",
+   "Report the month's failures, fixes and open risks, keep the record of who holds the write tools current, and review the volume with you after three months."
+  ],
+  "deliverables": [
+   "Monthly scenario health report",
+   "Dependency checks and fixes",
+   "Record of who holds the write tools"
+  ],
+  "asks": [
+   "A Fusion administrator to turn on MCP access and decide who holds the write tools",
+   "Your confirmation before any destructive change, such as a delete",
+   "Owners for failures in the systems your scenarios connect to"
+  ],
+  "risk": "A change that breaks other scenarios: we check which scenarios depend on a connection, webhook or data store before changing it, and destructive changes need your confirmation.",
+  "outcome": "Each month your agreed Fusion scenarios are reviewed, every failure has a fix or an owner, and destructive changes happen only with your confirmation.",
+  "kind": "task",
+  "phase": "after launch"
+ },
+ {
+  "id": "XB18",
+  "steps": [
+   "Review Adobe's default Organizational Rules with your marketing operations owner, and agree your naming patterns for programs, emails and Smart Campaigns.",
+   "Write your required folders, tokens and reports and your compliance rules, such as unsubscribe links, footer details, UTM parameters and exclusion filters.",
+   "Set the global rules and the agreed workspace overrides, update the version number, and test the rules with Validate Programs on real programs.",
+   "Tune rules that block good programs, then send your marketing operations team a change note on what changed and why."
+  ],
+  "deliverables": [
+   "Organizational Rules document with version history",
+   "Workspace overrides",
+   "Validate Programs test results",
+   "Change note for marketing operations"
+  ],
+  "asks": [
+   "An administrator to edit the rules, since that needs admin permissions",
+   "Your current naming conventions and compliance standards for programs and emails",
+   "Real programs to test the rules against"
+  ],
+  "risk": "Rules so strict they block good programs: we test them with Validate Programs on real programs and tune any rule that fails work your team would approve.",
+  "outcome": "Coworker in Marketo Engage builds, plans and validates programs against your own approved rules, with global rules, workspace overrides and a version history.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XB19",
+  "steps": [
+   "Each month, take the agreed campaign briefs from your team, plan each program with Plan Campaigns and build it from the right template with Build Programs.",
+   "Finish what stays manual: Smart List filters for your real segments, Smart Campaign flow steps, the placeholder emails and any dynamic content.",
+   "Run the manual checks Coworker flags and run Validate Programs against your own rules, then fix what fails.",
+   "Activate each program once you approve it, and review the monthly volume with you after three months."
+  ],
+  "deliverables": [
+   "Launched programs each month",
+   "Plan and validation result for each program",
+   "Manual check record for each program"
+  ],
+  "asks": [
+   "Campaign briefs, approved copy and target segments each month",
+   "Templates with at least one email and one Smart Campaign",
+   "An approver for each program before it is activated"
+  ],
+  "risk": "A program activated with the wrong audience or logic: filters and flow steps stay manual, so we set them by hand and validate every program before you approve it.",
+  "outcome": "Each month your agreed campaign briefs become Marketo Engage programs that pass Validate Programs and the manual checks, and are activated with your approval.",
+  "kind": "task",
+  "phase": "after launch"
+ },
+ {
+  "id": "XQ09",
+  "steps": [
+   "Run AI-decisioning health with your marketing operations owner to see persona classification and coverage across demographic, firmographic, technographic, psychographic, persona and intent data.",
+   "Define your personas from your person attributes in the persona mapping panel, so more of your people are classified into a persona.",
+   "Set the intent model's activity weights with Coworker's Intent configuration skill, activate the approved model, and check the results with Analyze intent.",
+   "Rerun AI-decisioning health, compare it with the first report, and agree an enrichment plan for the coverage gaps that remain."
+  ],
+  "deliverables": [
+   "Persona definitions",
+   "Active intent model and its weights",
+   "AI-decisioning health reports before and after",
+   "Enrichment plan for the remaining gaps"
+  ],
+  "asks": [
+   "A marketing operations owner to approve the personas, weights and enrichment plan",
+   "Users with the permission to view B2B intent reports",
+   "Your persona definitions as your sales and marketing teams use them today"
+  ],
+  "risk": "Weights that skew how people are scored: only one intent model is active and it drives the scoring, so you approve the weights before we activate them.",
+  "outcome": "Persona classification improves against your first AI-decisioning health report, the approved intent model is active, and you have an enrichment plan for the remaining gaps.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XQ10",
+  "steps": [
+   "Create the webinar with Coworker in its program at your licensed capacity, and design the registration page and room in the Adobe Connect design surface.",
+   "Build the promotion journey Coworker drafts, then finish what it lists as left to configure: the audience, the invitation email, the registration form event filter and member status steps.",
+   "Build the post-webinar journey with its attended and no-show paths, then test registration, the joining link and the follow-up emails before publishing.",
+   "Leave a reusable webinar program with a prompt guide, so your team can run later events the same way."
+  ],
+  "deliverables": [
+   "One live webinar with its promotion and follow-up journeys",
+   "Tested registration path",
+   "Reusable webinar program with a prompt guide"
+  ],
+  "asks": [
+   "The webinar's content, speakers and approved emails",
+   "The audience to invite and the registration form to use",
+   "A test group to register and attend before publishing"
+  ],
+  "risk": "Registrants who never get the joining link or the right follow-up: we test registration and the invitation before publishing, and check both follow-up paths and the member status steps.",
+  "outcome": "Your first interactive webinar runs from a tested registration path, attendees and no-shows each get the right follow-up, and your team can reuse the program.",
+  "kind": "task",
+  "phase": "build"
+ }
+]

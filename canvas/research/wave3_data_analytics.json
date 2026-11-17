@@ -1046,6 +1046,108 @@
     "how": "An Adobe Commerce extension sends your storefront events, such as product views, cart additions and orders, through a datastream to your Adobe Analytics report suite.",
     "gain": "Your store's behavior shows up in the Adobe Analytics reports your business already reads, without hand-built tagging on each storefront page."
    }
+  },
+  {
+   "id": "cw-aa",
+   "a": "cw",
+   "b": "aa",
+   "how": "Coworker Chat reads your client's Adobe Analytics report suites through Adobe's aa-mcp integration, within each user's Adobe Analytics permissions, and opens the visualizations it builds in Analysis Workspace.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/coworker/content/home",
+    "title": "Experience League: Adobe CX Enterprise Coworker Overview"
+   },
+   "source_quote": "Coworker Chat is available now in the following applications:",
+   "source_note": "The list under this sentence on the Coworker overview names Adobe Analytics.",
+   "gain": {
+    "title": "Report suite answers by asking",
+    "text": "Your client's teams ask about their Adobe Analytics report suites in plain words and open the answers in Analysis Workspace for deeper analysis."
+   },
+   "flows": [
+    {
+     "from": "aa",
+     "to": "cw",
+     "what": "Report suites, dimensions, metrics and segments each user can see in Analysis Workspace, read by Coworker Chat",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/analytics-chat",
+      "title": "Experience League: Get started analyzing data with Coworker Chat"
+     }
+    },
+    {
+     "from": "cw",
+     "to": "aa",
+     "what": "Visualizations from a chat, opened as a new Analysis Workspace project",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/analytics-chat",
+      "title": "Experience League: Get started analyzing data with Coworker Chat"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "Coworker Chat reads Adobe Analytics through Adobe's aa-mcp integration, within each user's permissions",
+   "availability": "",
+   "prereqs": [
+    "Coworker Chat license",
+    "Adobe Analytics license",
+    "Adobe's onboarding team configures Coworker and its Adobe application integrations",
+    "The aa-mcp integration in Coworker's list of connected servers (Customizations, Integrations tab); if it is not listed, add it with Add server",
+    "MCP Read-only Access, or MCP Full Access to also create segments, calculated metrics or projects, in an Adobe Analytics product profile for each user; product administrators get full MCP access automatically",
+    "User access to the report suites and components each person asks about: Coworker Chat inherits their Adobe Analytics permissions"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/coworker/content/home",
+     "quote": "Onboarding: Adobe’s enterprise support or professional services team configures Coworker for your environment, sets up integrations with your Adobe applications, and defines governance and approval workflows."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/analytics-chat",
+     "quote": "Coworker Chat connects to Customer Journey Analytics and Adobe Analytics through integrations. Before you start, make sure that the integration for your product is connected."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/analytics-chat",
+     "quote": "Select the Integrations tab, then make sure that cja-mcp and aa-mcp are available in your list of connected servers."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/analytics-chat",
+     "quote": "(Conditional) If the integration isn’t listed, select Add server to add it."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/analytics-chat",
+     "quote": "Coworker Chat inherits permissions from Customer Journey Analytics or Adobe Analytics. You can access only those data views, report suites, dimensions, metrics, and segments available to you in Analysis Workspace."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/analytics-chat",
+     "quote": "The visualization opens in a new Analysis Workspace project in Customer Journey Analytics or Adobe Analytics, depending on the source of the data."
+    },
+    {
+     "url": "https://developer.adobe.com/analytics-mcp/docs/guides/permissions",
+     "quote": "Adobe Analytics and Customer Journey Analytics product administrators automatically receive full MCP access for their respective products, even when neither MCP permission item is explicitly assigned in their product profiles."
+    },
+    {
+     "url": "https://developer.adobe.com/analytics-mcp/docs/guides/permissions",
+     "quote": "Other users need MCP Read-only Access or MCP Full Access in a product profile."
+    }
+   ],
+   "lines": [
+    {
+     "id": "XL27",
+     "name": "Coworker Chat on Adobe Analytics report suites",
+     "unit": "one-time",
+     "low": 12,
+     "base": 24,
+     "high": 40,
+     "default": false,
+     "scope": "Give your client's pilot users Adobe Analytics MCP access in their product profiles (MCP Read-only Access for analysis, or MCP Full Access where they may also create segments, calculated metrics or projects), check that the aa-mcp integration is connected in Coworker, agree the report suite each team uses and store it in memory, compare the first answers with Analysis Workspace, and write the starter prompts and one Skill that keeps Coworker on the approved components, including root cause questions about a known metric over a known period.",
+     "evidence": "Select the Integrations tab, then make sure that cja-mcp and aa-mcp are available in your list of connected servers.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/analytics-chat",
+      "title": "Experience League: Get started analyzing data with Coworker Chat"
+     }
+    }
+   ],
+   "client": {
+    "how": "Coworker Chat reads your Adobe Analytics report suites through Adobe's aa-mcp integration, with each person's own permissions, and opens the visualizations it builds in Analysis Workspace.",
+    "gain": "Your teams ask about your Adobe Analytics report suites in plain words and open the answers in Analysis Workspace for deeper analysis."
+   }
   }
  ],
  "not_documented": [
@@ -1195,7 +1297,7 @@
   },
   {
    "what": "The connection aa-cw, with its 2 services",
-   "why": "Adam, Nov 10 2026. The Coworker cards of this wave: \"Let's just skip those. It's a waste of our time.\""
+   "why": "Adam, Nov 10 2026. The Coworker cards of this wave: \"Let's just skip those. It's a waste of our time.\" Nov 17 2026 (Adam: \"yes!\"): Coworker + Adobe Analytics is in the tool as cw-aa, a native connection, with one optional service, XL27 Coworker Chat on Adobe Analytics report suites (record: canvas/research/coworker_2026-11-17/services.json)."
   },
   {
    "what": "The connection aa-aam, with its 3 services",

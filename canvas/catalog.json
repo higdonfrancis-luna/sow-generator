@@ -146,7 +146,10 @@
    ],
    "more": [
     "CW04",
-    "CW08"
+    "CW08",
+    "CW09",
+    "CW10",
+    "CW11"
    ]
   },
   {
@@ -1063,7 +1066,12 @@
    "lines": [
     "CW-CJA"
    ],
-   "more": [],
+   "more": [
+    "XA28",
+    "XA29",
+    "XA30",
+    "XA31"
+   ],
    "kind": "native",
    "label": "Coworker Chat reads CJA through Adobe's cja-mcp integration; partner Skills add your client's AI-channel readout",
    "availability": "",
@@ -3068,7 +3076,10 @@
    ],
    "more": [
     "AXD09",
-    "AXD10"
+    "AXD10",
+    "AXD13",
+    "AXD14",
+    "AXD15"
    ],
    "how": "Coworker Chat works in AEM Sites: from a plain-language prompt it drafts and updates pages, on Page Editor sites as on Edge Delivery sites, builds Visual Content Fragments from Figma and helps developers with Cloud Manager and the Dispatcher.",
    "source": {
@@ -3129,7 +3140,8 @@
     "AXD11"
    ],
    "more": [
-    "AXD12"
+    "AXD12",
+    "AXD16"
    ],
    "how": "AEM's Onboarding, Content Discovery and Content Optimization capabilities work through Coworker Chat: Coworker sets up folders, tags and metadata forms once the user confirms, finds assets by metadata or theme (and can filter to approved ones), and makes channel-ready renditions with a Dynamic Media license, Dynamic Media with OpenAPI and approved assets.",
    "source": {
@@ -4255,7 +4267,11 @@
    "lines": [
     "XA25"
    ],
-   "more": [],
+   "more": [
+    "XA32",
+    "XA33",
+    "XA34"
+   ],
    "how": "Coworker Chat works with Real-Time CDP B2C from Coworker's workspace, helping teams create, optimize and analyze audiences in natural language.",
    "source": {
     "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/overview",
@@ -4324,7 +4340,13 @@
    "lines": [
     "XA26"
    ],
-   "more": [],
+   "more": [
+    "XA35",
+    "XA36",
+    "XA37",
+    "XA38",
+    "XA39"
+   ],
    "how": "Coworker Chat works with Journey Optimizer B2C from Coworker's workspace: Adobe's journey skills create journeys from a prompt or a flowchart (Journey Create) and check fallout, conflicts and anomalies.",
    "source": {
     "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows",
@@ -4380,7 +4402,8 @@
    "b": "target",
    "lines": [],
    "more": [
-    "XA27"
+    "XA27",
+    "XA40"
    ],
    "how": "Coworker Chat is available in Target, both in its own window and inside the Target interface.",
    "source": {
@@ -4724,7 +4747,10 @@
    "lines": [
     "XB10"
    ],
-   "more": [],
+   "more": [
+    "XB18",
+    "XB19"
+   ],
    "how": "Coworker for Marketo Engage adds agent skills inside Marketo Engage that build programs, investigate leads, validate programs and import leads; users need access set up.",
    "source": {
     "url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/coworker-for-marketo/overview",
@@ -4837,7 +4863,8 @@
     "XB14"
    ],
    "more": [
-    "XB16"
+    "XB16",
+    "XB17"
    ],
    "how": "CX Enterprise Coworker Chat runs inside Workfront within each user's permissions. It is read-only until a system admin turns on the Write MCP tools option. Adobe's Workfront help says: \"CX Enterprise Coworker is not currently available to organizations in health care, finance, or some other industries with sensitive data. AI Assistant is available to these organizations.\"",
    "source": {
@@ -8215,6 +8242,65 @@
    "sowGain": "Your store's behavior shows up in the Adobe Analytics reports your business already reads, without hand-built tagging on each storefront page."
   },
   {
+   "id": "cw-aa",
+   "a": "cw",
+   "b": "aa",
+   "lines": [],
+   "more": [
+    "XL27"
+   ],
+   "how": "Coworker Chat reads your client's Adobe Analytics report suites through Adobe's aa-mcp integration, within each user's Adobe Analytics permissions, and opens the visualizations it builds in Analysis Workspace.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/coworker/content/home",
+    "title": "Experience League: Adobe CX Enterprise Coworker Overview"
+   },
+   "gain": {
+    "title": "Report suite answers by asking",
+    "text": "Your client's teams ask about their Adobe Analytics report suites in plain words and open the answers in Analysis Workspace for deeper analysis."
+   },
+   "flows": [
+    {
+     "from": "aa",
+     "to": "cw",
+     "what": "Report suites, dimensions, metrics and segments each user can see in Analysis Workspace, read by Coworker Chat",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/analytics-chat",
+      "title": "Experience League: Get started analyzing data with Coworker Chat"
+     }
+    },
+    {
+     "from": "cw",
+     "to": "aa",
+     "what": "Visualizations from a chat, opened as a new Analysis Workspace project",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/analytics-chat",
+      "title": "Experience League: Get started analyzing data with Coworker Chat"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "Coworker Chat reads Adobe Analytics through Adobe's aa-mcp integration, within each user's permissions",
+   "availability": "",
+   "prereqs": [
+    "Coworker Chat license",
+    "Adobe Analytics license",
+    "Adobe's onboarding team configures Coworker and its Adobe application integrations",
+    "The aa-mcp integration in Coworker's list of connected servers (Customizations, Integrations tab); if it is not listed, add it with Add server",
+    "MCP Read-only Access, or MCP Full Access to also create segments, calculated metrics or projects, in an Adobe Analytics product profile for each user; product administrators get full MCP access automatically",
+    "User access to the report suites and components each person asks about: Coworker Chat inherits their Adobe Analytics permissions"
+   ],
+   "references": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/analytics-chat",
+     "title": "Get started analyzing data with Coworker Chat"
+    }
+   ],
+   "sowHow": "Coworker Chat reads your Adobe Analytics report suites through Adobe's aa-mcp integration, with each person's own permissions, and opens the visualizations it builds in Analysis Workspace.",
+   "sowGain": "Your teams ask about your Adobe Analytics report suites in plain words and open the answers in Analysis Workspace for deeper analysis."
+  },
+  {
    "id": "acrobatsign-aemforms",
    "a": "acrobatsign",
    "b": "aemforms",
@@ -8685,7 +8771,9 @@
     "XQ05"
    ],
    "more": [
-    "XQ06"
+    "XQ06",
+    "XQ09",
+    "XQ10"
    ],
    "how": "Coworker is the chat panel built into Marketo Optimizer. A marketer asks in plain language or picks a skill from the slash menu, and Coworker builds a program from a campaign brief, creates people lists and journeys, drafts emails and answers questions about results. Coworker checks every skill against the permissions the same feature needs outside chat, and creates nothing until the marketer approves.",
    "source": {
@@ -10119,6 +10207,63 @@
    "high": 32,
    "url": "https://experienceleague.adobe.com/en/docs/coworker/content/ai-platforms",
    "src": "Experience League: Adobe CX Enterprise Coworker for AI Platforms",
+   "origin": "sow",
+   "references": [
+    {
+     "url": "https://business.adobe.com/support/adobe-support-and-services.html",
+     "title": "Adobe for Business: Adobe Support and Services",
+     "quote": "Getting it to work at full capacity requires the right data foundations, governance structures, workflow design, and team skills. Adobe Support and Services helps you address all these needs, with Premium Learning building team capabilities, Ultimate Success providing strategic guidance, and Integrated Services and Custom Services handling hands-on configuration and deployment.",
+     "partner": true
+    }
+   ]
+  },
+  "CW09": {
+   "id": "CW09",
+   "name": "Coworker governance and access policy",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 56,
+   "url": "https://experienceleague.adobe.com/en/docs/coworker/content/home",
+   "src": "Experience League: Adobe CX Enterprise Coworker Overview",
+   "origin": "sow",
+   "references": [
+    {
+     "url": "https://business.adobe.com/support/adobe-support-and-services.html",
+     "title": "Adobe for Business: Adobe Support and Services",
+     "quote": "Getting it to work at full capacity requires the right data foundations, governance structures, workflow design, and team skills. Adobe Support and Services helps you address all these needs, with Premium Learning building team capabilities, Ultimate Success providing strategic guidance, and Integrated Services and Custom Services handling hands-on configuration and deployment.",
+     "partner": true
+    }
+   ]
+  },
+  "CW10": {
+   "id": "CW10",
+   "name": "Custom MCP server for a Client system",
+   "unit": "one-time",
+   "low": 32,
+   "base": 64,
+   "high": 120,
+   "url": "https://experienceleague.adobe.com/en/docs/coworker/content/home",
+   "src": "Experience League: Adobe CX Enterprise Coworker Overview",
+   "origin": "sow",
+   "references": [
+    {
+     "url": "https://business.adobe.com/support/adobe-support-and-services.html",
+     "title": "Adobe for Business: Adobe Support and Services",
+     "quote": "Getting it to work at full capacity requires the right data foundations, governance structures, workflow design, and team skills. Adobe Support and Services helps you address all these needs, with Premium Learning building team capabilities, Ultimate Success providing strategic guidance, and Integrated Services and Custom Services handling hands-on configuration and deployment.",
+     "partner": true
+    }
+   ]
+  },
+  "CW11": {
+   "id": "CW11",
+   "name": "Coworker trial value sprint",
+   "unit": "one-time",
+   "low": 16,
+   "base": 24,
+   "high": 40,
+   "url": "https://experienceleague.adobe.com/en/docs/cx-enterprise-ai/experience-cloud-ai/agents/trial",
+   "src": "Experience League: CX Enterprise Coworker Trial",
    "origin": "sow",
    "references": [
     {
@@ -13110,6 +13255,61 @@
     }
    ]
   },
+  "XA28": {
+   "id": "XA28",
+   "name": "Implementation plan from Coworker, checked against the tenant",
+   "unit": "one-time",
+   "low": 12,
+   "base": 20,
+   "high": 40,
+   "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/intelligent-implementation-and-administration/implementation-guide",
+   "src": "Experience League: Plan Your Customer Journey Analytics or Streaming Media Implementation with Coworker",
+   "origin": "research",
+   "scope": "Run Coworker's implementation guide skill with your client's team for one path (Customer Journey Analytics from scratch, the Adobe Analytics upgrade, Content Analytics, Marketing Campaign Analytics or Streaming Media), check each planned step against the live tenant (licenses, sandboxes, schemas, datasets, report suites and permissions), correct the owners and effort, and import the plan into Workfront or Jira as the delivery plan.",
+   "evidence": "These skills don’t access your Adobe systems or make any changes. They help you plan your implementation. They don’t perform it or verify it against a live tenant."
+  },
+  "XA29": {
+   "id": "XA29",
+   "name": "Adobe Analytics and CJA data validation and fixes",
+   "unit": "one-time",
+   "low": 24,
+   "base": 48,
+   "high": 96,
+   "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/intelligent-implementation-and-administration/data-validation-aa-cja",
+   "src": "Experience League: Validate Adobe Analytics to Customer Journey Analytics Data",
+   "origin": "research",
+   "scope": "After your client completes the upgrade steps, run Coworker's validation skill on up to three report suite and data view pairs (a full audit compares up to 40 metrics and 20 dimensions), check each suggested action, and fix the causes in Experience Platform, Adobe Analytics or the data view, such as bot filtering, session settings, marketing channel derived fields, duplicate datasets or field mappings. Rerun until each pair reaches the agreed matching rate, and document the differences that are expected by design, such as device-based visitors against people.",
+   "evidence": "Verify that the suggested actions are valid, then resolve them in Adobe Experience Platform or Adobe Analytics.",
+   "needs": [
+    "aa"
+   ]
+  },
+  "XA30": {
+   "id": "XA30",
+   "name": "Coworker analytics enablement on CJA data views",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 56,
+   "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/analytics-overview",
+   "src": "Experience League: Analyze Analytics Data with Adobe CX Enterprise Coworker Chat",
+   "origin": "research",
+   "scope": "Set up the organization-level practices Adobe recommends for analysis in Coworker, for up to two teams: coach an analyst from your client's team as the Coworker champion, agree the approved dimensions, metrics and segments in each data view and tidy their names and descriptions so prompts can name them exactly, write a library of up to 20 vetted prompts and one Skill that directs Coworker to the approved components, store each team's data view in memory, and teach users when to ask for a quick answer and when to work through a deeper analysis.",
+   "evidence": "Create a library of vetted prompts and skills that correlate with the data and components that are available to users."
+  },
+  "XA31": {
+   "id": "XA31",
+   "name": "Streaming Media collection from the Coworker plan",
+   "unit": "one-time",
+   "low": 40,
+   "base": 80,
+   "high": 160,
+   "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/intelligent-implementation-and-administration/implementation-guide",
+   "src": "Experience League: Plan Your Customer Journey Analytics or Streaming Media Implementation with Coworker",
+   "origin": "research",
+   "scope": "Instrument your client's video or audio players for Streaming Media collection on the Edge, from the plan Coworker's implementation guide skill produces: configure the datastream and the XDM schema and dataset for media events, implement the SDK or API on up to two player platforms, map the media event model, add the media components to the CJA data view where CJA reports, and check that sessions, pings and completions reach CJA or Adobe Analytics reporting.",
+   "evidence": "Get an implementation plan for Streaming Media collection on the Edge, covering datastream configuration, per-platform SDK/API implementation, and the media event model, so you correctly instrument sessions, pings, and completions for Customer Journey Analytics and/or Adobe Analytics reporting."
+  },
   "CW-AEM": {
    "id": "CW-AEM",
    "name": "Coworker Skills for AEM content",
@@ -14298,6 +14498,45 @@
    "scope": "Store the Figma access token in AEM, import approved Figma designs with Coworker, then review the Content Fragment models, fragments and templates it creates, reusing existing models where they fit.",
    "evidence": "AEM will automatically create the required Content Fragment Models, Content Fragments and HTML templates."
   },
+  "AXD13": {
+   "id": "AXD13",
+   "name": "Dispatcher, security and vulnerability fixes from Coworker findings",
+   "unit": "one-time",
+   "low": 24,
+   "base": 48,
+   "high": 96,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/development/use-cases",
+   "src": "Experience League: Development Agentic Capabilities Overview",
+   "origin": "research",
+   "scope": "Use Coworker's Dispatcher Insights on your client's production and stage environments (a seven-day log window), with the Dispatcher configuration and related AEM code shared for review, and the Governance Agent's vulnerability list, to agree a prioritized fix list: cache rules and headers, filters and routing, redirects, security headers, permission-sensitive caching, CSRF and CORS settings, and affected components to patch or upgrade. Implement the agreed fixes in your client's code, deploy through Cloud Manager, and ask Coworker to reassess the logs or live URLs.",
+   "evidence": "After you apply and deploy a change, ask Coworker to reassess the available logs or live URL behavior."
+  },
+  "AXD14": {
+   "id": "AXD14",
+   "name": "Content Fragment readiness fixes with Coworker",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 64,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/experience-production/use-cases",
+   "src": "Experience League: Experience Production Agentic Capabilities Overview",
+   "origin": "research",
+   "scope": "Run Coworker's Content Fragment inspection on up to three of your client's fragment folders before a semantic search, translation, headless or publishing launch, then work through its human-reviewed remediation steps: fix the model, metadata, schema and reference issues, resolve risky dependencies before deletes, and agree the tags and review step for Coworker's bulk fragment edits. Rerun the checks until the folders pass.",
+   "evidence": "Finally it provides assessments with guided, human-reviewed remediation steps."
+  },
+  "AXD15": {
+   "id": "AXD15",
+   "name": "Brand rules in Experience Context with a site audit",
+   "unit": "one-time",
+   "low": 24,
+   "base": 48,
+   "high": 96,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-governance/experience-context",
+   "src": "Experience League: Experience Context",
+   "origin": "research",
+   "scope": "Build your client's Experience Context for one brand: gather the style guide, claim rules, positioning and design standards, import up to three brand policies from PDF or page URLs, review the rules and checks the Governance Agent extracts, add up to three segments (such as markets, audiences or sub-brands) over global defaults, enter the design system's colors and typography, map the domains and set everything to Active. Run a batch analysis of up to 50 existing pages, report aligned and non-aligned pages, and agree a fix plan and owners for rule updates.",
+   "evidence": "New entities are created as Draft by default, so you must set an entity to Active to put it into effect."
+  },
   "AXD11": {
    "id": "AXD11",
    "name": "Partner-written Coworker Skills for DAM work",
@@ -14323,6 +14562,19 @@
    "origin": "research",
    "scope": "Index the custom metadata properties teams search by, such as campaign, brand or license, and test discovery prompts with each team.",
    "evidence": "To improve discovery performance, index relevant custom metadata properties."
+  },
+  "AXD16": {
+   "id": "AXD16",
+   "name": "Asset rights, Content Hub access rules and permission fixes",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 64,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-governance/overview",
+   "src": "Experience League: Governance Agent Overview",
+   "origin": "research",
+   "scope": "Use the AEM Governance Agent in Coworker to find your client's expired, expiring and undated assets in up to three folder trees, then add expiry dates and usage rights metadata to them in bulk in AEM Assets and set a review routine for assets about to expire. Design and create up to 10 Content Hub attribute-based access rules for groups, regions or agencies with the Governance Agent, written as ALLOW rules on IMS Group IDs and including a rule for each group that must see all assets, since Content Hub denies access to groups no rule covers. Apply the least-privilege group and ACL changes the Governance Agent recommends after diagnosing your client's repository permissions, since it does not change them itself.",
+   "evidence": "The agentic capability is read-only: it diagnoses permissions and recommends changes, but it does not modify access control lists, groups, or content on your behalf."
   },
   "AXE01": {
    "id": "AXE01",
@@ -14825,6 +15077,45 @@
     }
    ]
   },
+  "XA32": {
+   "id": "XA32",
+   "name": "Experience Platform health check fixes with Coworker",
+   "unit": "one-time",
+   "low": 24,
+   "base": 48,
+   "high": 96,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-platform/run-and-operate/health-checks/overview",
+   "src": "Experience League: Health Checks (Experience Platform)",
+   "origin": "research",
+   "scope": "Start from Coworker's view of the latest health check results for up to two of your client's sandboxes, let Coworker fix the issue types it supports after your client approves each change (identity namespace descriptions, duplicate and default merge policy names, and schemas missing the audit field group), and fix the other failed checks by hand, such as schema and identity configuration, TTL and lookback settings, segmentation and dataset limits, destination schedules, failing scheduled queries and source credentials. Add descriptions to the XDM fields teams target on so Coworker's field discovery finds them, rerun the checks and hand over a prioritized list of what is left.",
+   "evidence": "These issues are difficult to detect and often require specialized expertise to diagnose."
+  },
+  "XA33": {
+   "id": "XA33",
+   "name": "Data lake retention review with Coworker",
+   "unit": "one-time",
+   "low": 16,
+   "base": 24,
+   "high": 48,
+   "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-management/manage-data-lake-retention",
+   "src": "Experience League: Manage Data Lake Retention",
+   "origin": "research",
+   "scope": "Use Coworker's Data Management Agent to list your client's large, unused or forgotten Experience Event datasets in up to two sandboxes, check how actively each is used and model the effect of a retention period, then review up to 15 shortlisted datasets with the data owners against business and legal retention needs, choose another data lifecycle tool where a whole dataset or another store must be cleaned, and apply the approved retention policies after Coworker's impact preview.",
+   "evidence": "We recommend reviewing the available details and applying your business context before taking action."
+  },
+  "XA34": {
+   "id": "XA34",
+   "name": "Monthly data quality checks with Coworker",
+   "unit": "monthly",
+   "low": 8,
+   "base": 16,
+   "high": 32,
+   "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/intelligent-implementation-and-administration/data-validation-aep",
+   "src": "Experience League: Validate Your Experience Platform Data with Coworker",
+   "origin": "research",
+   "scope": "Each month, run Coworker's Data Validation skill on up to 10 of your client's critical datasets and their key identity and event fields, check streaming capacity and breaches for the agreed sandboxes, follow up flagged values with Query Service where a sample is not enough, log regressions with their cause, and agree fixes to mappings or source data with the data owners.",
+   "evidence": "Run ongoing data stewardship checks on critical datasets to catch regressions early."
+  },
   "XA26": {
    "id": "XA26",
    "name": "Partner-written Coworker Skills for journey work",
@@ -14844,6 +15135,72 @@
     }
    ]
   },
+  "XA35": {
+   "id": "XA35",
+   "name": "Journeys built with Coworker: readiness, finishing and checks",
+   "unit": "one-time",
+   "low": 24,
+   "base": 40,
+   "high": 72,
+   "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/orchestrate-journeys/journeys-coworker-skills",
+   "src": "Experience League: Coworker for journeys (Journey Optimizer)",
+   "origin": "research",
+   "scope": "Prepare your client's team to build journeys with Coworker's Journey Create skill: give practitioners the Manage Journeys, View Journey Events, Data Sources and Actions, View Segments and Manage Segments permissions and keep others read-only, confirm the audiences, events and data sources exist, name custom actions so prompts can call them exactly, and pilot up to five journeys from prompts or flowchart images. Finish in the journey canvas what Journey Create does not set, such as A/B tests, dataset lookups, wave sending, schedule recurrence, audience namespaces and custom action field mapping, then check each expression, run Coworker's quick simulation and a manual simulation or test mode, and publish.",
+   "evidence": "Make sure to check and validate any expressions that Journey Skills create to ensure that the correct fields and values are used."
+  },
+  "XA36": {
+   "id": "XA36",
+   "name": "Journey inventory and channel setup cleanup with Coworker",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 56,
+   "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/orchestrate-journeys/journeys-coworker-skills",
+   "src": "Experience League: Coworker for journeys (Journey Optimizer)",
+   "origin": "research",
+   "scope": "Run Coworker's journey hygiene, custom action error and channel configuration checks on one of your client's sandboxes, then clean up what they find: rename journeys, actions and events with missing, generic or similar names, close old live journeys to new entrances, delete the stale drafts and finished journeys your client no longer needs, move what stays into folders with tags, split oversized journeys, fix the endpoints, authentication or payloads behind failing custom actions, and correct sender, reply-to, subdomain, IP pool and unsubscribe settings in Journey Optimizer, since Channel Operation only reads them.",
+   "evidence": "Get recommendations to clean up and stabilize your journey inventory."
+  },
+  "XA37": {
+   "id": "XA37",
+   "name": "Custom outbound channel with Channel Builder",
+   "unit": "one-time",
+   "low": 24,
+   "base": 40,
+   "high": 72,
+   "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/channels/custom-channel/configure-custom-channel/create-custom-channel",
+   "src": "Experience League: Create a custom channel (Journey Optimizer)",
+   "origin": "research",
+   "scope": "Connect one messaging service your client uses that Journey Optimizer does not support natively (for example WeChat, Kakao Talk or a proprietary SMS gateway) to Journey Optimizer as a custom channel with Coworker's Channel Builder skill: the endpoint, headers and authentication, the throttling policy and the message payload. Test each payload scenario while the channel is still a draft, activate it, set up its API credentials where it uses authentication, its channel configuration and, where link tracking is needed, a delegated subdomain, and use it in a first journey or campaign.",
+   "evidence": "To be able to use a custom channel in campaigns and journeys, an administrator must first create the channel. This involves defining the endpoint, authentication, throttling policy, and message payload structure. You can create the channel manually in the Channel Builder, as described below, or with the Channel Builder skill in Coworker."
+  },
+  "XA38": {
+   "id": "XA38",
+   "name": "Email content production with Coworker's content skills",
+   "unit": "one-time",
+   "low": 24,
+   "base": 40,
+   "high": 72,
+   "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/content-management-coworker-skills",
+   "src": "Experience League: Coworker for content management (Journey Optimizer)",
+   "origin": "research",
+   "scope": "Set up and pilot Coworker's Channel Content skills for your client's email work: check that the approved brand guidelines (voice, imagery and legal) are published where the Brand Lookup skill finds them, set up the reusable email design system Coworker maintains, store the Figma access token in Coworker's secrets and agree frame conventions for Build Email from Figma, define the brand, compliance, design and accessibility (WCAG 2.1 AA) reviews each email passes, and agree how approved content is saved into Journey Optimizer templates. Pilot up to five emails from brief to saved draft and fix the template issues the reviews find.",
+   "evidence": "Request all relevant reviews: Ask for brand, compliance, design, and accessibility review before treating content as send-ready."
+  },
+  "XA39": {
+   "id": "XA39",
+   "name": "Loyalty Challenges setup with Coworker",
+   "unit": "one-time",
+   "low": 40,
+   "base": 72,
+   "high": 120,
+   "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/loyalty-challenges/get-started",
+   "src": "Experience League: Get started with Loyalty Challenges",
+   "origin": "research",
+   "scope": "Set up your client's Loyalty Challenges program so challenges can be built with Coworker: Loyalty roles (custom roles with Loyalty permissions in non-production sandboxes), the reward providers, event mappings, product inventory, exclusions and identity settings in Loyalty configurations, and the eligible audiences in Experience Platform. Build up to three first challenges with Coworker's Loyalty Challenge Management skill, write the challenge messages and content cards it does not fully automate, and review each challenge and its generated journey before publishing.",
+   "evidence": "Before challenges can be authored, an administrator configures the program foundations: reward providers, event mappings that map customer actions to task completions, product inventory, and exclusion lists.",
+   "tier": "Journey Optimizer Loyalty"
+  },
   "XA27": {
    "id": "XA27",
    "name": "Partner-written Coworker Skills for Target testing",
@@ -14856,6 +15213,19 @@
    "origin": "research",
    "scope": "Write and test Skills for your client's routine Target work in its own formats, such as test briefs and results summaries, on top of Adobe's shipped Target skills (guided activity setup), with approval steps.",
    "evidence": "Skills are reusable playbooks that help Adobe CX Coworker perform customer experience orchestration tasks consistently and efficiently."
+  },
+  "XA40": {
+   "id": "XA40",
+   "name": "Target program audit and cleanup with Coworker",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 64,
+   "url": "https://experienceleague.adobe.com/en/docs/target/using/introduction/coworker-skills",
+   "src": "Experience League: Coworker skills for Adobe Target",
+   "origin": "research",
+   "scope": "Run Coworker's Target program audit and Recommendations checks on your client's account, then clean up what they find: resolve collisions and priority conflicts between activities, fix misconfigured activities, archive stale activities and remove the audiences and offers no activity uses, fix the feeds, catalog attributes and criteria behind empty or stale recommendations, and give Coworker your client's past test history as a CSV so its next-test advice draws on your client's own learnings.",
+   "evidence": "Audits Target programs for risks, collisions, misconfigurations, hygiene issues, and quick wins."
   },
   "EDC01": {
    "id": "EDC01",
@@ -14988,6 +15358,32 @@
    "scope": "Check that the Gen-AI terms are accepted, set up user access and the role limits on lead investigation, and pilot the build and validate program skills on your client's own templates.",
    "evidence": "you must perform some setup steps to ensure the desired users have access"
   },
+  "XB18": {
+   "id": "XB18",
+   "name": "Organizational Rules for Coworker in Marketo Engage",
+   "unit": "one-time",
+   "low": 12,
+   "base": 24,
+   "high": 40,
+   "url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/coworker-for-marketo/organizational-rules",
+   "src": "Experience League: Organizational rules (Coworker for Marketo Engage)",
+   "origin": "research",
+   "scope": "Write your client's Organizational Rules for Coworker in Marketo Engage, starting from Adobe's defaults: naming patterns for programs, emails and Smart Campaigns, required folders, tokens and reports, and compliance rules such as unsubscribe links, footer details, UTM parameters and exclusion filters. Set the global rules and up to three workspace overrides, version them, test them with Validate Programs on real programs, and tune rules that block good programs.",
+   "evidence": "Every Marketo Engage environment includes default Organizational Rules. You can customize them to reflect your organization’s specific governance needs."
+  },
+  "XB19": {
+   "id": "XB19",
+   "name": "Monthly program builds with Coworker in Marketo Engage",
+   "unit": "monthly",
+   "low": 16,
+   "base": 32,
+   "high": 56,
+   "url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/coworker-for-marketo/skills/build-programs",
+   "src": "Experience League: Build programs (Coworker for Marketo Engage)",
+   "origin": "research",
+   "scope": "Each month, turn up to four of your client's campaign briefs into Marketo Engage programs with Coworker: plan each with Plan Campaigns, build it from the right template with Build Programs, then finish what stays manual (Smart List filters for the real segments, flow steps, placeholder emails and dynamic content), run the manual checks Coworker flags and Validate Programs against your client's rules, and activate after approval.",
+   "evidence": "Email content is auto-generated, but Smart Campaign filters and flow steps remain manual."
+  },
   "XB11": {
    "id": "XB11",
    "name": "Brand Concierge activity in Marketo programs",
@@ -15036,6 +15432,20 @@
    "origin": "research",
    "scope": "Connect Coworker to Workfront Fusion with an account your client chooses, since Coworker can change whatever that account can and the modules cannot limit individual tools. Build and test the agreed scenario around Run a Prompt and Get Execution Status: its trigger, a prompt mapped from earlier modules, storage and follow-on modules, results that need input or approval routed to a person, Task IDs saved for long tasks, a check that each completed run did its business action, and error handling that never resends a prompt whose outcome is uncertain.",
    "evidence": "The connector starts and checks Coworker requests. It does not monitor project changes or automatically save answers to another application. Add the appropriate trigger, storage, and follow-on modules to your scenario as needed.",
+   "ext": "Workfront Fusion (part of Workfront Ultimate and of Workflow plus Automation and Integration packages; Prime and Select without Automation and Integration need it bought separately)"
+  },
+  "XB17": {
+   "id": "XB17",
+   "name": "Monthly Fusion scenario support through Coworker",
+   "unit": "monthly",
+   "low": 8,
+   "base": 16,
+   "high": 32,
+   "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/set-up-and-manage-fusion/use-fusion-mcp-server/configure-fusion-mcp-server",
+   "src": "Experience League: Configure the Adobe Workfront Fusion MCP server",
+   "origin": "research",
+   "scope": "Have your client's Fusion administrator turn on MCP access and decide who gets the write tools and which team roles, then each month use Coworker with Fusion to list failed and warning executions for up to 20 scenarios, explain the errors, check which scenarios depend on a connection, webhook or data store before changing it, fix the failing scenarios and expired connections, and report the month's failures, fixes and open risks.",
+   "evidence": "Ask your Fusion administrator to enable write tools, or to grant you the required team role.",
    "ext": "Workfront Fusion (part of Workfront Ultimate and of Workflow plus Automation and Integration packages; Prime and Select without Automation and Integration need it bought separately)"
   },
   "XB15": {
@@ -16611,6 +17021,19 @@
    "scope": "Build your client's first commerce project in Analysis Workspace on the new data: product performance, cart and checkout fallout and revenue by marketing channel.",
    "evidence": "Finally, to view your Commerce data, you will need to navigate to Analysis Workspace in Adobe Analytics, create a project, choose your report suite, and add freeform tables and other visualizations to report on and analyze your Commerce data."
   },
+  "XL27": {
+   "id": "XL27",
+   "name": "Coworker Chat on Adobe Analytics report suites",
+   "unit": "one-time",
+   "low": 12,
+   "base": 24,
+   "high": 40,
+   "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/analytics-chat",
+   "src": "Experience League: Get started analyzing data with Coworker Chat",
+   "origin": "research",
+   "scope": "Give your client's pilot users Adobe Analytics MCP access in their product profiles (MCP Read-only Access for analysis, or MCP Full Access where they may also create segments, calculated metrics or projects), check that the aa-mcp integration is connected in Coworker, agree the report suite each team uses and store it in memory, compare the first answers with Analysis Workspace, and write the starter prompts and one Skill that keeps Coworker on the approved components, including root cause questions about a known metric over a known period.",
+   "evidence": "Select the Integrations tab, then make sure that cja-mcp and aa-mcp are available in your list of connected servers."
+  },
   "XN10": {
    "id": "XN10",
    "name": "Signing on forms built with Foundation Components",
@@ -16851,6 +17274,33 @@
    "origin": "research",
    "scope": "Create custom skills for the tasks your client's team repeats, such as a weekly journey readout or a pre-launch check, test and refine each with the people who will use it, and document what it reads and what it changes.",
    "evidence": "These skills answer product questions and let you build new custom skills."
+  },
+  "XQ09": {
+   "id": "XQ09",
+   "name": "Personas, intent model and AI decisioning data gaps",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 56,
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/ai-decisioning/ai-decisioning-health",
+   "src": "Experience League: AI-Decisioning Health (Marketo Optimizer)",
+   "origin": "research",
+   "scope": "Prepare the data Marketo Optimizer's AI decisioning reads: define up to 10 personas from your client's person attributes in the persona mapping panel, set and activate the intent model's activity weights with Coworker's Intent configuration skill and check the results with Analyze intent, then use AI-decisioning health to find coverage gaps across demographic, firmographic, technographic, psychographic, persona and intent data and agree an enrichment plan for them.",
+   "evidence": "Closing those gaps improves how AI decisioning scores and routes each person."
+  },
+  "XQ10": {
+   "id": "XQ10",
+   "name": "Webinar programs with Coworker in Marketo Optimizer",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 56,
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/coworker/webinar-creation",
+   "src": "Experience League: Create and Promote Webinars (Marketo Optimizer)",
+   "origin": "research",
+   "scope": "Set up your client's first interactive webinar with Coworker: create the webinar in its program at the licensed capacity, design the registration page and room in the Adobe Connect design surface, build the promotion and post-webinar journeys Coworker drafts, finish what it lists as left to configure (the journey audience, the invitation email, the registration form event filter and the member status steps), test and publish, and leave a reusable webinar program for later events.",
+   "evidence": "The chat interface lists what is left to configure in the journey canvas.",
+   "tier": "the Marketo Optimizer webinar license"
   },
   "XQ07": {
    "id": "XQ07",
