@@ -50,6 +50,8 @@ const srv = http.createServer((q, r) => {
   await shot('m10_phone_example', '#example-target', 390, 844);
   await shot('m11_list_picture', '#example-list', 1440, 1200);
   await shot('m12_tablet_top', null, 1024, 768);
+  await shot('m13_phone_list_picture', '#example-list', 390, 844);
+  await shot('m14_tablet_list_picture', '#example-list', 1024, 768);
   console.log('errors', errs);
   await b.close();
   srv.close();

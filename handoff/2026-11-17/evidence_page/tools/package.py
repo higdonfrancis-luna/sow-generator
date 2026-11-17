@@ -14,7 +14,7 @@ import sys
 import zipfile
 
 site, brief_zip, out = sys.argv[1:4]
-ADDED = ['coworker-evidence.html', 'propensity-method.html', 'propensity-mockup.png']
+ADDED = ['coworker-evidence.html', 'propensity-method.html', 'propensity-mockup.png', 'propensity-mockup-phone.png']
 PAGES = [f for f in ADDED if f.endswith('.html')]
 
 src = zipfile.ZipFile(brief_zip)

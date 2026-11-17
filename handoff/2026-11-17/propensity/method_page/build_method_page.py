@@ -5,7 +5,8 @@ look like the brief, and writes its own main content. It presents the counting d
 (../design_transparent.md) as the proposed method. Every customer count and every number like .45
 on the page is a labeled sample: no customer data has been read.
 
-The page shows one picture, propensity-mockup.png, copied from ../mockups/p3_list_only.png.
+The page shows one picture in two sizes: propensity-mockup.png and propensity-mockup-phone.png,
+copied from ../mockups/p3_list_only.png and p3_list_phone.png.
 
 Run:  python3 build_method_page.py ../../evidence_page/coworker-evidence.html propensity-method.html
 """
@@ -41,8 +42,8 @@ rep('<span class="internal-label"><span class="brief-status-dot" aria-hidden="tr
 
 # this tab's own styles, after the shared ones
 rep('</style>', '''/* Propensity to buy tab */
-main h1,main h2,main h3{text-wrap:balance}
-.pm-status{margin-top:26px;padding:16px 20px;border:1px solid #d9b200;border-radius:14px;background:#fffaf0;font-size:16px;line-height:1.5;color:#3d3200}
+main h1,main h2,main h3,main .micro{text-wrap:balance}
+.pm-status{max-width:920px;margin:26px auto 0;padding:16px 20px;border:1px solid #d9b200;border-radius:14px;background:#fffaf0;font-size:16px;line-height:1.5;color:#3d3200}
 .pm-status strong{color:#2a2200}
 .pm-sample{display:inline-block;margin-right:4px;padding:2px 8px;border:1px solid #c9a400;border-radius:5px;background:#fff2b3;color:#5c4a00;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;vertical-align:.08em}
 .pm-short .impact-ledger h3{margin-top:0}
@@ -67,13 +68,15 @@ main h1,main h2,main h3{text-wrap:balance}
 .pm-note{margin-top:18px;max-width:920px;font-size:15px;line-height:1.6;color:#555}
 .pm-note strong{color:var(--ink)}
 .pm-figure{margin:34px 0 0;display:grid;grid-template-columns:minmax(0,560px) minmax(0,1fr);gap:28px;align-items:start}
-.pm-figure img{display:block;width:100%;height:auto;border-radius:10px}
+.pm-figure img{display:block;width:100%;max-width:560px;height:auto;border-radius:10px}
+.pm-figure .pm-narrow{display:none;max-width:361px}
 .pm-figure figcaption{font-size:15px;line-height:1.6;color:#555}
 .pm-figure figcaption strong{color:var(--ink)}
 @media(min-width:1101px){#proof .cw-steps{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:1100px){.pm-two,.pm-figure{grid-template-columns:1fr}}
 @media(max-width:700px){.pm-calc{white-space:normal}.pm-status{font-size:15px}}
-@media print{.skip-link{display:none}.pm-status,.pm-sample{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+@media(max-width:480px){.pm-figure .pm-wide{display:none}.pm-figure .pm-narrow{display:block}}
+@media print{.skip-link{display:none}.pm-status,.pm-sample{-webkit-print-color-adjust:exact;print-color-adjust:exact}.pm-figure{grid-template-columns:minmax(0,400px) minmax(0,1fr);gap:20px;break-inside:avoid}}
 </style>''')
 
 SAMPLE = '<p><span class="pm-sample">Sample numbers</span> Made up to show the arithmetic. They are not customer data.</p>'
@@ -96,7 +99,7 @@ MAIN = '''<main id="main">
       </article>
       <article>
         <h3>The data sets the number.</h3>
-        <p>Next to each product is one number between 0 and 1. It is the share of similar customers who also own the product. Similar means customers who own every Adobe product on the canvas. The customer count sits beside the number.</p>
+        <p>Next to each product is one number between 0 and 1. It is the share of similar customers who also own the product. Similar means customers who own every Adobe product on the canvas. When too few do, the tool sets a product aside and says which. The customer count sits beside the number.</p>
       </article>
       <article>
         <h3>Checks come first.</h3>
@@ -108,11 +111,11 @@ MAIN = '''<main id="main">
 <section class="section capability-section sow-case cw-process pm-steps" id="logic"><div class="wrap">
   <div class="section-heading"><div><p class="eyebrow">How it works</p><h2>The logic,<br>step by step.</h2></div><p>Six steps. The first two need no customer data, so they can work on day one. The other four start when the data is loaded and checked.</p></div>
   <ol class="capability-flow cw-steps">
-      <li><p class="micro">Step 1 · <span>No data needed</span></p><h3>Ask the goal once</h3><p>The tool asks one question for each canvas: what is your client trying to accomplish? The partner picks one of the <strong>23</strong> client problems already in the tool. The answer stays with that canvas until the partner changes it.</p></li>
-      <li><p class="micro">Step 2 · <span>No data needed</span></p><h3>Sort every product by fit</h3><p><strong>Solves the goal:</strong> the products that problem calls for. <strong>Builds on the goal:</strong> products added when the partner gives more detail about the client. <strong>Connects to the goal:</strong> products with a documented connection to one that solves it. Everything else comes last. Products already on the canvas are not listed, so on a ready-made play the list often starts with products that build on the goal. Until the data is loaded, products under the same heading are in name order.</p></li>
+      <li><p class="micro">Step 1 · <span>No data needed</span></p><h3>Ask the goal once</h3><p>The tool asks one question for each canvas: what is your client trying to accomplish? The partner picks one of the <strong>23</strong> client problems already in the tool, or types the goal and confirms the closest of the 23. The answer stays with that canvas until the partner changes it.</p></li>
+      <li><p class="micro">Step 2 · <span>No data needed</span></p><h3>Sort every product by fit</h3><p><strong>Solves the goal:</strong> the products that problem calls for. <strong>Builds on the goal:</strong> products added when the partner gives more detail about the client. <strong>Connects to the goal:</strong> products with a documented connection to one that solves it. Everything else comes last, under “Not tied to this goal”. AEM Sites and AEM Sites with Edge Delivery Services share one row. Products already on the canvas are not listed. When a ready-made play already holds every product that solves the goal, the list starts with products that build on the goal. Until the data is loaded, products under the same heading are in name order.</p></li>
       <li><p class="micro">Step 3 · <span>Needs customer data</span></p><h3>Count similar customers</h3><p>Take the customers who own every Adobe product on the canvas. Count how many of them also own the product. That share is the starting number, and the count is shown beside it. Outside systems, such as a CDN or a CRM, are not in the data and are left out.</p></li>
-      <li><p class="micro">Step 4 · <span>Needs customer data</span></p><h3>Steady the small groups</h3><p>A small group can show 0 or 1 by chance. So we add <strong>10</strong> pretend customers to every group. They own the product as often as the next larger group does. Large groups barely move. Small groups stop swinging.</p></li>
-      <li><p class="micro">Step 5 · <span>Needs customer data</span></p><h3>Fall back when a combination is rare</h3><p>If fewer than <strong>30</strong> customers own every Adobe product on the canvas, the tool sets one product aside at a time until 30 or more remain, and says which it set aside. Products that neither solve the goal nor build on it go first. Each time, the product the fewest customers own goes first. If no product is left, the group is all customers. Expect this often when a canvas holds a new product.</p></li>
+      <li><p class="micro">Step 4 · <span>Needs customer data</span></p><h3>Steady the small groups</h3><p>A small group can show 0 or 1 by chance. So we add <strong>10</strong> pretend customers to every group except all customers. They own the product as often as the next larger group does. Large groups barely move. Small groups stop swinging.</p></li>
+      <li><p class="micro">Step 5 · <span>Needs customer data</span></p><h3>Fall back when a combination is rare</h3><p>If fewer than <strong>30</strong> customers own every Adobe product on the canvas, the tool sets one product aside at a time until 30 or more remain, and says which it set aside. Products that neither solve the goal nor build on it are set aside first, then the goal’s own products. Within each kind, the product the fewest customers own goes first. If no product is left, the group is all customers. Expect this often when a canvas holds a new product.</p></li>
       <li><p class="micro">Step 6 · <span>Needs customer data</span></p><h3>Order the list, then re-rank</h3><p>The goal headings come first. Under a heading, the higher number comes first. Each time a product goes on or comes off the canvas, every number is worked out again. The goal stays the same.</p></li>
   </ol>
 </div></section>
@@ -120,7 +123,7 @@ MAIN = '''<main id="main">
 <section class="section cw-evidence" id="example"><div class="wrap">
   <div class="section-heading"><div><p class="eyebrow">The arithmetic</p><h2>A number you can redo by hand.</h2></div><p>Each number opens to the lines of arithmetic behind it. Here are two, with made-up sample numbers. The canvas is the ready-made play Brand Visibility + Customer Journey Analytics. The goal is “My client can’t tie AI traffic to revenue”.</p></div>
   <p class="pm-note"><strong>Where the play fits.</strong> For this goal the tool already recommends the play Brand Visibility + Customer Journey Analytics. The list answers the next question: what comes after the play?</p>
-  <p class="pm-note"><strong>A rare combination.</strong> In this sample only 25 customers own both products on the canvas. That is fewer than 30. So the count sets Brand Visibility aside and uses the 673 customers who own Customer Journey Analytics.</p>
+  <p class="pm-note"><strong>A rare combination.</strong> In this sample fewer than 30 customers own both products on the canvas. Both products solve the goal, and Brand Visibility has fewer owners in the sample. So the count sets Brand Visibility aside and uses the 673 customers who own Customer Journey Analytics.</p>
   <div class="pm-example" id="example-target">
     <h3 id="ex1-h">Target, a common product in the sample</h3>
     ''' + SAMPLE + '''
@@ -133,7 +136,7 @@ MAIN = '''<main id="main">
         </tbody>
       </table>
     </div>
-    <p class="pm-shown">On screen: <b>.45</b> with “305 of the 673 customers who own Customer Journey Analytics”.</p>
+    <p class="pm-shown">On screen: <b>.45</b> with “305 of 673”. A line above the list says the 673 are the customers who own Customer Journey Analytics.</p>
   </div>
   <div class="pm-example" id="example-low">
     <h3 id="ex2-h">Coworker, a low number in the sample</h3>
@@ -147,11 +150,12 @@ MAIN = '''<main id="main">
         </tbody>
       </table>
     </div>
-    <p class="pm-shown">On screen: <b>.06</b> with “40 of the 673 customers who own Customer Journey Analytics”.</p>
+    <p class="pm-shown">On screen: <b>.06</b> with “40 of 673”.</p>
   </div>
   <figure class="pm-figure" id="example-list">
-    <img src="propensity-mockup.png" width="1182" height="2020" alt="Mockup of the Add product list on the play Brand Visibility + Customer Journey Analytics. Coworker is first at .06 under Builds on the goal. Under Connects to the goal come Adobe Analytics .80, AEM Sites .52, Target .45, Journey Optimizer .31 and Adobe Commerce .12. All numbers are samples.">
-    <figcaption><strong>A low number can still lead the list.</strong> In this sample Coworker shows .06 and Adobe Analytics shows .80. Coworker still comes first, because it builds on this goal and Adobe Analytics only connects to it. The number only sorts products under the same heading, such as “Connects to the goal”. It never moves a product to another heading.<br><br>The picture is a mockup with sample numbers. Ready-made plays have no Add product button today.</figcaption>
+    <img src="propensity-mockup.png" class="pm-wide" width="{W}" height="{H}" alt="Mockup of the Add product list on the play Brand Visibility + Customer Journey Analytics. Coworker is first at .06 under Builds on the goal. Under Connects to the goal come Adobe Analytics .80, AEM Sites .52, Target .45, Journey Optimizer .31 and Adobe Commerce .12. All numbers are samples.">
+    <img src="propensity-mockup-phone.png" class="pm-narrow" width="{PW}" height="{PH}" loading="lazy" alt="Mockup of the Add product list on the play Brand Visibility + Customer Journey Analytics. Coworker is first at .06 under Builds on the goal. Under Connects to the goal come Adobe Analytics .80, AEM Sites .52, Target .45, Journey Optimizer .31 and Adobe Commerce .12. All numbers are samples.">
+    <figcaption><strong>A low number can still lead the list.</strong> In this sample Coworker shows .06 and Adobe Analytics shows .80. Coworker still comes first, because it builds on this goal and Adobe Analytics only connects to it. The number only sorts products under the same heading, such as “Connects to the goal”. It never moves a product to another heading. The link “How this number was worked out” opens the arithmetic.<br><br>The picture is a mockup with sample numbers. Ready-made plays have no Add product button today.</figcaption>
   </figure>
 </div></section>
 
@@ -166,11 +170,11 @@ MAIN = '''<main id="main">
       <article>
         <p class="micro">With purchase dates, or two lists a year apart</p>
         <h3>A true propensity to buy</h3>
-        <p>The number becomes the share of similar customers who did not own the product and bought it within 12 months. Only this version can be checked against what customers went on to buy.</p>
+        <p>The number becomes the share of similar customers without the product who bought it within 12 months. Only this version can be checked against what customers went on to buy.</p>
       </article>
   </div>
   <p class="pm-note"><strong>Which one will we have?</strong> We will know when the data is read. If it has no purchase dates, a second list a year later is enough to turn the number into a true propensity to buy.</p>
-  <p class="pm-note"><strong>Who similar customers are.</strong> They are the accounts in the customer data that own every Adobe product on the canvas. The tool will name the data and its date. A partner’s client may not look like them. The count treats every product on the canvas as owned, including the ones in this proposal.</p>
+  <p class="pm-note"><strong>Who similar customers are.</strong> They are the accounts in the customer data that own every Adobe product on the canvas, or every product the count keeps when the combination is rare. The tool will name the data and its date. A partner’s client may not look like them. The count treats those products as owned, including ones the partner is only proposing to the client.</p>
   <p class="pm-note"><strong>Three things the number is not.</strong> It is not a forecast for one client. It does not measure the goal: a list of what customers own has no goals in it. It is not a judgment of fit: fit comes from the goal and the documented connections. The goal sets the order. On a rare combination it also decides which product is set aside first, so the customers behind the number can change with the goal.</p>
 </div></section>
 
@@ -178,13 +182,13 @@ MAIN = '''<main id="main">
   <div class="section-heading"><div><p class="eyebrow">Before partners see it</p><h2>How we will check the numbers.</h2></div><p>Four checks, then four conditions. If the numbers fail, the tool keeps the goal order and shows only the share of all customers.</p></div>
   <ol class="capability-flow cw-steps">
       <li><p class="micro">Check 1</p><h3>Redo it by hand</h3><p>Every number opens to its lines of arithmetic, like the two examples above. Anyone can redo them on a calculator from the counts on the page.</p></li>
-      <li><p class="micro">Check 2</p><h3>Hold customers back</h3><p>We build the counts from half the customers and test them on the other half. When the tool says <strong>.25</strong>, about 25 in 100 of the held-back customers should own the product.</p></li>
-      <li><p class="micro">Check 3</p><h3>Beat the simple list</h3><p>We hide one product each held-back customer owns and see if the list puts it in the top 3. The numbers must do this more often than a plain list of the most-owned products. If they do not, we say so and show the plain list’s numbers.</p></li>
+      <li><p class="micro">Check 2</p><h3>Hold customers back</h3><p>We build the counts from half the customers and test them on the other half. When the tool says <strong>.25</strong>, about 25 in 100 of the similar customers we held back should own the product.</p></li>
+      <li><p class="micro">Check 3</p><h3>Beat the simple list</h3><p>We hide one product each held-back customer owns and see if it is among the three highest numbers. The numbers must do this more often than a plain list of the most-owned products. If they do not, we say so and show only the share of all customers.</p></li>
       <li><p class="micro">Check 4 · needs purchase dates or two lists a year apart</p><h3>Test against what happened</h3><p>We rebuild the counts as they stood 12 months ago, then compare them with what customers bought in the 12 months that followed.</p></li>
   </ol>
-  <p class="pm-note"><strong>The four conditions.</strong> We sort the numbers into ranges, such as .20 to .30. Every range with 500 or more checks lands within 0.05 of what the tool said. The numbers beat the simple list. The privacy check passes. The data owner signs off.</p>
-  <p class="pm-note"><strong>What the checks cover.</strong> They test the number, not the goal order. The goal order comes from the 23 client problems the team wrote and the documented connections, and each reason on screen names its source. With a list of what customers own today, the checks show that the ownership shares are right. Only Check 4 shows what customers went on to buy.</p>
-  <p class="pm-note"><strong>Why counting and not a statistical model?</strong> A model might rank a little better, but nobody can redo its number by hand. The same checks can score a model later.</p>
+  <p class="pm-note"><strong>The four conditions.</strong> We sort the numbers into ranges, such as .20 to .30. Every range with 500 or more checks lands within 0.05 of what the tool said. The numbers beat the simple list. The privacy check passes: a check will stop the build if the file for the tool holds a group under 30, or anything other than products and counts. The data owner signs off.</p>
+  <p class="pm-note"><strong>What the checks cover.</strong> They test the number, not the goal order. The goal order comes from the 23 client problems the team wrote and the documented connections, and each reason on screen is the client detail or the documented connection behind it. With a list of what customers own today, the checks show whether the ownership shares are right. Only Check 4 shows what customers went on to buy.</p>
+  <p class="pm-note"><strong>Why counting and not a statistical model?</strong> A model might rank better, but nobody can redo its number by hand. The same checks can score a model later.</p>
 </div></section>
 
 <section class="section cw-asks" id="data"><div class="wrap">
@@ -208,7 +212,7 @@ MAIN = '''<main id="main">
         <ul class="pm-list">
           <li>The data is never saved to GitHub.</li>
           <li>The counting happens away from the tool. The tool gets group sizes and owner counts only.</li>
-          <li>No group smaller than <strong>30</strong> customers is published. The count inside a group can be smaller, such as 40 of 673 in the sample. It never points to an account, and it can be rounded if the data owner asks.</li>
+          <li>No group smaller than <strong>30</strong> customers is published. A count inside a group can be smaller than 30. It never points to an account, and it can be rounded if the data owner asks.</li>
           <li>Counts are Adobe-internal. Before any partner sees one, we confirm who can open the tool and the data owner approves.</li>
         </ul>
       </article>
@@ -237,7 +241,8 @@ MAIN = '''<main id="main">
           <li>No customer data has been loaded.</li>
           <li>No number has been checked against real customers.</li>
           <li>The data owner has not signed off.</li>
-          <li>Open choices: counting or a statistical model; where the list appears; what happens to a play when a product is added; the name on screen; exact or rounded counts; where the counting is done; and the starting values of 30 customers and 10 pretend customers.</li>
+          <li>Open choices: counting or a statistical model; where the list appears; what happens to a play when a product is added; the name on screen; exact or rounded counts; and where the counting is done.</li>
+          <li>The values 30 and 10 are starting values. The hold-back check on the real data confirms or changes them.</li>
         </ul>
       </article>
   </div>
@@ -248,7 +253,14 @@ MAIN = '''<main id="main">
 tail = tail.replace('Checked on November 17, 2026. Every source is a public Adobe page. Every quote is word for word.',
                     'Draft of November 17, 2026. Sample numbers only. No customer data has been read.')
 assert 'Draft of November 17, 2026' in tail
+from PIL import Image
+
+out_dir = os.path.dirname(os.path.abspath(dst))
+sizes = {}
+for name, source in (('propensity-mockup.png', 'p3_list_only.png'), ('propensity-mockup-phone.png', 'p3_list_phone.png')):
+    shutil.copyfile(os.path.join(here, '..', 'mockups', source), os.path.join(out_dir, name))
+    sizes[name] = Image.open(os.path.join(out_dir, name)).size
+(W, H), (PW, PH) = sizes['propensity-mockup.png'], sizes['propensity-mockup-phone.png']
+MAIN = MAIN.replace('{W}', str(W)).replace('{H}', str(H)).replace('{PW}', str(PW)).replace('{PH}', str(PH))
 open(dst, 'w', encoding='utf-8').write(t + MAIN + tail)
-shutil.copyfile(os.path.join(here, '..', 'mockups', 'p3_list_only.png'),
-                os.path.join(os.path.dirname(os.path.abspath(dst)), 'propensity-mockup.png'))
-print('wrote', dst, 'and propensity-mockup.png')
+print('wrote', dst, 'and its two pictures')

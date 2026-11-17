@@ -71,7 +71,7 @@ const row = (n, name, tag, why, num, count, next) => `
 <div class="pp-row"><span class="pp-rank">${n}</span>
 <span class="pp-name">${name}${next ? '<span class="pp-next">Next</span>' : ''}</span>
 ${num ? `<span class="pp-num">${num}</span>` : '<span></span>'}
-<span class="pp-why"><b>${tag}.</b> ${why}${count ? `<br><i>${count}</i>` : ''}</span></div>`;
+<span class="pp-why"><b>${tag}.</b> ${why}${count ? `<br><i>${count}</i> \u00b7 <u>How this number was worked out</u>` : ''}</span></div>`;
 
 const head = `<div class="hd"><div class="k">Add product</div><p>Ranked for your client’s goal. Brand Visibility and Customer Journey Analytics solve it, and both are on your canvas.</p></div>
 <div class="pp-goal"><span><b>Goal:</b> ${GOAL}</span><u>Change</u></div>`;
@@ -140,7 +140,13 @@ ${row(6, 'Adobe Commerce', 'Connects to the goal', WHY.commerce, '.12', 'Sample:
     await p.waitForTimeout(250);
     const box = await p.evaluate(() => { const r = document.getElementById('add-menu').getBoundingClientRect(); return Math.round(r.bottom); });
     await p.screenshot({ path: out + '/' + name + '.png', clip: { x: 0, y: 0, width: 1500, height: Math.min(1400, Math.max(box + 30, 560)) } });
-    if (name.startsWith('p3')) await (await p.$('#add-menu')).screenshot({ path: out + '/p3_list_only.png' });   // the picture the brief's tab shows
+    if (name.startsWith('p3')) {   // the two pictures the brief's tab shows: the list alone, and a phone-width one
+      await p.addStyleTag({ content: '#add-menu.pp{box-shadow:0 0 0 40px #fff}' });
+      await (await p.$('#add-menu')).screenshot({ path: out + '/p3_list_only.png' });
+      await p.addStyleTag({ content: '#add-menu.pp{width:361px}.pp-num{font-size:22px}' });
+      await p.waitForTimeout(200);
+      await (await p.$('#add-menu')).screenshot({ path: out + '/p3_list_phone.png' });
+    }
     console.log(name, '| play:', label, '| menu bottom', box);
     await ctx.close();
   }
