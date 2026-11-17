@@ -75,6 +75,28 @@ for lid, line in templates.items():
         continue
     source(lid, line['source'], line['sourceTitle'])
     supporting(lid, line)
+# Nov 17 2026 (Adam: "this is a proof point"): Adobe Support and Services supports the eight Coworker services a partner lists
+# and the two Coworker Skills services of the CJA and AEM plays, with Adobe's answer on that page as its evidence (pasted by the
+# owner, since business.adobe.com blocks automated tools). The canvas line of each carries it too. It is proof for the partner
+# ("partner": true): the partner's screens show it, and the statement of work, the services CSV and the RFI Builder's answers
+# leave it out (references.js forClient). CW00 and CW-FSI are left as they are.
+SUPPORT = 'https://business.adobe.com/support/adobe-support-and-services.html'
+SUPPORT_QUOTE = ('Getting it to work at full capacity requires the right data foundations, governance structures, workflow design, and team '
+                 'skills. Adobe Support and Services helps you address all these needs, with Premium Learning building team capabilities, '
+                 'Ultimate Success providing strategic guidance, and Integrated Services and Custom Services handling hands-on configuration '
+                 'and deployment.')
+for lid in ('CW01', 'CW02', 'CW03', 'CW04', 'CW05', 'CW06', 'CW07', 'CW08', 'CW-CJA', 'CW-AEM'):
+    cited = [r for r in templates[lid].get('references') or [] if r.get('url') == SUPPORT]
+    assert len(cited) == 1 and cited[0].get('quote') == SUPPORT_QUOTE, f'{lid}: the Adobe Support and Services reference or its quote is missing'
+    assert cited[0].get('partner') is True, f'{lid}: the Adobe Support and Services reference is not marked as partner proof'
+    assert [r for r in cat['lines'][lid].get('references', []) if r.get('url') == SUPPORT] == cited, f'{lid}: its canvas line lost the reference'
+assert not any(r.get('url') == SUPPORT for lid in ('CW00', 'CW-FSI') for r in templates[lid].get('references') or []), 'CW00 and CW-FSI take no Support and Services reference'
+assert all(r.get('partner') is not True or r.get('url') == SUPPORT for t in templates.values() for r in t.get('references') or []), 'only Adobe Support and Services is partner proof'
+refs_js = (SOW / 'references.js').read_text()
+assert 'const forClient = subject => list(subject).filter(r => !r.partner);' in refs_js and 'const refs = forClient(subject);' in refs_js, 'the statement of work appendix keeps partner references out'
+assert 'CapabilityReferences.forClient(l).map(' in html, 'the services CSV keeps partner references out'
+rfp_js = (SOW / 'rfp_answers.js').read_text()
+assert rfp_js.count('!r.partner') == 2, "the RFI Builder's answer sources keep partner references out"
 
 plain_rules = json.loads((SOW / 'plain_rules.json').read_text())
 retired_edits = 0

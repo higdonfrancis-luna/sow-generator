@@ -21,9 +21,10 @@ const CAVEATS = /limited availability|coming soon|\bbeta\b|\blabs\b|early access
   // optional service of its own, EDC01 "Measure Edge Delivery page and block interactions": 152 connections and 532 services, and still 34 Adobe products
   // and 9 outside systems
   const edc = CAT.connections.find(c => c.id === 'eds-cja');
-  ok(adobe === 34 && CAT.products.length - adobe === 10 && CAT.connections.length === 155 && Object.keys(L).length === 535 &&
+  // Nov 17 2026 (Adam: "yes for both"): Brand Intelligence + Creative Cloud and Brand Intelligence + Coworker, two connections with no services: 157 connections
+  ok(adobe === 34 && CAT.products.length - adobe === 10 && CAT.connections.length === 157 && Object.keys(L).length === 537 &&
     !!edc && edc.a === 'eds' && edc.b === 'cja' && edc.lines.join() === '' && edc.more.join() === 'EDC01' && !!L.EDC01 && L.EDC01.name === 'Measure Edge Delivery page and block interactions',
-    'the catalog holds 34 Adobe products, 10 outside systems, 155 connections and 535 services (Brand Intelligence added Frame.io, Firefly Creative Production and Figma, each with one optional service; this step\'s six; the reviewed canvas added Edge Delivery Services + Customer Journey Analytics with one optional service, EDC01)',
+    'the catalog holds 34 Adobe products, 10 outside systems, 157 connections and 537 services (Brand Intelligence added Creative Cloud and Coworker, with no services of their own; Coworker added two optional services, Coworker set up in an AI platform and Workfront Fusion scenarios with Coworker; Brand Intelligence added Frame.io, Firefly Creative Production and Figma, each with one optional service; this step\'s six; the reviewed canvas added Edge Delivery Services + Customer Journey Analytics with one optional service, EDC01)',
     [adobe, CAT.products.length - adobe, CAT.connections.length, Object.keys(L).length, edc ? [edc.a, edc.b, edc.lines.join('+'), edc.more.join('+')].join('/') : 'no eds-cja', (L.EDC01 || {}).name || 'no EDC01'].join());
   ok(Object.entries(OWN).every(([pid, ids]) => ids.every(i => L[i] && (P[pid].more || []).includes(i) && !(P[pid].lines || []).includes(i))), 'each new service is an optional line on its product (AEM Sites, AEM Assets, Marketo Engage), not ticked by default');
   ok(!JSON.stringify(CAT.plays).match(new RegExp('"(?:' + ALL.join('|') + ')"')), 'no play turns one on');
@@ -42,7 +43,7 @@ const CAVEATS = /limited availability|coming soon|\bbeta\b|\blabs\b|early access
   // the catalog is 532 services since 19b0363 (EDC01), so covering all of them is 532 entries, one for every catalog service; a count of 531 would pass
   // here while EDC01 has no method entry, and the RFI Builder then has no steps, deliverables or phrases to answer its question from
   const noMethod = Object.keys(L).filter(i => !KB.services[i]);
-  ok(Object.keys(KB.services).length === 535 && !noMethod.length, 'the knowledge base covers all 535 services', Object.keys(KB.services).length + ' entries for ' + Object.keys(L).length + ' services; no entry for ' + (noMethod.join() || 'none'));
+  ok(Object.keys(KB.services).length === 537 && !noMethod.length, 'the knowledge base covers all 537 services', Object.keys(KB.services).length + ' entries for ' + Object.keys(L).length + ' services; no entry for ' + (noMethod.join() || 'none'));
 
   // 4. the RFI Builder, with no AI: the questions the holdout asked lead with the new services
   const h = await open();

@@ -50,10 +50,11 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
   // Nov 15 2026 (19b0363, the reviewed canvas, canvas/research/eds_measurement.json) added one connection, Edge Delivery Services +
   // Customer Journey Analytics (eds-cja), with one optional service of its own, EDC01 "Measure Edge Delivery page and block
   // interactions": 152 connections and 532 services, and still 34 Adobe products and 9 outside systems
-  ok(cat.products.length === 34 && cat.outside === 10 && cat.conns.length === 155 && Object.keys(cat.lines).length === 535 &&
+  // Nov 17 2026 (Adam: "yes for both"): Brand Intelligence + Creative Cloud and Brand Intelligence + Coworker, two connections with no services: 157 connections
+  ok(cat.products.length === 34 && cat.outside === 10 && cat.conns.length === 157 && Object.keys(cat.lines).length === 537 &&
     !!conn['eds-cja'] && conn['eds-cja'].a === 'eds' && conn['eds-cja'].b === 'cja' && conn['eds-cja'].lines.join() === '' && conn['eds-cja'].more.join() === 'EDC01' &&
     !!cat.lines.EDC01 && cat.lines.EDC01.name === 'Measure Edge Delivery page and block interactions',
-    'the catalog holds 34 Adobe products, 10 outside systems, 155 connections and 535 services (Brand Intelligence added Frame.io, Firefly Creative Production and Figma, each with one optional service; step 91 added six; the reviewed canvas added Edge Delivery Services + Customer Journey Analytics with one optional service, EDC01)',
+    'the catalog holds 34 Adobe products, 10 outside systems, 157 connections and 537 services (Brand Intelligence added Creative Cloud and Coworker, with no services of their own; Coworker added two optional services, Coworker set up in an AI platform and Workfront Fusion scenarios with Coworker; Brand Intelligence added Frame.io, Firefly Creative Production and Figma, each with one optional service; step 91 added six; the reviewed canvas added Edge Delivery Services + Customer Journey Analytics with one optional service, EDC01)',
     [cat.products.length, cat.outside, cat.conns.length, Object.keys(cat.lines).length, conn['eds-cja'] && [conn['eds-cja'].a, conn['eds-cja'].b, ...conn['eds-cja'].lines, '|', ...conn['eds-cja'].more].join(' '), cat.lines.EDC01 && cat.lines.EDC01.name].join());
   ok(seven.length === 7 && seven.every(id => byId[id] && byId[id].name === SEVEN[id].name && byId[id].lines.join() === SEVEN[id].lines.filter(l => l.default).map(l => l.id).join() &&
     byId[id].more.join() === SEVEN[id].lines.filter(l => !l.default).map(l => l.id).join()), 'each of the seven products is in it with its services, starting and optional as proposed', seven.filter(id => !byId[id]).join());
@@ -64,8 +65,16 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
   ok(PAIRS.length === 26 && PAIRS.every(id => conn[id] && [...conn[id].lines, ...conn[id].more].sort().join() === WANT[id].lines.map(l => l.id).sort().join()) &&
     PAIRS.reduce((t, id) => t + conn[id].lines.length + conn[id].more.length, 0) === 46, 'the 26 connections are in it, with 46 services between them', PAIRS.filter(id => !conn[id]).join());
   const theirs = cat.conns.filter(c => seven.includes(c.a) || seven.includes(c.b)).map(c => c.id);
-  ok(theirs.filter(id => !/(^|-)(aa|mmeasure|acrobat|acrobatsign)(-|$)/.test(id) && !['frameio-brandintel', 'fireflycp-brandintel', 'figma-brandintel'].includes(id)).length === 26 && !theirs.some(id => id.split('-').includes('bv')) && !conn['gspm-fireflycm'] && !conn['express-aemsites'] && !theirs.some(id => /cw/.test(id) && /firefly/.test(id)),
+  ok(theirs.filter(id => !/(^|-)(aa|mmeasure|acrobat|acrobatsign)(-|$)/.test(id) && !['frameio-brandintel', 'fireflycp-brandintel', 'figma-brandintel', 'creativecloud-brandintel', 'cw-brandintel'].includes(id)).length === 26 && !theirs.some(id => id.split('-').includes('bv')) && !conn['gspm-fireflycm'] && !conn['express-aemsites'] && !theirs.some(id => /cw/.test(id) && /firefly/.test(id)),
     'nothing more: none of the seven connects to Brand Visibility, GenStudio + Custom Models and Express + AEM Sites are left out, and Coworker has no Firefly line', theirs.join());
+  // Nov 17 2026 (Adam: "yes for both"): Brand Intelligence + Creative Cloud and Brand Intelligence + Coworker are native, with no services of
+  // their own, on Adobe's Brand validation page; the Coworker one also cites Adobe's November 10 news as a supporting reference
+  const nov17 = await p.evaluate(() => ['creativecloud-brandintel', 'cw-brandintel'].map(id => CAT.connections.find(c => c.id === id) || {id, lines: [], more: [], prereqs: []}));
+  ok(nov17.every(c => c.kind === 'native' && c.no_services && !c.lines.length && !c.more.length && c.availability === '' && (c.source || {}).url === 'https://business.adobe.com/products/brand-intelligence/validate.html' &&
+      /so there is no separate service here\.$/.test(c.covered || '') && !!c.sowHow && c.prereqs.includes('Adobe Brand Intelligence licensed and onboarded, with the Validate add-on')) &&
+    /Adobe Photoshop/.test(nov17[0].how) && (nov17[0].how || '').includes('"so teams can review content where they already work"') && (nov17[1].how || '').includes('"AI chat surfaces such as Adobe CX Coworker"') &&
+    (nov17[1].references || []).some(r => r.url === 'https://news.adobe.com/news/2026/11/adobe-agentic-ai-content-supply-chain'),
+    'Nov 17: Brand Intelligence connects natively to Creative Cloud (Photoshop) and to Coworker, on Adobe\'s Brand validation page and in Adobe\'s words in quotation marks, with no services of their own; the Coworker card also cites Adobe\'s news', JSON.stringify(nov17.map(c => [c.id, c.kind, c.covered])));
   ok(cat.plays.filter(x => !x.startsWith('custom')).join('|') === 'abv:bv|cja:bv+cja|commerce:bv+commerce|aem:bv+so+eds|fsi:bv+bc|coworker:cw', 'the six plays on the front page are unchanged', cat.plays.join('|'));
   ok(byId.fireflycp.name === 'Firefly Creative Production' && !cat.products.some(x => /Firefly Services/.test(x.name)), 'Firefly Creative Production is one box; Firefly Services has none of its own');
 
@@ -112,11 +121,15 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
   ok(!availBad.length && PAIRS.every(id => /BEFORE IT WORKS/i.test(cards[id].text) && /WHAT YOU GET TOGETHER/i.test(cards[id].text) && /HOW IT CONNECTS/i.test(cards[id].text)),
     'and each says what kind it is, what it needs first, what the two give together and how they connect; six show their factual availability line and the other 20 show none', availBad.join());
   ok(/Two routes\./.test(cards['frameio-aemassets'].text) && /direct export/.test(cards['frameio-aemassets'].text), 'Frame.io + AEM Assets describes both routes: through Workfront, and Frame.io\'s direct export');
-  ok(!/health care|finance|sensitive data|Availability:|enabled for your client's Workfront instance by Adobe/i.test(cards['planning-cw'].text) && cards['planning-cw'].text.includes('Coworker enabled for the organization by the main Workfront administrator') &&
+  ok(!/health care|finance|sensitive data|Availability:|enabled for your client's Workfront instance by Adobe/i.test(cards['planning-cw'].text) && cards['planning-cw'].text.includes('A Workfront Standard and a Planning Standard license for each user, with both license types in the access level when your client has both a Workflow and a Planning package') &&
+    cards['planning-cw'].text.includes('Coworker enabled for the organization by the main Workfront administrator') &&
     cards['planning-cw'].text.includes('The Coworker panel allowed in each user\'s access level, where it is disabled by default') && cards['planning-cw'].text.includes('The read-only and write MCP tools chosen by the Workfront administrator in System Preferences') &&
     cards['planning-cw'].text.includes('A review of every proposed action, because actions are permanent and can be irreversible'),
-    'step 86: Workfront Planning + Coworker carries no industry note and no availability line, and keeps its four technical prerequisites', cards['planning-cw'].text);
+    'step 86: Workfront Planning + Coworker carries no industry note and no availability line, and keeps its license line and its four technical prerequisites', cards['planning-cw'].text);
   ok(/Adobe Brand Intelligence licensed and onboarded/.test(cards['workfront-brandintel'].text), 'the Workfront AI Reviewer card says Brand Intelligence is onboarded first');
+  { const q = await own(['cw', 'brandintel']); await openCard(q, '.ib[data-c="cw-brandintel"]'); const c = await readCard(q); await q.context().close();
+    ok(!c.rows.length && c.text.includes('Coworker\'s own services set Coworker up.') && c.text.includes('"AI chat surfaces such as Adobe CX Coworker"') && /your client/i.test(c.text) && !/Availability:|confirm/i.test(c.text),
+      'Nov 17: the Brand Intelligence + Coworker card quotes Adobe, says where its work sits instead of listing services, and asks the partner to confirm nothing', c.text.slice(0, 300)); }
   const everything = [...shown.map(x => x[1].text), ...PAIRS.map(id => cards[id].text)].join('\n');
   ok(!LABELS.test(everything), 'none of the 33 cards says beta, early access, limited availability or coming soon, or gives a release number', (everything.match(LABELS) || [''])[0]);
   ok(/your client/.test(everything) && !/\bthe Client\b/.test(everything), 'the cards speak to the partner ("your client"), never in the Client\'s voice');
@@ -132,10 +145,10 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
     (sow.xj13 || '').includes('; A Workfront contract that supports unified review and approval; ') && (sow.xj13 || '').includes('A Frame.io Enterprise license for uploading straight into Frame.io projects; the viewer alone needs none') &&
     !/your client|account representative checks|Adobe confirms|Adobe says|before this service starts/.test(sow.xj13 || ''),
     'step 86: the statement of work keeps the Workfront contract and the Frame.io Enterprise license as prerequisites, with no "Adobe confirms" sentence', sow.xj13);
-  ok((sow.xj32 || '').includes('Prerequisites for Workfront Planning + Coworker: Coworker enabled for the organization by the main Workfront administrator; The Coworker panel allowed in each user\'s access level, where it is disabled by default; ' +
+  ok((sow.xj32 || '').includes('Prerequisites for Workfront Planning + Coworker: A Workfront Standard and a Planning Standard license for each user, with both license types in the access level when the Client has both a Workflow and a Planning package; Coworker enabled for the organization by the main Workfront administrator; The Coworker panel allowed in each user\'s access level, where it is disabled by default; ' +
     'The read-only and write MCP tools chosen by the Workfront administrator in System Preferences; A review of every proposed action, because actions are permanent and can be irreversible.') &&
     !/Availability:|health care|finance|industry|Adobe confirms|confirmed with Adobe|offered to the Client|your client/.test(sow.xj32 || ''),
-    'step 86: Planning + Coworker lists its four technical prerequisites there, with no availability sentence and no industry note', sow.xj32);
+    'step 86: Planning + Coworker lists its license line and its four technical prerequisites there, with no availability sentence and no industry note', sow.xj32);
   await p.click('[data-step="document"]'); await p.waitForTimeout(500);
   const doc = await p.textContent('#sow-preview');
   ok(/Unified review and approval rollout/.test(doc) && !/your client/i.test(doc) && !LABELS.test(doc), 'the statement of work lists them, never says "your client" and carries no release label', (doc.match(LABELS) || [''])[0]);
@@ -159,6 +172,16 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
   const r2 = await h.text('1. How would you implement Adobe Firefly for our designers?');
   const u = r2.questions[0].draft;
   ok(u && (u.uncovered || []).includes('Firefly') , 'a question about Firefly on its own still says Firefly is not in this catalog', JSON.stringify(u && [u.products.map(x => x.id), u.uncovered]));
+  // Nov 17: Brand Intelligence + Coworker and Brand Intelligence + Creative Cloud have no services of their own because their work
+  // sits on the two products' own services (the cards' covered line). A question that names either pair is answered from those
+  // services, and the partner is not told that Experience League lists no services for the pair
+  const r3 = await h.text('1. Describe how you would use Adobe Brand Intelligence with Adobe CX Enterprise Coworker so our marketers can check content against our brand guidelines.\n' +
+    '2. How would our designers see Adobe Brand Intelligence checks in Creative Cloud apps such as Photoshop?');
+  const bi = r3.questions.map(q => ({products: q.draft ? q.draft.products.map(x => x.id) : [], lines: q.draft ? q.draft.lines.map(x => x.id) : []})), biNotes = [];
+  for (const q of r3.questions) { await h.select(q.i); biNotes.push(await h.panel()); }
+  ok(bi.length === 2 && ['cw', 'brandintel'].every(id => bi[0].products.includes(id)) && ['creativecloud', 'brandintel'].every(id => bi[1].products.includes(id)) &&
+    bi.every(x => x.lines.some(l => /^BN\d/.test(l))) && !biNotes.some(t => /Experience League lists no services/.test(t)),
+    'Nov 17: a question that names Brand Intelligence with Coworker or with Creative Cloud is answered from their own services, with no "Experience League lists no services" note', JSON.stringify(bi) + ' ' + biNotes.map(t => t.slice(0, 200)).join(' | '));
   ok(!h.errors.length, 'no page errors in the RFI Builder', h.errors.slice(0, 2).join(' | '));
   await h.close();
 

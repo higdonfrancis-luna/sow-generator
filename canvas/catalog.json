@@ -145,7 +145,8 @@
     "CW06"
    ],
    "more": [
-    "CW04"
+    "CW04",
+    "CW08"
    ]
   },
   {
@@ -1038,7 +1039,7 @@
    "id": "cw-cja",
    "a": "cw",
    "b": "cja",
-   "how": "Coworker Chat reads CJA directly; partner-built Skills turn your client's agreed AI-channel measures in a validated data view into a repeatable readout.",
+   "how": "Coworker Chat reads CJA through Adobe's cja-mcp integration, within each user's CJA permissions; partner-built Skills turn your client's agreed AI-channel measures in a validated data view into a repeatable readout.",
    "source": {
     "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows",
     "title": "Experience League: Coworker Chat workflows"
@@ -1064,12 +1065,13 @@
    ],
    "more": [],
    "kind": "native",
-   "label": "Coworker Chat reads CJA directly (Adobe-built); partner Skills add your client's AI-channel readout",
+   "label": "Coworker Chat reads CJA through Adobe's cja-mcp integration; partner Skills add your client's AI-channel readout",
    "availability": "",
    "prereqs": [
     "Coworker Chat license",
     "CJA B2C edition",
     "Adobe's onboarding team configures Coworker and its Adobe application integrations",
+    "The cja-mcp integration in Coworker's list of connected servers (Customizations, Integrations tab); if it is not listed, add it with Add server",
     "User access to the CJA data view; Skills hold no data and follow existing permissions",
     "A validated CJA data view with AI referral fields (and the Brand Visibility dataset for agent traffic)"
    ],
@@ -1077,10 +1079,17 @@
     "Coworker Chat license",
     "CJA B2C edition",
     "Adobe's onboarding team configures Coworker and its Adobe application integrations",
+    "The cja-mcp integration in Coworker's list of connected servers (Customizations, Integrations tab); if it is not listed, add it with Add server",
     "User access to the CJA data view; Skills hold no data and follow existing permissions",
     "A validated CJA data view with AI referral fields (and the Brand Visibility dataset for agent traffic)"
    ],
-   "sowHow": "Coworker Chat reads Customer Journey Analytics directly. The Skills we build turn your agreed AI-channel measures in a validated data view into a repeatable readout.",
+   "references": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/analytics-chat",
+     "title": "Get started analyzing data with Coworker Chat"
+    }
+   ],
+   "sowHow": "Coworker Chat reads Customer Journey Analytics through Adobe's cja-mcp integration, with each person's own permissions. The Skills we build turn your agreed AI-channel measures in a validated data view into a repeatable readout.",
    "sowGain": "A Skill we build turns your agreed AI channel measures in CJA into a repeatable readout."
   },
   {
@@ -4827,8 +4836,10 @@
    "lines": [
     "XB14"
    ],
-   "more": [],
-   "how": "CX Enterprise Coworker Chat runs inside Workfront within each user's permissions. It is read-only until a system admin turns on the Write MCP tools option.",
+   "more": [
+    "XB16"
+   ],
+   "how": "CX Enterprise Coworker Chat runs inside Workfront within each user's permissions. It is read-only until a system admin turns on the Write MCP tools option. Adobe's Workfront help says: \"CX Enterprise Coworker is not currently available to organizations in health care, finance, or some other industries with sensitive data. AI Assistant is available to these organizations.\"",
    "source": {
     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/basics/coworker-in-workfront/coworker-overview",
     "title": "Experience League: CX Coworker overview (Workfront)"
@@ -7177,12 +7188,14 @@
    "label": "Coworker searches, creates and updates Planning records from a prompt, inside Workfront",
    "availability": "",
    "prereqs": [
+    "A Workfront Standard and a Planning Standard license for each user, with both license types in the access level when your client has both a Workflow and a Planning package",
     "Coworker enabled for the organization by the main Workfront administrator",
     "The Coworker panel allowed in each user's access level, where it is disabled by default",
     "The read-only and write MCP tools chosen by the Workfront administrator in System Preferences",
     "A review of every proposed action, because actions are permanent and can be irreversible"
    ],
    "sowPrereqs": [
+    "A Workfront Standard and a Planning Standard license for each user, with both license types in the access level when the Client has both a Workflow and a Planning package",
     "Coworker enabled for the organization by the main Workfront administrator",
     "The Coworker panel allowed in each user's access level, where it is disabled by default",
     "The read-only and write MCP tools chosen by the Workfront administrator in System Preferences",
@@ -9093,6 +9106,90 @@
    ],
    "sowHow": "Your team uses the Adobe Brand Intelligence plugin in Figma to create on-brand variants from your predefined templates, with images selected, cropped and checked against your brand guidelines automatically.",
    "sowGain": "Your team creates multiple on-brand variants from your templates, with less manual work selecting and assembling assets."
+  },
+  {
+   "id": "creativecloud-brandintel",
+   "a": "creativecloud",
+   "b": "brandintel",
+   "lines": [],
+   "more": [],
+   "how": "Adobe's Brand validation page names Photoshop among Validate's native integrations. Brand Intelligence validation results surface directly in Adobe Photoshop, \"so teams can review content where they already work\".",
+   "source": {
+    "url": "https://business.adobe.com/products/brand-intelligence/validate.html",
+    "title": "Adobe for Business: Brand validation with Adobe Brand Intelligence"
+   },
+   "gain": {
+    "title": "Brand results in Photoshop",
+    "text": "Your client's teams see brand validation results in Photoshop, where they already work, so issues are caught early."
+   },
+   "flows": [
+    {
+     "from": "brandintel",
+     "to": "creativecloud",
+     "what": "Validation results, shown directly in Photoshop",
+     "needs": [],
+     "source": {
+      "url": "https://business.adobe.com/products/brand-intelligence/validate.html",
+      "title": "Adobe for Business: Brand validation with Adobe Brand Intelligence"
+     }
+    }
+   ],
+   "no_services": true,
+   "kind": "native",
+   "label": "Validate results show in Photoshop, where teams already work",
+   "availability": "",
+   "prereqs": [
+    "Adobe Brand Intelligence licensed and onboarded, with the Validate add-on",
+    "Photoshop for the people who check their work there"
+   ],
+   "covered": "Showing teams the results is part of Brand Intelligence's reviewer training and rollout, so there is no separate service here.",
+   "sowHow": "Your team sees the brand validation results from Adobe Brand Intelligence in Photoshop, where they already work.",
+   "sowGain": "Brand issues are caught early, while the work is still in Photoshop."
+  },
+  {
+   "id": "cw-brandintel",
+   "a": "cw",
+   "b": "brandintel",
+   "lines": [],
+   "more": [],
+   "how": "Adobe's Brand validation page says the Validate skill is available in \"AI chat surfaces such as Adobe CX Coworker\". Adobe's news says \"CX Enterprise Coworker draws on Adobe Brand Intelligence to bring business and brand context into agent-led workflows\".",
+   "source": {
+    "url": "https://business.adobe.com/products/brand-intelligence/validate.html",
+    "title": "Adobe for Business: Brand validation with Adobe Brand Intelligence"
+   },
+   "gain": {
+    "title": "Brand checks from Coworker",
+    "text": "Your client's teams check content against their documented brand, campaign and product guidelines from Coworker, with issues flagged before assets are published or distributed."
+   },
+   "flows": [
+    {
+     "from": "brandintel",
+     "to": "cw",
+     "what": "Brand validation with the Validate skill, available in Coworker",
+     "needs": [],
+     "source": {
+      "url": "https://business.adobe.com/products/brand-intelligence/validate.html",
+      "title": "Adobe for Business: Brand validation with Adobe Brand Intelligence"
+     }
+    }
+   ],
+   "no_services": true,
+   "kind": "native",
+   "label": "Validate's brand checks are available in Coworker, one of Adobe's AI chat surfaces",
+   "availability": "",
+   "prereqs": [
+    "Coworker Chat license",
+    "Adobe Brand Intelligence licensed and onboarded, with the Validate add-on"
+   ],
+   "covered": "Coworker's own services set Coworker up. Brand Intelligence's reviewer training and rollout covers the checks, so there is no separate service here.",
+   "references": [
+    {
+     "url": "https://news.adobe.com/news/2026/11/adobe-agentic-ai-content-supply-chain",
+     "title": "Adobe Brings Agentic AI to the Content Supply Chain with CX Enterprise Coworker"
+    }
+   ],
+   "sowHow": "Adobe Brand Intelligence's Validate skill is available in Adobe CX Coworker, so your team can check content against your brand guidelines from Coworker.",
+   "sowGain": "Your team checks content against your brand, campaign and product guidelines from Coworker, with issues flagged before assets are published."
   }
  ],
  "lines": {
@@ -9885,7 +9982,15 @@
    "high": 32,
    "url": "https://experienceleague.adobe.com/en/docs/coworker/content/home",
    "src": "Experience League: Adobe CX Enterprise Coworker",
-   "origin": "sow"
+   "origin": "sow",
+   "references": [
+    {
+     "url": "https://business.adobe.com/support/adobe-support-and-services.html",
+     "title": "Adobe for Business: Adobe Support and Services",
+     "quote": "Getting it to work at full capacity requires the right data foundations, governance structures, workflow design, and team skills. Adobe Support and Services helps you address all these needs, with Premium Learning building team capabilities, Ultimate Success providing strategic guidance, and Integrated Services and Custom Services handling hands-on configuration and deployment.",
+     "partner": true
+    }
+   ]
   },
   "CW02": {
    "id": "CW02",
@@ -9896,7 +10001,15 @@
    "high": 40,
    "url": "https://experienceleague.adobe.com/en/docs/coworker/content/home",
    "src": "Experience League: Adobe CX Enterprise Coworker",
-   "origin": "sow"
+   "origin": "sow",
+   "references": [
+    {
+     "url": "https://business.adobe.com/support/adobe-support-and-services.html",
+     "title": "Adobe for Business: Adobe Support and Services",
+     "quote": "Getting it to work at full capacity requires the right data foundations, governance structures, workflow design, and team skills. Adobe Support and Services helps you address all these needs, with Premium Learning building team capabilities, Ultimate Success providing strategic guidance, and Integrated Services and Custom Services handling hands-on configuration and deployment.",
+     "partner": true
+    }
+   ]
   },
   "CW03": {
    "id": "CW03",
@@ -9907,7 +10020,15 @@
    "high": 80,
    "url": "https://experienceleague.adobe.com/en/docs/coworker/content/customizations/skills/what-are-skills",
    "src": "Experience League: What are Coworker skills?",
-   "origin": "sow"
+   "origin": "sow",
+   "references": [
+    {
+     "url": "https://business.adobe.com/support/adobe-support-and-services.html",
+     "title": "Adobe for Business: Adobe Support and Services",
+     "quote": "Getting it to work at full capacity requires the right data foundations, governance structures, workflow design, and team skills. Adobe Support and Services helps you address all these needs, with Premium Learning building team capabilities, Ultimate Success providing strategic guidance, and Integrated Services and Custom Services handling hands-on configuration and deployment.",
+     "partner": true
+    }
+   ]
   },
   "CW07": {
    "id": "CW07",
@@ -9918,7 +10039,15 @@
    "high": 64,
    "url": "https://experienceleague.adobe.com/en/docs/coworker/content/customizations/plugins/what-are-plugins",
    "src": "Experience League: What are Coworker plugins?",
-   "origin": "sow"
+   "origin": "sow",
+   "references": [
+    {
+     "url": "https://business.adobe.com/support/adobe-support-and-services.html",
+     "title": "Adobe for Business: Adobe Support and Services",
+     "quote": "Getting it to work at full capacity requires the right data foundations, governance structures, workflow design, and team skills. Adobe Support and Services helps you address all these needs, with Premium Learning building team capabilities, Ultimate Success providing strategic guidance, and Integrated Services and Custom Services handling hands-on configuration and deployment.",
+     "partner": true
+    }
+   ]
   },
   "CW05": {
    "id": "CW05",
@@ -9929,7 +10058,15 @@
    "high": 40,
    "url": "https://experienceleague.adobe.com/en/docs/coworker/content/home",
    "src": "Experience League: Adobe CX Enterprise Coworker",
-   "origin": "sow"
+   "origin": "sow",
+   "references": [
+    {
+     "url": "https://business.adobe.com/support/adobe-support-and-services.html",
+     "title": "Adobe for Business: Adobe Support and Services",
+     "quote": "Getting it to work at full capacity requires the right data foundations, governance structures, workflow design, and team skills. Adobe Support and Services helps you address all these needs, with Premium Learning building team capabilities, Ultimate Success providing strategic guidance, and Integrated Services and Custom Services handling hands-on configuration and deployment.",
+     "partner": true
+    }
+   ]
   },
   "CW06": {
    "id": "CW06",
@@ -9940,7 +10077,15 @@
    "high": 56,
    "url": "https://experienceleague.adobe.com/en/docs/coworker/content/customizations/skills/what-are-skills",
    "src": "Experience League: What are Coworker skills?",
-   "origin": "sow"
+   "origin": "sow",
+   "references": [
+    {
+     "url": "https://business.adobe.com/support/adobe-support-and-services.html",
+     "title": "Adobe for Business: Adobe Support and Services",
+     "quote": "Getting it to work at full capacity requires the right data foundations, governance structures, workflow design, and team skills. Adobe Support and Services helps you address all these needs, with Premium Learning building team capabilities, Ultimate Success providing strategic guidance, and Integrated Services and Custom Services handling hands-on configuration and deployment.",
+     "partner": true
+    }
+   ]
   },
   "CW04": {
    "id": "CW04",
@@ -9951,7 +10096,38 @@
    "high": 40,
    "url": "https://experienceleague.adobe.com/en/docs/coworker/content/customizations/plugins/manage-plugins-for-your-org",
    "src": "Experience League: Manage Coworker plugins and marketplaces",
-   "origin": "sow"
+   "origin": "sow",
+   "references": [
+    {
+     "url": "https://news.adobe.com/news/2026/11/adobe-integrates-agentic-cx-enterprise-coworker-into-ai-platforms",
+     "title": "Adobe Integrates Agentic CX Enterprise Coworker Into AI Platforms from Anthropic, Google, Microsoft, OpenAI and More"
+    },
+    {
+     "url": "https://business.adobe.com/support/adobe-support-and-services.html",
+     "title": "Adobe for Business: Adobe Support and Services",
+     "quote": "Getting it to work at full capacity requires the right data foundations, governance structures, workflow design, and team skills. Adobe Support and Services helps you address all these needs, with Premium Learning building team capabilities, Ultimate Success providing strategic guidance, and Integrated Services and Custom Services handling hands-on configuration and deployment.",
+     "partner": true
+    }
+   ]
+  },
+  "CW08": {
+   "id": "CW08",
+   "name": "Coworker set up in an AI platform",
+   "unit": "one-time",
+   "low": 8,
+   "base": 16,
+   "high": 32,
+   "url": "https://experienceleague.adobe.com/en/docs/coworker/content/ai-platforms",
+   "src": "Experience League: Adobe CX Enterprise Coworker for AI Platforms",
+   "origin": "sow",
+   "references": [
+    {
+     "url": "https://business.adobe.com/support/adobe-support-and-services.html",
+     "title": "Adobe for Business: Adobe Support and Services",
+     "quote": "Getting it to work at full capacity requires the right data foundations, governance structures, workflow design, and team skills. Adobe Support and Services helps you address all these needs, with Premium Learning building team capabilities, Ultimate Success providing strategic guidance, and Integrated Services and Custom Services handling hands-on configuration and deployment.",
+     "partner": true
+    }
+   ]
   },
   "MK01": {
    "id": "MK01",
@@ -12924,7 +13100,15 @@
    "high": 80,
    "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows",
    "src": "Experience League: Coworker Chat workflows",
-   "origin": "sow"
+   "origin": "sow",
+   "references": [
+    {
+     "url": "https://business.adobe.com/support/adobe-support-and-services.html",
+     "title": "Adobe for Business: Adobe Support and Services",
+     "quote": "Getting it to work at full capacity requires the right data foundations, governance structures, workflow design, and team skills. Adobe Support and Services helps you address all these needs, with Premium Learning building team capabilities, Ultimate Success providing strategic guidance, and Integrated Services and Custom Services handling hands-on configuration and deployment.",
+     "partner": true
+    }
+   ]
   },
   "CW-AEM": {
    "id": "CW-AEM",
@@ -12935,7 +13119,15 @@
    "high": 96,
    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/coworker/aem-in-coworker",
    "src": "Experience League: AEM in Coworker",
-   "origin": "sow"
+   "origin": "sow",
+   "references": [
+    {
+     "url": "https://business.adobe.com/support/adobe-support-and-services.html",
+     "title": "Adobe for Business: Adobe Support and Services",
+     "quote": "Getting it to work at full capacity requires the right data foundations, governance structures, workflow design, and team skills. Adobe Support and Services helps you address all these needs, with Premium Learning building team capabilities, Ultimate Success providing strategic guidance, and Integrated Services and Custom Services handling hands-on configuration and deployment.",
+     "partner": true
+    }
+   ]
   },
   "CW-FSI": {
    "id": "CW-FSI",
@@ -14831,6 +15023,20 @@
    "origin": "research",
    "scope": "Review permissions, decide with the governance board when to turn on write access, write a starter prompt library for your client's processes and pilot it with one team.",
    "evidence": "enable the Write MCP tools option in your organization's System Preferences"
+  },
+  "XB16": {
+   "id": "XB16",
+   "name": "Workfront Fusion scenarios with Coworker",
+   "unit": "one-time",
+   "low": 24,
+   "base": 40,
+   "high": 80,
+   "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-cx-coworker-modules",
+   "src": "Experience League: Adobe CX Enterprise Coworker modules (Workfront Fusion)",
+   "origin": "research",
+   "scope": "Connect Coworker to Workfront Fusion with an account your client chooses, since Coworker can change whatever that account can and the modules cannot limit individual tools. Build and test the agreed scenario around Run a Prompt and Get Execution Status: its trigger, a prompt mapped from earlier modules, storage and follow-on modules, results that need input or approval routed to a person, Task IDs saved for long tasks, a check that each completed run did its business action, and error handling that never resends a prompt whose outcome is uncertain.",
+   "evidence": "The connector starts and checks Coworker requests. It does not monitor project changes or automatically save answers to another application. Add the appropriate trigger, storage, and follow-on modules to your scenario as needed.",
+   "ext": "Workfront Fusion (part of Workfront Ultimate and of Workflow plus Automation and Integration packages; Prime and Select without Automation and Integration need it bought separately)"
   },
   "XB15": {
    "id": "XB15",

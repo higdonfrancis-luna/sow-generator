@@ -24,6 +24,10 @@ const RELEASE_WORDS = /releas|availab|launch|introduc|roll(?:ed|s|ing)? out|roll
 const WATCH = /\blegacy\b|maintenance mode|co-innovation|limited number of customers|not currently (?:offered|available)|current scope/gi;
 // Nov 8 (Adam: "number three"): the lifecycle labels the Client never reads (the SOW, the CSV, and since step 53 the RFP Builder's drafted responses)
 const CLIENT = /not currently (?:offered|available)|not offered to health care|sensitive-data organizations|health care, finance|health care and finance|maintenance mode|co-innovation|limited number of customers|current scope|Legacy offer route|as Legacy/gi;
+// Nov 17 (Adam: "2, yes"): Adobe's own note on the industries Coworker is not offered to, word for word, is on the partner's
+// Workfront + Coworker card (the end of its how text) and on no other view; the Client never reads it
+const ADOBE_NOTE = 'Adobe\'s Workfront help says: "CX Enterprise Coworker is not currently available to organizations in health care, finance, or some other industries with sensitive data. AI Assistant is available to these organizations."';
+const WF_CARD = /^canvas [^:]+: connection card workfront-cw(?: \(expanded\))?$|^canvas template: connection workfront-cw$/;
 
 const server = http.createServer((req, res) => {
   let u = decodeURIComponent(req.url.split('?')[0].split('#')[0]);
@@ -233,16 +237,21 @@ const HARVEST = `(() => { document.querySelectorAll('details').forEach(d => d.op
     while ((m = re.exec(text))) hits.push([where, m[0], text.slice(Math.max(0, m.index - 90), m.index + m[0].length + 90)]);
     const dre = new RegExp(DATE.source, 'g');
     while ((m = dre.exec(text))) { const before = text.slice(Math.max(0, m.index - 80), m.index); if (RELEASE_WORDS.test(before)) dates.push([where, m[0], text.slice(Math.max(0, m.index - 100), m.index + m[0].length + 40)]); }
-    const wre = new RegExp(WATCH.source, 'gi');
-    while ((m = wre.exec(text))) { const k = m[0].toLowerCase(); if (!watch.has(k)) watch.set(k, [0, where, text.slice(Math.max(0, m.index - 80), m.index + m[0].length + 80)]); watch.get(k)[0]++; }
+    const wre = new RegExp(WATCH.source, 'gi'), wtext = WF_CARD.test(where) ? text.replace(ADOBE_NOTE, '') : text;
+    while ((m = wre.exec(wtext))) { const k = m[0].toLowerCase(); if (!watch.has(k)) watch.set(k, [0, where, wtext.slice(Math.max(0, m.index - 80), m.index + m[0].length + 80)]); watch.get(k)[0]++; }
   }
   // Nov 8 (Adam: "number three"): what the Client reads (the SOW preview, the downloaded SOW, the CSV) carries no lifecycle
-  // label, while the partner's canvas cards keep Adobe's eligibility note on Coworker
+  // label, while the partner's canvas cards keep Adobe's eligibility note on Coworker. Step 86 (Nov 12) took the note off the cards;
+  // Nov 17 put Adobe's own words back on the Workfront + Coworker card only
   const clientHits = [];
-  let partnerNote = 0;
+  let partnerNote = 0, wfNote = 0;
   for (const [where, text] of seen) {
     if (/statement of work|downloaded SOW|services CSV/.test(where)) { let m; const re = new RegExp(CLIENT.source, 'gi'); while ((m = re.exec(text))) clientHits.push([where, m[0], text.slice(Math.max(0, m.index - 90), m.index + m[0].length + 90)]); }
-    if (/^canvas /.test(where) && /health care(?:,| and) finance|not (?:currently )?(?:offered|available) to (?:organizations in )?health care|confirm eligibility/i.test(text)) partnerNote++;
+    if (/^canvas /.test(where)) {
+      const own = WF_CARD.test(where);
+      if (own && text.includes(ADOBE_NOTE)) wfNote++;
+      if (/health care(?:,| and) finance|not (?:currently )?(?:offered|available) to (?:organizations in )?health care|industries with sensitive data|confirm eligibility/i.test(own ? text.replace(ADOBE_NOTE, '') : text)) partnerNote++;
+    }
   }
   // voice (Nov 8): the canvas speaks to the partner, the downloaded SOW and the CSV to the Client
   const canvasClient = [], docPartner = [];
@@ -263,7 +272,7 @@ const HARVEST = `(() => { document.querySelectorAll('details').forEach(d => d.op
   for (const [where, word, ctx] of cc.slice(0, 20)) console.log(`   ❌ ${where} <${word}> ...${ctx}...`);
   ok(dp.length === 0, 'the downloaded SOW and the CSV never say "your client"', dp.length + ' found');
   for (const [where, word, ctx] of dp.slice(0, 20)) console.log(`   ❌ ${where} <${word}> ...${ctx}...`);
-  ok(partnerNote === 0, `step 86: no canvas card carries Adobe's note that Coworker is not offered to health care or finance, or tells the partner to confirm eligibility (${partnerNote} views)`);
+  ok(partnerNote === 0 && wfNote > 0, `step 86 and Nov 17: only the Workfront + Coworker connection card carries Adobe's note that Coworker is not offered to health care or finance, in Adobe's words (${wfNote} views of it), and no card tells the partner to confirm eligibility (${partnerNote} views elsewhere)`);
   const rc = uniq(rfpClient);
   ok(rc.length === 0, 'the RFP Builder\'s drafted responses and the downloaded response carry no partner or Client word and no lifecycle label (step 53)', rc.length + ' found');
   for (const [where, word, ctx] of rc.slice(0, 20)) console.log(`   ❌ ${where} <${word}> ...${ctx}...`);

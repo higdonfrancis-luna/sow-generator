@@ -643,6 +643,22 @@
       "url": "https://experienceleague.adobe.com/en/docs/workfront/using/basics/coworker-in-workfront/use-coworker-in-workfront",
       "title": "Experience League: Use CX Coworker in Workfront"
      }
+    },
+    {
+     "id": "XB16",
+     "ext": "Workfront Fusion (part of Workfront Ultimate and of Workflow plus Automation and Integration packages; Prime and Select without Automation and Integration need it bought separately)",
+     "name": "Workfront Fusion scenarios with Coworker",
+     "unit": "one-time",
+     "low": 24,
+     "base": 40,
+     "high": 80,
+     "default": false,
+     "scope": "Connect Coworker to Workfront Fusion with an account your client chooses, since Coworker can change whatever that account can and the modules cannot limit individual tools. Build and test the agreed scenario around Run a Prompt and Get Execution Status: its trigger, a prompt mapped from earlier modules, storage and follow-on modules, results that need input or approval routed to a person, Task IDs saved for long tasks, a check that each completed run did its business action, and error handling that never resends a prompt whose outcome is uncertain.",
+     "evidence": "The connector starts and checks Coworker requests. It does not monitor project changes or automatically save answers to another application. Add the appropriate trigger, storage, and follow-on modules to your scenario as needed.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-cx-coworker-modules",
+      "title": "Experience League: Adobe CX Enterprise Coworker modules (Workfront Fusion)"
+     }
     }
    ],
    "no_services": false,
@@ -725,6 +741,7 @@
   "Brand Concierge to Marketo: the integration page is a video overview and points to a separate 'Brand Concierge data in Marketo Engage' document that was not found. The Brand Concierge FAQ says meeting scheduling uses Adobe Marketo Qualifier, a separate product.",
   "Workfront 'what': the business.adobe.com FAQ text was truncated after 'plan, track, and manage'; the closing words 'their work' are ours.",
   "WF06 and MK06 monthly scope is inferred from Adobe's ongoing feedback cadence (Workfront) and audit areas (Marketo); Adobe publishes no monthly service list.",
-  "Step 61 (Nov 10 2026, Adam: retire both): XB09 on marketo-eds and XB13 on workfront-eds left the catalog when AEM Forms became a product. Each was its connection's only service and worked only through AEM Forms, so both connections left too; the work is AFX09 and AFX10 (aemforms-marketo) and AFX11 and AFX12 (aemforms-workfront) in aem_forms.json. Notes above that mention them describe the research as it was on Oct 30."
+  "Step 61 (Nov 10 2026, Adam: retire both): XB09 on marketo-eds and XB13 on workfront-eds left the catalog when AEM Forms became a product. Each was its connection's only service and worked only through AEM Forms, so both connections left too; the work is AFX09 and AFX10 (aemforms-marketo) and AFX11 and AFX12 (aemforms-workfront) in aem_forms.json. Notes above that mention them describe the research as it was on Oct 30.",
+  "XB16: Adobe's page for the Coworker connector in Workfront Fusion (last update October 28, 2026; read November 16, 2026) gives two modules, Run a Prompt and Get Execution Status. The scenario around them is the partner's work: the trigger, storage and follow-on modules, routing to a person when Requires attention is true, saved Task IDs for long tasks, and error handling that never repeats a prompt whose outcome is uncertain. The modules cannot restrict individual tools, and Coworker acts with the connection account's access."
  ]
 }

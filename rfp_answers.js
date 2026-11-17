@@ -294,7 +294,7 @@ function match(text,opts){
   const conn=conns[0]||null,adobe=prods.filter(id=>!P[id].outside);
   // step 82: an after-launch question about the RFI's products is not asking how they connect, so no pair is checked for it
   const missing=[];if(!fromContext&&!productSupport)for(let i=0;i<adobe.length;i++)for(let j=i+1;j<adobe.length;j++){if(conns.some(c=>[c.a,c.b].includes(adobe[i])&&[c.a,c.b].includes(adobe[j])))continue;
-    const empty=C.find(c=>[c.a,c.b].includes(adobe[i])&&[c.a,c.b].includes(adobe[j]));
+    const empty=C.find(c=>!c.covered&&[c.a,c.b].includes(adobe[i])&&[c.a,c.b].includes(adobe[j]));   // a pair whose work sits on the products' own services (covered) is answered from them
     if(empty)missing.push(P[adobe[i]].name+' and '+P[adobe[j]].name+' (Experience League lists no services for the pair: '+partnerVoice(empty.sowNote||empty.availability||'see the card').replace(/\.$/,'')+')');
     else if(adobe.length>2)missing.push(P[adobe[i]].name+' and '+P[adobe[j]].name);}
   // two named products whose only connection has no services behind it: nothing is drafted for the client (the No match
@@ -470,10 +470,11 @@ function doLine(id){const L=LN[id],scope=clientScrub(rfp(L.scope||(TPL[id]||{}).
     const parts=sent.split(/;\s+/);
     return parts.map((p,pi)=>{const out=promise(p,si===0&&pi===0);return pi===0?out[0].toUpperCase()+out.slice(1):out;}).join('; ');
   }).join(' ');}
-// every drafted line's own page first, then the lines' references, then the connections' sources (step 52)
+// every drafted line's own page first, then the lines' references, then the connections' sources (step 52); a reference marked
+// partner (Adobe Support and Services on the Coworker services, Nov 17) is proof for the partner and never one of the client's sources
 function sources(m){const out=[],seen=new Set();const add=(url,title)=>{if(!url||seen.has(url))return;seen.add(url);out.push({url,title:clientScrub(title||url)});};
   for(const id of m.lines){const L=LN[id];add(L.url,L.src);}
-  for(const id of m.lines)for(const r of (LN[id].references||[]))add(r.url,r.title);
+  for(const id of m.lines)for(const r of (LN[id].references||[]))if(!r.partner)add(r.url,r.title);
   for(const c of (m.conns&&m.conns.length?m.conns:m.conn?[m.conn]:[])){if(c.source)add(c.source.url,c.source.title);for(const f of (c.flows||[]))if(f.source)add(f.source.url,f.source.title);}
   return out.slice(0,Math.max(6,m.lines.length));}
 // The capability box: what a fact question names and where Adobe answers it (step 52)
@@ -1188,7 +1189,7 @@ function capHTML(d){
 }
 function whyNone(q){const named=q.pick||detectAll(q.text).named;let out='';
   // a documented connection with no services behind it (Journey Optimizer + Brand Concierge): the partner learns what Adobe says
-  for(const c of C)if(named.includes(c.a)&&named.includes(c.b)&&![...(c.lines||[]),...(c.more||[])].some(l=>LN[l])){const why=c.sowNote||c.availability||'';out+='Experience League lists no services for '+P[c.a].name+' + '+P[c.b].name+(why?': '+partnerVoice(why).replace(/\.?$/,'.'):'.')+' ';}
+  for(const c of C)if(!c.covered&&named.includes(c.a)&&named.includes(c.b)&&![...(c.lines||[]),...(c.more||[])].some(l=>LN[l])){const why=c.sowNote||c.availability||'';out+='Experience League lists no services for '+P[c.a].name+' + '+P[c.b].name+(why?': '+partnerVoice(why).replace(/\.?$/,'.'):'.')+' ';}
   return out;}
 function renderAnswer(){
   const box=$r('rfp-answer');if(!box)return;const q=current();
@@ -2406,7 +2407,7 @@ function method(q,d){
   const sections=[['Our approach',[approach[0],kbFit(approach[1],q),approach[2]].filter(Boolean)],['How we would do it',kbFitAll(steps,q)],['What you get',kbFitAll(gets.slice(0,5),q)],['Timeline and effort',time],['Risk we manage',[kbFit(main.risk,q)]]].filter(x=>x[1].length);
   licenseLines(sections,ids,q);
   const asks=kbFitAll([...new Set(ids.flatMap(id=>E(id).asks))].slice(0,3),q);
-  const seenSources=new Set(),sources=[...(d.sources||[]),...ids.flatMap(id=>[{title:LN[id].src||LN[id].name,url:LN[id].url},...(LN[id].references||[])])].filter(x=>x.url&&!seenSources.has(x.url)&&seenSources.add(x.url)).map(x=>({title:x.title,url:x.url}));
+  const seenSources=new Set(),sources=[...(d.sources||[]),...ids.flatMap(id=>[{title:LN[id].src||LN[id].name,url:LN[id].url},...(LN[id].references||[]).filter(r=>!r.partner)])].filter(x=>x.url&&!seenSources.has(x.url)&&seenSources.add(x.url)).map(x=>({title:x.title,url:x.url}));
   return {sections,services:ids,asks,sources,model:'knowledge base'};}
 // an AI answer saved with the work is used only while its question is unchanged, and only in the shapes this page writes
 window.RFPAnswers={reviewNotice:REVIEW_NOTICE,clientCopy,scopeText,refsFor,scopeSource,scopeConflict,scopeProductConflict,editedScopeConflict,savedText,restoreScope,rfiProducts,kbExclusions,kbPermitted,kbAllowedMatch,kbChoices,scopeEvidence,method,kbPlan,homeOfLine,rfiTimeline,rfiLaunch,hasAnswer:q=>hasDraft(draftOf(q)),match,compose,rfp,plain,written,limitOf,clientOrg,proposalPack,proposalAnswer,planningEffort,effortLine,effortClaim,baseName,limitIn,wordsIn,listify,doLine,toSow,checklistRows,writeBack,usedText,ownedProducts,context:contextProducts,detect,detectAll,scan};

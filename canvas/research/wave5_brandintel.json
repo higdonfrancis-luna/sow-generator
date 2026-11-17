@@ -1,5 +1,5 @@
 {
- "about": "Brand Intelligence connections, read on Nov 16 2026 from public Adobe pages: Brand validation with Adobe Brand Intelligence and Firefly Creative Production for Enterprise (business.adobe.com), and the Adobe Brand Intelligence overview and Instruct to Assemble (helpx.adobe.com). Each connection keeps the quote on its source page and the references behind it. Hours are our own estimates; Adobe publishes none.",
+ "about": "Brand Intelligence connections, read on Nov 16 2026 from public Adobe pages: Brand validation with Adobe Brand Intelligence and Firefly Creative Production for Enterprise (business.adobe.com), and the Adobe Brand Intelligence overview and Instruct to Assemble (helpx.adobe.com). Each connection keeps the quote on its source page and the references behind it. Hours are our own estimates; Adobe publishes none. Nov 17 2026 (Adam: \"yes for both\"): Brand Intelligence + Creative Cloud and Brand Intelligence + Coworker, native and with no services of their own, both on the Brand validation page: its Native integrations line names Photoshop, and its answer to \"Where can Adobe Brand Intelligence Validate be used?\", read from the owner's screenshot of the page, names \"AI chat surfaces such as Adobe CX Coworker\". Adobe's November 10 news line on Coworker and Brand Intelligence is a reference on the Coworker one.",
  "checked": "2026-11-16",
  "products": [],
  "connections": [
@@ -213,6 +213,93 @@
    "client": {
     "how": "Your team uses the Adobe Brand Intelligence plugin in Figma to create on-brand variants from your predefined templates, with images selected, cropped and checked against your brand guidelines automatically.",
     "gain": "Your team creates multiple on-brand variants from your templates, with less manual work selecting and assembling assets."
+   }
+  },
+  {
+   "id": "creativecloud-brandintel",
+   "a": "creativecloud",
+   "b": "brandintel",
+   "how": "Adobe's Brand validation page names Photoshop among Validate's native integrations. Brand Intelligence validation results surface directly in Adobe Photoshop, \"so teams can review content where they already work\".",
+   "source": {
+    "url": "https://business.adobe.com/products/brand-intelligence/validate.html",
+    "title": "Adobe for Business: Brand validation with Adobe Brand Intelligence"
+   },
+   "source_quote": "Native integrations. Surface validation results directly within connected tools such as Adobe Photoshop, Adobe Workfront, and Frame.io for Business, so teams can review content where they already work.",
+   "gain": {
+    "title": "Brand results in Photoshop",
+    "text": "Your client's teams see brand validation results in Photoshop, where they already work, so issues are caught early."
+   },
+   "flows": [
+    {
+     "from": "brandintel",
+     "to": "creativecloud",
+     "what": "Validation results, shown directly in Photoshop",
+     "source": {
+      "url": "https://business.adobe.com/products/brand-intelligence/validate.html",
+      "title": "Adobe for Business: Brand validation with Adobe Brand Intelligence"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "Validate results show in Photoshop, where teams already work",
+   "availability": "",
+   "prereqs": [
+    "Adobe Brand Intelligence licensed and onboarded, with the Validate add-on",
+    "Photoshop for the people who check their work there"
+   ],
+   "lines": [],
+   "no_services": true,
+   "covered": "Showing teams the results is part of Brand Intelligence's reviewer training and rollout, so there is no separate service here.",
+   "client": {
+    "how": "Your team sees the brand validation results from Adobe Brand Intelligence in Photoshop, where they already work.",
+    "gain": "Brand issues are caught early, while the work is still in Photoshop."
+   }
+  },
+  {
+   "id": "cw-brandintel",
+   "a": "cw",
+   "b": "brandintel",
+   "how": "Adobe's Brand validation page says the Validate skill is available in \"AI chat surfaces such as Adobe CX Coworker\". Adobe's news says \"CX Enterprise Coworker draws on Adobe Brand Intelligence to bring business and brand context into agent-led workflows\".",
+   "source": {
+    "url": "https://business.adobe.com/products/brand-intelligence/validate.html",
+    "title": "Adobe for Business: Brand validation with Adobe Brand Intelligence"
+   },
+   "source_quote": "The Adobe Brand Intelligence Validate skill is available in creative surfaces such as Photoshop, Illustrator, and InDesign; review and approval surfaces such as Adobe Workfront and Frame.io for Business; and AI chat surfaces such as Adobe CX Coworker. APIs also let organizations bring brand validation into third-party applications and custom workflows, extending brand checks beyond native Adobe integrations.",
+   "gain": {
+    "title": "Brand checks from Coworker",
+    "text": "Your client's teams check content against their documented brand, campaign and product guidelines from Coworker, with issues flagged before assets are published or distributed."
+   },
+   "flows": [
+    {
+     "from": "brandintel",
+     "to": "cw",
+     "what": "Brand validation with the Validate skill, available in Coworker",
+     "source": {
+      "url": "https://business.adobe.com/products/brand-intelligence/validate.html",
+      "title": "Adobe for Business: Brand validation with Adobe Brand Intelligence"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "Validate's brand checks are available in Coworker, one of Adobe's AI chat surfaces",
+   "availability": "",
+   "prereqs": [
+    "Coworker Chat license",
+    "Adobe Brand Intelligence licensed and onboarded, with the Validate add-on"
+   ],
+   "references": [
+    {
+     "url": "https://news.adobe.com/news/2026/11/adobe-agentic-ai-content-supply-chain",
+     "title": "Adobe Brings Agentic AI to the Content Supply Chain with CX Enterprise Coworker",
+     "quote": "CX Enterprise Coworker draws on Adobe Brand Intelligence to bring business and brand context into agent-led workflows"
+    }
+   ],
+   "lines": [],
+   "no_services": true,
+   "covered": "Coworker's own services set Coworker up. Brand Intelligence's reviewer training and rollout covers the checks, so there is no separate service here.",
+   "client": {
+    "how": "Adobe Brand Intelligence's Validate skill is available in Adobe CX Coworker, so your team can check content against your brand guidelines from Coworker.",
+    "gain": "Your team checks content against your brand, campaign and product guidelines from Coworker, with issues flagged before assets are published."
    }
   }
  ]

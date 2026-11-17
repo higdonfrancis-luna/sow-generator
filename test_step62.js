@@ -51,9 +51,10 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
   // step 85 (Nov 12 2026) added Adobe Commerce + CRM and eight services (seven of Adobe Commerce's own, one on the connection)
   // the reviewed canvas (Nov 15 2026, commit 19b0363) added one connection, Edge Delivery Services + Customer Journey Analytics
   // (eds-cja), with one optional service of its own, EDC01 "Measure Edge Delivery page and block interactions": 152 and 532
-  ok(cat.products.length === 34 && cat.outside === 10 && cat.conns.length === 155 && Object.keys(cat.lines).length === 535 &&
+  // Nov 17 2026 (Adam: "yes for both"): Brand Intelligence + Creative Cloud and Brand Intelligence + Coworker, two connections with no services: 157 connections
+  ok(cat.products.length === 34 && cat.outside === 10 && cat.conns.length === 157 && Object.keys(cat.lines).length === 537 &&
     !!conn['eds-cja'] && conn['eds-cja'].a === 'eds' && conn['eds-cja'].b === 'cja' && conn['eds-cja'].lines.join() === '' && conn['eds-cja'].more.join() === 'EDC01' && !!cat.lines.EDC01,
-    'the catalog holds 34 Adobe products, 10 outside systems, 155 connections and 535 services (Brand Intelligence added Frame.io, Firefly Creative Production and Figma, each with one optional service; step 91 added six; the reviewed canvas added Edge Delivery + Customer Journey Analytics with one service, EDC01)',
+    'the catalog holds 34 Adobe products, 10 outside systems, 157 connections and 537 services (Brand Intelligence added Creative Cloud and Coworker, with no services of their own; Coworker added two optional services, Coworker set up in an AI platform and Workfront Fusion scenarios with Coworker; Brand Intelligence added Frame.io, Firefly Creative Production and Figma, each with one optional service; step 91 added six; the reviewed canvas added Edge Delivery + Customer Journey Analytics with one service, EDC01)',
     [cat.products.length, cat.outside, cat.conns.length, Object.keys(cat.lines).length, conn['eds-cja'] && [...conn['eds-cja'].lines, '|', ...conn['eds-cja'].more].join(' ')].join());
   ok(Object.entries(SIX).every(([id, [name, a, m]]) => byId[id] && byId[id].name === name && byId[id].lines.length === a && byId[id].more.length === m), 'each of the six products is in it with its six services (starting and optional as proposed)',
     JSON.stringify(Object.keys(SIX).map(id => byId[id] && [id, byId[id].lines.length, byId[id].more.length])));

@@ -9,10 +9,15 @@
       let url; try { url = new URL(r.url); } catch (_) { continue; }
       if (url.protocol !== 'https:' || url.username || url.password || seen.has(url.href)) continue;
       seen.add(url.href); const title=typeof r.title === 'string' && r.title.trim() ? r.title.trim() : url.href;
-      out.push({url:url.href,title:root.ProductCopy ? root.ProductCopy.scrub(title) : title});
+      const ref = {url:url.href,title:root.ProductCopy ? root.ProductCopy.scrub(title) : title};
+      if (r.partner === true) ref.partner = true;
+      out.push(ref);
     }
     return out;
   }
+  /* Nov 17: a reference marked partner (Adobe Support and Services on the Coworker services) is proof for the partner. The
+     partner's screens show it; what the client reads (the statement of work's appendix, the services CSV) uses forClient */
+  const forClient = subject => list(subject).filter(r => !r.partner);
   const link = r => '<a href="'+escape(r.url)+'" target="_blank" rel="noopener">'+escape(r.title)+'</a>';
   function supporting(subject, includePrimary = false) {
     const refs = list(subject).slice(includePrimary ? 0 : 1);
@@ -24,11 +29,11 @@
   }
   /* step 68: in the statement of work the references sit in an appendix, each service's under its own heading */
   function documentHTML(subject, heading) {
-    const refs = list(subject);
+    const refs = forClient(subject);
     return refs.length ? '<div class="sow-detail"><h4>'+escape(heading)+'</h4><ul>'+refs.map(r=>'<li>'+link(r)+'</li>').join('')+'</ul></div>' : '';
   }
   function inContext(subject, brandVisibility) {
     return {references:list(subject).filter(r => brandVisibility || !r.url.includes('/brand-visibility/'))};
   }
-  root.CapabilityReferences = {list, supporting, html, documentHTML, inContext};
+  root.CapabilityReferences = {list, forClient, supporting, html, documentHTML, inContext};
 })(globalThis);

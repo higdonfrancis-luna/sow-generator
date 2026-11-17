@@ -17,8 +17,12 @@ function syncKnowledgeExplorer() {
     // shows it where the catalog line has no scope of its own. The canvas's own CAT is not changed.
     const TEMPLATE_SCOPE = /*KM_TEMPLATE_SCOPE*/{};
     const lines = Object.fromEntries(Object.entries(CAT.lines).map(([id, line]) => [id, line.scope || !TEMPLATE_SCOPE[id] ? line : Object.assign({}, line, {scope: TEMPLATE_SCOPE[id]})]));
+    // Nov 17 (Adam: "2, yes"): Adobe's industry note belongs to the partner's Workfront + Coworker card only, so the explorer, which
+    // prints every relationship's how text, gets that card's text without the note. The canvas's own CAT is not changed.
+    const CARD_ONLY = {'workfront-cw': / Adobe's Workfront help says: "[^"]*"$/};
+    const connections = CAT.connections.map(c => CARD_ONLY[c.id] ? Object.assign({}, c, {how: String(c.how || '').replace(CARD_ONLY[c.id], '')}) : c);
     knowledgeExplorer = window.WarroomKnowledgeExplorer.mount(root, {
-      catalog: Object.assign({}, CAT, {lines}),
+      catalog: Object.assign({}, CAT, {lines, connections}),
       // step 95 (Adam, Nov 14): the ring follows the play built above; its name heads the panel beside it
       getPlayName: () => (play() ? play().title || play().label : ''),
       // Match the offerings and outside systems visible on Build, including saved canvases.

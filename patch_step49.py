@@ -193,7 +193,7 @@ import json, os
 HERE = os.path.dirname(os.path.abspath(__file__))
 catalog = json.load(open(os.path.join(HERE, 'canvas', 'catalog.json'), encoding='utf-8'))
 slim = {'products': [{k: v for k, v in p.items() if k in ('id', 'name', 'title', 'outside', 'lines', 'more')} for p in catalog['products']],
-        'connections': [{k: v for k, v in c.items() if k in ('id', 'a', 'b', 'label', 'how', 'gain', 'sowHow', 'sowGain', 'sowNote', 'availability', 'sowAvailability', 'prereqs', 'sowPrereqs', 'lines', 'more', 'source', 'flows', 'tier')} for c in catalog['connections']],
+        'connections': [{k: v for k, v in c.items() if k in ('id', 'a', 'b', 'label', 'how', 'gain', 'sowHow', 'sowGain', 'sowNote', 'availability', 'sowAvailability', 'prereqs', 'sowPrereqs', 'lines', 'more', 'source', 'flows', 'tier', 'covered')} for c in catalog['connections']],
         'lines': {k: {kk: vv for kk, vv in v.items() if kk != 'evidence'} for k, v in catalog['lines'].items()}}
 CAT_SCRIPT = '<script id="rfp-catalog">const RFP_CAT=' + json.dumps(slim, ensure_ascii=False).replace('</', '<\\/') + ';</script>\n'
 # part three: the knowledge base, sow/rfp_facts.json, built by rfp_prototype/part3_research/build_facts.py (build_site.py runs it first)

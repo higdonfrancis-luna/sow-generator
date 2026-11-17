@@ -1,6 +1,6 @@
 """No customer-facing release labels, forecasts or product-release dates; Client dates are kept.
 
-Reads the data the two pages ship: the SOW tool's 44 templates (with their size bands and the name and
+Reads the data the two pages ship: the SOW tool's 45 templates (with their size bands and the name and
 assumption pairs applied outside a play), the 159 research service definitions, the canvas catalog and the
 problem picker. The rendered pages and downloads are checked separately by check_rendered_copy.js.
 """
@@ -66,7 +66,11 @@ assert not found, f'{len(found)} release label(s) or date(s) in shipped product 
 # step 85 (Nov 12 2026): Adobe Commerce gets seven services of its own (CE01 to CE07) and Adobe Commerce + CRM (commerce-crm) with one (XR01):
 # step 91 (Nov 13 2026): six services for the catalog gaps the holdout RFI found (SI07 to SI10, AS07, MK07):
 # 489 research services, 151 connections, 531 canvas services
-assert len(templates) == 44 and len(concepts) == 493 and len(canvas['connections']) == 155 and len(canvas['lines']) == 535, (len(templates), len(concepts), len(canvas['connections']), len(canvas['lines']))
+# Coworker review: CW08 (Coworker set up in an AI platform) adds a template and a canvas service; XB16 (Workfront Fusion scenarios
+# with Coworker) adds a service definition and a canvas service
+# Nov 17 2026 (Adam: "yes for both"): Brand Intelligence + Creative Cloud and Brand Intelligence + Coworker add two connections and
+# no service
+assert len(templates) == 45 and len(concepts) == 494 and len(canvas['connections']) == 157 and len(canvas['lines']) == 537, (len(templates), len(concepts), len(canvas['connections']), len(canvas['lines']))
 assert all(i in concepts and i in canvas['lines'] for i in ('CE01', 'CE02', 'CE03', 'CE04', 'CE05', 'CE06', 'CE07', 'XR01')), 'a step 85 Commerce service is missing'
 assert any(x['id'] == 'commerce-crm' for x in canvas['connections']), 'Adobe Commerce + CRM is missing'
 
@@ -146,12 +150,26 @@ sow_lines += [(k, v.get('assumptions', '')) for k, v in concepts.items()]
 labelled = [(i, t) for i, t in sow_lines if CLIENT.search(t)]
 assert not labelled, f'the SOW still carries a lifecycle label: {labelled[:3]}'
 # step 86 (Nov 12 2026, Adam: "don't provide any caveats"): the partner cards carry no Coworker eligibility note and no lifecycle label
-# either, and every Coworker connection keeps the license or technical prerequisite that stood beside the note
+# either, and every Coworker connection keeps the license or technical prerequisite that stood beside the note.
+# Nov 17 (Adam: "2, yes"): one exception. The Workfront + Coworker card's how text ends with Adobe's own two sentences from its
+# Workfront help, word for word and in quotation marks, with no "confirm with Adobe" beside them. The how text is the partner half of
+# the how and sowHow pair, so the note never reaches what the Client reads (checked above: sowHow, sowGain, the SOW's availability and
+# prerequisites, and the service definitions).
+ADOBE_NOTE = ('Adobe\'s Workfront help says: "CX Enterprise Coworker is not currently available to organizations in health care, finance, '
+              'or some other industries with sensitive data. AI Assistant is available to these organizations."')
 ELIGIBILITY = re.compile(CLIENT.pattern + r"|confirm eligibility|regulated industries|industries with sensitive data|outside health care|Try Before You Buy|through the Adobe account team", re.I)
 card_lines = [(x['id'] + '.' + k, x.get(k) or '') for x in canvas['connections'] for k in ('label', 'availability', 'how', 'tier', 'covered', 'sowAvailability', 'sowNote')]
 card_lines += [(x['id'] + '.' + k, p) for x in canvas['connections'] for k in ('prereqs', 'sowPrereqs') for p in (x.get(k) or [])]
-partner = [(i, t) for i, t in card_lines if ELIGIBILITY.search(t)]
+noted = [(i, t) for i, t in card_lines if ADOBE_NOTE in t]
+assert [i for i, t in noted] == ['workfront-cw.how'] and noted[0][1].endswith(' ' + ADOBE_NOTE) and noted[0][1].count(ADOBE_NOTE) == 1, \
+    f"Adobe's industry note belongs once, word for word, at the end of the Workfront + Coworker card's how text, and nowhere else on a card: {[i for i, t in noted]}"
+partner = [(i, t) for i, t in card_lines if ELIGIBILITY.search(t.replace(ADOBE_NOTE, '') if i == 'workfront-cw.how' else t)]
 assert not partner, f'a connection card still carries the Coworker eligibility note or a lifecycle label: {partner[:3]}'
+# and no other shipped text holds Adobe's sentence: no service, template, problem or other connection field
+ADOBE_WORDS = re.compile(r'not currently (?:offered|available) to (?:organizations in )?health care', re.I)
+copies = [(path, text[:90]) for name, data in (('templates', templates), ('concepts', concepts), ('canvas', canvas), ('problem picker', problems['problems']))
+          for path, text in strings(data, name) if ADOBE_WORDS.search(text)]
+assert len(copies) == 1 and copies[0][1] == noted[0][1][:90], f"Adobe's industry note is shipped somewhere other than the Workfront + Coworker card: {copies}"
 KEPT = {'cw-cja': ['Coworker Chat license', 'CJA B2C edition'],
         'cw-eds': ['Coworker Chat license', 'AEM as a Cloud Service with Edge Delivery Services (not AEM 6.5 on-premises)', 'AEM agent access through the Agentic SKU'],
         'cw-bc': ['Coworker Chat license', 'Brand Concierge conversation datasets in Experience Platform, with Query Service access'],
@@ -167,7 +185,9 @@ KEPT = {'cw-cja': ['Coworker Chat license', 'CJA B2C edition'],
         'cw-gspm': ["CX Enterprise Coworker for your client's organization, with the GenStudio connection made available by the organization"],
         'ca-cw': ['Coworker Chat licensed for your client', 'The standard (B2C) edition of Customer Journey Analytics'],
         'planning-cw': ['Coworker enabled for the organization by the main Workfront administrator'],
-        'moptimizer-cw': ['The conversational experience permission for each user who works in Coworker, plus the Manage or View permission of every feature a skill touches']}
+        'moptimizer-cw': ['The conversational experience permission for each user who works in Coworker, plus the Manage or View permission of every feature a skill touches'],
+        # Nov 17: a connection with no services of its own, so nothing prints its prerequisites in a statement of work
+        'cw-brandintel': ['Coworker Chat license', 'Adobe Brand Intelligence licensed and onboarded, with the Validate add-on']}
 cards = {x['id']: x for x in canvas['connections']}
 assert sorted(KEPT) == sorted(x['id'] for x in canvas['connections'] if 'cw' in (x['a'], x['b'])), 'the Coworker connections changed'
 lost = [(i, p) for i, ps in KEPT.items() for p in ps if p not in cards[i].get('prereqs', [])]
@@ -210,5 +230,5 @@ client_cards = sum(1 for x in canvas['connections'] if x.get('sowHow'))
 assert not leaked, f'SOW voice on a partner surface: {leaked[:3]}'
 print(f'PASS: {len(templates)} templates, {len(concepts)} service definitions, {len(canvas["connections"])} connections, '
       f'{len(canvas["lines"])} canvas lines and {len(problems["problems"])} problems carry no release label, forecast or release date; '
-      'Client dates and quantities survive the draft scrub. Nothing says a Brand Visibility trial or names Adobe Analytics as a Brand Visibility feed. The SOW carries no lifecycle label; the partner cards carry no Coworker eligibility note or lifecycle label, keep their Coworker license and technical prerequisites, and never speak in the Client\'s voice; '
+      'Client dates and quantities survive the draft scrub. Nothing says a Brand Visibility trial or names Adobe Analytics as a Brand Visibility feed. The SOW carries no lifecycle label; the partner cards carry no Coworker eligibility note or lifecycle label (but Adobe\'s own words on the Workfront + Coworker card, Nov 17), keep their Coworker license and technical prerequisites, and never speak in the Client\'s voice; '
       f'{client_cards} connections carry a client-voice how and gain for the RFP Builder with no label or partner word.')

@@ -2,6 +2,8 @@
 // provide any caveats"; of "where Adobe has enabled that feature" and "once Adobe confirms in writing": "why would we write
 // that I would strip those and go"). Every availability caveat is out of the catalog text; licenses, technical
 // prerequisites and real limits stay. The whole text of each changed field is sow/plain_2026-11-12/rewrites.json.
+// Nov 17 2026 (Adam: "2, yes"): one exception, Adobe's own industry note on the Workfront + Coworker card (filed in the record
+// as nov17_followup); it stays off every other card and out of the statement of work.
 // Run from the repo root after python3 sow/canvas/build.py and python3 sow/build_site.py:
 //   node sow/test_step86.js
 const {chromium} = require('playwright');
@@ -23,6 +25,12 @@ const TPL = Object.fromEntries(JSON.parse(PAGE.match(/<script>const CATALOG=(\[.
 // wording that says a feature may not be there, or that Adobe has to say yes first
 const CAVEAT = /not stated by Adobe|Adobe (?:does not|doesn't) (?:state|document|specify)|confirm(?:ed|s)? (?:\w+ ){0,6}with Adobe|Adobe confirms|Adobe's (?:written )?confirmation|in writing|account team|\bCSM\b|\bTAM\b|where Adobe has|once Adobe|needs Adobe to|Adobe has to enable|confirmed enablement|confirm enablement|\bbeta\b|early access|early adopter|limited availability|limited release|co-innovation|Try Before You Buy|coming soon|generally available|\(Legacy\)|Legacy offer|maintenance mode|not (?:currently )?(?:offered|available) to (?:health|organizations in health)|confirm eligibility/i;
 const LIC = "A Brand Visibility license (CJA's page requires it for the source)";
+// Nov 17 (Adam: "2, yes"): Adobe's note on the industries Coworker is not offered to is back on the partner's Workfront + Coworker
+// card, and only there: at the end of the card's how text, word for word from Adobe's Workfront help and in quotation marks, with no
+// "confirm with Adobe" beside it. The client's version of the how text (sowHow), the statement of work and the RFI answers keep none.
+const ADOBE_NOTE = 'Adobe\'s Workfront help says: "CX Enterprise Coworker is not currently available to organizations in health care, finance, or some other industries with sensitive data. AI Assistant is available to these organizations."';
+const ADOBE_WORDS = /not currently (?:offered|available) to (?:organizations in )?health care|industries with sensitive data|AI Assistant is available to these organizations/i;
+const unNoted = (where, s) => where === 'workfront-cw.how' ? s.replace(ADOBE_NOTE, '') : s;
 (async () => {
   await new Promise(r => server.listen(0, r));
   const BASE = `http://localhost:${server.address().port}/`;
@@ -49,8 +57,12 @@ const LIC = "A Brand Visibility license (CJA's page requires it for the source)"
   }
   for (const [i, l] of Object.entries(L)) for (const f of ['name', 'nname', 'scope', 'ext', 'tier']) if (l[f]) texts.push([i + '.' + f, l[f]]);
   for (const [i, t] of Object.entries(TPL)) for (const f of ['name', 'scope', 'deliverable', 'assumptions', 'acceptance', 'exclusions', 'basis']) if (t[f]) texts.push([i + '.' + f, t[f]]);
-  const hits = texts.filter(([w, s]) => CAVEAT.test(s));
-  ok(texts.length > 3000 && !hits.length, `none of the ${texts.length} texts on a card, a service or a statement of work line says a feature may not be available or that Adobe must confirm it`, hits.slice(0, 4).map(([w, s]) => w + ': ' + (s.match(CAVEAT) || [''])[0]).join(' | '));
+  const hits = texts.filter(([w, s]) => CAVEAT.test(unNoted(w, s)));
+  ok(texts.length > 3000 && !hits.length, `none of the ${texts.length} texts on a card, a service or a statement of work line says a feature may not be available or that Adobe must confirm it (Adobe's own industry note on the Workfront + Coworker card aside)`, hits.slice(0, 4).map(([w, s]) => w + ': ' + (s.match(CAVEAT) || [''])[0]).join(' | '));
+  const noted = texts.filter(([w, s]) => s.includes(ADOBE_NOTE) || ADOBE_WORDS.test(s));
+  ok(noted.length === 1 && noted[0][0] === 'workfront-cw.how' && noted[0][1].endsWith(' ' + ADOBE_NOTE) && noted[0][1].split(ADOBE_NOTE).length === 2 &&
+    !ADOBE_WORDS.test([K['workfront-cw'].sowHow, K['workfront-cw'].sowGain, K['workfront-cw'].sowNote, K['workfront-cw'].sowAvailability, ...(K['workfront-cw'].sowPrereqs || [])].join(' ')),
+    'Nov 17: Adobe\'s industry note is on one text only, the Workfront + Coworker card\'s how, word for word and in quotation marks; the client\'s version of that card has none', noted.map(([w]) => w).join());
   const get = (c, f) => f === 'gain_title' ? c.gain.title : f === 'gain_text' ? c.gain.text : f === 'flows_what' ? c.flows.map(x => x.what) : (c[f] === undefined ? (Array.isArray(REC.connections[c.id][f].before) ? [] : '') : c[f]);
   // Nov 15 2026, the reviewed canvas (19b0363): two of the recorded fields were written again from Adobe's pages after this
   // step. The Frame.io + AEM Assets prerequisites now name the Workfront packages, access levels and the Unified Approvals
@@ -60,6 +72,11 @@ const LIC = "A Brand Visibility license (CJA's page requires it for the source)"
   // read, whole, as the later rewrite does, and that text carries no caveat (checked below). The rewrite no longer spells
   // out two limits the record kept and Adobe's page still states: the repository cannot be changed once the setup is saved,
   // and metadata maps one way only, from Workfront to Experience Manager. If they are put back, this text changes with them.
+  // Coworker review (Adam, Nov 17: "1, yes"): two Coworker cards gain a line from Adobe's pages in their step 86 "after" lists in
+  // plain_rules.json: Coworker + CJA the cja-mcp check (Adobe's "Get started analyzing data with Coworker Chat"), and Workfront
+  // Planning + Coworker the license line (Adobe's Planning Coworker overview). Neither line is a caveat (checked below).
+  const CW_CJA = ["Coworker Chat license", "CJA B2C edition", "Adobe's onboarding team configures Coworker and its Adobe application integrations", "The cja-mcp integration in Coworker's list of connected servers (Customizations, Integrations tab); if it is not listed, add it with Add server", "User access to the CJA data view; Skills hold no data and follow existing permissions", "A validated CJA data view with AI referral fields (and the Brand Visibility dataset for agent traffic)"];
+  const PLAN_REST = ["Coworker enabled for the organization by the main Workfront administrator", "The Coworker panel allowed in each user's access level, where it is disabled by default", "The read-only and write MCP tools chosen by the Workfront administrator in System Preferences", "A review of every proposed action, because actions are permanent and can be irreversible"];
   const LATER = {
     connections: {'frameio-aemassets': {prereqs: [
       'The Workfront approval route requires Adobe Unified Experience and Adobe cloud storage for the project, plus Workfront Prime or Ultimate, or Workflow Ultimate.',
@@ -67,7 +84,12 @@ const LIC = "A Brand Visibility license (CJA's page requires it for the source)"
       'Approve work-in-progress in Workfront and the Frame.io viewer, then send the approved file to AEM Assets. Linked AEM assets are outside this approval workflow.',
       'Associate Workfront and AEM Assets with the Adobe Admin Console organization IDs and configure each repository integration. Choose the destination repository before saving the setup.',
       'Map Workfront fields to AEM Assets fields on send. Object metadata synchronization can subsequently keep mapped fields updated.',
-      "Frame.io's direct export, where your client does not use Workfront: a Frame.io V4 account, AEM Assets as a Cloud Service on the minimum release Frame.io names, and the Adobe Experience Manager app switched on by a Frame.io account admin; it sends no metadata"]}},
+      "Frame.io's direct export, where your client does not use Workfront: a Frame.io V4 account, AEM Assets as a Cloud Service on the minimum release Frame.io names, and the Adobe Experience Manager app switched on by a Frame.io account admin; it sends no metadata"]},
+      'cw-cja': {prereqs: CW_CJA, sowPrereqs: CW_CJA},
+      // Nov 17 (Adam: "2, yes"): the Workfront + Coworker card's how is the step 86 text with Adobe's industry note after it
+      // (plain_rules.json; the record files it under nov17_followup)
+      'workfront-cw': {how: REC.connections['workfront-cw'].how.after + ' ' + ADOBE_NOTE},
+      'planning-cw': {prereqs: ["A Workfront Standard and a Planning Standard license for each user, with both license types in the access level when your client has both a Workflow and a Planning package", ...PLAN_REST], sowPrereqs: ["A Workfront Standard and a Planning Standard license for each user, with both license types in the access level when the Client has both a Workflow and a Planning package", ...PLAN_REST]}},
     services: {AXC05: {scope: 'Choose the Sites Optimizer delivery type that serves the public site. Use Edge Delivery Services for Edge-delivered pages, AEM Cloud Service for cloud Publish delivery, or AEM Managed Services for managed Publish delivery. Connect the AEM author environment as the content provider and verify permissions with an eligible content change in author. Reuse the site activation and initial deployment from Sites Optimizer setup when those are already in scope.'}},
   };
   const want = (kind, id, f, v) => LATER[kind] && LATER[kind][id] && f in LATER[kind][id] ? LATER[kind][id][f] : v.after;
@@ -77,9 +99,11 @@ const LIC = "A Brand Visibility license (CJA's page requires it for the source)"
   for (const [id, fields] of Object.entries(REC.services)) for (const [f, v] of Object.entries(fields)) if ((L[id][f] || '') !== want('services', id, f, v)) wrong.push(id + '.' + f);
   for (const [id, fields] of Object.entries(REC.play_services)) for (const [f, v] of Object.entries(fields)) if (JSON.stringify(TPL[id][f]) !== JSON.stringify(want('play_services', id, f, v))) wrong.push(id + '.' + f);
   // a later rewrite stands in for a field the record holds and no longer matches, and carries no caveat of its own
-  const laterBad = later.filter(([kind, id, f, text]) => !(REC[kind][id] && REC[kind][id][f]) || JSON.stringify(text) === JSON.stringify(REC[kind][id][f].after) || [].concat(text).some(x => CAVEAT.test(x))).map(([kind, id, f]) => id + '.' + f);
-  ok(Object.keys(REC.connections).length === 145 && Object.keys(REC.services).length === 20 && Object.keys(REC.play_services).length === 22 && !wrong.length && later.length === 2 && !laterBad.length,
-    'every field of the 145 connections, 20 researched services and 22 play services reads as the record says, but for the two the reviewed canvas wrote again since, which read as that rewrite does', [...wrong.slice(0, 6), ...laterBad.map(x => 'later: ' + x)].join());
+  const laterBad = later.filter(([kind, id, f, text]) => !(REC[kind][id] && REC[kind][id][f]) || JSON.stringify(text) === JSON.stringify(REC[kind][id][f].after) || [].concat(text).some(x => CAVEAT.test(unNoted(id + '.' + f, x)))).map(([kind, id, f]) => id + '.' + f);
+  ok(Object.keys(REC.connections).length === 145 && Object.keys(REC.services).length === 20 && Object.keys(REC.play_services).length === 22 && !wrong.length && later.length === 7 && !laterBad.length &&
+    !!REC.nov17_followup && REC.nov17_followup.changes.length === 1 && REC.nov17_followup.changes[0].id === 'workfront-cw' && REC.nov17_followup.changes[0].field === 'how' &&
+    REC.nov17_followup.changes[0].was === REC.connections['workfront-cw'].how.after && REC.nov17_followup.changes[0].now === K['workfront-cw'].how,
+    'every field of the 145 connections, 20 researched services and 22 play services reads as the record says, but for the two the reviewed canvas wrote again since, the four Coworker prerequisite lists the Coworker review added a line to, and the Workfront + Coworker how text that took Adobe\'s industry note back on Nov 17 (filed in the record as nov17_followup), which read as those rewrites do', [...wrong.slice(0, 6), ...laterBad.map(x => 'later: ' + x)].join());
   // Adam, Nov 12: no step has the partner ask Adobe to act either (item 4 of the step 86 report)
   const ASKS = /(?:ask|raise[sd]?|request)\b[^.;]{0,40}\bAdobe\b|Adobe Support enables|Customer Care turns/i;
   ok(['XH07', 'XG07', 'XL09'].every(i => !ASKS.test(L[i].scope) && REC.services[i]) && !K['ajob2b-marketo'].prereqs.some(x => /Adobe Support/.test(x)) && K['rtcdp-mmm'].prereqs.includes('Look-alike features switched on for the environment')
@@ -98,7 +122,7 @@ const LIC = "A Brand Visibility license (CJA's page requires it for the source)"
   ok(CAT.connections.every(c => !c.sowPrereqs || c.sowPrereqs.length === c.prereqs.length), 'the statement of work keeps one line for each thing a connection needs');
   const cw = CAT.connections.filter(c => c.a === 'cw' || c.b === 'cw');
   ok(cw.length >= 15 && cw.every(c => !/health ?care|finance|eligib/i.test([c.availability, c.sowAvailability || '', c.sowNote || '', ...c.prereqs, ...(c.sowPrereqs || [])].join(' '))),
-    'no Coworker connection says who Adobe does not offer Coworker to', cw.length);
+    'no Coworker connection says who Adobe does not offer Coworker to in its availability line, its prerequisites or its client note (the Workfront + Coworker how text, Nov 17, is checked above)', cw.length);
   ok(K['target-eds'].label === 'Target on Edge Delivery through Web SDK, at.js or the martech plugin' && L.XA07.name === 'Journey Optimizer offers in Target tests' && /^Choose the Real-Time CDP profile attributes/.test(L.XA09.scope),
     'labels and names lost their caveat clause, and a service no longer waits on Adobe: the martech plugin, offers in Target tests, Real-Time CDP context in conversations');
 
@@ -121,6 +145,37 @@ const LIC = "A Brand Visibility license (CJA's page requires it for the source)"
   await p.click('[data-step="document"]'); await p.waitForTimeout(500);
   const doc = await p.textContent('#sow-preview');
   ok(!CAVEAT.test(doc) && !/your client/i.test(doc), 'the statement of work for that engagement carries no caveat', (doc.match(CAVEAT) || [''])[0]);
+
+  // 4b. Nov 17 (Adam: "2, yes"): the partner's Workfront + Coworker card shows Adobe's industry note in Adobe's words, and the
+  // statement of work for its services does not (the Coworker + CJA card above shows none: CAVEAT covers the note)
+  { const q = await own(['workfront', 'cw']);
+    const wf = await openCard(q, 'button.ib[data-c="workfront-cw"]');
+    ok(wf.includes(ADOBE_NOTE) && !/confirm (?:eligibility|with Adobe)/i.test(wf) && !/Availability:/.test(wf),
+      'Nov 17: the Workfront + Coworker card shows Adobe\'s note in Adobe\'s words, with no confirm-with-Adobe line and no Availability line', wf.slice(0, 500));
+    // the knowledge explorer under the canvas prints every relationship's how text: it shows this one without Adobe's note,
+    // whether the partner opens it from Coworker or from Workfront
+    await closeAll(q); const ke = [];
+    for (const id of ['cw', 'workfront']) {
+      await q.evaluate(id => knowledgeExplorer.focusProduct(id), id); await q.waitForTimeout(150);
+      await q.evaluate(() => document.querySelectorAll('#knowledge-model-root details').forEach(d => { d.open = true; })); await q.waitForTimeout(100);
+      ke.push(await q.evaluate(() => ({shown: !document.getElementById('knowledge-model-section').hidden, text: document.getElementById('knowledge-model-root').innerText,
+        rel: [...document.querySelectorAll('#knowledge-model-root details[data-relationship]')].map(d => d.dataset.relationship)})));
+    }
+    ok(ke.every(k => k.shown && k.rel.includes('workfront-cw') && k.text.includes(REC.connections['workfront-cw'].how.after) && !ADOBE_WORDS.test(k.text)),
+      'Nov 17: the knowledge explorer under the canvas shows the Workfront + Coworker relationship without Adobe\'s note, opened from Coworker or from Workfront',
+      JSON.stringify(ke.map(k => [k.shown, k.rel.includes('workfront-cw'), (k.text.match(ADOBE_WORDS) || [''])[0]])));
+    const wl = [...K['workfront-cw'].lines, ...K['workfront-cw'].more];
+    await q.evaluate(list => { for (const l of list) st.ls[l] = true; render(); }, wl);
+    await closeAll(q); await q.fill('#rate', '150'); await q.waitForTimeout(200);
+    await q.click('#save'); await q.waitForURL('**/sow/index.html#scope', {timeout: 15000}); await q.waitForTimeout(800);
+    await q.click('[data-step="services"]'); await q.waitForTimeout(500);
+    const wrows = await q.evaluate(list => list.map(id => (state.estimates.custom['CANVAS-' + id] || {}).assumptions || ''), wl);
+    const panel = await q.textContent('#services-panel');
+    await q.click('[data-step="document"]'); await q.waitForTimeout(500);
+    const wdoc = await q.textContent('#sow-preview');
+    ok(wl.length === 2 && wrows.every(a => /^Prerequisites for Workfront \+ Coworker: /.test(a)) && /Workfront Fusion scenarios with Coworker/.test(wdoc) && !ADOBE_WORDS.test(wrows.join(' ') + panel + wdoc) && !/health care|confirm eligibility/i.test(wdoc),
+      'and the statement of work for its two services, and the Services step, carry no industry note', wrows.map(a => a.slice(0, 120)).join(' | '));
+    await q.context().close(); }
 
   // 5. a saved draft follows: the page's own wording rules turn each old play-service text into the new one
   const pairs = [];

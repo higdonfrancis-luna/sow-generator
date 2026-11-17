@@ -40,9 +40,10 @@ const LABELS = new RegExp(CAVEATS.source + '|\\$\\d', 'i');   // the catalog tex
   // the reviewed canvas (19b0363) added one connection, Edge Delivery Services + Customer Journey Analytics (eds-cja), with one optional service of its own,
   // EDC01 "Measure Edge Delivery page and block interactions": 152 connections and 532 services, and still 34 Adobe products and 9 outside systems
   const edc = K['eds-cja'];
-  ok(adobe === 34 && CAT.products.length - adobe === 10 && CAT.connections.length === 155 && Object.keys(L).length === 535 &&
+  // Nov 17 2026 (Adam: "yes for both"): Brand Intelligence + Creative Cloud and Brand Intelligence + Coworker, two connections with no services: 157 connections
+  ok(adobe === 34 && CAT.products.length - adobe === 10 && CAT.connections.length === 157 && Object.keys(L).length === 537 &&
     !!edc && edc.a === 'eds' && edc.b === 'cja' && edc.lines.join() === '' && edc.more.join() === 'EDC01' && !!L.EDC01 && L.EDC01.name === 'Measure Edge Delivery page and block interactions',
-    'the catalog holds 34 Adobe products, 10 outside systems, 155 connections and 535 services (Brand Intelligence added Frame.io, Firefly Creative Production and Figma, each with one optional service; step 91 added six; the reviewed canvas added Edge Delivery Services + Customer Journey Analytics with one optional service, EDC01)',
+    'the catalog holds 34 Adobe products, 10 outside systems, 157 connections and 537 services (Brand Intelligence added Creative Cloud and Coworker, with no services of their own; Coworker added two optional services, Coworker set up in an AI platform and Workfront Fusion scenarios with Coworker; Brand Intelligence added Frame.io, Firefly Creative Production and Figma, each with one optional service; step 91 added six; the reviewed canvas added Edge Delivery Services + Customer Journey Analytics with one optional service, EDC01)',
     [adobe, CAT.products.length - adobe, CAT.connections.length, Object.keys(L).length, edc ? [edc.a, edc.b, edc.lines.join('+'), edc.more.join('+')].join('/') : 'no eds-cja', (L.EDC01 || {}).name || 'no EDC01'].join());
   ok(P.commerce.lines.length === 0 && P.commerce.more.join() === OWN.join(), 'Adobe Commerce has seven services of its own, none ticked to start', P.commerce.lines.concat(P.commerce.more).join());
   ok(ALL.every(i => L[i] && L[i].origin === 'research' && L[i].scope && L[i].evidence && /^https:\/\/(experienceleague|developer)\.adobe\.com\//.test(L[i].url) && L[i].low < L[i].base && L[i].base < L[i].high),
