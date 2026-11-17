@@ -3,7 +3,8 @@
 It borrows the head, masthead, footer and menu script from the Coworker evidence tab, so both tabs
 look like the brief, and writes its own main content. It presents the counting design
 (../design_transparent.md) as the proposed method. Every customer count and every number like .45
-on the page is a labeled sample: no customer data has been read.
+on the page is a labeled sample. Real customer numbers never go on this page or into this repository
+without Adam's say-so and the data owner's sign-off.
 
 The page shows one picture in two sizes: propensity-mockup.png and propensity-mockup-phone.png,
 copied from ../mockups/p3_list_only.png and p3_list_phone.png.
@@ -88,9 +89,9 @@ TABLE_HEAD = ('<thead role="rowgroup"><tr role="row"><th scope="col" role="colum
 MAIN = '''<main id="main">
 <section class="hero executive-hero wrap cw-hero" id="top">
   <div class="hero-copy"><p class="eyebrow">Next product</p><h1>The next product for a client,<em> worked out in the open.</em></h1><p class="hero-deck">How the tool will rank the next Adobe product for a client. The client’s goal sets the order. A number anyone can redo by hand shows how common the product is among similar customers.</p><div class="actions"><a class="button primary" href="#logic">See the logic <span aria-hidden="true">↓</span></a><a class="text-link" href="#meaning">What the number means →</a></div>
-  <p class="pm-status"><strong>Where this stands.</strong> This is the method we propose. It is not in the tool yet. No customer data has been read. Every customer count and every number like .45 on this page is a sample. With a list of what customers own today, the number shows ownership, not buying.</p></div>
+  <p class="pm-status"><strong>Where this stands.</strong> This is the method we propose. It is not in the tool yet. A first look at real customer data was taken on November 17. None of its numbers are on this page: every customer count and every number like .45 here is a sample. With a list of what customers own today, the number shows ownership, not buying.</p></div>
 </section>
-<section class="metric-strip wrap cw-metrics" aria-label="This method in numbers"><div><strong>23</strong><span>client goals already in the tool</span></div><div><strong>158</strong><span>documented connections in the tool</span></div><div><strong>34</strong><span>Adobe products in the tool</span></div><div><strong>0</strong><span>customer records read so far</span></div></section>
+<section class="metric-strip wrap cw-metrics" aria-label="This method in numbers"><div><strong>23</strong><span>client goals already in the tool</span></div><div><strong>158</strong><span>documented connections in the tool</span></div><div><strong>34</strong><span>Adobe products in the tool</span></div><div><strong>0</strong><span>real customer numbers on this page</span></div></section>
 
 <section class="section cw-asks pm-short" id="short"><div class="wrap">
   <div class="section-heading"><div><p class="eyebrow">In short</p><h2>The goal sets the order. The data sets the number.</h2></div><p>Two questions get two separate answers. Which product fits this client’s goal? The tool’s own files answer that. How common is that product among similar customers? Customer data answers that.</p></div>
@@ -255,8 +256,8 @@ MAIN = '''<main id="main">
         <ul class="pm-list">
           <li>Nothing is in the tool.</li>
           <li>Ready-made plays have no Add product button today. This proposal would add one.</li>
-          <li>No customer data has been loaded.</li>
-          <li>No number has been checked against real customers.</li>
+          <li>Customer data arrived on November 17 and a first look is done. None of it is in the tool.</li>
+          <li>The checks have had a first run on that data. The results are being reviewed.</li>
           <li>The data owner has not signed off.</li>
           <li>Open choices: counting or a statistical model; where the list appears; what happens to a play when a product is added; the name on screen; exact or rounded counts; and where the counting is done.</li>
           <li>The values 30 and 10 are starting values. The hold-back check on the real data confirms or changes them.</li>
@@ -268,8 +269,8 @@ MAIN = '''<main id="main">
 </main>'''
 
 tail = tail.replace('Checked on November 17, 2026. Every source is a public Adobe page. Every quote is word for word.',
-                    'Draft of November 17, 2026. Sample numbers only. No customer data has been read.')
-assert 'Draft of November 17, 2026' in tail
+                    'Draft of November 17, 2026. Sample numbers only on this page.')
+assert 'Sample numbers only on this page' in tail
 from PIL import Image
 
 out_dir = os.path.dirname(os.path.abspath(dst))
