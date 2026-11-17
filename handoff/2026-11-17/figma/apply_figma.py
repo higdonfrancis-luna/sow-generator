@@ -11,7 +11,7 @@ services, XF01 to XF06, that start off (like XK16), so a canvas saved before the
                                                XF02 Save-back folders and export settings for Figma designs  8 / 16 / 32
   Figma + GenStudio for Performance Marketing  XF03 Figma ad templates prepared for the GenStudio plugin     16 / 32 / 56
                                                XF04 Figma frames converted for GenStudio Photoshop           8 / 16 / 32
-  Figma + Adobe Express                        XF05 Figma designs turned into Express templates             16 / 24 / 48
+  Figma + Adobe Express                        XF05 Figma designs imported into Adobe Express                8 / 16 / 32
   Figma + Firefly Custom Models                XF06 Custom models for Figma designers                        8 / 16 / 24
 
 Every step finds its place by content and is idempotent: a step already applied is left as it is, and a step whose anchor is
@@ -23,14 +23,19 @@ missing stops the script with a message that names the file, so a later checkout
                                                   shown as links (connection_overrides, references_set)
   4. index.html (OUTSIDE_MORE)                    the statement of work keeps Figma on Create your own play, so a draft
                                                   saved there and opened again brings Figma back with its chosen services
-  5. rfp_answers.js (NAMES)                       the RFI Builder recognizes Figma when an RFI names it
-  6. rfp_prototype/kb_method                      RFI write-ups: batches/, reviewed/ and phrases/ in the next free batch
-  7. checks                                       the stated totals move by +4 connections and +6 services; Figma's menu
+  5. rfp_answers.js (NAMES, TIED)                 the RFI Builder names Figma only where a sentence ties it to a product it
+                                                  connects to ('AEM Assets inside Figma'), not where an RFI mentions it in
+                                                  passing ('our designers work in Figma'), and Figma's name stays evidence
+                                                  for the services about it
+  6. canvas/template.html                         a tag in the Add outside system menu that wraps keeps its words inside
+                                                  its corners (Figma's lists five products)
+  7. rfp_prototype/kb_method                      RFI write-ups: batches/, reviewed/ and phrases/ in the next free batch
+  8. checks                                       the stated totals move by +4 connections and +6 services; Figma's menu
                                                   text in canvas/test_canvas.js; the later-connection filters of steps 62
                                                   and 64; new checks in canvas/test_canvas.js and test_step64.js
-  8. builds                                       python3 canvas/build.py and python3 build_site.py, twice, so the
+  9. builds                                       python3 canvas/build.py and python3 build_site.py, twice, so the
                                                   canvas shows the knowledge base's new counts
-  9. README.md                                    one section, with the counts the build reports
+ 10. README.md                                    one section, with the counts the build reports
 """
 import glob, json, os, re, subprocess, sys
 
@@ -96,7 +101,6 @@ HX_EXPRESS_RN = 'https://helpx.adobe.com/express/web/whats-new/release-notes.htm
 HX_FF_GEN = 'https://helpx.adobe.com/firefly/web/app-integrations/figma/generate-images-in-figma.html'
 HX_FF_PLUGIN = 'https://helpx.adobe.com/firefly/web/app-integrations/figma/firefly-plugin-for-figma.html'
 HX_CM = 'https://helpx.adobe.com/firefly/web/custom-models/get-started-with-custom-models/custom-models-overview.html'
-HX_CM_SHARE = 'https://helpx.adobe.com/firefly/web/custom-models/manage-custom-models/share-custom-models.html'
 HX_CM_TRAIN = 'https://helpx.adobe.com/firefly/web/custom-models/get-started-with-custom-models/train-custom-models.html'
 
 T_FIGMA = 'Experience League: Integrate AEM Assets with Figma'
@@ -113,7 +117,6 @@ T_EXPRESS_RN = 'Adobe Help: Adobe Express on web release notes'
 T_FF_GEN = 'Adobe Firefly help: Use text to image to generate images in Figma'
 T_FF_PLUGIN = 'Adobe Firefly help: Use Firefly Enterprise and GenStudio for Figma'
 T_CM = 'Adobe Firefly help: Custom models overview'
-T_CM_SHARE = 'Adobe Firefly help: Share custom models'
 T_CM_TRAIN = 'Adobe Firefly help: Create and train custom models'
 
 src = lambda u, t: {'url': u, 'title': t}
@@ -143,7 +146,6 @@ Q = {
     'V23': 'Map Figma text elements to GenStudio for Performance Marketing fields, such as headline, body, on_image_text, and more.',
     'V24': 'Generate new on-brand Meta, LinkedIn, or Display ad Experiences based on a brand, persona, product, and text prompt.',
     'V25': 'Translate generated Experiences into multiple languages.',
-    'V26': 'Export generated Experiences to a local source as flattened images.',
     'V27': 'Export generated Experiences to GenStudio for Performance Marketing.',
     'V28': 'The plugin requires the first two levels of your Figma document to follow this convention:',
     'V29': 'There is no fixed size requirement. Display templates support any size.',
@@ -151,7 +153,6 @@ Q = {
     'V31': 'For Instagram or Facebook posts: Width: 1080 px (fixed) Height: 1080 px or 1350 px For Instagram or Facebook stories: Width: 1080 px (fixed) Height: 1920 px',
     'V32': 'You must map an image by assigning the image field role to at least one image element in your template.',
     'V33': 'Select the number of variations to be produced (up to eight).',
-    'V34': 'A ZIP file is created in the plugin panel, or a link to Open in GenStudio appears.',
     'V35': 'To perform this task, you need both the Figma plugin and GenStudio Photoshop.',
     'V36': 'You can use the Figma plugin to convert a Figma frame, multiple frames, or an entire document to Photoshop format and export it for use with GenStudio Photoshop.',
     'V37': 'Features such as strikethrough, superscript, subscript, opacity as percentages, gradients, and similar advanced properties are not yet supported.',
@@ -163,12 +164,9 @@ Q = {
     'V45': 'Create on-brand and personalized ads directly using the new GenStudio Plugins for Adobe Photoshop and Figma design tools.',
     'V46': 'Photoshop, minimum version 25.6.0',
     'V47': 'Download and update the plugin from the Creative Cloud Marketplace in Adobe Exchange.',
-    'V48': 'Log in to a GenStudio for Performance Marketing instance with an Adobe ID',
     'V50': 'Native Import: Imports supported content as editable Adobe Express elements.',
     'V51': 'Import Figma pages, frames, or individual layers into Adobe Express using the Figma add-on.',
     'V52': 'You need a Figma account with access to the file you want to import and access to Add-ons in Adobe Express. Full and Dev Figma licenses have unlimited access to the add-on capabilities, while Collab and View seats have daily limits.',
-    'V53': 'Open a design in the Adobe Express editor, select More and then select Add-ons.',
-    'V54': 'Search for Figma, select the add-on, and then select Add.',
     'V55': 'Open the Figma add-on and select Connect.',
     'V56': "Rasterize: Imports the selected content as a flattened image. You can move and scale the image, but you can't edit its individual elements.",
     'V57': 'You can use both import methods in the same design.',
@@ -191,13 +189,11 @@ Q = {
     'V76': 'Select Text to image option in the plugin panel.',
     'V77': 'The generated images will appear in the plugin panel. You can add them to your canvas using any of these methods:',
     'V78': "You'll find the Adobe Firefly Enterprise and GenStudio plugin in the Figma marketplace, where it's available like any other plugin.",
-    'V79': 'Firefly now works directly within Figma through a dedicated plugin, bringing generative AI capabilities into your existing design environment.',
     'V81': 'The plugin will prompt you to sign in. Enter the email address and password that is associated with Adobe account to begin using the plugin within your Figma workspace.',
     'V83': 'Custom models can be used to generate content in supported Adobe apps, including Photoshop, Illustrator, Adobe Express, Firefly, and GenStudio.',
     'V84': 'Custom Models can be trained to generate a specific subject or reproduce a visual style.',
     'V85': 'Firefly Custom Models are available for Creative Cloud for individuals, Creative Cloud Pro for teams, Creative Cloud Pro Plus for teams subscribers, organizations that use Adobe storage for business, and select enterprise plans.',
     'V86': 'If you have a Creative Cloud for enterprise plan, contact your Adobe Account Manager to add custom models to your plan.',
-    'V89': 'Generator: Can generate with your published model in Creative Cloud apps but cannot edit or review.',
     'V90': "If you're an enterprise customer, depending on your organization's workflow, you may need to publish the trained model before it becomes available to other users or apps.",
     'V94': 'Alternatively, access the Adobe Experience Manager (AEM) Assets Connector available on Figma community, click Open in…, select a recent file or create a new file and click Run to access the Adobe Experience Manager (AEM) Assets Connector panel.',
 }
@@ -206,11 +202,14 @@ Q = {
 CONNECTIONS = [
     {
         'id': 'figma-aemassets', 'a': 'figma', 'b': 'aemassets',
-        'how': "The Adobe Experience Manager (AEM) Assets Connector runs as a panel inside Figma, opened from Actions in Figma or from its Figma Community page. Designers search AEM Assets with Content Advisor and place images (JPEG, PNG), videos (MP4, MOV, WebM), animated GIFs and SVG vectors on the Figma canvas. Check for updates compares the assets in the Figma file with AEM and lists the ones that changed, and Update brings in the newer version. Designers upload a selected item or a whole page to an AEM Assets folder as PNG, PDF, JPG or SVG, setting the scale for PNG and the scale and quality for JPG.",
+        'how': "Adobe's AEM Assets Connector opens as a panel in Figma. Designers search AEM Assets, place images, videos, GIFs and SVGs on the Figma canvas, bring in newer versions with Check for updates, and upload a selected item or a whole page to an AEM Assets folder.",
+        'how_evidence': [ev(EL_KCS, Q['V15']), ev(EL_FIGMA, Q['V08']), ev(EL_FIGMA, Q['V11']), ev(EL_FIGMA, Q['V94']),
+                         ev(EL_FIGMA, Q['V12']), ev(EL_FIGMA, Q['V04']), ev(EL_FIGMA, Q['V07']), ev(EL_FIGMA, Q['V13'])],
         'source': src(EL_FIGMA, T_FIGMA),
         'source_quote': Q['V01'],
         'gain': {'title': 'AEM Assets inside Figma',
-                 'text': "Your client's designers place AEM Assets files on the Figma canvas, see when a newer version exists in AEM, and save new or edited designs back to an AEM Assets folder without switching between tools."},
+                 'text': "Your client's designers place AEM Assets files on the Figma canvas, check for newer versions in AEM, and save new or edited designs back to an AEM Assets folder without switching between tools."},
+        'gain_evidence': [ev(EL_FIGMA, Q['V01']), ev(EL_FIGMA, Q['V07']), ev(EL_FIGMA, Q['V09'])],
         'flows': [
             {'from': 'aemassets', 'to': 'figma', 'what': 'Images, videos, GIFs and SVGs found with Content Advisor and placed on the Figma canvas, and their newer versions through Check for updates', 'source': src(EL_FIGMA, T_FIGMA)},
             {'from': 'figma', 'to': 'aemassets', 'what': 'New or edited designs, a selected item or a whole page, uploaded to an AEM Assets folder as PNG, PDF, JPG or SVG', 'source': src(EL_FIGMA, T_FIGMA)},
@@ -223,7 +222,7 @@ CONNECTIONS = [
             'AEM Assets as a Cloud Service on AEM release 19149 or later',
             'The Adobe Experience Manager (AEM) Assets Connector from the Figma Community, run from Actions in Figma',
             'Designers signed in with the same company or federated Adobe ID they use for Experience Cloud and AEM Assets',
-            'Assets in JPEG, PNG, MP4, MOV, WebM, GIF or SVG to place in Figma; designs save back as PNG, PDF, JPG or SVG',
+            'Assets in JPEG, PNG, MP4, MOV, WebM, GIF or SVG to place in Figma, and designs saved back as PNG, PDF, JPG or SVG',
         ],
         'prereq_sources': [ev(EL_FIGMA, Q['V03']), ev(EL_FIGMA, Q['V02']), ev(EL_FIGMA, Q['V10']), ev(EL_FIGMA, Q['V11']), ev(EL_KCS, Q['V15']),
                            ev(EL_KCS, Q['V16']), ev(EL_FIGMA, Q['V04']), ev(EL_FIGMA, Q['V05'])],
@@ -238,12 +237,15 @@ CONNECTIONS = [
              'evidence': 'The export configuration comprises the file format, scale, and quality.',
              'source': src(EL_FIGMA, T_FIGMA)},
         ],
-        'client': {'how': 'Your designers open AEM Assets in a panel inside Figma, place images, videos, GIFs and SVGs from it on the Figma canvas, see when a newer version is in AEM, and save new or edited designs back to an AEM Assets folder.',
+        'client': {'how': 'Your designers open AEM Assets in a panel inside Figma, place images, videos, GIFs and SVGs from it on the Figma canvas, check for newer versions in AEM, and save new or edited designs back to an AEM Assets folder.',
                    'gain': 'Your designers use the files in your DAM without switching between tools, and their finished designs are saved back to AEM Assets.'},
     },
     {
         'id': 'figma-gspm', 'a': 'figma', 'b': 'gspm',
-        'how': "Adobe's GenStudio for Performance Marketing Figma plugin adds a panel to Figma. Designers install it from the Figma community marketplace, and in Figma it opens as the Firefly Enterprise and GenStudio plugin. They lay out ad templates as a section (the project) holding frames (the templates) and map the text and image layers to GenStudio field roles such as headline, body and on_image_text. The plugin then generates up to eight on-brand Meta, LinkedIn or Display variations from a brand, persona, product and prompt, translates them, and exports them to GenStudio for Performance Marketing as experiences, or as flattened images in a ZIP file. With GenStudio Photoshop it also converts Figma frames to Photoshop documents.",
+        'how': "Adobe's Firefly Enterprise and GenStudio plugin adds a GenStudio for Performance Marketing panel to Figma. Designers map the text and image layers of their ad templates to GenStudio fields, generate up to eight on-brand Meta, LinkedIn or Display variations from a brand, persona, product and prompt, translate them, and export them to GenStudio for Performance Marketing as experiences. The plugin also converts Figma frames to Photoshop documents for use with GenStudio Photoshop.",
+        'how_evidence': [ev(HX_FF_PLUGIN, Q['V78']), ev(EL_GSPM, Q['V39']), ev(EL_GSPM, Q['V21']), ev(EL_GSPM, Q['V23']), ev(EL_GSPM, Q['V32']),
+                         ev(EL_GSPM, Q['V24']), ev(EL_GSPM, Q['V33']), ev(EL_GSPM, Q['V41']), ev(EL_GSPM, Q['V25']), ev(EL_GSPM, Q['V27']),
+                         ev(EL_GSPM, Q['V36'])],
         'source': src(EL_GSPM, T_GSPM),
         'source_quote': Q['V21'],
         'gain': {'title': 'Ad variations where the designers already work',
@@ -253,43 +255,45 @@ CONNECTIONS = [
             {'from': 'figma', 'to': 'gspm', 'what': 'Generated variations, exported to GenStudio for Performance Marketing as experiences', 'source': src(EL_GSPM, T_GSPM)},
         ],
         'kind': 'outside', 'line': 'native',
-        'label': "Adobe's GenStudio for Performance Marketing plugin in Figma generates on-brand ad variations in Figma templates and exports them to GenStudio",
+        'label': "Adobe's Firefly Enterprise and GenStudio plugin in Figma generates on-brand ad variations in Figma templates and exports them to GenStudio for Performance Marketing",
         'availability': '',
         'prereqs': [
             "Your client's designers building their ad templates in Figma",
             'GenStudio for Performance Marketing, with the brands, personas and products the plugin generates from',
-            'The plugin from the Figma community marketplace, with each designer signed in with an Adobe account',
+            'The Firefly Enterprise and GenStudio plugin from the Figma community marketplace, with each designer signed in with an Adobe account',
             'Figma files laid out as sections (projects) holding frames (templates), with the image role mapped to at least one image element in each template',
             'Template sizes: Meta posts 1080 px wide by 1080 or 1350 px high, Meta stories 1080 by 1920 px, LinkedIn 1200 px wide by 1200, 628, 2292, 1800 or 1500 px high, Display any size',
             "Every font used in the file installed on the designer's machine",
-            'For frames converted to Photoshop: GenStudio Photoshop in Photoshop 25.6.0 or later, and frames that are not inside a section',
         ],
-        'prereq_sources': [ev(EL_GSPM, Q['V41']), ev(EL_GSPM, Q['V22']), ev(HX_FF_PLUGIN, Q['V81']), ev(EL_GSPM, Q['V28']), ev(EL_GSPM, Q['V32']),
-                           ev(EL_GSPM, Q['V31']), ev(EL_GSPM, Q['V30']), ev(EL_GSPM, Q['V29']), ev(EL_GSPM, Q['V40']), ev(EL_GSPM, Q['V35']),
-                           ev(EL_GSPM_PS, Q['V46']), ev(EL_GSPM, Q['V38'])],
+        'prereq_sources': [ev(EL_GSPM, Q['V41']), ev(EL_GSPM, Q['V22']), ev(HX_FF_PLUGIN, Q['V78']), ev(HX_FF_PLUGIN, Q['V81']), ev(EL_GSPM, Q['V28']),
+                           ev(EL_GSPM, Q['V32']), ev(EL_GSPM, Q['V31']), ev(EL_GSPM, Q['V30']), ev(EL_GSPM, Q['V29']), ev(EL_GSPM, Q['V40'])],
         'references': [ref(EL_GSPM_PS, T_GSPM_PS, Q['V46']), ref(HX_FF_PLUGIN, T_FF_PLUGIN, Q['V81']), ref(EL_GSPM_INT, T_GSPM_INT, Q['V42']),
                        ref(EL_GSPM_RN, T_GSPM_RN, Q['V45'])],
         'lines': [
             {'id': 'XF03', 'name': 'Figma ad templates prepared for the GenStudio plugin', 'unit': 'one-time', 'low': 16, 'base': 32, 'high': 56, 'default': False,
-             'scope': "Install the plugin from the Figma community marketplace for your client's designers, set up their Figma ad files as sections and frames at the sizes Meta, LinkedIn and Display accept, map the field roles with at least one image, and generate, translate and export test variations to GenStudio for Performance Marketing.",
+             'scope': "Install the Firefly Enterprise and GenStudio plugin from the Figma community marketplace for your client's designers, set up their Figma ad files as sections and frames at the sizes Meta, LinkedIn and Display accept, map the field roles with at least one image, and generate, translate and export test variations to GenStudio for Performance Marketing.",
              'evidence': Q['V23'],
              'source': src(EL_GSPM, T_GSPM)},
             {'id': 'XF04', 'name': 'Figma frames converted for GenStudio Photoshop', 'unit': 'one-time', 'low': 8, 'base': 16, 'high': 32, 'default': False,
-             'ext': 'GenStudio Photoshop in Photoshop 25.6.0 or later',
-             'scope': 'Convert the agreed Figma frames to Photoshop with the plugin, open them in GenStudio Photoshop, and rebuild with the designer what the conversion does not carry over, such as gradients, opacity percentages, strikethrough, superscript and subscript.',
+             'ext': 'GenStudio Photoshop from Adobe Exchange, in Photoshop 25.6.0 or later',
+             'ext_evidence': [ev(EL_GSPM, Q['V35']), ev(EL_GSPM_PS, Q['V47']), ev(EL_GSPM_PS, Q['V46'])],
+             'scope': 'Take the agreed Figma frames out of sections, convert them with the plugin to Photoshop documents for use with GenStudio Photoshop, open them in Photoshop, and rebuild with the designer what the conversion does not carry over, such as gradients, opacity percentages, strikethrough, superscript and subscript.',
              'evidence': Q['V36'],
              'source': src(EL_GSPM, T_GSPM)},
         ],
-        'client': {'how': "Your designers keep building ad templates in Figma. Adobe's GenStudio for Performance Marketing plugin generates on-brand ad variations in those templates from your brands, personas and products, translates them, and sends them to GenStudio for Performance Marketing as experiences.",
+        'client': {'how': "Your designers keep building ad templates in Figma. Adobe's Firefly Enterprise and GenStudio plugin generates on-brand ad variations in those templates from your brands, personas and products, translates them, and sends them to GenStudio for Performance Marketing as experiences.",
                    'gain': 'Your designers produce on-brand variations and translations of your ads in the tool they already use, and the results reach GenStudio for Performance Marketing as experiences.'},
     },
     {
         'id': 'figma-express', 'a': 'figma', 'b': 'express',
-        'how': "The Figma add-on in Adobe Express (More, then Add-ons, then search for Figma) connects the user's Figma account. The user pastes a Figma file link and picks a page, frame or layer. Native Import brings it in as editable Express elements: text stays editable, shapes and vectors are recreated as editable objects, and images are positioned to match the Figma layout. Rasterize brings it in as a flattened image, and both can be used in one design. Gradients, patterns and certain masked or combined shapes can come in as images. Fonts are matched by name, and a missing font gets a fallback that the import summary marks Font Not Available. The add-on only reads the Figma file and does not change it.",
+        'how': "The Figma add-on in Adobe Express connects the user's Figma account and imports a page, frame or layer from a Figma file, as editable Express elements (Native Import) or a flattened image (Rasterize). Gradients, patterns and certain masked or combined shapes can come in as images, and a font Express lacks gets a fallback. The add-on does not change the Figma file.",
+        'how_evidence': [ev(HX_EXPRESS, Q['V55']), ev(HX_EXPRESS, Q['V63']), ev(HX_EXPRESS, Q['V64']), ev(HX_EXPRESS, Q['V50']),
+                         ev(HX_EXPRESS, Q['V56']), ev(HX_EXPRESS, Q['V59']), ev(HX_EXPRESS, Q['V58']), ev(HX_EXPRESS, Q['V60'])],
         'source': src(HX_EXPRESS, T_EXPRESS),
         'source_quote': Q['V51'],
         'gain': {'title': 'Figma work reused in Express',
-                 'text': "Frames your client's designers make in Figma come into Adobe Express as editable designs the wider team can build on, instead of being rebuilt by hand."},
+                 'text': "Frames your client's designers make in Figma come into Adobe Express as editable Express elements, so the team can keep editing them in Express."},
+        'gain_evidence': [ev(HX_EXPRESS, Q['V50']), ev(HX_EXPRESS, Q['V62'])],
         'flows': [
             {'from': 'figma', 'to': 'express', 'what': 'Figma pages, frames or layers, imported as editable Express elements with Native Import or as a flattened image with Rasterize', 'source': src(HX_EXPRESS, T_EXPRESS)},
         ],
@@ -297,53 +301,54 @@ CONNECTIONS = [
         'label': 'The Figma add-on in Adobe Express imports Figma pages, frames or layers as editable Express elements or flattened images',
         'availability': '',
         'prereqs': [
-            'Valid Adobe Express and Figma accounts; the Figma add-on comes at no additional cost',
-            'A Figma account with access to each file to import, and access to Add-ons in Adobe Express',
-            'Full or Dev Figma seats for unlimited use of the add-on; Collab and View seats have daily limits',
+            'Valid Adobe Express and Figma accounts, with access to each Figma file to import and to Add-ons in Adobe Express (the Figma add-on has no additional cost)',
+            'Full or Dev Figma seats for unlimited use of the add-on (Collab and View seats have daily limits)',
             'Add-on access for the people who import: on enterprise plans it is managed through roles in the Admin Console, where a custom role can give access to specific Express add-ons',
         ],
         'prereq_sources': [ev(HX_EXPRESS, Q['V61']), ev(HX_EXPRESS, Q['V52']), ev(HX_ADDONS_ADMIN, Q['V67']), ev(HX_ADDONS_ADMIN, Q['V68']), ev(HX_ROLES, Q['V69'])],
         'references': [ref(HX_ADDONS_ADMIN, T_ADDONS_ADMIN, Q['V67']), ref(HX_ROLES, T_ROLES, Q['V69']), ref(HX_EXPRESS_RN, T_EXPRESS_RN, Q['V66'])],
         'lines': [
-            {'id': 'XF05', 'name': 'Figma designs turned into Express templates', 'unit': 'one-time', 'low': 16, 'base': 24, 'high': 48, 'default': False,
-             'scope': "Check that your client's Express users who import can use the Figma add-on (on enterprise plans through Admin Console roles), connect the designers' Figma accounts, import the agreed frames with Native Import or Rasterize, fix the fonts the import summary marks Font Not Available and the shapes that came in as images, and build the first Express templates from the imported designs.",
+            {'id': 'XF05', 'name': 'Figma designs imported into Adobe Express', 'unit': 'one-time', 'low': 8, 'base': 16, 'high': 32, 'default': False,
+             'scope': "Check that your client's Express users who import can use the Figma add-on (on enterprise plans through Admin Console roles), connect the Figma account of each person who imports, import the agreed frames with Native Import or Rasterize, fix the fonts the import summary marks Font Not Available and the shapes that came in as images, and hand the corrected designs over for templates.",
              'evidence': Q['V50'],
              'source': src(HX_EXPRESS, T_EXPRESS)},
         ],
         'client': {'how': "Your designers' Figma pages, frames and layers come into Adobe Express through the Figma add-on, either as editable Express elements or as flattened images. The add-on only reads the Figma file.",
-                   'gain': "Your wider team builds on your designers' Figma work in Adobe Express instead of rebuilding it by hand."},
+                   'gain': "Your designers' Figma work comes into Adobe Express as editable elements your team keeps editing there."},
     },
     {
         'id': 'figma-fireflycm', 'a': 'figma', 'b': 'fireflycm',
-        'how': "In Adobe's Firefly Enterprise and GenStudio plugin for Figma, Text to image has a Model menu. There the designer picks an Adobe or partner model, or a custom model they have created, and places the generated images on the Figma canvas. The plugin runs in the Figma desktop app or Figma in the browser and needs an active Adobe account with Firefly access.",
+        'how': "Adobe's Firefly Enterprise and GenStudio plugin for Figma, the same plugin as on Figma + GenStudio for Performance Marketing, has a Model menu in Text to image. There the designer picks a custom model they have created, generates images and places them on the Figma canvas.",
+        'how_evidence': [ev(HX_FF_PLUGIN, Q['V78']), ev(EL_GSPM, Q['V39']), ev(HX_FF_GEN, Q['V76']), ev(HX_FF_GEN, Q['V71']), ev(HX_FF_GEN, Q['V77'])],
         'source': src(HX_FF_GEN, T_FF_GEN),
         'source_quote': Q['V71'],
-        'gain': {'title': 'Brand models on the Figma canvas',
-                 'text': "Your client's designers generate images in the brand's trained style or product subject inside Figma, with the same custom models their teams use in Firefly, Adobe Express and Photoshop."},
+        'gain': {'title': 'Custom models on the Figma canvas',
+                 'text': "Inside Figma, your client's designers generate images in the style or subject of the custom models they have created. The same models also generate in Firefly, Adobe Express and Photoshop."},
+        'gain_evidence': [ev(HX_FF_GEN, Q['V75']), ev(HX_FF_GEN, Q['V71']), ev(HX_CM, Q['V84']), ev(HX_CM, Q['V83'])],
         'flows': [
-            {'from': 'fireflycm', 'to': 'figma', 'what': 'Custom models, picked from the Model menu in Text to image, generating images the designers place on the Figma canvas', 'source': src(HX_FF_GEN, T_FF_GEN)},
+            {'from': 'fireflycm', 'to': 'figma', 'what': 'Custom models the designer has created, picked from the Model menu in Text to image, generating images the designer places on the Figma canvas', 'source': src(HX_FF_GEN, T_FF_GEN)},
         ],
         'kind': 'outside', 'line': 'native',
-        'label': "Custom models are picked in Text to image in Adobe's Firefly Enterprise and GenStudio plugin for Figma",
+        'label': "Adobe's Firefly Enterprise and GenStudio plugin for Figma generates images with the custom models a designer has created",
         'availability': '',
         'prereqs': [
-            "Firefly Custom Models on your client's plan; a Creative Cloud for enterprise plan needs them added to it",
+            "Firefly Custom Models on your client's plan: a Creative Cloud for enterprise plan needs them added to it",
             'The Firefly Enterprise and GenStudio plugin installed in Figma, in the Figma desktop app or Figma in the browser',
             'An active Adobe account with Firefly access for each designer, signed in inside the plugin',
-            'Each model trained and published: on enterprise plans a trained model may need publishing before other users and apps can use it',
-            'Each model shared with the designers with at least the Generator permission',
+            'Firefly custom models each designer has created',
+            "On enterprise plans, each model published where the organization's workflow requires it before other apps can use it",
         ],
         'prereq_sources': [ev(HX_CM, Q['V85']), ev(HX_CM, Q['V86']), ev(HX_FF_GEN, Q['V72']), ev(HX_FF_GEN, Q['V73']), ev(HX_FF_GEN, Q['V74']),
-                           ev(HX_FF_PLUGIN, Q['V81']), ev(HX_CM_TRAIN, Q['V90']), ev(HX_CM_SHARE, Q['V89'])],
-        'references': [ref(HX_FF_PLUGIN, T_FF_PLUGIN, Q['V78']), ref(HX_CM, T_CM, Q['V83']), ref(HX_CM_TRAIN, T_CM_TRAIN, Q['V90']), ref(HX_CM_SHARE, T_CM_SHARE, Q['V89'])],
+                           ev(HX_FF_PLUGIN, Q['V81']), ev(HX_FF_GEN, Q['V71']), ev(HX_CM_TRAIN, Q['V90'])],
+        'references': [ref(HX_FF_PLUGIN, T_FF_PLUGIN, Q['V78']), ref(HX_CM, T_CM, Q['V83']), ref(HX_CM_TRAIN, T_CM_TRAIN, Q['V90'])],
         'lines': [
             {'id': 'XF06', 'name': 'Custom models for Figma designers', 'unit': 'one-time', 'low': 8, 'base': 16, 'high': 24, 'default': False,
-             'scope': "Share the published models with your client's Figma designers with the Generator permission, check that each model shows in the plugin's Model menu and generates as expected on the Figma canvas, and walk the designers through Text to image with the prompt guide for each model.",
+             'scope': "Check that each of your client's Figma designers has the plugin, Firefly access and the custom models they have created, then with each designer pick their models in Text to image, generate images and place them on the Figma canvas, and walk them through the prompt guide for each model.",
              'evidence': Q['V71'],
              'source': src(HX_FF_GEN, T_FF_GEN)},
         ],
-        'client': {'how': "Your designers pick your custom models in Text to image in Adobe's Firefly Enterprise and GenStudio plugin for Figma, and place the generated images on the Figma canvas.",
-                   'gain': "Your designers generate images in your brand's own style or product subject inside Figma, with the same custom models your teams use in other Adobe apps."},
+        'client': {'how': "In Text to image in Adobe's Firefly Enterprise and GenStudio plugin for Figma, your designers pick a custom model they have created and place the generated images on the Figma canvas.",
+                   'gain': 'Inside Figma, your designers generate images in the style or subject of the custom models they have created. The same models also generate in other Adobe apps.'},
     },
 ]
 RESEARCH = {
@@ -364,11 +369,12 @@ RESEARCH = {
         "XF01 is the connector for Figma designers: the folders they reach and the Figma side, tested end to end. DAM onboarding, users and access (AS01) sets up the Admin Console users, groups and product profiles for AEM Assets as a whole.",
         "XF02 decides where designs uploaded from Figma land and with which export settings. The folder hierarchy, tags and metadata forms are AS02; the save-back of Express designs is XJ03.",
         "XF03 builds and maps Figma ad files for the plugin. GS03 codes responsive HTML templates in GenStudio, XJ10 builds Express templates for GenStudio, and GS05 trains editors on GenStudio itself. Adobe's integrations page calls Express templates in GenStudio the recommended approach for ad templates, so this connection is for clients whose designers already work in Figma; the card says so with its first prerequisite and no hedge.",
-        "XF04 converts Figma frames for GenStudio Photoshop, which needs Photoshop 25.6.0 or later (its Experience League page). XJ12 brings Photoshop and Illustrator files into Express, the other direction and another app.",
-        "XF05 brings Figma designs into Express and fixes what the import changes. Locked templates with brand controls stay EP03, which locks the templates XF05 builds.",
-        "XF06 shares the published models with Figma designers and checks them in the plugin. It does not publish the models (FM03) or write the prompt guide (FM04), which XK09 (Express) and XK10 (Creative Cloud apps) repeat, and the sharing rules stay FM05.",
+        "XF04 converts Figma frames for GenStudio Photoshop, which needs Photoshop 25.6.0 or later and installs from Adobe Exchange (its Experience League page); that is XF04's own note, so the card's prerequisites do not repeat it. XJ12 brings Photoshop and Illustrator files into Express, the other direction and another app.",
+        "XF05 brings Figma designs into Express, fixes what the import changes and hands the designs over for templates: shared templates with locked elements are EP03, and Express templates for GenStudio are XJ10.",
+        "XF06 works with the custom models each designer has created, the route Adobe's Figma page documents: it checks the plugin and Firefly access, generates with each designer and walks them through Text to image. It does not train, publish or share models (FM02, FM03, FM05) or write the prompt guide (FM04), which XK09 (Express) and XK10 (Creative Cloud apps) repeat.",
         "Adobe's Express add-ons overview says add-ons allow connections to third-party tools, and its listing of the Figma add-on could not be opened; no Adobe page read names the Figma add-on's publisher.",
-        "Whether a model shared with the Generator permission is listed in the Figma plugin's Model menu is not stated: the Figma page says to choose a custom model you've created, and the share page says Generator works in Creative Cloud apps. XF06 tests it with the designers.",
+        "Adobe's Figma page says to choose a custom model you've created. Only the Firefly web page adds models shared with you, and the share page says a Generator generates in Creative Cloud apps, so the card and XF06 promise only the models a designer has created.",
+        "GenStudio for Performance Marketing and Firefly Custom Models work through one plugin, listed in the Figma marketplace as Firefly Enterprise and GenStudio (Adobe's Firefly help and the GenStudio page both name it), so both cards use that name and a partner plans one install.",
         "Left out for lack of an Adobe page: Express designs into Figma, and Figma with Creative Cloud apps, Frame.io or Firefly Creative Production. Workfront Fusion's Figma modules, AEM's Figma to Visual Content Fragments skill and Brand Intelligence's BN06 are other routes, not built here.",
     ],
 }
@@ -407,11 +413,11 @@ PAGE_FACTS = {
     'XF01': FACTS_ASSETS + [Q['V12'], Q['V07'], Q['V16'], Q['V02'], Q['V11']],
     'XF02': FACTS_ASSETS + [Q['V13'], Q['V06'], Q['V05'], Q['V07']],
     'XF03': FACTS_GSPM + [Q['V22'], Q['V28'], Q['V24'], Q['V25'], Q['V27'], Q['V32'], Q['V40'], Q['V41']],
-    'XF04': FACTS_GSPM + [Q['V35'], Q['V37'], Q['V38'], Q['V46']],
-    'XF05': FACTS_EXPRESS + [Q['V61'], Q['V52'], Q['V56'], Q['V58'], Q['V59'], Q['V67']],
-    'XF06': FACTS_CM + [Q['V71'], Q['V76'], Q['V77'], Q['V72'], Q['V74'], Q['V89']],
+    'XF04': FACTS_GSPM + [Q['V35'], Q['V37'], Q['V38'], Q['V46'], Q['V47']],
+    'XF05': FACTS_EXPRESS + [Q['V61'], Q['V52'], Q['V56'], Q['V57'], Q['V58'], Q['V59'], Q['V67']],
+    'XF06': FACTS_CM + [Q['V71'], Q['V76'], Q['V77'], Q['V72'], Q['V74']],
 }
-LICENSE = {'XF04': 'GenStudio Photoshop in Photoshop 25.6.0 or later'}
+LICENSE = {lid: l['ext'] for lid, (c, l) in LBY.items() if l.get('ext')}
 
 
 def kb_source(lid):
@@ -441,7 +447,7 @@ KB_ENTRIES = [
      'outcome': 'Designs uploaded from Figma land in the agreed AEM Assets folders, named and exported the way each use needs.',
      'kind': 'task', 'phase': 'build'},
     {'id': 'XF03',
-     'steps': ['Install the plugin from the Figma community marketplace for your designers, and agree the Meta, LinkedIn and Display ads to build as templates.',
+     'steps': ['Install the Firefly Enterprise and GenStudio plugin from the Figma community marketplace for your designers, and agree the Meta, LinkedIn and Display ads to build as templates.',
                'Set up each Figma ad file as a section holding frames at the sizes each channel accepts, and map the field roles, with at least one image.',
                'Generate test variations from a brand, persona and product in GenStudio for Performance Marketing, and translate them into the agreed languages.',
                "Export the test variations to GenStudio for Performance Marketing as experiences, fix any template that fails, and record each template's field roles."],
@@ -452,31 +458,31 @@ KB_ENTRIES = [
      'kind': 'task', 'phase': 'build'},
     {'id': 'XF04',
      'steps': ['Agree with your designer which Figma frames move to Photoshop, and take them out of sections, which the conversion does not accept.',
-               'Convert the frames with the plugin and open them in GenStudio Photoshop, then check each layer against the Figma original.',
+               'Convert the frames with the plugin to Photoshop documents for use with GenStudio Photoshop, open them in Photoshop and check each layer against the Figma original.',
                'Rebuild with your designer what the conversion does not carry over, such as gradients, opacity percentages, strikethrough, superscript and subscript.'],
      'deliverables': ['Agreed list of frames to convert', 'Converted Photoshop documents', 'Rebuilt effects, checked by your designer'],
      'asks': ['A designer to choose the frames and approve each converted document'],
      'risk': 'Effects lost in the conversion, such as gradients or strikethrough: we check each document against its Figma frame and rebuild what is missing.',
-     'outcome': 'Your agreed Figma frames open as Photoshop documents in GenStudio Photoshop, checked and finished by your designer.',
+     'outcome': 'Your agreed Figma frames are Photoshop documents ready for GenStudio Photoshop, checked and finished by your designer.',
      'kind': 'task', 'phase': 'build'},
     {'id': 'XF05',
-     'steps': ['Check that your Adobe Express users who import can use the Figma add-on, and connect your designers\' Figma accounts.',
-               'Import the agreed frames with Native Import, or with Rasterize where a design must keep its exact appearance.',
+     'steps': ['Check that your Adobe Express users who import can use the Figma add-on, and connect the Figma account of each person who imports.',
+               'Import the agreed frames with Native Import, and rasterize individual elements where they must keep their appearance.',
                'Fix the fonts the import summary marks Font Not Available and the shapes that came in as images.',
-               'Build the first Adobe Express templates from the imported designs, and test them with your team.'],
-     'deliverables': ['Figma add-on ready for your users', 'Imported and corrected designs', 'First Adobe Express templates'],
+               'Check each corrected design with your designer and hand it over for your Adobe Express templates.'],
+     'deliverables': ['Figma add-on ready for your users', 'Imported and corrected designs', 'Import check for each design, signed off by your designer'],
      'asks': ['The Figma files and frames to bring into Adobe Express', 'A designer to agree which frames come in editable and which as images'],
-     'risk': 'Fonts or effects that change on import: we read the import summary for each frame and fix fonts and shapes before any template is built.',
-     'outcome': "Your team builds on your designers' Figma work in Adobe Express, from templates made from the imported designs.",
+     'risk': 'Fonts or effects that change on import: we read the import summary for each frame and fix fonts and shapes before the designs are handed over.',
+     'outcome': "Your designers' Figma work opens in Adobe Express as editable designs, with fonts and shapes corrected and ready to become templates.",
      'kind': 'task', 'phase': 'build'},
     {'id': 'XF06',
-     'steps': ['Share your published custom models with your Figma designers with the Generator permission, and check that each designer has the plugin and Firefly access.',
-               "Check with a designer from each team that each model shows in the plugin's Model menu and generates as expected on the Figma canvas.",
-               'Walk your designers through Text to image with the prompt guide for each model, and through placing the images in their frames.'],
-     'deliverables': ['Custom models shared with your Figma designers', 'Model check record', 'Designer walkthrough'],
-     'asks': ['The published models and the designers who should use each one'],
-     'risk': 'A model that does not show for a designer: we check each model with a designer from each team before handover.',
-     'outcome': "Your designers generate images with your custom models in Figma, in your brand's own style or product subject.",
+     'steps': ['Check that each of your Figma designers has the Firefly Enterprise and GenStudio plugin, Firefly access and the custom models they have created.',
+               'With each designer, pick their custom models in Text to image and generate images.',
+               'Walk your designers through placing the generated images on the Figma canvas, with the prompt guide for each model.'],
+     'deliverables': ['Plugin, access and model check for each designer', 'Test images generated with each model in Figma', 'Designer walkthrough'],
+     'asks': ['The Figma designers in scope and the custom models each one has created'],
+     'risk': "A designer who cannot generate with a model: we check the plugin sign-in, Firefly access and, on enterprise plans, the model's publishing before the walkthrough.",
+     'outcome': 'Your designers generate images in Figma with the custom models they have created, in the style or subject each model was trained on.',
      'kind': 'task', 'phase': 'launch'},
 ]
 KB_PHRASES = {
@@ -488,10 +494,10 @@ KB_PHRASES = {
              'map Figma layers to ad fields', 'translate ads in Figma', 'export Figma ads to GenStudio', 'designers build ads in Figma'],
     'XF04': ['convert Figma frames to Photoshop', 'Figma to Photoshop conversion', 'Figma designs into GenStudio Photoshop', 'move Figma files to Photoshop',
              'rebuild effects after conversion', 'PSD files from Figma frames', 'Photoshop documents from Figma designs'],
-    'XF05': ['import Figma designs into Adobe Express', 'Figma add-on for Adobe Express', 'Express templates from Figma designs', 'bring Figma frames into Express',
+    'XF05': ['import Figma designs into Adobe Express', 'Figma add-on for Adobe Express', 'Figma designs ready for Express templates', 'bring Figma frames into Express',
              'reuse Figma work in Express', 'editable Express designs from Figma', 'Figma to Express hand-off', 'fix fonts after a Figma import'],
     'XF06': ['custom models in Figma', 'Firefly custom models for Figma designers', 'brand-trained image generation in Figma', 'Firefly plugin for Figma',
-             'generate on-brand images in Figma', 'share custom models with designers', 'Text to image in Figma with custom models', 'brand style images on the Figma canvas'],
+             'generate on-brand images in Figma', 'designers generate with their own custom models', 'Text to image in Figma with custom models', 'brand style images on the Figma canvas'],
 }
 
 
@@ -551,8 +557,30 @@ def step_outside_more():
     done.append(p + ": OUTSIDE_MORE keeps figma on 'custom'")
 
 
+TIED_JS = r"""// Nov 17 2026: designers work in Figma, so an RFI names it in passing ('our designers create in Figma', 'files in Box, Figma and
+// Dropbox'). Figma counts as named only in a sentence that also names a product it connects to and ties the work to Figma: inside,
+// into, from, to or with Figma, in Figma after anything but a word for where people work ('variants in Figma', not 'work in Figma'),
+// a Figma plugin, canvas, template, design, frame or file, or a plugin for Figma; not as one of a list of tools ('Figma and
+// Photoshop'). Its name stays evidence for the services about it (nameW in match)
+const TIED={figma:/\b(?:inside|within|into|from|to|with)\s+(?:(?:the|their|our|your)\s+)?figma\b|(?<!\b(?:work|design|creat|liv|sit)\w*\s+)\bin\s+(?:(?:the|their|our|your)\s+)?figma\b|\bfigma(?:\s+(?!(?:for|and|or|to|in|on|with|of|at|by)\b)\w+)?\s+(?:plugins?|add-?ons?|connectors?|canvas|templates?|designs?|frames?|files?)\b|\b(?:plugins?|add-?ons?|connectors?)\s+(?:for|in)\s+figma\b/i};
+function tied(id,raw,h,hits){   // h: a name hit of the outside system id in raw
+  const at=h.a-1,stop=/[.?!](?=\s|$)|\n/g;let s=0,e=raw.length,m;
+  while((m=stop.exec(raw))){if(m.index<at)s=m.index+1;else{e=m.index;break;}}
+  const ends=new Set(C.filter(c=>(c.a===id||c.b===id)&&[...(c.lines||[]),...(c.more||[])].length).map(c=>c.a===id?c.b:c.a));
+  const listed=/^\s*(?:,|and\b|or\b|&)\s*[A-Z]/.test(raw.slice(h.b-1,e))||/\w\s*,\s*$/.test(raw.slice(s,at));
+  return !listed&&TIED[id].test(raw.slice(s,e))&&hits.some(x=>x.type==='name'&&!x.neg&&ends.has(x.pid)&&x.a-1>=s&&x.b-1<=e);
+}
+"""
+DETECT_ANCHOR = "  if(!named.cja&&['aa','mmeasure','mmm','ca'].some(id=>named[id]))delete topics.cja;\n"
+DETECT_JS = "  for(const id in TIED)if(named[id]&&!hits.some(h=>h.pid===id&&h.type==='name'&&!h.neg&&tied(id,String(text||''),h,hits)))delete named[id];   // Nov 17 2026: Figma in passing\n"
+NAMEW_OLD = "nameW=nameWords(via==='rfp'?adobe:d.named.filter(id=>prods.includes(id)))"
+NAMEW_NEW = "nameW=nameWords((via==='rfp'?adobe:d.named.filter(id=>prods.includes(id))).filter(id=>!TIED[id]))"
+
+
 def step_names():
-    """The RFI Builder names Figma when an RFI does, like the other outside systems' brand names (Snowflake, Salesforce)."""
+    """The RFI Builder names Figma, like the other outside systems' brand names (Snowflake, Salesforce), but only where a sentence
+    ties it to a product it connects to: an RFI that mentions Figma in passing keeps the drafts it had before (6a96c44 never named
+    Figma), and Figma's own name stays evidence for the services about it (AXD10, BN06, XK16 and the XF lines)."""
     p = 'rfp_answers.js'
     s = read(p)
     i = s.find('const NAMES={')
@@ -560,14 +588,42 @@ def step_names():
         fail(p, 'NAMES not found')
     j = s.find('};', i)
     if re.search(r"\n figma:\[", s[i:j]):
-        return done.append(p + ': NAMES already has figma')
-    m = re.search(r"\n cms:\[[^\]]*\]", s[i:j])
-    if not m:
-        fail(p, 'the cms entry of NAMES was not found')
-    at = i + m.end()
-    s = s[:at] + ",\n figma:['figma']" + s[at:]
+        done.append(p + ': NAMES already has figma')
+    else:
+        m = re.search(r"\n cms:\[[^\]]*\]", s[i:j])
+        if not m:
+            fail(p, 'the cms entry of NAMES was not found')
+        at = i + m.end()
+        s = s[:at] + ",\n figma:['figma']" + s[at:]
+        done.append(p + ": NAMES names figma")
+    if 'const TIED=' in s:
+        done.append(p + ': the TIED rule is already there')
+    else:
+        for anchor, what in (('function detectAll(text,scope){\n', 'detectAll'), (DETECT_ANCHOR, "detectAll's step 69 line"), (NAMEW_OLD, "match's nameW")):
+            if s.count(anchor) != 1:
+                fail(p, f'{what} was not found once')
+        s = s.replace('function detectAll(text,scope){\n', TIED_JS + 'function detectAll(text,scope){\n')
+        s = s.replace(DETECT_ANCHOR, DETECT_ANCHOR + DETECT_JS)
+        s = s.replace(NAMEW_OLD, NAMEW_NEW)
+        done.append(p + ': Figma named only where a sentence ties it to a product it connects to (TIED), and its name kept as evidence')
     write(p, s)
-    done.append(p + ": NAMES names figma")
+
+
+TAG_OLD = '#out-menu .it2 .ctag{max-width:260px}\n'
+TAG_NEW = ("/* Nov 17 2026: a tag that wraps keeps its words inside its corners (Figma's lists five products): round on one line, a rounded box on more */\n"
+           '#out-menu .it2 .ctag{max-width:260px;border-radius:12px}\n')
+
+
+def step_template():
+    """The pill shape (border-radius 999px) cut the words of a tag on two or more lines in the Add outside system menu."""
+    p = 'canvas/template.html'
+    s = read(p)
+    if TAG_NEW in s:
+        return done.append(p + ': the Add outside system tags already keep their words inside their corners')
+    if s.count(TAG_OLD) != 1:
+        fail(p, "the Add outside system menu's tag rule was not found once")
+    write(p, s.replace(TAG_OLD, TAG_NEW))
+    done.append(p + ': a tag that wraps in the Add outside system menu keeps its words inside its corners')
 
 
 def step_kb():
@@ -682,30 +738,38 @@ CANVAS_CHECKS = r"""
   // Nov 17 2026: Figma connects to AEM Assets, GenStudio for Performance Marketing, Adobe Express and Firefly Custom Models through the plugins
   // and the add-on Adobe documents (canvas/research/wave6_figma.json): native lines, Adobe's pages as links only, six services that start off
   { const FIG = {'figma-aemassets': ['aemassets', {XF01: [8, 16, 32], XF02: [8, 16, 32]}], 'figma-gspm': ['gspm', {XF03: [16, 32, 56], XF04: [8, 16, 32]}],
-      'figma-express': ['express', {XF05: [16, 24, 48]}], 'figma-fireflycm': ['fireflycm', {XF06: [8, 16, 24]}]};
+      'figma-express': ['express', {XF05: [8, 16, 32]}], 'figma-fireflycm': ['fireflycm', {XF06: [8, 16, 24]}]};
     const ADOBE_PAGE = /^https:\/\/(?:experienceleague|helpx)\.adobe\.com\//;
     const fc = Object.keys(FIG).map(id => CAT.connections.find(c => c.id === id) || {id, prereqs: [], flows: [], lines: [], more: []});
-    ok(fc.every(c => c.a === 'figma' && c.b === FIG[c.id][0] && c.kind === 'outside' && c.line === 'native' && c.label && c.how && c.availability === '' && c.prereqs.length >= 4 &&
+    ok(fc.every(c => c.a === 'figma' && c.b === FIG[c.id][0] && c.kind === 'outside' && c.line === 'native' && c.label && c.how && c.availability === '' && c.prereqs.length >= 3 &&
         c.gain && c.gain.title && c.gain.text && c.sowHow && c.sowGain && ADOBE_PAGE.test((c.source || {}).url) && c.flows.length && c.flows.every(f => ADOBE_PAGE.test(f.source.url)) &&
         (c.references || []).length && c.references.every(r => ADOBE_PAGE.test(r.url) && r.title) && !c.lines.length && c.more.join() === Object.keys(FIG[c.id][1]).join()),
       'Nov 17: Figma connects natively to AEM Assets, GenStudio for Performance Marketing, Adobe Express and Firefly Custom Models, each with how it works, what you get together, its prerequisites, Adobe pages and services that start off',
       JSON.stringify(fc.map(c => [c.id, c.kind, c.line, c.lines, c.more])));
     const xf = Object.values(FIG).flatMap(([, h]) => Object.entries(h));
     ok(xf.every(([id, h]) => { const l = CAT.lines[id]; return !!l && l.origin === 'research' && l.unit === 'one-time' && !!l.scope && ADOBE_PAGE.test(l.url) && [l.low, l.base, l.high].join() === h.join(); }) &&
-        CAT.lines.XF04.ext === 'GenStudio Photoshop in Photoshop 25.6.0 or later',
+        CAT.lines.XF04.ext === 'GenStudio Photoshop from Adobe Exchange, in Photoshop 25.6.0 or later',
       'Nov 17: XF01 to XF06 carry their scope, Adobe page and hours, and the Photoshop conversion says it also needs GenStudio Photoshop',
       xf.map(([id]) => id + ' ' + (CAT.lines[id] ? [CAT.lines[id].low, CAT.lines[id].base, CAT.lines[id].high].join('/') : 'missing')).join(', '));
     const shown = fc.flatMap(c => [c.label, c.how, ...c.prereqs, c.gain && c.gain.title, c.gain && c.gain.text, ...c.flows.map(f => f.what)])
       .concat(xf.flatMap(([id]) => [(CAT.lines[id] || {}).name, (CAT.lines[id] || {}).scope, (CAT.lines[id] || {}).ext].filter(x => x !== undefined)));
     const hedge = t => typeof t !== 'string' || /confirm|not stated|\bbeta\b|limited availability|coming soon|recommended approach|account (?:team|manager)|in writing|\bthe client\b|\bclients\b/i.test(t) || /\b[Yy]our\b(?! client)/.test(t);
     ok(!shown.some(hedge), 'Nov 17: the Figma cards and services ask nothing of Adobe, carry no availability caveat and speak to the partner about "your client"', shown.find(hedge));
+    // Adobe's Figma page documents custom models the designer has created, not models shared with them; one plugin carries one name;
+    // each card says how it works in three sentences at most; GenStudio Photoshop is XF04's own note, not a prerequisite of the card
+    const cm = fc[3], said = c => [c.label, c.how, ...c.prereqs, c.gain && c.gain.text, ...c.flows.map(f => f.what), c.sowHow, c.sowGain].join(' ');
+    ok(/created/.test(cm.how) && /created/.test(cm.label) && !/\bshar|Generator/i.test(said(cm) + ' ' + (CAT.lines.XF06 || {}).scope) && [fc[1], cm].every(c => /Firefly Enterprise and GenStudio plugin/.test(c.label)) &&
+        fc.every(c => c.how.split(/(?<=\.)\s+/).length <= 3) && !fc[1].prereqs.some(x => /Photoshop/.test(x)),
+      'Nov 17: Figma + Firefly Custom Models promises only the custom models a designer has created, both plugin cards name the Firefly Enterprise and GenStudio plugin, each card says how it works in three sentences at most, and GenStudio Photoshop stays the conversion service\'s own note',
+      JSON.stringify([cm.label, fc.map(c => c.how.split(/(?<=\.)\s+/).length), fc[1].prereqs.filter(x => /Photoshop/.test(x))]));
     // on Create your own play: Figma beside the four products, its four lines, and the total unchanged until a service is chosen
     const q = await fresh(); await q.goto(CANVAS); await choose(q, 'custom');
     for (const id of ['aemassets', 'gspm', 'express', 'fireflycm']) await addP(q, id);
     await outside(q); const t0 = await read(q);
     await q.click('#out-btn'); await q.waitForTimeout(200);
-    const tag = await q.$eval('#out-menu [data-out="figma"] .ctag', e => e.textContent).catch(() => 'no Figma item');
-    ok(tag === 'Connects to AEM Assets, GenStudio for Performance Marketing, Adobe Express and Firefly Custom Models', 'Nov 17: Add outside system offers Figma for the four products on the canvas', tag);
+    const tag = await q.$eval('#out-menu [data-out="figma"] .ctag', e => ({t: e.textContent, r: getComputedStyle(e).borderTopLeftRadius, h: Math.round(e.getBoundingClientRect().height)})).catch(() => ({t: 'no Figma item'}));
+    ok(tag.t === 'Connects to AEM Assets, GenStudio for Performance Marketing, Adobe Express and Firefly Custom Models' && tag.r === '12px' && tag.h > 30,
+      'Nov 17: Add outside system offers Figma for the four products on the canvas, and its tag, on several lines, keeps its words inside its rounded corners', JSON.stringify(tag));
     await q.click('#out-menu [data-out="figma"]'); await q.waitForTimeout(500); await away(q);
     const drawn = await edges(q), t1 = await read(q);
     ok(Object.keys(FIG).every(id => drawn.includes(id)) && t1.big === t0.big && t1.sub === t0.sub, 'Nov 17: adding Figma draws its four lines, and the total stays as it was: every Figma service starts off',
@@ -732,8 +796,9 @@ STEP64_CHECKS = r"""
     await q.click('#save'); await q.waitForURL('**/sow/index.html#scope', {timeout: 60000}); await q.waitForTimeout(700);
     const xf3 = await q.evaluate(() => { const l = selectedLines().find(x => x.id.replace(/^CANVAS-/, '') === 'XF03'); return l ? {name: l.name, hours: l.hours, assumptions: String(l.assumptions || ''), refs: CapabilityReferences.forClient(l).map(r => r.url), outside: (state.outside || {}).custom || []} : null; });
     ok(!!xf3 && xf3.name === 'Figma ad templates prepared for the GenStudio plugin' && xf3.hours === 32 && xf3.outside.includes('figma') && /Prerequisites for Figma \+ GenStudio for Performance Marketing: /.test(xf3.assumptions) &&
-        xf3.refs.includes('https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/integrations/figma-plugin') && !/confirm|not stated|recommended approach/i.test(xf3.assumptions),
-      'Nov 17: Figma ad templates prepared for the GenStudio plugin, chosen on the canvas, reaches the statement of work with its 32 hours, its prerequisites and Adobe\'s page, and Figma stays on the play', JSON.stringify(xf3));
+        xf3.refs.includes('https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/integrations/figma-plugin') && !/confirm|not stated|recommended approach/i.test(xf3.assumptions) &&
+        !/Photoshop 25\.6\.0/.test(xf3.assumptions),
+      'Nov 17: Figma ad templates prepared for the GenStudio plugin, chosen on the canvas, reaches the statement of work with its 32 hours, its prerequisites (GenStudio Photoshop stays the conversion service\'s note) and Adobe\'s page, and Figma stays on the play', JSON.stringify(xf3));
     const [draft] = await Promise.all([q.waitForEvent('download'), q.click('#save-draft')]);
     const d = await fresh(); await d.goto(BASE + 'sow/'); await d.waitForTimeout(600);
     await d.setInputFiles('#draft-file', await draft.path()); await d.waitForTimeout(1000);
@@ -745,17 +810,30 @@ STEP64_CHECKS = r"""
 
 
 RFI_CHECKS = r"""
-  // Nov 17 2026: the RFI Builder names Figma (NAMES in rfp_answers.js), so a question that names Figma with AEM Assets, GenStudio for
-  // Performance Marketing or Adobe Express is answered from that Figma connection's own services
+  // Nov 17 2026: the RFI Builder names Figma (NAMES in rfp_answers.js) where a sentence ties it to a product it connects to (TIED), so a
+  // question that names Figma with AEM Assets, GenStudio for Performance Marketing or Adobe Express is answered from that Figma connection's own services
   const r4 = await h.text('1. Describe how our designers would use images from AEM Assets inside Figma and save their finished designs back to AEM Assets.\n' +
     '2. How would you set up Adobe GenStudio for Performance Marketing so our designers can generate ad variations in their Figma templates?\n' +
-    '3. Our designers work in Figma. How would you bring their designs into Adobe Express templates for the wider team?');
+    '3. How would you bring our designers\' Figma designs into Adobe Express templates for the wider team?');
   const fg = r4.questions.map(q => ({conn: q.draft ? q.draft.conn : null, lines: q.draft ? q.draft.lines.map(x => x.id) : [], plain: q.draft ? q.draft.plain : ''}));
   ok(fg.length === 3 && fg[0].conn === 'figma+aemassets' && fg[0].lines.some(l => /^XF0[12]$/.test(l)) && fg[0].plain.includes('on the Figma canvas') &&
     fg[1].conn === 'figma+gspm' && fg[1].lines[0] === 'XF03' && fg[2].conn === 'figma+express' && fg[2].lines[0] === 'XF05' &&
     fg.every(x => !/your client|the partner/i.test(x.plain) && !LABELS.test(x.plain)),
     'Nov 17: a question that names Figma with AEM Assets, GenStudio for Performance Marketing or Adobe Express is answered from that Figma connection\'s own services',
     JSON.stringify(fg.map(x => [x.conn, x.lines.slice(0, 3)])));
+  // ... and a question that mentions Figma in passing keeps the drafts it had before Figma connected to these products: the product's own
+  // services, no Figma line, and no Figma box sent to Build
+  const r5 = await h.text('1. Describe your approach to rolling out Adobe Express to our marketing teams. Our designers create the master layouts in Figma.\n' +
+    '2. Describe how you would implement Adobe GenStudio for Performance Marketing for our paid social team. Our creative team builds the ads in Figma.\n' +
+    '3. Describe how you would migrate our assets into AEM Assets from Box, Figma, Dropbox and shared drives.\n' +
+    '4. Describe how you would set up Firefly Custom Models for our brand. Our designers work in Figma.\n' +
+    '5. How would Coworker help our authors import Figma designs into AEM Sites?\n' +
+    '6. Describe how you would set up Workfront for the creative team. We plan campaigns in Workfront and design in Figma.');
+  const ps = r5.questions.map(q => ({conn: q.draft ? q.draft.conn || '' : '', products: q.draft ? q.draft.products.map(x => x.id) : [], lines: q.draft ? q.draft.lines.map(x => x.id) : []}));
+  const kept = [['EP01', 'EP02', 'EP03', 'EP04'], ['GS04', 'GS05'], ['AS02', 'AS03'], ['FM01', 'FM02', 'FM03'], ['AXD10'], ['WF01']];
+  ok(ps.length === 6 && ps.every((x, i) => kept[i].every(l => x.lines.includes(l)) && !x.products.includes('figma') && !/figma/.test(x.conn) && !x.lines.some(l => /^XF/.test(l))),
+    'Nov 17: a question that mentions Figma in passing (Express, GenStudio, an AEM Assets migration, Custom Models, Coworker\'s Figma import, Workfront) keeps the product\'s own services, with no Figma line or box',
+    JSON.stringify(ps));
 """
 
 def step_checks():
@@ -828,9 +906,9 @@ README_TITLE = '## Figma connects to AEM Assets, GenStudio for Performance Marke
 def readme_section(n_conn, n_lines, batch):
     return f"""{README_TITLE}
 
-Figma, the outside system added for Brand Intelligence on November 16, connects to four more products, each through a plugin or add-on Adobe documents, drawn as native lines like Figma + Brand Intelligence and Adobe Asset Link: **AEM Assets** (Adobe's AEM Assets Connector places AEM Assets files on the Figma canvas and saves designs back), **GenStudio for Performance Marketing** (Adobe's GenStudio plugin, which opens in Figma as the Firefly Enterprise and GenStudio plugin, generates on-brand ad variations in Figma templates and exports them to GenStudio; the card is for clients whose designers already work in Figma), **Adobe Express** (the Figma add-on in Express imports Figma pages, frames or layers) and **Firefly Custom Models** (custom models are picked in Text to image in the Firefly Enterprise and GenStudio plugin). Every quote behind the cards was checked word for word on Experience League and Adobe Help on November 17, and the cards show those pages as links only. Following the owner's November 12 rule (step 86), nothing on them asks the partner to confirm anything with Adobe. No Adobe page read names who publishes the Figma add-on in Express.
+Figma, the outside system added for Brand Intelligence on November 16, connects to four more products, each through a plugin or add-on Adobe documents, drawn as native lines like Figma + Brand Intelligence and Adobe Asset Link: **AEM Assets** (Adobe's AEM Assets Connector places AEM Assets files on the Figma canvas and saves designs back), **GenStudio for Performance Marketing** (Adobe's Firefly Enterprise and GenStudio plugin generates on-brand ad variations in Figma templates and exports them to GenStudio for Performance Marketing; the card is for clients whose designers already work in Figma), **Adobe Express** (the Figma add-on in Express imports Figma pages, frames or layers) and **Firefly Custom Models** (the same plugin generates images with the custom models a designer has created, the route Adobe's Figma page documents; models shared with a designer are not on the card). Every quote behind the cards was checked word for word on Experience League and Adobe Help on November 17, and the cards show those pages as links only. Following the owner's November 12 rule (step 86), nothing on them asks the partner to confirm anything with Adobe. No Adobe page read names who publishes the Figma add-on in Express.
 
-Six optional services start off, like XK16, so a canvas saved before them reopens with the same services and totals: XF01 AEM Assets Connector rollout for Figma designers and XF02 Save-back folders and export settings for Figma designs (8 / 16 / 32 hours each), XF03 Figma ad templates prepared for the GenStudio plugin (16 / 32 / 56), XF04 Figma frames converted for GenStudio Photoshop (8 / 16 / 32; it also needs GenStudio Photoshop in Photoshop 25.6.0 or later), XF05 Figma designs turned into Express templates (16 / 24 / 48) and XF06 Custom models for Figma designers (8 / 16 / 24). Each keeps its own deliverable beside the services it touches (AS01, AS02, XJ03, GS03, XJ10, EP03, FM03 to FM05, XK09, XK10); `canvas/research/wave6_figma.json` says how, with the quotes. The rest of the data is in `canvas/research/connection_types.json`, `product_copy_rules.json` (the client's version and the supporting pages) and the RFI write-ups in `rfp_prototype/kb_method` (batch {batch}). The statement of work keeps Figma on Create your own play (`OUTSIDE_MORE` in `index.html`), so a draft saved there and opened again brings Figma back with its chosen services (before, it came back without Figma, and the next save dropped XK16), and the RFI Builder names Figma when an RFI does (`NAMES` in `rfp_answers.js`). The catalog is {n_conn} connections and {n_lines} services; the counts move in `qa/check_product_copy.py`, `canvas/test_canvas.js` and `test_step61`, `62`, `64`, `66`, `71`, `85` and `91`. `canvas/test_canvas.js` checks the four connections and Figma on a canvas, and `test_step64.js` checks that a Figma service reaches the statement of work and comes back from a saved draft, and that the RFI Builder answers a question about Figma from the Figma services.
+Six optional services start off, like XK16, so a canvas saved before them reopens with the same services and totals: XF01 AEM Assets Connector rollout for Figma designers and XF02 Save-back folders and export settings for Figma designs (8 / 16 / 32 hours each), XF03 Figma ad templates prepared for the GenStudio plugin (16 / 32 / 56), XF04 Figma frames converted for GenStudio Photoshop (8 / 16 / 32; it also needs GenStudio Photoshop from Adobe Exchange, in Photoshop 25.6.0 or later, which is the service's own note and not a prerequisite of the card), XF05 Figma designs imported into Adobe Express (8 / 16 / 32; it hands the corrected designs over, and shared templates with locked elements stay EP03) and XF06 Custom models for Figma designers (8 / 16 / 24). Each keeps its own deliverable beside the services it touches (AS01, AS02, XJ03, GS03, XJ10, EP03, FM02 to FM05, XK09, XK10); `canvas/research/wave6_figma.json` says how, with the quotes. The rest of the data is in `canvas/research/connection_types.json`, `product_copy_rules.json` (the client's version and the supporting pages) and the RFI write-ups in `rfp_prototype/kb_method` (batch {batch}). The statement of work keeps Figma on Create your own play (`OUTSIDE_MORE` in `index.html`), so a draft saved there and opened again brings Figma back with its chosen services (before, it came back without Figma, and the next save dropped XK16), and the RFI Builder names Figma only where a sentence ties it to a product it connects to, such as "AEM Assets inside Figma" (`NAMES` and `TIED` in `rfp_answers.js`): a question that mentions Figma in passing, such as "our designers work in Figma", keeps the product's own services. A tag that wraps in the Add outside system menu keeps its words inside its corners (`canvas/template.html`). The catalog is {n_conn} connections and {n_lines} services; the counts move in `qa/check_product_copy.py`, `canvas/test_canvas.js` and `test_step61`, `62`, `64`, `66`, `71`, `85` and `91`. `canvas/test_canvas.js` checks the four connections and Figma on a canvas, and `test_step64.js` checks that a Figma service reaches the statement of work and comes back from a saved draft, that the RFI Builder answers a question about Figma with a product from the Figma services, and that six questions that mention Figma in passing keep the product's own services.
 
 """
 
@@ -868,6 +946,7 @@ def main():
     step_copy()
     step_outside_more()
     step_names()
+    step_template()
     step_kb()
     step_counts()
     step_filters()
