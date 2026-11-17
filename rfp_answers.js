@@ -505,7 +505,7 @@ function capLinks(text,prods){const out=[];if(SECURITY.test(text)||!prods.length
    sow/rfp_facts.json, built by sow/rfp_prototype/part3_research/build_facts.py from sentences each backed by a quote checked on
    Adobe's public pages. A hosting, security, sign-in, uptime, privacy or licensing question gets those sentences for the products
    it names, or, when it names none, for the products the RFP's other answers draw on; each sentence carries its numbered Adobe
-   source. Where Adobe's pages disagree or say nothing, the product goes to Confirm with Adobe, never into the response. Licensing
+   source. Where Adobe's pages disagree or say nothing, the product goes to the partner's note (Ask Adobe or Good to know), never into the response. Licensing
    terms (editions, how a product is metered) stay in the partner's note; only "needs its own license" sentences reach the client. */
 const KB=typeof RFP_FACTS!=='undefined'?RFP_FACTS:null;
 const KB_TOPICS=[
@@ -653,7 +653,7 @@ const LICENSE=/\b(?:licen[cs]es?|offering|entitlements?|editions?|packages?|add-
 const ADOBE_PERFORMS=/\b(?:provisioned|configured|enabled|set up|issued|activated|switched on|turned on) by Adobe\b|\bAdobe(?:'s)? (?:support|onboarding|professional services|engineering) team\b|\bAdobe's (?:support|onboarding|professional services)\b|\bAdobe Support\b|\bAdobe onboarding\b|\bCustomer Care\b|\bAdobe (?:enabling|enables|turns on|has turned on|to enable|has to enable|must enable)\b|\bAdobe(?: \w+){0,3} has enabled\b/i;
 // what only Adobe can confirm: a route Adobe does not document, Adobe's own statement, a written confirmation, the CSM or TAM
 const ADOBE_DOES=/\b(?:by Adobe\b|confirm(?:ed|s)?(?: [\w'-]+){0,9} with Adobe|Adobe confirms|Adobe does not document|which Adobe does not|not document(?:ed)?\b|does not say\b|Adobe says|Adobe states|Adobe marks|Adobe's direction|co-innovation|One Adobe lab|AEM Engineering|Adobe enablement is|written confirmation from Adobe|Adobe's written confirmation|written Adobe confirmation|\bCSM\b|\bTAM\b|Try Before You Buy)/i;
-const ASK_ADOBE=/\bconfirm(?:ed|s)?(?: [\w'-]+){0,9} with Adobe\b|\bconfirm with the CSM\b|\bwith the CSM or TAM\b/i;   // an instruction to ask Adobe, wherever it sits in the sentence
+const ASK_ADOBE=/\bconfirm(?:ed|s)?(?: [\w'-]+){0,9} with Adobe\b|\basks? Adobe\b(?!['’]s| data\b| (?:Analytics|Commerce|Express)\b)|\bconfirm with the CSM\b|\bwith the CSM or TAM\b/i;   // an instruction to ask Adobe, in the new words or the old, wherever it sits in the sentence; "ask Adobe's ...", "ask Adobe data questions" and "ask Adobe Analytics ..." (or Adobe Commerce, Adobe Express: the products this catalog names with Adobe in front) are a product in use, not one
 // a statement of scope or exclusion, not something to ask the client for
 const ASSUMPTION=/\btraining scope\b|\bnot an? (?:software|Adobe|seat) (?:seat )?limit\b|\bnot supported\b|\bstays? unchanged\b|\bboundary\b|\bdoes not list\b|\bis reused\b|\b(?:is|are) measured with\b|\bno native\b|\bno pre-built\b|\bnot acceptance requirements\b|\bisn't charged again\b|\bnot charged again\b|\bcannot change after\b|\breports? to one source only\b|\bis (?:a |an )?(?:separate|separately) \w+ work\b|\bwould be separate work\b|\bis out of scope\b|\bare out of scope\b|\bonly where\b.*\bis confirmed\b|\bno (?:[a-z]+ )?connector is assumed\b|\bis included here once\b|\b(?:is|are) built and tested\b|\bpermissions apply\b|\bactions are supported\b|\bThis is (?:a |an |our )?(?:partner )?(?:test|pilot) method\b|\bcovers only eligible\b|\bis priced once\b|^(?:The partner and the Client|the Client and the partner|we and you|you and we)\b|\bPartner-built\b|\bscope a partner-run\b|\bIf that capability is unavailable\b|\bcannot be enabled\b|\bis the service scope\b|\bis the one monthly\b|\bfits within\b/i;
 // a statement about how a product or the service behaves ("Scheduled refresh on 75 to 150 audiences, depending on the CJA entitlement")
@@ -686,7 +686,7 @@ function noteItems(m,owned){
     const about=detect(core).filter(id=>inAnswer.includes(id)),license=()=>push(about.some(id=>owned.has(id))?asks:sells,n);   // a license the RFP says the client runs is confirmed with the client, not sold or assumed; the product in a parenthetical aside ("CJA's page requires it") is not the one licensed
     if(ASSUMPTION.test(first))return push(assumptions,n);
     if(CLIENT_DOES.test(core))return push(asks,n);
-    if(ASK_ADOBE.test(n)||(cv&&ASK_ADOBE.test(cv)))return push(confirm,n);                       // "confirm with Adobe", in the partner's or the SOW's words
+    if(ASK_ADOBE.test(n)||(cv&&ASK_ADOBE.test(cv)))return push(confirm,n);                       // "ask Adobe" or "confirm with Adobe", in the partner's or the SOW's words
     if(STATEMENT_START.test(core)||STATEMENT_STRONG.test(first))return push(assumptions,n);
     if(licenseAt(core,6)&&/^(?:[A-Z]|an? |the )/.test(first)&&!ADOBE_PERFORMS.test(first))return license();
     if(ADOBE_DOES.test(core)||(cv&&ADOBE_DOES.test(cv)))return push(confirm,n);
@@ -703,7 +703,7 @@ function noteItems(m,owned){
   for(const c of conns){
     const pre=c.prereqs||[],sowPre=c.sowPrereqs||[];
     for(const p of pre){const cv=closest(p,sowPre);for(const x of pieces(p,false)){const before=asks.length;place(x,cv,false);if(asks.length>before&&cv&&x===p)clientAsks[p]=cv;}}
-    // the caution the client-voice text leaves out: under Confirm with Adobe when it is about Adobe, else a line of its own
+    // the caution the client-voice text leaves out: with the notes about Adobe when it is about Adobe, else a line of its own
     if(c.sowNote&&!confirm.some(x=>similar(x,c.sowNote)>=0.85)){if(ADOBE_DOES.test(c.sowNote)||/\bAdobe\b/.test(c.sowNote))push(confirm,c.sowNote);else push(notes,c.sowNote);}
     const avail=c.sowAvailability||c.availability;if(avail)push(assumptions,'Availability'+(conns.length>1?' of '+P[c.a].name+' + '+P[c.b].name:'')+': '+String(avail).replace(/\.?$/,'.'));
   }
@@ -768,8 +768,8 @@ function ownedProducts(){
       if(OWNS.test(before)||(/\b(?:an?|existing)\s+(?:adobe\s+)?$/i.test(before)&&OWNS_AFTER.test(after))){const both=x=>s.add(x);both(h.pid);
         for(let j=k+1;j<hits.length;j++){const gap=raw.slice(hits[j-1].b-1,hits[j].a-1);if(/^\s*(?:,|and|,\s*and|or)\s*(?:adobe\s+)?$/i.test(gap))both(hits[j].pid);else break;}}}}   // "we already license Brand Visibility and Customer Journey Analytics": both
   rfpState.owned=s;return s;}
-// the partner's own note under the draft, in four lists (step 54): licenses, asks with tick boxes, confirm with Adobe,
-// assumptions. Nothing in it reaches the downloads except what the partner ticks or types.
+// the partner's own note under the draft, in its lists (step 54): licenses, asks with tick boxes, the notes about Adobe
+// (Ask Adobe, then Good to know), assumptions. Nothing in it reaches the downloads except what the partner ticks or types.
 // The note distinguishes the client deliverables from the partner's checklist.
 // It changes with the question's state: skipped, edited, or live (finding 6.6).
 function internalLine(q,asks){const base='Internal. Nothing in this box goes into the proposal or your client\'s workbook';
@@ -793,20 +793,24 @@ function extraLines(d){const out=[];
   for(const x of (d.notes||[]))out.push('Not in the client\'s text: '+partnerVoice(x));   // the label stays as it is; the caution itself speaks to the partner
   if(d.uncovered&&d.m&&d.m.lines.length)out.push('Not in this catalog: '+listOf(d.uncovered)+'. Check Adobe\'s pages before you answer for '+(d.uncovered.length>1?'them':'it')+'.');
   return out;}
-function confirmLines(d){const c=[...(d.confirm||[])];if(d.m&&d.m.missing&&d.m.missing.length)c.push('This catalog documents no connection between '+d.m.missing.join(', or between ')+'. Say how they work together in your own words, or confirm it with Adobe.');return c;}
+function confirmLines(d){const c=[...(d.confirm||[])];if(d.m&&d.m.missing&&d.m.missing.length)c.push('This catalog documents no connection between '+d.m.missing.join(', or between ')+'. Say how they work together in your own words, or ask Adobe.');return c;}
+// Nov 17 2026 (Adam: "Ask Adobe, confirm with Adobe, it's the same thing. Maybe we get consistent on it."): the notes about Adobe in two lists,
+// the ones that tell the partner to ask Adobe (ASK_ADOBE, so the old words count too), then the rest. Each keeps its order, and a list with no notes is left out.
+function confirmLists(d){const all=confirmLines(d),ask=x=>ASK_ADOBE.test(x);
+  return [['Ask Adobe',all.filter(ask),'rfp-confirm'],['Good to know',all.filter(x=>!ask(x)),'rfp-know']].filter(l=>l[1].length);}
 function asksLead(q){if(q&&q.status==='skipped')return 'Ask your client. While the question is left out, ticks and notes go into your checklist only.';
   if(q&&q.answer)return 'Ask your client. While the answer is edited, ticks and notes go into your checklist only.';
   return 'Ask your client. Ticked items go into the response as "What we would need from you". Type what your client told you and the item moves to "What you already have in place".';}
 function noteHTML(d,q){
   if(!d)return '';
-  const extra=extraLines(d),confirm=confirmLines(d),asks=d.asks||[],sells=d.sells||[],assumptions=d.assumptions||[],lines=d.m&&d.m.lines?d.m.lines.filter(id=>LN[id]):[];
+  const extra=extraLines(d),confirm=confirmLists(d),asks=d.asks||[],sells=d.sells||[],assumptions=d.assumptions||[],lines=d.m&&d.m.lines?d.m.lines.filter(id=>LN[id]):[];
   if(!sells.length&&!asks.length&&!confirm.length&&!assumptions.length&&!extra.length&&!lines.length)return '';
   return '<div class="rfp-partner-note"><h4>Notes for you, not for the client</h4><p class="rfp-internal">'+esc(internalLine(q,asks))+'</p>'+
     extra.map(x=>'<p>'+esc(x)+'</p>').join('')+
     (sells.length?'<p>Adobe licenses this proposal includes (Adobe quotes them):</p><ul class="rfp-sells">'+sells.map(x=>'<li>'+esc(partnerVoice(x))+'</li>').join('')+'</ul>':'')+
     (asks.length?'<p>'+esc(asksLead(q))+'</p><ul class="rfp-asks">'+
       asks.map((x,i)=>'<li><label><input type="checkbox" class="rfp-tick" data-i="'+i+'"'+(ticked(q,d,i)&&!factOf(q,d,i)?' checked':'')+(factOf(q,d,i)?' disabled':'')+'><span>'+esc(partnerVoice(x))+' '+badgeHTML(q,d,i)+'</span></label><textarea class="rfp-fact" data-i="'+i+'" rows="2" placeholder="What your client told you" aria-label="What your client told you about: '+esc(partnerVoice(x))+'">'+esc(factOf(q,d,i))+'</textarea></li>').join('')+'</ul>':'')+
-    (confirm.length?'<p>Confirm with Adobe:</p><ul class="rfp-confirm">'+confirm.map(x=>'<li>'+esc(partnerVoice(x))+'</li>').join('')+'</ul>':'')+
+    confirm.map(([head,items,cls])=>'<p>'+head+':</p><ul class="'+cls+'">'+items.map(x=>'<li>'+esc(partnerVoice(x))+'</li>').join('')+'</ul>').join('')+
     (assumptions.length?'<p>Assumptions behind this answer:</p><ul class="rfp-assume">'+assumptions.map(x=>'<li>'+esc(partnerVoice(x))+'</li>').join('')+'</ul>':'')+
     (lines.length?'<p>Services behind this answer, for the statement of work. Untick one to leave it out of Add to my statement of work; the response is unchanged.</p><ul class="rfp-lines">'+lines.map(id=>'<li><label><input type="checkbox" class="rfp-line" data-id="'+esc(id)+'"'+(q&&q.lines&&q.lines[id]===false?'':' checked')+'><span>'+esc(LN[id].name)+(LN[id].unit==='monthly'?' (monthly)':'')+'</span></label></li>').join('')+'</ul>':'')+'</div>';
 }
@@ -1524,7 +1528,7 @@ function checklistRows(){
       const item=partnerVoice(ask)+(fact?' Your client says: '+fact:'');
       add('Ask your client',item,yes);
     }
-    for(const [type,items] of [['License',d.sells],['Confirm with Adobe',confirmLines(d)],['Assumption',d.assumptions]]){
+    for(const [type,items] of [['License',d.sells],...confirmLists(d),['Assumption',d.assumptions]]){
       for(const item of items||[]){
         const safe=scopeText(item,q);
         if(safe)add(type,partnerVoice(safe),contains(clientScrub(rfp(safe))));

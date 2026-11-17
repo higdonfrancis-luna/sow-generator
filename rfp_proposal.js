@@ -9,7 +9,7 @@
    Exposes window.RFPProposal. */
 (function(){
 const R=window.RFPBuilder,A=window.RFPAnswers,S=R.state,$r=id=>document.getElementById(id);
-const BANNED=/\bbeta\b|early access|coming soon|limited availability|Adobe Consulting Services|[$€£]\s?\d|\bconfirm(?:ed)? (?:\w+ ){0,4}with Adobe\b|\bnot stated by Adobe\b|\b(?:obtain|get|secure|seek)\b[^.?!]{0,80}\bfrom Adobe\b|\bAdobe['\u2019]s written\b|\bin writing from Adobe\b|\bfrom Adobe in writing\b|\b(?:check|verify|validate|confirm)(?:ed|s|ing)?\b[^.?!]{0,60}\b(?:with|by) Adobe\b(?!\s+[A-Z])|\b(?:pending|subject to|awaiting)\b[^.?!]{0,30}\bAdobe['\u2019]?s? (?:confirmation|approval|sign-?off)\b/i;   // step 89: and any sentence that defers a point to Adobe
+const BANNED=/\bbeta\b|early access|coming soon|limited availability|Adobe Consulting Services|[$€£]\s?\d|\bconfirm(?:ed)? (?:\w+ ){0,4}with Adobe\b|\basks? Adobe\b(?!['’]s| data\b| (?:Analytics|Commerce|Express)\b)|\bnot stated by Adobe\b|\b(?:obtain|get|secure|seek)\b[^.?!]{0,80}\bfrom Adobe\b|\bAdobe['\u2019]s written\b|\bin writing from Adobe\b|\bfrom Adobe in writing\b|\b(?:check|verify|validate|confirm)(?:ed|s|ing)?\b[^.?!]{0,60}\b(?:with|by) Adobe\b(?!\s+[A-Z])|\b(?:pending|subject to|awaiting)\b[^.?!]{0,30}\bAdobe['\u2019]?s? (?:confirmation|approval|sign-?off)\b/i;   // step 89: and any sentence that defers a point to Adobe
 let NAMES={};
 const DOCX='application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 

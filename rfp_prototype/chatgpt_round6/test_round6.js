@@ -189,7 +189,7 @@ async function checklistAndWord(h) {
   const [header,...rows] = book['My checklist'];
   assert.deepEqual(header,['Ref','Question','Type','Item','In the response','Done']);
   assert.ok(rows.length && rows.every(([ref,question,type,item,inResponse,done]) => ref && question &&
-    ['License','Ask your client','Confirm with Adobe','Assumption'].includes(type) &&
+    ['License','Ask your client','Ask Adobe','Good to know','Assumption'].includes(type) &&
     typeof item === 'string' && item.trim().length > 4 && ['Yes','No'].includes(inResponse) && !done));
   const firstQuestion = rows.findIndex(r => r[0] !== 'All');
   assert.ok(firstQuestion > 0);
@@ -397,7 +397,7 @@ async function review6b6(h) {
     'The original downloaded Word copy passes all three screeners');
   const phrases = {
     clientVoice: ['your client','the Client'],
-    partnerNote: ['Notes for you','Ask your client','Adobe licenses this proposal','Confirm with Adobe','Assumptions behind','Internal.'],
+    partnerNote: ['Notes for you','Ask your client','Adobe licenses this proposal','Confirm with Adobe','Ask Adobe','Good to know','Assumptions behind','Internal.'],
     internalStatus: ['Drafted by the partner','not yet reviewed','Skipped by the partner','No catalog match']
   };
   for (const [field, values] of Object.entries(phrases)) {

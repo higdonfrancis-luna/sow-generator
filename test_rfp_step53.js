@@ -14,12 +14,12 @@ const FIX = __dirname + '/qa/rfp_fixtures';
 let fails = 0;
 const ok = (c, m, d = '') => { console.log((c ? '✅ ' : '❌ ') + m + (c || !d ? '' : '  [' + String(d).slice(0, 500) + ']')); if (!c) fails++; };
 // what a client must never read in a drafted response
-// ("we confirm the route with Adobe before this work starts" is a statement the client may read; an instruction to confirm is not)
-const LABELS = /\blegacy\b|maintenance mode|co-innovation|limited number of customers|not currently (?:offered|available)|current scope|pilot item|\bAdobe says\b|(?<!\b(?:[Ww]e|is|are|be|been|was|were) )\bconfirm(?:s|ed|ing)?\b(?: [a-z']+){0,9} with Adobe|\bconfirm it\b|(?:^|[.;:!?] )Confirm\b|confirm(?:ed)? for your|prove it|is a design to prove|measure the implementation|\bbeta\b|\bon the canvas\b|\bthe SOW\b|priced once|More services/i;
+// ("we confirm the route with Adobe before this work starts" is a statement the client may read; an instruction to confirm is not, and "ask Adobe" never is)
+const LABELS = /\blegacy\b|maintenance mode|co-innovation|limited number of customers|not currently (?:offered|available)|current scope|pilot item|\bAdobe says\b|(?<!\b(?:[Ww]e|is|are|be|been|was|were) )\bconfirm(?:s|ed|ing)?\b(?: [a-z']+){0,9} with Adobe|\basks? Adobe\b(?!['’]s| data\b| (?:Analytics|Commerce|Express)\b)|\bconfirm it\b|(?:^|[.;:!?] )Confirm\b|confirm(?:ed)? for your|prove it|is a design to prove|measure the implementation|\bbeta\b|\bon the canvas\b|\bthe SOW\b|priced once|More services/i;
 const PARTNER = /\bthe Client\b(?! ID| Secret)|\bClient's\b|\byour client\b|\bthe partner\b|\bpartner-|\bpartner validation|\bA our\b|\ba our\b|Client authorization|Client-provided|\bwe (?:does|authorizes|authors|has|is)\b|\byou (?:does|authorizes|authors|has|is)\b/;
 const BROKEN = /\b[Ww]e will (?:the|a|an|your|our|where|for|with|in|once|using|derived|query|this|that|these|those|each|all|any|its|their|it|them|you|we|us|is|are|and|or)\b/;
 const CARDS = [
-  ['workfront-cw', 'How would Coworker work inside Workfront for our campaign managers?', /health care|finance|sensitive data|not currently (?:offered|available)|generally available|eligib|Adobe confirms|confirm(?:s|ed)? (?:[a-z']+ ){0,6}with Adobe/i],
+  ['workfront-cw', 'How would Coworker work inside Workfront for our campaign managers?', /health care|finance|sensitive data|not currently (?:offered|available)|generally available|eligib|Adobe confirms|confirm(?:s|ed)? (?:[a-z']+ ){0,6}with Adobe|\basks? Adobe\b(?!['’]s| data\b| (?:Analytics|Commerce|Express)\b)/i],
   ['commerce-aemsites', 'How does the CIF add-on bring Adobe Commerce catalog data into AEM Sites authoring?', null],
   ['ajo-target', 'How can Journey Optimizer offer decisions run in Adobe Target activities?', null],
   ['target-eds', 'How would you run Adobe Target personalization on our Edge Delivery Services pages?', null],
@@ -62,24 +62,24 @@ const CARDS = [
     const plain = q.draft.plain;
     ok(!LABELS.test(plain) && !PARTNER.test(plain), `${conn}: the response carries no lifecycle label or partner caution`, (plain.match(LABELS) || plain.match(PARTNER) || []).join(', ') + ' :: ' + plain.slice(0, 240));
     if (note) {
-      // step 86: Adobe's industry caution is out of the catalog, so it is in neither the note nor the response, and only Adobe's own configuration work is left under Confirm with Adobe; both licenses and the two technical prerequisites stay
+      // step 86: Adobe's industry caution is out of the catalog, so it is in neither the note nor the response, and only Adobe's own configuration work is left, under Good to know, with nothing to ask Adobe; both licenses and the two technical prerequisites stay
       await h.select(0);
-      const n = await h.eval(() => { const b = document.querySelector('#rfp-answer .rfp-confirm'); return b ? b.textContent : ''; });
+      const n = await h.eval(() => { const b = document.querySelector('#rfp-answer .rfp-know'); return b ? b.textContent : ''; });
       const whole = await h.eval(() => { const b = document.querySelector('#rfp-answer .rfp-partner-note'); return b ? b.textContent : ''; });
       const body = await h.eval(() => document.getElementById('rfp-body').textContent);
-      ok(/^Adobe's support or professional services team configures Coworker, its Adobe app integrations and its governance and approval workflows\.?$/.test(n.trim()) && whole.length > 200 && !note.test(whole.replace('Confirm with Adobe:', '')) && !note.test(body) && !note.test(plain)
+      ok(/^Adobe's support or professional services team configures Coworker, its Adobe app integrations and its governance and approval workflows\.?$/.test(n.trim()) && whole.length > 200 && /Good to know:/.test(whole) && !/Ask Adobe:|Confirm with Adobe:/.test(whole) && !note.test(whole) && !note.test(body) && !note.test(plain)
         && /Workfront Standard license \(any Workfront package\)/.test(whole)
         && /CX Enterprise Coworker license for your client's organization/.test(whole) && !/Coworker license for your client's organization; Adobe's support/.test(whole)
         && /Write MCP tools option enabled in System Preferences by a Workfront admin before Coworker can change anything\./.test(body)
         && /Users need existing Workfront access to each object\./.test(body),
-        `${conn}: the industry caution is gone from the note and the response, only Adobe's own configuration work sits under Confirm with Adobe (split from the license), and both licenses and both technical prerequisites stay`, (n || (whole.match(note) || body.match(note) || []).join(', ')) + ' :: ' + whole.slice(0, 300));
+        `${conn}: the industry caution is gone from the note and the response, only Adobe's own configuration work sits under Good to know (split from the license), with no Ask Adobe list, and both licenses and both technical prerequisites stay`, (n || (whole.match(note) || body.match(note) || []).join(', ')) + ' :: ' + whole.slice(0, 300));
     }
   }
   // 5.2 Journey Optimizer + Brand Concierge has no services behind it: the client reads nothing, and the partner reads that there are no services, with no availability caution (step 86)
   let r = await h.text('How would Journey Optimizer follow up after a Brand Concierge conversation?');
   ok(!r.questions[0].draft, '5.2 the undocumented Journey Optimizer + Brand Concierge route drafts nothing for the client', JSON.stringify(r.questions[0].draft));
   await h.select(0);
-  ok(/No match in the catalog/.test(await h.panel()) && /Experience League lists no services for Journey Optimizer \+ Brand Concierge/.test(await h.panel()) && !/not documented|not a documented|documents no|marketed|unconfirmed|confirm(?:s|ed)?\b/i.test(await h.panel()) && !(await h.eval(() => document.querySelector('#rfp-answer .rfp-confirm'))), '5.2 the panel tells the partner that Experience League lists no services for the pair, with no "not documented" or "confirm with Adobe" caution', (await h.panel()).slice(0, 400));
+  ok(/No match in the catalog/.test(await h.panel()) && /Experience League lists no services for Journey Optimizer \+ Brand Concierge/.test(await h.panel()) && !/not documented|not a documented|documents no|marketed|unconfirmed|confirm(?:s|ed)?\b|\bask Adobe\b/i.test(await h.panel()) && !(await h.eval(() => document.querySelector('#rfp-answer .rfp-confirm, #rfp-answer .rfp-know'))), '5.2 the panel tells the partner that Experience League lists no services for the pair, with no "not documented", "confirm with Adobe" or "ask Adobe" caution', (await h.panel()).slice(0, 400));
   r = await h.file(FIX + '/bank_rfp.xlsx');
   let q = r.questions.find(x => x.label === '2.2');
   ok(q && q.draft && !/ordinary referrer reporting can show without it|lift comes only from a test/.test(q.draft.plain), '5.4 bank 2.2 no longer coaches the partner inside the client text', q && q.draft && q.draft.plain.slice(0, 400));
@@ -138,12 +138,12 @@ const CARDS = [
   ok(/Experience League lists no services for (?:the pair|Journey Optimizer \+ Brand Concierge)/.test(await h.panel()), '5.2 the Adobe sentence also shows when Journey Optimizer is added from the chips (in the partner note, since the partner asked for the pair)', (await h.panel()).slice(0, 300));
   r = await h.text('How would Brand Visibility help our pages on Edge Delivery Services show up in AI answers?'); await h.select(0);
   const nt = await h.eval(() => { const n = document.querySelector('#rfp-answer .rfp-partner-note'); return n ? n.textContent : ''; });
-  // step 86: the CDN log forwarding prerequisite lost its "confirmed with Adobe" clause, so it is a plain client need, and nothing sits under Confirm with Adobe
+  // step 86: the CDN log forwarding prerequisite lost its "confirmed with Adobe" clause, so it is a plain client need, and nothing sits under Ask Adobe or Good to know
   const bvBody = await h.eval(() => document.getElementById('rfp-body').textContent);
   needsText = await h.eval(() => [...document.querySelectorAll('#rfp-body h4')].filter(x => x.textContent === 'What we would need from you').map(x => x.nextElementSibling.textContent).join(' '));
-  ok(!/confirm(?:s|ed)? (?:[a-z']+ ){0,6}with Adobe|Adobe documents it for/i.test(bvBody) && !/confirmed with Adobe|Confirm with Adobe|Adobe documents it for/.test(nt) && !(await h.eval(() => document.querySelector('#rfp-answer .rfp-confirm')))
+  ok(!/confirm(?:s|ed)? (?:[a-z']+ ){0,6}with Adobe|\basks? Adobe\b(?!['’]s| data\b| (?:Analytics|Commerce|Express)\b)|Adobe documents it for/i.test(bvBody) && !/confirmed with Adobe|Confirm with Adobe|Ask Adobe|Good to know|Adobe documents it for/.test(nt) && !(await h.eval(() => document.querySelector('#rfp-answer .rfp-confirm, #rfp-answer .rfp-know')))
     && /CDN log forwarding for agentic traffic data\./.test(needsText) && /CDN log forwarding for agentic traffic data(?! \()/.test(nt) && /Brand Visibility license; for the one-click route, users with the Adobe LLM Optimizer Users product profile/.test(nt),
-    'bv-eds: the CDN log forwarding prerequisite is a plain client need with no "confirmed with Adobe" clause, nothing sits under Confirm with Adobe, and the license stays in the note', nt.slice(0, 400) + ' :: ' + needsText.slice(0, 300));
+    'bv-eds: the CDN log forwarding prerequisite is a plain client need with no "confirmed with Adobe" clause, nothing sits under Ask Adobe or Good to know, and the license stays in the note', nt.slice(0, 400) + ' :: ' + needsText.slice(0, 300));
   await h.file(FIX + '/bank_rfp.xlsx'); await h.file(FIX + '/retail_rfi.docx');
   const retail=await h.word(),retailTitle=retail.blocks.find(b=>/^Proposal: /.test(b.text))?.text||'';
   ok(/Request for Information|Harbor & Pine/i.test(retailTitle)&&!/[.]docx|retail_rfi/i.test(retailTitle),

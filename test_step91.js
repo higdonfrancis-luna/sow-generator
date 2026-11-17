@@ -13,7 +13,7 @@ const CAT = JSON.parse(fs.readFileSync(path.join(__dirname, 'canvas', 'catalog.j
 const KB = JSON.parse(fs.readFileSync(path.join(__dirname, 'rfp_method.json'), 'utf8'));
 const GAPS = path.join(__dirname, 'canvas', 'research', 'gaps_2026-11-13');
 const OWN = {aemsites: ['SI07', 'SI08', 'SI09', 'SI10'], aemassets: ['AS07'], marketo: ['MK07']}, ALL = Object.values(OWN).flat();
-const CAVEATS = /limited availability|coming soon|\bbeta\b|\blabs\b|early access|early adopter|generally available|not stated by Adobe|confirm (?:\w+ ){0,5}with Adobe|Consulting Services/i;
+const CAVEATS = /limited availability|coming soon|\bbeta\b|\blabs\b|early access|early adopter|generally available|not stated by Adobe|confirm (?:\w+ ){0,5}with Adobe|\basks? Adobe\b(?!['’]s| data\b| (?:Analytics|Commerce|Express)\b)|Consulting Services/i;
 (async () => {
   // 1. the catalog
   const L = CAT.lines, P = Object.fromEntries(CAT.products.map(p => [p.id, p])), adobe = CAT.products.filter(p => !p.outside).length;

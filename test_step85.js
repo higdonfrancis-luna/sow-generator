@@ -19,7 +19,7 @@ const server = http.createServer((req, res) => {
 const CAT = JSON.parse(fs.readFileSync(path.join(__dirname, 'canvas', 'catalog.json'), 'utf8'));
 const FOUND = JSON.parse(fs.readFileSync(path.join(__dirname, 'canvas', 'research', 'commerce_2026-11-12', 'commerce_services.json'), 'utf8'));
 const OWN = ['CE01', 'CE02', 'CE03', 'CE04', 'CE05', 'CE06', 'CE07'], ALL = [...OWN, 'XR01'];
-const CAVEATS = /limited availability|coming soon|\bbeta\b|\blabs\b|early access|early adopter|generally available|not stated by Adobe|confirm (?:\w+ ){0,5}with Adobe|Consulting Services/i;
+const CAVEATS = /limited availability|coming soon|\bbeta\b|\blabs\b|early access|early adopter|generally available|not stated by Adobe|confirm (?:\w+ ){0,5}with Adobe|\basks? Adobe\b(?!['’]s| data\b| (?:Analytics|Commerce|Express)\b)|Consulting Services/i;
 const LABELS = new RegExp(CAVEATS.source + '|\\$\\d', 'i');   // the catalog text carries no price either; the statement of work shows the partner's own fees
 (async () => {
   await new Promise(r => server.listen(0, r));

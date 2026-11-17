@@ -52,7 +52,7 @@ const survey = h => h.eval(() => {
   ok(T.every(t => Object.values(t.draws_on).flat().every(l => cat.lines[l])), 'every service a topic sits beside is in the catalog');
   const tt = T.find(t => t.id === 'testing_without_target');
   ok(tt && (tt.unless_products || []).includes('target'), 'the testing topic stands aside when the question is about Adobe Target');
-  ok(T.every(t => [t.risk, t.outcome, ...t.steps, ...t.deliverables, ...t.asks, ...t.facts.map(f => f.text)].every(x => !/[—–]|\bbeta\b|early access|coming soon|confirm(?:ed)? with Adobe|not stated by Adobe/i.test(x))), 'no topic has a dash, a release label or ask-Adobe wording');
+  ok(T.every(t => [t.risk, t.outcome, ...t.steps, ...t.deliverables, ...t.asks, ...t.facts.map(f => f.text)].every(x => !/[—–]|\bbeta\b|early access|coming soon|confirm(?:ed)? with Adobe|\basks? Adobe\b(?!['’]s| data\b| (?:Analytics|Commerce|Express)\b)|not stated by Adobe/i.test(x))), 'no topic has a dash, a release label or ask-Adobe wording');
 
   // 2 to 5, on the insurer RFP (its own Excel response form)
   const h = await open();
@@ -89,7 +89,7 @@ const survey = h => h.eval(() => {
   // the house rules
   const kb = C.filter(x => x.method);
   ok(kb.length >= 22, 'the knowledge base answers at least 22 of the insurer\'s Adobe questions', kb.length);
-  ok(kb.every(x => !/[—–]|confirm(?:ed)? with Adobe|not stated by Adobe|\bthe Client\b|\byour client\b/i.test(x.text)), 'no answer has a dash, ask-Adobe wording or the wrong voice', kb.filter(x => /[—–]|confirm(?:ed)? with Adobe|not stated by Adobe|\bthe Client\b|\byour client\b/i.test(x.text)).map(x => x.ref).join());
+  ok(kb.every(x => !/[—–]|confirm(?:ed)? with Adobe|\basks? Adobe\b(?!['’]s| data\b| (?:Analytics|Commerce|Express)\b)|not stated by Adobe|\bthe Client\b|\byour client\b/i.test(x.text)), 'no answer has a dash, ask-Adobe wording or the wrong voice', kb.filter(x => /[—–]|confirm(?:ed)? with Adobe|\basks? Adobe\b(?!['’]s| data\b| (?:Analytics|Commerce|Express)\b)|not stated by Adobe|\bthe Client\b|\byour client\b/i.test(x.text)).map(x => x.ref).join());
   ok(kb.every(x => !x.limit || x.words <= x.limit), 'every answer is within its section\'s word limit', kb.filter(x => x.limit && x.words > x.limit).map(x => x.ref + ' ' + x.words + '/' + x.limit).join());
 
   // Tallgrass: the same services as round 1, no topic, and the migration off its own CMS answered by step 91's service
