@@ -103,6 +103,13 @@ Read this first in the new chat. Everything below is on GitHub, so a new account
 - **Adam's new question (Nov 18):** how will partners know when to add ChatGPT, Claude and Microsoft Copilot; should there be plays focused on them? This session's recommendation: one new ready-made play in the agentic lineup, "Adobe in your client's AI assistant" (Coworker with the three assistants around it; the ranked list suggests what else works there); a first-page client problem that opens it (today "Copilot" or "Claude" typed on the first page lands on Brand Visibility's "missing from AI answers" problem); and a "Works in ..." hint on products on every other canvas, with the assistants first in the Add outside system menu. Pictures come before any building (`ai_hosts/round2/main/discover_mock.js` in the scratchpad).
 - **The ranked list is saved as `ae62797`** (Nov 18; byte-identical to the copy that passed every suite in its build). A confirmation run of every suite on the branch is in progress (`build_out/ranked/save_run/SUMMARY.txt` in the scratchpad). The three boxes are being built on top of it in a separate working copy (workflow `build-ai-assistant-boxes`; patch at `build_out/ai_boxes/ai_boxes.patch` when done).
 
+**The Adobe agentic AI play (Adam: "go", Nov 18)**
+- Adam approved the pictures `ai_hosts/discovery_pictures/e1_agentic_explainer.png` and `e2_first_page_agentic_card.png` (`ai_hosts/DISCOVERY.md`, last section). Build it on top of the ChatGPT, Claude and Microsoft Copilot boxes, from `ai_hosts/agentic_play_data.json` (made by `make_agentic.py`):
+  - A first-page card "Adobe agentic AI", built like the GenStudio card: Find new customers (Real-Time CDP, Brand Visibility, Coworker, Customer Journey Analytics, with Ad platforms and the three assistants on from the start), Keep customers (Journey Optimizer, Brand Concierge, Coworker, Customer Journey Analytics), Grow share of wallet (Target, Journey Optimizer, Coworker, Customer Journey Analytics), and the complete play (all of them plus Brand Intelligence). The existing plays stay exactly as they are.
+  - An "Ask it" example question at the top of every assistant connection's card, for the partner only: 40 questions, 21 in Adobe's own words (proven on the saved pages), 19 plain ones within what the connection does.
+  - The Claude + Brand Intelligence connection: Adobe's developer guide for Validate names Claude Desktop as its example host (three quotes proven).
+- Not approved yet: the "Works in ..." hints on products and the assistants-first menu (pictures d3, d3b).
+
 **Questions waiting for Adam**
 1. Answered: he wants Add product back on the ready-made plays, with the ranked list ("both places").
 2. Answered: the play keeps its name.
