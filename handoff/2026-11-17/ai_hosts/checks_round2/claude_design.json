@@ -1,0 +1,310 @@
+{
+ "topic": "claude_design",
+ "checked_on": "2026-11-18",
+ "method": "curl with default headers, about one request a second; pages saved under ai_hosts/pages/ named by the first 12 characters of the URL's SHA-1 and listed in pages/index_claude_design.tsv (round one pages reused where they existed). Experience League HTML held the page text, so no .md or JSON copies were needed. Every quote proven word for word with the matcher logic of handoff/2026-11-17/evidence_page/tools/verify.py (round2/claude_design_work/match.py). business.adobe.com not tried; github.com and video.tv.adobe.com blocked by the proxy (one try each, not worked around).",
+ "results_file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/round2/checks/claude_design.json",
+ "claims": [
+  {
+   "id": "CD1",
+   "claim": "ChatGPT fact-check: a designer can send an email made in Claude Design into Journey Optimizer, where it lands as an editable content template that a person checks; sending is a separate step. Its sources: Adobe's business.adobe.com post (\"Adobe Experience Manager and Adobe Journey Optimizer are now available as workflow destinations\"), Adobe's registry on GitHub and an Adobe demo video. Round one: needs text Adam pastes, because it found no official page naming Claude Design with Journey Optimizer. Research record adobe-journey-optimizer-anthropic-claude-design-design-handoff: available for email templates, other channels roadmap.",
+   "tool_product_ids": [
+    "ajo"
+   ],
+   "outside": "Claude",
+   "verdict": "partly confirmed",
+   "adobe_status": "No label on the reachable page: Experience League lists it as a new Journey Optimizer tutorial (a demo video) published July 2026, repeated in the August 2026 notes. ChatGPT quotes the business.adobe.com post as \"now available\" (not readable here). For the record only: the Journey Optimizer connector for Claude, which the leads say carries the import, is labeled Beta on its own page and \"available to all customers in Public Beta\" in the 2026 release notes. Nothing of this goes on a card.",
+   "publish_under_nov12_rule": true,
+   "kind": "design or content hand-off",
+   "what_adobe_says": "The route exists today. Adobe's own Central Release Notes on Experience League (July 2026, repeated in August 2026) list a new Journey Optimizer tutorial, the AJO - Claude Design Demo video, described as a demo of sending designs created in Claude directly to Journey Optimizer. That is all a reachable Adobe page says about this route. The details (that an email arrives, that it becomes an editable content template, email only, what the client needs first, whether it goes through Journey Optimizer's connector for Claude) are only in the business.adobe.com post, which needs text Adam pastes (https://business.adobe.com/blog/adobe-experience-manager-journey-optimizer-claude-design), and in leads. Card wording until the paste: send designs made in Claude Design straight into Journey Optimizer. After the paste the card can say an email, as an editable content template, if the post says so. Adobe's general rule for content templates explains the separate steps: a template is a starting point that marketers reuse inside a campaign or journey, so building the campaign or journey, testing, approval and sending all stay in Journey Optimizer.",
+   "quotes": [
+    {
+     "quote": "AJO - Claude Design Demo video",
+     "url": "https://experienceleague.adobe.com/en/docs/release-notes/experience-cloud/previous/2026/07152026",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/b02d5ded50da.html"
+    },
+    {
+     "quote": "Watch a demo of sending designs created in Claude directly to Adobe Journey Optimizer.",
+     "url": "https://experienceleague.adobe.com/en/docs/release-notes/experience-cloud/previous/2026/07152026",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/b02d5ded50da.html"
+    },
+    {
+     "quote": "New tutorials published for Adobe Journey Optimizer on Experience League.",
+     "url": "https://experienceleague.adobe.com/en/docs/release-notes/experience-cloud/previous/2026/07152026",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/b02d5ded50da.html"
+    },
+    {
+     "quote": "Watch a demo of sending designs created in Claude directly to Adobe Journey Optimizer.",
+     "url": "https://experienceleague.adobe.com/en/docs/release-notes/experience-cloud/previous/2026/08142026",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/cc32d86c5268.html"
+    },
+    {
+     "quote": "This user can create an email template that your organization's marketers can select as a starting point for all emails.",
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/content-templates/content-templates",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/aabc2fb39804.html"
+    },
+    {
+     "quote": "Marketing users can then reuse and adapt these standalone content templates inside their own journeys or campaigns.",
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/content-templates/content-templates",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/aabc2fb39804.html"
+    },
+    {
+     "quote": "Once saved, your content template is available for use in a campaign or a journey.",
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/content-templates/create-content-templates",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/8ae40c6472f5.html"
+    },
+    {
+     "quote": "To create, edit, and delete content templates, ensure you have the Manage library items permission included in the Content Library Manager product profile.",
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/content-templates/content-templates",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/aabc2fb39804.html"
+    },
+    {
+     "quote": "You have an active Adobe Journey Optimizer license.",
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/combine/ajo-mcp",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/4ccaf822b710.html"
+    },
+    {
+     "quote": "To set up the MCP server in Claude Web or Claude Desktop, go to Connectors and select Adobe Journey Optimizer.",
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/combine/ajo-mcp",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/4ccaf822b710.html"
+    }
+   ],
+   "prerequisites": [
+    "A Journey Optimizer license (Adobe states it for Journey Optimizer's connector for Claude).",
+    "Claude Design on the client's Claude plan. That is Anthropic's product; no reachable Adobe page names the plan.",
+    "If the hand-off goes through Journey Optimizer's connector for Claude, as the leads say: the Adobe Journey Optimizer connector added in Claude (Connectors), and permissions in Journey Optimizer.",
+    "If it creates a content template, as the leads say: Journey Optimizer's own rule for templates applies, the Manage library items permission in the Content Library Manager product profile.",
+    "Anything else (Adobe sign-in, admin approval, sandbox) comes from the text Adam pastes."
+   ],
+   "real_limits": [
+    "It sends nothing. A content template is used later in a campaign or journey, where testing, approval and sending happen.",
+    "Email only, according to the leads; Adobe's reachable pages name no channel. Other channels, which the research calls roadmap, stay out because the tool carries no forecasts."
+   ],
+   "lead_was_wrong_about": [
+    "Round one: \"No official page this session could read names Claude Design together with Journey Optimizer.\" Experience League's Central Release Notes for July and August 2026 do, with the AJO - Claude Design Demo video.",
+    "Round one: \"If it runs through the Journey Optimizer connector that Adobe labels Beta, the step 86 rule leaves it out even after the paste.\" The Nov 12 rule publishes beta features as available.",
+    "ChatGPT: \"Adobe's registry documents the specific tool import-claude-design-from-url\". Its link is github.com (not evidence, blocked here), and no developer.adobe.com page carries that text (see CD3).",
+    "ChatGPT: \"Confirm the selected workflow in the customer's tenant before committing to delivery\" and \"Scope the Design email handoff individually\": caveats the Nov 12 rule removes.",
+    "ChatGPT's acceptance test (\"review a personalization field\" in the resulting template): not on a reachable Adobe page for this route.",
+    "ChatGPT's \"Adobe email-workflow demo\" (video.tv.adobe.com/v/3492418) is not evidence and is blocked here, but it is the same video Experience League's release notes list, so its title and one-line description there are evidence.",
+    "Research: \"Other channels were identified as roadmap\". Roadmap is never published."
+   ]
+  },
+  {
+   "id": "CD2",
+   "claim": "ChatGPT fact-check: a designer can send a page made in Claude Design into AEM Sites, where it lands as a managed page that an author opens and reviews; publishing follows the client's own AEM workflow. Its sources: Adobe's business.adobe.com post (June 18), an Adobe demo video (video.tv.adobe.com/v/3492493) and Anthropic's Claude Design help. Round one: needs text Adam pastes. Research record aem-sites-anthropic-claude-design-design-handoff.",
+   "tool_product_ids": [
+    "aemsites",
+    "eds"
+   ],
+   "outside": "Claude",
+   "verdict": "needs text Adam pastes",
+   "adobe_status": "Not stated on any page I could read. ChatGPT quotes the business.adobe.com post as \"now available\" (not readable here).",
+   "publish_under_nov12_rule": false,
+   "kind": "design or content hand-off",
+   "what_adobe_says": "No official Adobe page I could reach names Claude Design with AEM. Searched: Experience League's full list of 37,138 English pages (no address with claude-design), its AEM pages on AI, the AEM connectors for Claude and ChatGPT, Edge Delivery Services, authoring methods and the modernization agent, the AEM release notes 2026.1 to 2026.9 and the current one, and Adobe's monthly Central Release Notes from June to November 2026 (their new-tutorial lists name a Claude Design demo for Journey Optimizer only, none for AEM); developer.adobe.com's full page list and its AI registry; all 37 news releases from April to November 2026 in the newsroom's list; helpx's page list and connector pages; www.adobe.com's home and Express page lists (the Express article in CD4 is the only Claude Design page there). What Adobe does document, without naming Claude Design: its AEM connector for Claude runs on Adobe's AEM server for AI assistants and applies to AEM as a Cloud Service; and in Edge Delivery Services, Experience Workspace is where content made by agents and AI tools is reviewed and approved. Neither says which AEM the Claude Design hand-off lands in. So the product (AEM Sites, AEM Sites with Edge Delivery Services, or both), what the client needs first, and whether publishing is a separate step must come from the text Adam pastes: https://business.adobe.com/blog/adobe-experience-manager-journey-optimizer-claude-design. Publish it once the paste shows it exists, in any form, with no release label.",
+   "quotes": [
+    {
+     "quote": "The AEM MCP Server is also used by the AEM Claude Connector and AEM ChatGPT Plugin",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/release-notes/release-notes/2026/2026-7-0",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/6d37b15252fd.html"
+    },
+    {
+     "quote": "Applies to: Experience Manager as a Cloud Service",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/chat-applications/setup-claude",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/694a5c2e930d.html"
+    },
+    {
+     "quote": "Install the Adobe Experience Manager Connector from Anthropic's connector marketplace.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/chat-applications/setup-claude",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/694a5c2e930d.html"
+    },
+    {
+     "quote": "Modern content is created by agents, LLMs, automated pipelines, and authors in AEM.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/overview",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/b1c1e2ef87b2.html"
+    },
+    {
+     "quote": "More than just authoring, Experience Workspace is the central place where teams review, collaborate, approve, and deploy content with confidence by combining human creativity and AI capabilities.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/overview",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/b1c1e2ef87b2.html"
+    }
+   ],
+   "prerequisites": [
+    "Not stated on a reachable Adobe page: take them from the text Adam pastes.",
+    "Only if the hand-off uses Adobe's AEM connector for Claude (not established): AEM as a Cloud Service and the Adobe Experience Manager connector installed in Claude."
+   ],
+   "real_limits": [
+    "Unknown until the paste. According to the leads, the page arrives for an author to review, and publishing stays the client's normal AEM step."
+   ],
+   "lead_was_wrong_about": [
+    "ChatGPT: \"Send a Claude Design page to AEM Sites\". Which AEM it is (AEM Sites, Edge Delivery Services, or both) is not on any reachable Adobe page; the research assumed AEM Sites too.",
+    "ChatGPT: \"Adobe page-workflow demo\" (video.tv.adobe.com/v/3492493). It is not evidence and is blocked here, and unlike the Journey Optimizer demo, no Experience League page lists it.",
+    "ChatGPT: \"Anthropic independently lists both destinations under Export and share\". Anthropic's help is not evidence.",
+    "ChatGPT: \"Confirm the selected workflow in the customer's tenant before committing to delivery\": a caveat the Nov 12 rule removes.",
+    "The quotes here do not name Claude Design; they show only what the AEM side documents. Round one's verdict stands for AEM."
+   ]
+  },
+  {
+   "id": "CD3",
+   "claim": "ChatGPT fact-check and the research: Adobe's AI registry documents a tool of Journey Optimizer's own connector, import-claude-design-from-url, which fetches a self-contained HTML email, creates a Journey Optimizer template and returns a link (cited at github.com/AdobeDocs/ai-registry-docs, mcp-servers/ajo-mcp-server.md). ChatGPT adds that the registry also names ChatGPT for this connector.",
+   "tool_product_ids": [
+    "ajo"
+   ],
+   "outside": "Claude",
+   "verdict": "not confirmed",
+   "adobe_status": "The connector: Beta on its Experience League page, and \"available to all customers in Public Beta\" in Journey Optimizer's 2026 release notes (April 2026 release). The import tool: no reachable page names it, so no label.",
+   "publish_under_nov12_rule": false,
+   "kind": "ready-made by Adobe, an admin switches it on",
+   "what_adobe_says": "Not on any reachable official page. developer.adobe.com's AI registry page is a script: it loads its list of servers from ai.adobe.io and links each server to a document on GitHub. Neither is an evidence site and both are blocked here. No developer.adobe.com page renders the Journey Optimizer server document: it is not in the site's list of 10,287 pages, and the addresses round one tried return page not found. The registry's built-in card for the Journey Optimizer connector (script data, a lead) speaks only of inspecting and troubleshooting journeys, campaigns and offers. Experience League's connector page (last updated October 6, 2026) lists only read-only tools for campaigns, journeys, channel set-ups and marketing actions, and says nothing can be created, changed or deleted in the current release. So on Adobe's reachable pages the connector cannot create a template, and the import tool is unproven. Whether the Claude Design hand-off runs through this connector is for the text Adam pastes. For the record: the connector itself exists today (Adobe: available to all customers in Public Beta), so under the Nov 12 rule it is published as available, with its read-only limit. That belongs to the Journey Optimizer connector check, not to this card. The false above is for the import tool only.",
+   "quotes": [
+    {
+     "quote": "All tools are read-only. Write operations (creating, updating, or deleting objects) are not supported in the current Beta release.",
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/combine/ajo-mcp",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/4ccaf822b710.html"
+    },
+    {
+     "quote": "The Adobe Journey Optimizer MCP server is currently available in Claude Web, Claude Desktop, and Cursor.",
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/combine/ajo-mcp",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/4ccaf822b710.html"
+    },
+    {
+     "quote": "This integration is in Beta.",
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/combine/ajo-mcp",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/4ccaf822b710.html"
+    },
+    {
+     "quote": "This capability is currently available in Claude Web and Desktop.",
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/whats-new/previous-rn-new/release-notes-2026",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/debc382c717a.html"
+    },
+    {
+     "quote": "This capability is available to all customers in Public Beta.",
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/whats-new/previous-rn-new/release-notes-2026",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/debc382c717a.html"
+    },
+    {
+     "quote": "The Adobe Journey Optimizer MCP server now exposes five additional read-only channel configuration tools",
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/whats-new/previous-rn-new/release-notes-2026",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/debc382c717a.html"
+    },
+    {
+     "quote": "Inspect, summarize, and troubleshoot Adobe Journey Optimizer journeys, campaigns, and offers directly from Claude.",
+     "url": "https://developer.adobe.com/internals/mcp-registry-web-app/home.06cd388e.js",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/73f226e80d26.html"
+    }
+   ],
+   "prerequisites": [
+    "For the connector itself: a Journey Optimizer license, Claude Web or Claude Desktop with the Adobe Journey Optimizer connector added, and permission in Journey Optimizer to view campaigns, journeys and offers."
+   ],
+   "real_limits": [
+    "On Experience League the connector is look-only: it cannot create, change or delete anything.",
+    "Adobe lists the connector for Claude Web, Claude Desktop and Cursor. ChatGPT is not on Adobe's list for it."
+   ],
+   "lead_was_wrong_about": [
+    "ChatGPT and the research cite github.com for the import tool. That is not evidence, it is blocked here, and no developer.adobe.com page carries the same text.",
+    "ChatGPT: \"Adobe's registry also names ChatGPT\" for this connector. Experience League lists Claude Web, Claude Desktop and Cursor, and the registry's own card lists Claude only (script data).",
+    "Research: \"creates an AJO template and returns a link\". This comes only from github.com and conflicts with Experience League's read-only statement."
+   ]
+  },
+  {
+   "id": "CD4",
+   "claim": "Research record adobe-express-anthropic-claude-design-design-handoff (not in ChatGPT's fact-check): a design made in Claude Design opens in Adobe Express as an editable Express document, through Adobe's creativity connector in Claude. Round one: partly confirmed and held back.",
+   "tool_product_ids": [
+    "express"
+   ],
+   "outside": "Claude",
+   "verdict": "partly confirmed",
+   "adobe_status": "No release label. Adobe's article says the connector has been available in Claude since April.",
+   "publish_under_nov12_rule": false,
+   "kind": "design or content hand-off",
+   "what_adobe_says": "Adobe's Express article on www.adobe.com: a person who makes a social post, flyer or presentation in Claude Design can click Open in Adobe Express and get a fully editable Express document to refine, brand, share and publish, after connecting Adobe's connector in Claude. Adobe's help page for that connector (now called Adobe for Claude) says it is not optimized for enterprise use, does not support school accounts, and that its Adobe Express capabilities are not available to enterprise accounts. The tool's Express box is Adobe Express for Enterprise, so this route does not reach it. The false above is because of that product limit, not a release label. Leave it out unless Adam decides otherwise when he answers the open question on Claude with Creative Cloud and Acrobat, which use the same connector.",
+   "quotes": [
+    {
+     "quote": "You can export directly from Claude Design into Adobe Express as a fully editable Express document, where you can refine, brand, collaborate on, and publish it.",
+     "url": "https://www.adobe.com/express/learn/blog/adobe-creativity-connector",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/0ca32c06b113.html"
+    },
+    {
+     "quote": "Connect the Adobe for creativity connector in Claude.",
+     "url": "https://www.adobe.com/express/learn/blog/adobe-creativity-connector",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/0ca32c06b113.html"
+    },
+    {
+     "quote": "Click \"Open in Adobe Express\" to open your design as a native Express document and take it from there.",
+     "url": "https://www.adobe.com/express/learn/blog/adobe-creativity-connector",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/0ca32c06b113.html"
+    },
+    {
+     "quote": "Unlike a rendered export, Claude-generated designs become native Adobe Express documents.",
+     "url": "https://www.adobe.com/express/learn/blog/adobe-creativity-connector",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/0ca32c06b113.html"
+    },
+    {
+     "quote": "The Adobe for creativity connector has been available in Claude since April",
+     "url": "https://www.adobe.com/express/learn/blog/adobe-creativity-connector",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/0ca32c06b113.html"
+    },
+    {
+     "quote": "Adobe for creativity connector in Claude has been renamed to Adobe, with new creativity and productivity capabilities.",
+     "url": "https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/adobe-connectors/adobe-for-claude.html",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/267f563fa9ce.html"
+    },
+    {
+     "quote": "Adobe for Claude isn't optimized for enterprise use and does not support EDU accounts. Adobe Express capabilities aren't available to enterprise accounts.",
+     "url": "https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/adobe-connectors/adobe-for-claude.html",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/267f563fa9ce.html"
+    }
+   ],
+   "prerequisites": [
+    "Adobe's connector connected in Claude (the same connector as Claude with Creative Cloud and Acrobat)."
+   ],
+   "real_limits": [
+    "Adobe Express capabilities of the connector are not available to enterprise accounts.",
+    "The connector is not optimized for enterprise use and does not support school accounts."
+   ],
+   "lead_was_wrong_about": [
+    "Research status \"Available through the Adobe creativity connector\" leaves out Adobe's limit for enterprise accounts.",
+    "Research cites business.adobe.com first; the www.adobe.com article carries the claim on its own.",
+    "The article uses the connector's old name; Adobe's help page says it was renamed to Adobe."
+   ]
+  },
+  {
+   "id": "CD5",
+   "claim": "ChatGPT fact-check: \"Use the workflow name Claude Design. Anthropic says its standalone site closes December 14, 2026 as Design moves into Claude.\"",
+   "tool_product_ids": [],
+   "outside": "Claude",
+   "verdict": "not confirmed",
+   "adobe_status": "not stated",
+   "publish_under_nov12_rule": false,
+   "kind": "not applicable",
+   "what_adobe_says": "Adobe's own pages use the name Claude Design (the Express article; Experience League's AJO - Claude Design Demo video) and also speak of designs created in Claude. So Claude Design is the right name on the Claude box's cards, and these lines belong to the Claude box, not a new one. No Adobe page mentions a move into Claude or a December 14 date. That rests on Anthropic's help only, and it is a dated forecast, which the tool does not carry.",
+   "quotes": [
+    {
+     "quote": "AJO - Claude Design Demo video",
+     "url": "https://experienceleague.adobe.com/en/docs/release-notes/experience-cloud/previous/2026/07152026",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/b02d5ded50da.html"
+    },
+    {
+     "quote": "You can export directly from Claude Design into Adobe Express as a fully editable Express document",
+     "url": "https://www.adobe.com/express/learn/blog/adobe-creativity-connector",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/0ca32c06b113.html"
+    }
+   ],
+   "prerequisites": [],
+   "real_limits": [],
+   "lead_was_wrong_about": [
+    "The December 14, 2026 move comes only from support.claude.com, which is not evidence, and is a forecast. Nothing for the tool."
+   ]
+  }
+ ],
+ "other_leads": [
+  "Paste checklist for https://business.adobe.com/blog/adobe-experience-manager-journey-optimizer-claude-design (blocked to automated tools): (1) the sentence \"Adobe Experience Manager and Adobe Journey Optimizer are now available as workflow destinations\" word for word; (2) for AEM: which AEM (AEM Sites as a Cloud Service, Edge Delivery Services and Experience Workspace, or both), that the page arrives for an author to review, and whether publishing is a separate step; (3) for Journey Optimizer: email only, that it becomes an editable content template, and whether it goes through Journey Optimizer's connector for Claude; (4) what the client needs first (Claude plan, Adobe sign-in, connector, admin approval, product roles); (5) any release words (available, beta, preview, coming).",
+  "Manual route, not a connector and not specific to Claude: Journey Optimizer imports an HTML file or a .zip folder into its Email Designer, then converts it so it can be edited and personalized (Experience League, updated November 18, 2026: https://experienceleague.adobe.com/en/docs/journey-optimizer/using/channels/email/design-email/start-creating-content/existing-content, saved as pages/435d1bd80067.html). An HTML email from any design tool can come in this way.",
+  "If the paste says the AEM hand-off lands in Experience Workspace, the line goes to AEM Sites with Edge Delivery Services. Adobe describes Experience Workspace as the default for new Edge Delivery projects and the place where content made by agents and AI tools is reviewed, approved and deployed (Experience League Edge Delivery overview, updated November 11, 2026).",
+  "The AI registry's import-tool text can only count if the same words appear on a developer.adobe.com page. Today the registry loads its server data from ai.adobe.io and its documents from GitHub, and developer.adobe.com's sitemap (10,287 pages) has no page for the Journey Optimizer connector. A person could open https://developer.adobe.com/ai-registry/ in a browser to see what it shows, but the data there is still not an evidence page.",
+  "Journey Optimizer's 2026 release notes list a Coworker skill named Build Email from Figma (September 24, 2026). That is Figma, not Claude, and may matter to the Figma box.",
+  "AEM's Experience Modernization Agent (Experience League, November 12, 2026) takes Figma designs and supplied design references for redesigns. It does not name Claude Design.",
+  "The newsroom's June 18, 2026 release (the same day as the business.adobe.com post, per ChatGPT) covers Adobe's creative tools in ChatGPT, Claude, Copilot, Gemini and Slack. It does not mention Claude Design, AEM or Journey Optimizer. The June 22 Cannes release says Adobe CX skills and MCP servers are generally available in Claude Enterprise, but names no Claude Design route.",
+  "Searched with no hit for Claude Design: Experience League's sitemap of November 18 (37,138 English pages) and llms.txt; the AEM release notes 2026.1 to 2026.9 plus current; the Central Release Notes June to November 2026; Journey Optimizer's current and 2026 release notes, documentation updates, early release notes, connector page, content template, import and integrations pages; developer.adobe.com's sitemap and Journey Optimizer API home; news.adobe.com's sitemap and all 37 releases from April to November 2026; helpx's sitemap and connector pages; www.adobe.com's home, Express and Express blog sitemaps. github.com and video.tv.adobe.com were tried once each and are blocked by the network proxy; business.adobe.com was not tried."
+ ]
+}
