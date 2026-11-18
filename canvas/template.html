@@ -1322,6 +1322,11 @@ function pick(e){e.stopPropagation();const b=e.target.closest('[data-play],[data
 const GROUPS=[['AI & agents',['bv','bc','cw','brandintel']],['Content & workflows',['aemsites','aemassets','eds','so','aemforms','commerce','workfront','gspm','frameio','planning']],['Creativity & design',['creativecloud','express','fireflycp','fireflycm']],['Data & analytics',['rtcdp','cja','aa','ca','mmm','collab']],['Campaign management',['ajo','ajob2b','xa','marketo','moptimizer','mqualifier','mmeasure','target']],['Document productivity',['acrobat','acrobatsign']]];
 const groupOf=id=>(GROUPS.find(g=>g[1].includes(id))||['More products'])[0],placeIn=id=>{const g=GROUPS.find(g=>g[1].includes(id));return g?g[1].indexOf(id):99;};
 let grpOpen={},findQ='';
+/* Nov 17: never go backwards. Adam's rules (never_suggest.json): while a product in when_on_canvas_any is on the canvas, the menu does not suggest
+   the products in never_suggest. heldBy gives the product on the canvas that holds one back, or nothing. The AEM Sites rule needs no row:
+   the list already leaves the AEM Sites entry out once Edge Delivery Services is on the canvas */
+const NEVER=/*NEVER_SUGGEST*/[];
+const heldBy=id=>{for(const r of NEVER)if(r.never_suggest.includes(id)){const t=r.when_on_canvas_any.find(actualHas);if(t)return t;}return '';};
 const linked=(a,b)=>C.some(c=>(c.a===a&&c.b===b)||(c.a===b&&c.b===a));
 const andList=a=>a.length<2?a.join(''):a.slice(0,-1).join(', ')+' and '+a[a.length-1];
 const item=(id,tag,to,show)=>`<button class="it2" data-add="${id}" role="menuitem"><span class="nm">${esc(P[id].name)}</span>${tag?`<span class="ctag">${tag}</span>`:''}${to?`<span class="to${show?' show':''}">${esc(to)}</span>`:''}</button>`;
@@ -1365,16 +1370,19 @@ function listHTML(){const pl=play(),byName=(a,b)=>P[a].name.localeCompare(P[b].n
   const to=id=>[...new Set(prods().filter(p=>!p.outside&&candidateConnects(id,p.id)).map(p=>offeringId(p.id)))];
   const tag=id=>first?`Connects to ${deg(id)} product${deg(id)===1?'':'s'}`:to(id).length?`Connects to ${to(id).length} on your canvas`:'';
   const row=id=>id==='eds'?sitesItem():item(id,tag(id),!first&&to(id).length?'Lines to '+andList(to(id).map(q=>P[q].name)):'');
+  /* a product a rule holds back leaves its group and sits once under Not suggested, with why, where it can still be added */
+  const notSuggested=ids=>{const held=ids.filter(heldBy).sort(byName);
+    return held.length?`<div class="g">Not suggested</div>`+held.map(id=>item(id,'Add anyway',`${P[heldBy(id)].name} is on your canvas. Add ${P[id].name} only if your client still runs it.`,true)).join(''):'';};
   /* typed in the box: every product whose name matches, with the heading it sits under */
   const q=findQ.trim().toLowerCase();
-  if(q){const hit=rest.filter(id=>[P[id].name,P[id].title,P[id].short,...(id==='eds'?['AEM Sites traditional AEM Publish Edge Delivery Services Universal Editor']:[])].some(s=>s&&s.toLowerCase().includes(q))).sort(byName);
-    return hit.length?`<div class="g">${hit.length} match${hit.length===1?'':'es'}</div>`+hit.map(id=>id==='eds'?sitesItem():item(id,tag(id),groupOf(id),true)).join(''):`<p class="nomatch">No product matches. Clear the box to see them all.</p>`;}
+  if(q){const hit=rest.filter(id=>[P[id].name,P[id].title,P[id].short,...(id==='eds'?['AEM Sites traditional AEM Publish Edge Delivery Services Universal Editor']:[])].some(s=>s&&s.toLowerCase().includes(q))).sort(byName),sug=hit.filter(id=>!heldBy(id));
+    return hit.length?(sug.length?`<div class="g">${sug.length} match${sug.length===1?'':'es'}</div>`+sug.map(id=>id==='eds'?sitesItem():item(id,tag(id),groupOf(id),true)).join(''):'')+notSuggested(hit):`<p class="nomatch">No product matches. Clear the box to see them all.</p>`;}
   const sect=(list,openFirst)=>[...GROUPS.map(g=>g[0]),'More products'].map(name=>[name,list.filter(id=>groupOf(id)===name).sort((a,b)=>placeIn(a)-placeIn(b)||byName(a,b))]).filter(g=>g[1].length)
     .map(([name,ids],i)=>`<details class="mgrp" data-grp="${esc(name)}"${(name in grpOpen?grpOpen[name]:openFirst&&i===0)?' open':''}><summary><span>${esc(name)}</span><span class="cnt">${ids.length} product${ids.length===1?'':'s'}</span>${I.chev}</summary>${ids.map(row).join('')}</details>`).join('');
   if(first)return sect(rest,true);
   /* products on the canvas: the ones that connect to it first, the rest under their headings, closed */
-  const yes=rest.filter(id=>to(id).length).sort((a,b)=>to(b).length-to(a).length||byName(a,b)),no=rest.filter(id=>!to(id).length);
-  return (yes.length?`<div class="g">Connects to your canvas</div>`+yes.map(row).join(''):'')+(no.length?`<div class="g">Not connected to your canvas yet</div>`+sect(no,false):'');}
+  const free=rest.filter(id=>!heldBy(id)),yes=free.filter(id=>to(id).length).sort((a,b)=>to(b).length-to(a).length||byName(a,b)),no=free.filter(id=>!to(id).length);
+  return (yes.length?`<div class="g">Connects to your canvas</div>`+yes.map(row).join(''):'')+notSuggested(rest)+(no.length?`<div class="g">Not connected to your canvas yet</div>`+sect(no,false):'');}
 function openAdd(on){const m=$('add-menu'),pl=play();if(on&&!(pl&&pl.custom))return;const was=!m.hidden;m.hidden=!on;$('add-btn').setAttribute('aria-expanded',!!on);
   if(on){hideCard(true);m.innerHTML=menuHTML();placeAdd();}else{preview(null);findQ='';}if(was!==!!on&&pl)fit();}
 /* pointing at a product in the menu outlines the products on the canvas it would connect to */

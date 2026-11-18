@@ -671,6 +671,133 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
     const t2 = await read(q), sum = s => Number(s.replace(/[^0-9.]/g, ''));
     ok(sum(t2.big) === sum(t0.big) + 16 * 150, 'Nov 17: choosing AEM Assets Connector rollout for Figma designers adds its 16 typical hours to the total', t0.big + ' then ' + t2.big);
     await q.context().close(); }
+
+  // Nov 17 2026, never go backwards (Adam: "any newer product that offers the same functionality that an older product did: they're not going to go
+  // backwards"). His rules are data (never_suggest.json), each one-way, and only change what the Add product menu on Create your own play suggests:
+  // the older product leaves its group for a "Not suggested" heading, where it can still be added.
+  { const RULES = JSON.parse(fs.readFileSync(path.join(HERE, 'never_suggest.json'), 'utf8')).rules.map(r => r.when_on_canvas_any.join() + '>' + r.never_suggest.join());
+    const own = async ids => { const q = await fresh(); await q.goto(CANVAS); await choose(q, 'custom'); for (const id of ids) await addP(q, id); await outside(q); await away(q); return q; };
+    // the open menu as a partner reads it, with the pointer away from it: its headings in order (the "g" headings; the groups of an empty canvas
+    // are not read), and every product with the heading it sits under
+    const menu = async (q, find) => { if (await q.isHidden('#add-menu')) await q.click('#add-btn'); await q.waitForTimeout(250);
+      if (find !== undefined) { await q.fill('#add-find', find); await q.waitForTimeout(250); }
+      await away(q);
+      return q.$$eval('#add-list > *', els => { const heads = [], rows = []; let under = '';
+        for (const e of els) {
+          if (e.classList.contains('g')) { under = e.textContent.trim(); heads.push(under); continue; }
+          for (const b of e.matches('[data-add]') ? [e] : e.querySelectorAll('[data-add]')) { const tag = b.querySelector('.ctag'), why = b.querySelector('.to');
+            rows.push({id: b.dataset.add, under, name: b.querySelector('.nm').textContent.trim(), tag: tag ? tag.textContent.trim() : '', why: why ? why.textContent.trim() : '',
+              seen: !!why && why.getBoundingClientRect().height > 0, sites: !!b.closest('.sites-menu')}); }
+        }
+        return {heads, rows}; }); };
+    const page0 = await own([]), onPage = await page0.evaluate(() => NEVER.map(r => Object.keys(r).join() + ':' + r.when_on_canvas_any.join() + '>' + r.never_suggest.join()).join(' '));
+    ok(RULES.join(' ') === 'cja>aa ajo>target eds>aemsites' && onPage === RULES.map(r => 'when_on_canvas_any,never_suggest:' + r).join(' '),
+      'Nov 17: never_suggest.json holds Adam\'s three one-way rules (Customer Journey Analytics holds back Adobe Analytics, Journey Optimizer holds back Target, Edge Delivery holds back traditional AEM Publish), and the page gets their product ids only', RULES.join(' ') + ' / ' + onPage);
+    const m0 = await menu(page0);
+    ok(m0.heads.length === 0 && m0.rows.length === N + 1 && !(await page0.innerText('#add-menu')).includes('Not suggested'), 'Nov 17: an empty canvas holds nothing back: every product is offered and there is no "Not suggested"', m0.heads.join(' | ') + ' ' + m0.rows.length);
+    await page0.context().close();
+    for (const [trigger, held] of [['cja', 'aa'], ['ajo', 'target']]) {
+      const T = P[trigger].name, H = P[held].name, why = `${T} is on your canvas. Add ${H} only if your client still runs it.`;
+      const q = await own([trigger, 'rtcdp']);
+      let m = await menu(q), r = m.rows.filter(x => x.id === held);
+      ok(m.heads.join(' | ') === 'Connects to your canvas | Not suggested | Not connected to your canvas yet' && r.length === 1 && r[0].under === 'Not suggested' && m.rows.filter(x => x.under === 'Not suggested').length === 1,
+        `Nov 17: with ${T} on the canvas, ${H} sits once under "Not suggested", right after "Connects to your canvas", and in no other group`, m.heads.join(' | ') + ' ' + JSON.stringify(r));
+      ok(r.length === 1 && r[0].name === H && r[0].tag === 'Add anyway' && r[0].why === why && r[0].seen, `Nov 17: its tag reads "Add anyway", and the line under its name, shown without pointing at the row, reads "${why}"`, JSON.stringify(r));
+      // take the newer product off: the older one is an ordinary row again
+      await outside(q); await q.click(`.node[data-p="${trigger}"]`); await q.waitForTimeout(300); await q.click(`#card [data-rm="${trigger}"]`); await q.waitForTimeout(400);
+      m = await menu(q); r = m.rows.filter(x => x.id === held);
+      ok(!m.heads.includes('Not suggested') && r.length === 1 && r[0].under === 'Connects to your canvas' && r[0].tag === 'Connects to 1 on your canvas' && r[0].why === 'Lines to Real-Time CDP' && !r[0].seen,
+        `Nov 17: with ${T} removed, ${H} is back in its normal place under "Connects to your canvas" and "Not suggested" is gone`, m.heads.join(' | ') + ' ' + JSON.stringify(r));
+      // put it back, then Add anyway: the product goes on the canvas like any other
+      await addP(q, trigger); m = await menu(q);
+      ok(m.rows.filter(x => x.id === held).map(x => x.under + ':' + x.tag).join() === 'Not suggested:Add anyway', `Nov 17: with ${T} added again, ${H} is under "Not suggested" again`, JSON.stringify(m.rows.filter(x => x.id === held)));
+      await q.click(`#add-menu [data-add="${held}"]`); await q.waitForTimeout(400);
+      const on = await nodes(q), es = await edges(q); m = await menu(q);
+      ok(JSON.stringify(on) === JSON.stringify([trigger, held, 'rtcdp'].sort()) && es.some(c => c.split('-').sort().join() === [trigger, held].sort().join()) && !m.heads.includes('Not suggested') && !m.rows.some(x => x.id === held),
+        `Nov 17: "Add anyway" puts ${H} on the canvas beside ${T}, with their connection, and the menu has nothing left to hold back`, on.join() + ' / ' + es.join() + ' / ' + m.heads.join(' | '));
+      await q.context().close();
+    }
+    // one-way: the older product on the canvas never holds the newer one back
+    for (const [older, newer] of [['aa', 'cja'], ['target', 'ajo']]) {
+      const q = await own([older]), m = await menu(q), r = m.rows.filter(x => x.id === newer);
+      ok(!m.heads.includes('Not suggested') && r.length === 1 && r[0].under === 'Connects to your canvas' && r[0].tag === 'Connects to 1 on your canvas',
+        `Nov 17: one-way: with ${P[older].name} on the canvas, ${P[newer].name} is still suggested under "Connects to your canvas"`, m.heads.join(' | ') + ' ' + JSON.stringify(r));
+      await q.context().close();
+    }
+    // a canvas with none of the newer products: both older ones in their normal place
+    { const q = await own(['bv', 'rtcdp']), m = await menu(q), two = m.rows.filter(x => ['aa', 'target'].includes(x.id));
+      ok(!m.heads.includes('Not suggested') && two.length === 2 && two.every(x => x.under === 'Connects to your canvas' && x.tag === 'Connects to 1 on your canvas'),
+        'Nov 17: a canvas with neither Customer Journey Analytics nor Journey Optimizer shows no "Not suggested": Adobe Analytics and Target are suggested as before', m.heads.join(' | ') + ' ' + JSON.stringify(two));
+      await q.context().close(); }
+    // both newer products on the canvas: one heading, the two older products under it by name, each with its own line
+    { const q = await own(['cja', 'ajo']), m = await menu(q), held = m.rows.filter(x => x.under === 'Not suggested');
+      ok(m.heads.join(' | ') === 'Connects to your canvas | Not suggested | Not connected to your canvas yet' && m.rows.filter(x => ['aa', 'target'].includes(x.id)).length === 2 &&
+          held.map(x => [x.id, x.tag, x.why, x.seen].join(':')).join() === ['aa:Add anyway:Customer Journey Analytics is on your canvas. Add Adobe Analytics only if your client still runs it.:true',
+            'target:Add anyway:Journey Optimizer is on your canvas. Add Target only if your client still runs it.:true'].join(),
+        'Nov 17: with Customer Journey Analytics and Journey Optimizer both on the canvas, one "Not suggested" heading holds Adobe Analytics then Target, each with its own line', m.heads.join(' | ') + ' ' + JSON.stringify(held));
+      await q.context().close(); }
+    // every other product on the canvas: nothing connects first, so "Not suggested" is the menu's first and only heading
+    { const q = await own(OFFERINGS.filter(id => !['aa', 'target'].includes(id))); let m = await menu(q);
+      ok(m.heads.join(' | ') === 'Not suggested' && m.rows.map(x => x.id + ':' + x.under + ':' + x.tag).join() === 'aa:Not suggested:Add anyway,target:Not suggested:Add anyway',
+        'Nov 17: when only the held-back products are left to add, "Not suggested" is the first and only heading, with Adobe Analytics then Target', m.heads.join(' | ') + ' ' + JSON.stringify(m.rows.map(x => x.id + ':' + x.under)));
+      await q.click('#add-menu [data-add="aa"]'); await q.waitForTimeout(400); await addP(q, 'target');
+      m = await menu(q); const said = (await q.innerText('#add-menu')).replace(/\s+/g, ' ');
+      ok((await nodes(q)).length === N && m.rows.length === 0 && said.includes('Every product is on your canvas') && !said.includes('Not suggested'),
+        'Nov 17: and once both are added the menu says every product is on the canvas', (await nodes(q)).length + ' ' + said);
+      await q.context().close(); }
+    // on a phone the two lines wrap inside the menu
+    { const q = await fresh(390, 844); await q.goto(CANVAS); await choose(q, 'custom'); await q.click('#empty-add'); await q.waitForTimeout(300); await addP(q, 'cja'); await addP(q, 'ajo');
+      const m = await menu(q), held = m.rows.filter(x => x.under === 'Not suggested');
+      const box = await q.evaluate(() => { const r = document.getElementById('add-menu').getBoundingClientRect();
+        return {page: document.documentElement.scrollWidth, menu: [r.left, r.right], lines: [...document.querySelectorAll('#add-menu [data-add] .to.show')].map(e => { const x = e.getBoundingClientRect(); return [x.left, x.right, x.height]; })}; });
+      ok(held.map(x => x.id + ':' + x.seen).join() === 'aa:true,target:true' && box.page <= 390 && box.menu[0] >= 0 && box.menu[1] <= 390 && box.lines.length === 2 && box.lines.every(l => l[0] >= box.menu[0] && l[1] <= box.menu[1] && l[2] > 0),
+        'Nov 17: on a phone the "Not suggested" rows and their lines sit inside the menu, with no sideways scroll', JSON.stringify(held.map(x => x.id + ':' + x.seen)) + ' ' + JSON.stringify(box));
+      await q.context().close(); }
+    // the find box finds a held-back product, under the same heading, tag and line
+    { const q = await own(['cja']); let m = await menu(q, 'analytics'), r = m.rows.filter(x => x.id === 'aa');
+      const n = m.rows.length - 1, why = 'Customer Journey Analytics is on your canvas. Add Adobe Analytics only if your client still runs it.';
+      ok(n >= 1 && m.heads.join(' | ') === `${n} match${n === 1 ? '' : 'es'} | Not suggested` && m.rows.slice(0, n).every(x => x.under === m.heads[0] && /analytics/i.test(x.name)) && m.rows[n].id === 'aa' &&
+          r.length === 1 && r[0].under === 'Not suggested' && r[0].tag === 'Add anyway' && r[0].why === why && r[0].seen,
+        'Nov 17: typing "analytics" in the find box lists the suggested matches, then Adobe Analytics under "Not suggested" with "Add anyway" and its line', m.heads.join(' | ') + ' ' + JSON.stringify(m.rows.map(x => x.id + ':' + x.under)));
+      m = await menu(q, 'adobe analytics');
+      ok(m.heads.join(' | ') === 'Not suggested' && m.rows.map(x => x.id + ':' + x.tag + ':' + x.why).join() === 'aa:Add anyway:' + why, 'Nov 17: typing its whole name finds Adobe Analytics alone, still under "Not suggested"', m.heads.join(' | ') + ' ' + JSON.stringify(m.rows));
+      await q.click('#add-menu [data-add="aa"]'); await q.waitForTimeout(400);
+      ok(JSON.stringify(await nodes(q)) === '["aa","cja"]', 'Nov 17: and adding it from the find box puts it on the canvas', (await nodes(q)).join());
+      await q.context().close(); }
+    // AEM Sites: one entry, two ways. Sites Optimizer alone holds nothing back
+    { const q = await own(['so']), m = await menu(q), s = m.rows.filter(x => x.sites);
+      ok(!m.heads.includes('Not suggested') && s.map(x => [x.id, x.name, x.under].join(':')).join() === 'eds:With Edge Delivery Services:Connects to your canvas,aemsites:With traditional AEM Publish:Connects to your canvas',
+        'Nov 17: Sites Optimizer alone holds nothing back: the AEM Sites entry still offers Edge Delivery Services and traditional AEM Publish', m.heads.join(' | ') + ' ' + JSON.stringify(s));
+      await q.context().close(); }
+    // Edge Delivery on the canvas: AEM Sites is one box there, so its entry has left the menu and traditional AEM Publish is not offered at all
+    { const q = await own(['eds', 'so']), m = await menu(q), t1 = await menu(q, 'traditional'), t2 = await menu(q, 'AEM Sites'), all = [m, t1, t2];
+      ok(JSON.stringify(await nodes(q)) === '["eds","so"]' && all.every(x => !x.heads.includes('Not suggested') && !x.rows.some(y => y.id === 'aemsites' || y.sites)) && t1.rows.length === 0,
+        'Nov 17: with AEM Sites with Edge Delivery Services on the canvas, the menu offers no traditional AEM Publish, listed or found: the AEM Sites entry is already off the menu, so no "Not suggested" line is needed',
+        JSON.stringify(all.map(x => [x.heads, x.rows.filter(y => y.id === 'aemsites' || y.sites)])));
+      await q.context().close(); }
+    { const q = await own(['aemsites']), m = await menu(q), s = m.rows.filter(x => x.sites);
+      ok(!m.heads.includes('Not suggested') && s.map(x => x.id + ':' + x.name).join() === 'eds:Use Edge Delivery Services',
+        'Nov 17: one-way: with AEM Sites on traditional AEM Publish on the canvas, the menu still offers Edge Delivery Services', m.heads.join(' | ') + ' ' + JSON.stringify(s));
+      await q.context().close(); }
+    // the rules stop at the menu: a service that needs Adobe Analytics still says so, and its button still adds it
+    { const q = await own(['cw', 'cja']); await q.click('.ib[data-c="cw-cja"]'); await q.waitForTimeout(400);
+      for (const d of await q.$$('#card details')) if (!(await d.evaluate(x => x.open))) await d.$eval('summary', s => s.click());
+      await q.waitForTimeout(200);
+      const row = await q.$eval('#card .ln[data-l="XA29"]', x => ({text: x.innerText.replace(/\s+/g, ' '), button: [...x.querySelectorAll('[data-addp]')].map(b => b.dataset.addp + ':' + b.textContent.trim()).join()})).catch(() => ({text: 'no XA29 row', button: ''}));
+      ok(row.text.includes('Needs Adobe Analytics on the canvas') && row.button === 'aa:Add Adobe Analytics', 'Nov 17: on Coworker + Customer Journey Analytics, "Adobe Analytics and CJA data validation and fixes" still says it needs Adobe Analytics on the canvas, with its "Add Adobe Analytics" button', JSON.stringify(row));
+      await q.click('#card .ln[data-l="XA29"] [data-addp="aa"]'); await q.waitForTimeout(600);
+      const on = await nodes(q), locked = await q.$$eval('#card .ln[data-l="XA29"]', xs => xs.map(x => x.classList.contains('lock')).join());
+      ok(JSON.stringify(on) === '["aa","cja","cw"]' && locked === 'false', 'Nov 17: and the button puts Adobe Analytics on the canvas beside Customer Journey Analytics and unlocks the service', on.join() + ' ' + locked);
+      await q.context().close(); }
+    // ready-made plays have no Add product menu, so nothing changes there, even on the plays that hold Customer Journey Analytics or Edge Delivery
+    for (const id of ['cja', 'aem']) {
+      const q = await fresh(); await q.goto(CANVAS); await choose(q, id);
+      const on = await nodes(q), menuHtml = await q.$eval('#add-menu', x => x.innerHTML);
+      ok(await q.isHidden('#add-btn') && await q.isHidden('#add-menu') && menuHtml === '' && PL[id].products.every(x => on.includes(x)),
+        `Nov 17: the ready-made play ${PL[id].label} is unchanged: its own products, no Add product button and no menu`, on.join() + ' ' + menuHtml.length);
+      await q.context().close();
+    }
+  }
   ok(errs.length === 0, 'no script errors', errs.join(' | ').slice(0, 300));
   await b.close();
   console.log(fails ? `${fails} CHECK(S) FAILED` : 'ALL CANVAS CHECKS PASSED');

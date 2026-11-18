@@ -1,0 +1,21 @@
+{
+ "note": "Never go backwards (Adam, Nov 17 2026): a client that owns the newer product is not offered the older one that does the same job. Each rule is one-way and only changes what the Add product menu on Create your own play suggests: while a product in when_on_canvas_any is on the canvas, each product in never_suggest leaves its group and sits under 'Not suggested', where a partner can still add it. Nothing is ever taken off a canvas. Product ids are the catalog's. Built into the canvas by build.py, which passes the ids only. To add a rule, add an entry here; the menu code needs no change. The one exception is AEM Sites (eds and aemsites): the menu draws it itself, as one entry with two choices, so build.py refuses any other rule on those two ids.",
+ "rules": [
+  {
+   "when_on_canvas_any": ["cja"],
+   "never_suggest": ["aa"],
+   "adam": "I would never offer somebody Adobe Analytics who already owned Customer Journey Analytics."
+  },
+  {
+   "when_on_canvas_any": ["ajo"],
+   "never_suggest": ["target"],
+   "adam": "If someone owns Journey Optimizer, they're not going to buy Target."
+  },
+  {
+   "when_on_canvas_any": ["eds"],
+   "never_suggest": ["aemsites"],
+   "adam": "If they own edge delivery services they probably do not want to go backwards to traditional AEM publish.",
+   "in_the_menu": "The menu offers AEM Sites as one entry with two choices. Once AEM Sites with Edge Delivery Services is on the canvas that entry is already gone, so the menu has no 'With traditional AEM Publish' row to move, and no 'Not suggested' line shows for this rule."
+  }
+ ]
+}

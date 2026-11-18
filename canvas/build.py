@@ -387,6 +387,18 @@ def main():
     marker = '/*TRAINING*/{}'
     assert render_tpl.count(marker) == 1, marker
     render_tpl = render_tpl.replace(marker, json.dumps(training, ensure_ascii=False, separators=(',', ':')).replace('</', '<\\/'))
+    # Never go backwards (Adam, Nov 17 2026): the rules the Add product menu on Create your own play follows (never_suggest.json).
+    # The page gets the product ids only; every id is a product that play offers, and no rule runs both ways.
+    # The menu draws AEM Sites itself, as one entry with two choices that leaves once either is on the canvas, so a rule cannot move those two
+    # ids to "Not suggested": the only rule allowed on them is the one the entry already keeps (Edge Delivery holds back traditional AEM Publish).
+    rules = [{k: r[k] for k in ('when_on_canvas_any', 'never_suggest')} for r in json.load(open(os.path.join(HERE, 'never_suggest.json'), encoding='utf-8'))['rules']]
+    offered = set(next(p for p in plays if p.get('custom'))['products'])
+    pairs = {(t, h) for r in rules for t in r['when_on_canvas_any'] for h in r['never_suggest']}
+    assert pairs and all({t, h} <= offered and t != h and (h, t) not in pairs for t, h in pairs), sorted(pairs)
+    assert all(h != 'eds' and (h != 'aemsites' or t == 'eds') for t, h in pairs), sorted(pairs)
+    marker = '/*NEVER_SUGGEST*/[]'
+    assert render_tpl.count(marker) == 1, marker
+    render_tpl = render_tpl.replace(marker, json.dumps(rules, separators=(',', ':')))
     out = (render_tpl.replace('/*CATALOG*/null', blob).replace('/*PROBLEMS*/null', pblob)
               .replace('{{FONT400}}', b64(fonts.format(400))).replace('{{FONT600}}', b64(fonts.format(600))).replace('{{FONT700}}', b64(fonts.format(700)))
               .replace('{{LOGO}}', b64(os.path.join(SOW, 'adobe_logo.png')))

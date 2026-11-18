@@ -1,5 +1,5 @@
 {
-  "note": "Draft, not in the tool. Rules Adam gave on Nov 17, 2026 for the ranked Add product list: a client does not go back to an older product once it owns the newer one that does the same job. Each rule only stops a suggestion. It never removes a product from a canvas, and Create your own play stays freeform. Product ids are the tool's own (canvas/catalog.json).",
+  "note": "Adam's words and the reasoning behind each rule. The rules the tool follows are in canvas/never_suggest.json (built on Create your own play; the ranked list is not built). Rules Adam gave on Nov 17, 2026 for the ranked Add product list: a client does not go back to an older product once it owns the newer one that does the same job. Each rule only stops a suggestion. It never removes a product from a canvas, and Create your own play stays freeform. Product ids are the tool's own (canvas/catalog.json).",
   "principle": "Any newer product that offers the same functionality as an older product: the client is not going to go backwards. (Adam, Nov 17)",
   "rules": [
     {
@@ -34,7 +34,7 @@
       ],
       "adam": "If someone owns Adobe Experience Manager cloud service or Edge Delivery or even Sites Optimizer I don't think they're going to buy AEM Sites. Nov 17, later, asked which AEM Sites: \"if they own edge delivery services they probably do not want to go backwards to traditional AEM publish.\"",
       "tool_today": "To settle with Adam: the tool has three AEM products: 'AEM Sites' (its texts describe AEM Sites as a Cloud Service), 'AEM Sites with Edge Delivery Services' and 'Sites Optimizer'. It documents native connections aemsites-eds (five services, AEM authoring as the Edge Delivery content source) and aemsites-so (four services), and several first-page chips say the client already owns AEM Sites. How the customer data names the AEM products decides the mapping. On Create your own play the menu offers AEM Sites two ways: 'With Edge Delivery Services' (eds) and 'With traditional AEM Publish' (aemsites).",
-      "status": "Set by Adam: once AEM Sites with Edge Delivery Services is on the canvas, never suggest AEM Sites with traditional AEM Publish (the tool's product 'aemsites'). Sites Optimizer alone does not trigger it. The tool keeps the aemsites-eds connection and its five services for clients who own both, and the first-page chips that say a client already owns AEM Sites are untouched. In the ranked list the two AEM Sites deliveries already share one row, so the rule mostly shows on Create your own play, where the AEM Sites entry offers both."
+      "status": "Set by Adam: once AEM Sites with Edge Delivery Services is on the canvas, never suggest AEM Sites with traditional AEM Publish (the tool's product 'aemsites'). Sites Optimizer alone does not trigger it. The tool keeps the aemsites-eds connection and its five services for clients who own both, and the first-page chips that say a client already owns AEM Sites are untouched. In the ranked list the two AEM Sites deliveries already share one row, so the rule mostly shows on Create your own play, where the AEM Sites entry offers both while neither is on the canvas. Once AEM Sites with Edge Delivery Services is on the canvas that entry leaves the menu, so traditional AEM Publish is not offered there at all."
     }
   ],
   "not_in_the_tool": [
@@ -52,7 +52,7 @@
   "where_the_rules_apply": {
     "adam": "I would say not Adobe analytics first because they'd be going backwards.",
     "decision": "The rules apply to the ranked Add product list on ready-made plays and to the Add product menu on Create your own play. On Create your own play the product leaves 'Connects to your canvas' and sits on a 'Not suggested' line, where a partner can still add it.",
-    "picture": "mockups/own_play_menu_today_vs_proposed.png (made by mockups/own_play_menu_mock.js). Not built; waiting for Adam’s yes on the picture."
+    "picture": "mockups/own_play_menu_today_vs_proposed.png (made by mockups/own_play_menu_mock.js). Approved by Adam and built on Create your own play."
   },
   "no_rule": [
     {
