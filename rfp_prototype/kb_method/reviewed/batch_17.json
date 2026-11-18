@@ -1,0 +1,136 @@
+[
+ {
+  "id": "XT01",
+  "steps": [
+   "Add the read-only or the full assistant permission to the product profiles of your pilot users in the Admin Console, and agree the data view each team uses.",
+   "Help each person add Adobe's Customer Journey Analytics plugin in ChatGPT, connector in Claude or tool in Copilot Studio, and sign in with their Adobe ID.",
+   "Compare the first answers with Analysis Workspace, then write the starter questions and a one-page guide for your team."
+  ],
+  "deliverables": [
+   "Assistant permissions set for your pilot users",
+   "Customer Journey Analytics connected in the agreed assistant",
+   "Starter questions and a one-page guide"
+  ],
+  "asks": [
+   "The pilot users, the assistant they use and the data view each team needs",
+   "An Adobe administrator to set the permissions in the Admin Console"
+  ],
+  "risk": "Answers that differ from Analysis Workspace: we check the first answers against the same data view before your team relies on them.",
+  "outcome": "Your analysts and marketers ask Customer Journey Analytics questions in their own assistant and get reports from the data views they can use.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "XT03",
+  "steps": [
+   "Check that your AEM as a Cloud Service environment is on release 26309 or later, and add Adobe's traffic rule where it limits access by IP address.",
+   "Help the pilot authors add the Adobe Experience Manager plugin in ChatGPT, the connector in Claude or Adobe's AEM address in Microsoft 365 Copilot, and sign in with their Adobe ID.",
+   "Agree with your content owner which changes, deletions and publishing may be asked for in the assistant, and who reviews them before they go live.",
+   "Write the starter requests and a one-page guide, and walk the pilot authors through them."
+  ],
+  "deliverables": [
+   "Environment check and access rule",
+   "AEM connected in the agreed assistant for the pilot authors",
+   "Agreed rules for changes and publishing",
+   "Starter requests and a one-page guide"
+  ],
+  "asks": [
+   "The pilot authors, the assistant they use and the site in scope",
+   "A content owner to agree which changes the assistant may make"
+  ],
+  "risk": "A change published without review: we agree who reviews each kind of change before authors ask the assistant for it, as Adobe advises.",
+  "outcome": "Your authors find, draft and update pages and content fragments by asking in their assistant, within their own AEM permissions.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "XT04",
+  "steps": [
+   "Set up or reuse your AEM connection in ChatGPT, Claude or Microsoft 365 Copilot for the asset team, and add Adobe's AEM address by hand where the team needs upload, move, delete or publish.",
+   "Check the folder permissions behind those actions, and whether Dynamic Media with OpenAPI is on for resized and cropped versions made on request.",
+   "Agree with your DAM owner which asset actions may be asked for in the assistant, and write a one-page guide."
+  ],
+  "deliverables": [
+   "AEM connection set up for the asset team",
+   "Folder permission check for asset actions",
+   "Agreed asset actions and a one-page guide"
+  ],
+  "asks": [
+   "The asset team, the assistant it uses and the folders it works in",
+   "A DAM owner to agree which asset actions the assistant may take"
+  ],
+  "risk": "An asset moved, deleted or published by mistake: we check folder permissions first and agree which actions the team may ask for.",
+  "outcome": "Your asset team searches, fetches and handles assets by asking in its assistant, within the AEM permissions each person already has.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "XT05",
+  "steps": [
+   "Check that your Workfront is on Adobe's sign-in system, and have the Workfront administrator review the read switch and decide with your governance board whether to turn on the write switch.",
+   "Have the ChatGPT, Claude or Microsoft Copilot administrator enable the Adobe Workfront connector or allow adding it by web address, and help the pilot team connect and sign in.",
+   "Check that each person sees only what their Workfront access allows, Planning records too where your package includes Planning.",
+   "Write the starter requests and a one-page guide, reusing any write decision a Coworker service on the same quote already made."
+  ],
+  "deliverables": [
+   "Read and write decision for the Workfront connection",
+   "Workfront connected in the agreed assistant for the pilot team",
+   "Access check across projects, tasks and Planning records",
+   "Starter requests and a one-page guide"
+  ],
+  "asks": [
+   "The pilot team and the assistant it uses",
+   "A Workfront administrator and your governance board for the write decision"
+  ],
+  "risk": "Records created or deleted by mistake: writing stays off until your governance board agrees it, and we check each person's access first.",
+  "outcome": "Your team finds and updates projects, tasks and issues by asking in its assistant, within the Workfront access each person already has.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "XT06",
+  "steps": [
+   "Check that your ChatGPT, Claude or Microsoft Copilot plan allows the connection, and add Adobe's GenStudio address as a custom connector.",
+   "Have each pilot user sign in with their Adobe ID and pick the Adobe organization, then test questions about ad performance and a draft from a template.",
+   "Agree who may publish an approved ad from a conversation, reusing any publishing rule a Coworker service on the same quote already set.",
+   "Write the starter requests and a one-page guide for your marketers."
+  ],
+  "deliverables": [
+   "GenStudio for Performance Marketing connected in the agreed assistant",
+   "Tested questions and a test draft",
+   "Agreed publishing rule",
+   "Starter requests and a one-page guide"
+  ],
+  "asks": [
+   "The pilot users, the assistant they use and the Adobe organization",
+   "A marketing lead to agree who may publish from a conversation"
+  ],
+  "risk": "A live ad published from a conversation by mistake: we agree who may publish before the team starts and test with a draft first.",
+  "outcome": "Your marketers get ad performance answers and first drafts by asking in their assistant, and publish only under the agreed rule.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "XT07",
+  "steps": [
+   "Create a dedicated API-only user in Marketo Engage with only the permissions your team needs, and its credentials in LaunchPoint.",
+   "Check with your Marketo administrator that the instance is enabled for this access, and set up Claude Desktop or Claude Code on the pilot computers.",
+   "Test first in a sandbox with a request that changes nothing, then agree which changes may be asked for in Claude.",
+   "Write the starter requests and a one-page guide for your marketing operations team."
+  ],
+  "deliverables": [
+   "API-only user with agreed permissions",
+   "Claude set up on the pilot computers",
+   "Sandbox test record and agreed changes",
+   "Starter requests and a one-page guide"
+  ],
+  "asks": [
+   "A Marketo administrator to create the API-only user and its credentials",
+   "The pilot users and their computers"
+  ],
+  "risk": "A change made in the live instance by mistake: we test in a sandbox first and give the API user only the permissions the team needs.",
+  "outcome": "Your marketing operations team looks up and updates Marketo programs, emails and lists by asking in Claude.",
+  "kind": "task",
+  "phase": "launch"
+ }
+]

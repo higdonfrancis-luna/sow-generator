@@ -162,7 +162,9 @@ function redoLine(line) { const v = s => Number(s.replace(/,/g, ''));
     ok(c.play === play && c.label === label && same(c.on, ids) && ids.every(id => c.boxes.includes(id)) && edges > 0 && svc && same(h.added, ids) && same(h.addedNames, ids.map(id => NAME[id])),
       `2. ${label} plus ${ids.map(id => NAME[id]).join(' and ')}: the label "Play" still reads "${label}", the added product is on the canvas with its lines and services, and the hand-over names it`, JSON.stringify({label: c.label, on: c.on, boxes: c.boxes, edges, svc, added: h.added, names: h.addedNames}));
     ok(rm.own.every(x => !x) && rm.added.every(Boolean), `2. ${label}: the play's own products have no Remove button and the added one has`, JSON.stringify(rm));
-    if (play === 'coworker') ok(!c.out && !c.boxes.includes('cdn'), '2. known limit, pinned: Adobe Coworker with Brand Visibility added shows no "Add outside system" button and has no CDN', JSON.stringify({out: c.out, boxes: c.boxes}));
+    // Nov 18 2026 (Adam: "a play should always offer them if there's a product on its canvas that connects to them"): the known limit is gone
+    if (play === 'coworker') { const offer = await p.evaluate(() => outsideOffer());
+      ok(c.out && offer.includes('cdn') && !c.boxes.includes('cdn'), '2. Adobe Coworker with Brand Visibility added shows "Add outside system", which offers the CDN; the CDN is on the canvas only once it is added', JSON.stringify({out: c.out, offer, boxes: c.boxes})); }
     await toSow(p); const s = await sow(p);
     ok(s.play === play && s.label === label && s.title === title && s.objective && s.n === c.n && s.total === c.total && same(s.added[play].products, ids),
       `2. ${label}: the SOW steps keep the play's name and objective, Services shows the canvas's ${c.n} services and total, and the statement of work is titled "${title}"`, JSON.stringify(s).slice(0, 400) + ' canvas ' + c.n + ' ' + c.total);
@@ -336,19 +338,20 @@ function redoLine(line) { const v = s => Number(s.replace(/,/g, ''));
     ok(every.length > 3 && l.rows.length > 5 && l.rows.every(r => tierOf(r) === 3 && !r.next) && !l.heads.some(h => FITS.includes(h)), '7. when every row left is in "Not tied to this goal", no row carries "Next"', JSON.stringify({every, rows: l.rows.length, heads: l.heads, next: l.rows.filter(r => r.next).length}));
     await p.context().close(); }
 
-  { // the Adobe Coworker play offers no outside system, so a chip's note about the CDN stays off its rows; Create your own play offers the CDN and keeps the note
+  { // Nov 18 2026: a play offers every outside system that connects to a product on it, so on the Adobe Coworker play Brand Visibility brings the CDN, and the
+    // row that adds Brand Visibility keeps its chip's note about the CDN, as Create your own play does; a note about a system the play would still not offer stays off
     const p = await open(), why = {}; await pick(p, 'coworker');
     for (const g of ['slow-reporting', 'cant-see-what-works']) { await goal(p, g); const l = await list(p); why[g] = (l.rows.find(r => r.id === 'bv') || {}).why; why[g + ', rows naming the CDN'] = l.rows.filter(r => /CDN/.test(r.why)).length; }
     await p.context().close();
     const q = await open(); await pick(q, 'custom', ''); await goal(q, 'slow-reporting'); const own = ((await list(q)).rows.find(r => r.id === 'bv') || {}).why; await q.context().close();
     const names = await (async () => { const p = await open(), bad = []; for (const play of READY) { await pick(p, play, '');
-      bad.push(...await p.evaluate(() => { const offered = play().outside || [], out = []; for (const g of PROBS) { st.goal = g.id; const R = rankRows();
-        for (const r of R.rows) if (r.tier === 1) { const ids = rowIds(r.id), c = R.f.refine.find(c => c.add.some(id => ids.includes(id))); if (c.note && r.why.includes(c.note) && c.add.some(id => P[id].outside && !offered.includes(id))) out.push(st.play + ' ' + g.id + ' ' + r.id); } }
+      bad.push(...await p.evaluate(() => { const out = []; for (const g of PROBS) { st.goal = g.id; const R = rankRows();
+        for (const r of R.rows) if (r.tier === 1) { const ids = rowIds(r.id), c = R.f.refine.find(c => c.add.some(id => ids.includes(id))); const offered = offerOf([...(play().custom ? [] : play().products), ...st.on, ...ids]); if (c.note && r.why.includes(c.note) && c.add.some(id => P[id].outside && !offered.includes(id))) out.push(st.play + ' ' + g.id + ' ' + r.id); } }
         delete st.goal; return out; }));
       await p.click('#change-play'); await p.click('#confirm-yes'); await p.waitForTimeout(300); } await p.context().close(); return bad; })();
-    ok(why['slow-reporting'] === 'Builds on the goal. My client wants the AI channel included.' && why['cant-see-what-works'] === 'Builds on the goal. My client wants AI assistants included as a channel.' && !why['slow-reporting, rows naming the CDN'] && !why['cant-see-what-works, rows naming the CDN']
+    ok(why['slow-reporting'] === 'Builds on the goal. My client wants the AI channel included. Brand Visibility\'s CJA source needs CDN logs, so the CDN belongs on the canvas.' && why['cant-see-what-works'] === 'Builds on the goal. My client wants AI assistants included as a channel. Brand Visibility\'s CJA source needs CDN logs, so the CDN belongs on the canvas.' && why['slow-reporting, rows naming the CDN'] === 1 && why['cant-see-what-works, rows naming the CDN'] === 1
       && own === 'Builds on the goal. My client wants the AI channel included. Brand Visibility\'s CJA source needs CDN logs, so the CDN belongs on the canvas.' && !names.length,
-      '7. on Adobe Coworker, which offers no outside system, the Brand Visibility row gives the client detail without "the CDN belongs on the canvas" (both goals that add it); Create your own play, which offers the CDN, keeps the sentence; on no play and for no goal does a reason carry the note of a chip that adds an outside system the play does not offer', JSON.stringify({why, own, names: names.slice(0, 5)})); }
+      '7. on Adobe Coworker, which offers the CDN once Brand Visibility is on it, the Brand Visibility row gives the client detail and "the CDN belongs on the canvas" (both goals that add it), as Create your own play does; on no play and for no goal does a reason carry the note of a chip that adds an outside system the play would not offer with that product on it', JSON.stringify({why, own, names: names.slice(0, 5)})); }
 
   // ============ 8. the goal: asked once ============
   { const p = await open({table: FIX_B}); await pick(p, 'aem'); await menu(p); let l = await list(p);

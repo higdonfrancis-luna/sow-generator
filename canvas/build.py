@@ -27,10 +27,15 @@ def clean(s):
 def scope_runtime(html):
     marker = '<script id="canvas-scope-runtime">'
     with open(os.path.join(HERE, 'catalog_map.json'), encoding='utf-8') as source:
-        presets = {p['id']: {'products': p['products'], 'startingOutside': p.get('ostart', [])}
-                   for p in json.load(source)['plays'] if not p.get('custom')}
+        cmap = json.load(source)
+    presets = {p['id']: {'products': p['products'], 'startingOutside': p.get('ostart', [])}
+               for p in cmap['plays'] if not p.get('custom')}
+    # Nov 18 2026: a play offers every outside system that connects to a product on its canvas, and any product can be added to a play,
+    # so the SOW steps keep every outside system the canvas hands over, on every play
+    outside = [p['id'] for p in cmap['products'] if p.get('outside')]
     with open(os.path.join(HERE, 'scope-choices.js'), encoding='utf-8') as source:
-        script = marker + '\n' + source.read() + 'const CanvasPresets = ' + json.dumps(presets) + ';\n</script>'
+        script = (marker + '\n' + source.read() + 'const CanvasPresets = ' + json.dumps(presets) + ';\n'
+                  + 'const CanvasOutside = ' + json.dumps(outside) + ';\n</script>')
     if marker in html:
         return re.sub(re.escape(marker) + r'.*?</script>', lambda _: script, html, count=1, flags=re.S)
     anchor = '<script id="capability-references-runtime">'
@@ -113,6 +118,9 @@ def main():
         # outside systems (step 27): the customer's own systems, offered on a play's canvas, never in a play from the start
         if p.get('outside'):
             q['outside'], q['systems'] = True, clean(p['systems'])
+            # Nov 18 2026: an AI assistant's line in the Add outside system menu while Brand Visibility is on the canvas
+            if p.get('systems_with_bv'):
+                q['systems_with_bv'] = clean(p['systems_with_bv'])
         # step 45: why a system is Recommended
         if p.get('rec'):
             q['rec'] = clean(p['rec'])
@@ -181,9 +189,10 @@ def main():
             continue
         assert t['kind'] in ('native', 'platform', 'extension', 'partner', 'outside'), c['id']
         c['kind'], c['label'] = t['kind'], clean(t['label'])
-        # an outside system's connection is labelled Outside system and drawn in the style of its route
-        if t['kind'] == 'outside':
-            assert t.get('line') in ('native', 'platform'), c['id']
+        # an outside system's connection is labelled Outside system and drawn in the style of its route; one with no route style
+        # (Nov 18 2026: ChatGPT, Claude and Microsoft Copilot, which Adobe never calls a native integration) is drawn plain
+        if t['kind'] == 'outside' and 'line' in t:
+            assert t['line'] in ('native', 'platform'), c['id']
             c['line'] = t['line']
         c['availability'], c['prereqs'] = clean(t.get('availability', '')), [clean(x) for x in t.get('prereqs', [])]
         # step 47: the SOW version of a partner note (a condition with an owner); the card shows the note, the hand-over the SOW version
@@ -196,6 +205,11 @@ def main():
         for k in ('tier', 'covered'):
             if t.get(k):
                 c[k] = clean(t[k])
+        # Nov 18 2026: the service of a product that covers that work (Coworker set up in an AI platform, for ChatGPT + Coworker), which the line's card lists
+        # with its hours and tick; it is counted once, on its product
+        if t.get('covered_by'):
+            assert t.get('covered') and any(t['covered_by'] in p['lines'] + p['more'] for p in products), c['id']
+            c['covered_by'] = t['covered_by']
         # the evidence quotes stay in research/connection_types.json; the page shows the type, availability and prerequisites
         for k in ('how',):
             if t.get(k):
@@ -249,7 +263,9 @@ def main():
     for pl in plays:
         assert set(pl['pos']) == set(pl['products']), f"play {pl['id']} needs a place for each product"
         assert len({tuple(v) for v in pl['pos'].values()}) == len(pl['pos']), f"play {pl['id']} has two products in one place"
-        assert set(pl.get('opos', {})) == set(pl.get('outside', []) + pl.get('kept', [])), f"play {pl['id']} needs a place for each outside system and kept product"
+        # Nov 18 2026: a play also offers every outside system that connects to one of its products, so it needs a place for those too
+        offers = {e for c in keep_c for e, q in ((c['a'], c['b']), (c['b'], c['a'])) if pby[e].get('outside') and q in pl['products']}
+        assert set(pl.get('opos', {})) == set(pl.get('outside', []) + pl.get('kept', [])) | offers, f"play {pl['id']} needs a place for each outside system it offers and kept product"
         assert all(pby[o].get('outside') for o in pl.get('outside', [])), f"play {pl['id']} lists an outside system that isn't one"
         # step 96: a built play offers outside systems only; 'kept' is an Adobe product a saved canvas keeps, never offered
         assert all(o not in pl.get('outside', []) and not pby[o].get('outside') and o in pl.get('opos', {}) and o not in pl['products'] for o in pl.get('kept', [])), f"play {pl['id']} keeps a product it can't place"
@@ -275,7 +291,7 @@ def main():
     keep_p, keep_c, used = cat['products'], cat['connections'], cat['lines']
     # step 47: partners see service names, never the internal line IDs, so no shown text may cite one
     ids = re.compile(r'\b(?:' + '|'.join(sorted(map(re.escape, used), key=len, reverse=True)) + r')\b')
-    shown = [(p['id'], p.get(k)) for p in keep_p for k in ('name', 'title', 'systems', 'rec')]
+    shown = [(p['id'], p.get(k)) for p in keep_p for k in ('name', 'title', 'systems', 'systems_with_bv', 'rec')]
     for c in keep_c:
         shown += [(c['id'], c.get(k)) for k in ('how', 'label', 'availability', 'sowAvailability', 'tier', 'covered')]
         shown += [(c['id'], x) for x in c.get('prereqs', []) + c.get('sowPrereqs', []) + [f['what'] for f in c.get('flows', [])]]

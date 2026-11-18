@@ -75,7 +75,9 @@ assert not found, f'{len(found)} release label(s) or date(s) in shipped product 
 # connection (cw-aa)
 # Nov 17 2026: Figma connects to AEM Assets, GenStudio for Performance Marketing, Adobe Express and Firefly Custom Models: four connections, and six
 # service definitions and canvas services (XF01 to XF06)
-assert len(templates) == 48 and len(concepts) == 523 and len(canvas['connections']) == 162 and len(canvas['lines']) == 569, (len(templates), len(concepts), len(canvas['connections']), len(canvas['lines']))
+# Nov 18 2026 (Adam: three boxes, lines that sell no hours are fine, no Adobe Analytics lines): ChatGPT, Claude and Microsoft Copilot connect to 18 products
+# with 41 connections (two of them between boxes the tool already had), and six service definitions and canvas services sit on the products (XT01, XT03 to XT07)
+assert len(templates) == 48 and len(concepts) == 529 and len(canvas['connections']) == 203 and len(canvas['lines']) == 575, (len(templates), len(concepts), len(canvas['connections']), len(canvas['lines']))
 NOV17 = ['CW09', 'CW10', 'CW11', 'XA28', 'XA29', 'XA30', 'XA31', 'XL27', 'XA32', 'XA33', 'XA34', 'XA35', 'XA36', 'XA37', 'XA38', 'XA39', 'XA40',
          'AXD13', 'AXD14', 'AXD15', 'AXD16', 'XB17', 'XB18', 'XB19', 'XQ09', 'XQ10']
 assert all(i in canvas['lines'] for i in NOV17) and all((i in concepts) == (not i.startswith('CW')) for i in NOV17), 'a Nov 17 Coworker service is missing'
@@ -88,11 +90,11 @@ assert any(x['id'] == 'commerce-crm' for x in canvas['connections']), 'Adobe Com
 # feed Brand Visibility. Sites Optimizer's and Coworker's own trial wording stays (different products), as do Adobe's page titles.
 TRIAL = re.compile(r"\btrials?\b|\bpaid (?:Brand Visibility )?offer(?:ing)?\b|\bpaid Brand Visibility\b", re.I)
 # Nov 17 2026: Coworker trial value sprint (CW11) is Coworker's own trial, Adobe's usage-bound CX Enterprise Coworker Trial, in the
-# words of its verified text; no Brand Visibility trial comes with it
+# words of its verified text; no Brand Visibility trial comes with it. Nov 18 2026: AEM's agents trial, which opens the brand checks to ChatGPT and Claude
 TRIAL_OK = re.compile(r"Sites Optimizer trial|Trial sites authored in Google Drive or SharePoint need the ASO-EDS-Autofix-Users IMS group"
                       r"|Adobe's trial page says headless delivery is not supported"
                       r"|Coworker trial|trial's AI credits|Adobe decides trial eligibility|the trial is not open to customers|The trial gives a one-time allotment"
-                      r"|for the whole trial|what Adobe enables for the trial", re.I)
+                      r"|for the whole trial|what Adobe enables for the trial|Adobe's agents trial or a paid license", re.I)
 AA_FEED = re.compile(r"Brand Visibility|Business Impact|LLM Optimizer")
 
 
@@ -204,7 +206,13 @@ KEPT = {'cw-cja': ['Coworker Chat license', 'CJA B2C edition'],
         # Nov 17 (Adam: "yes!"): Coworker + Adobe Analytics, with its licenses, Adobe's aa-mcp integration and the MCP permission items
         'cw-aa': ['Coworker Chat license', 'Adobe Analytics license',
                   "The aa-mcp integration in Coworker's list of connected servers (Customizations, Integrations tab); if it is not listed, add it with Add server",
-                  'MCP Read-only Access, or MCP Full Access to also create segments, calculated metrics or projects, in an Adobe Analytics product profile for each user; product administrators get full MCP access automatically']}
+                  'MCP Read-only Access, or MCP Full Access to also create segments, calculated metrics or projects, in an Adobe Analytics product profile for each user; product administrators get full MCP access automatically'],
+        # Nov 18 2026: Coworker inside ChatGPT, Claude and Microsoft Copilot, with the Coworker license each one needs
+        'chatgpt-cw': ["A Coworker license, with Coworker set up for your client's organization and each person's own access to it in Adobe",
+                       'Adobe Experience Platform and at least one of Real-Time CDP, Journey Optimizer or Customer Journey Analytics'],
+        'claude-cw': ["A Coworker license, with Coworker set up for your client's organization and each person's own access to it in Adobe",
+                      'Adobe Experience Platform and at least one of Real-Time CDP, Journey Optimizer or Customer Journey Analytics'],
+        'copilot-cw': ['A Coworker license', 'Microsoft 365 Copilot']}
 cards = {x['id']: x for x in canvas['connections']}
 assert sorted(KEPT) == sorted(x['id'] for x in canvas['connections'] if 'cw' in (x['a'], x['b'])), 'the Coworker connections changed'
 lost = [(i, p) for i, ps in KEPT.items() for p in ps if p not in cards[i].get('prereqs', [])]

@@ -42,7 +42,9 @@ def source(location, url, title):
             and not parsed.port and parsed.hostname and parsed.path.strip('/')
             and not any(c.isspace() for c in url)
             and (parsed.hostname == 'aem.live' or parsed.hostname.endswith('.aem.live')
-                 or parsed.hostname == 'adobe.com' or parsed.hostname.endswith('.adobe.com'))), (location, url)
+                 or parsed.hostname == 'adobe.com' or parsed.hostname.endswith('.adobe.com')
+                 # Nov 18 2026: Frame.io's own help site, which Adam accepted as evidence on Nov 10 (step 64), for a Frame.io line only
+                 or (parsed.hostname == 'help.frame.io' and 'frameio' in location.split('-')))), (location, url)
     assert isinstance(title, str) and title.strip() and title != url, f'{location}: missing source title'
     urls.add(url)
 

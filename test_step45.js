@@ -55,8 +55,8 @@ const server = http.createServer((req, res) => {
     await p.click('#out-btn'); await p.waitForTimeout(250);
     const m = await p.evaluate(() => ({k: document.querySelector('#out-menu .hd .k').textContent, sub: document.querySelector('#out-menu .hd p').textContent, g: [...document.querySelectorAll('#out-menu .g')].map(x => x.textContent),
       items: [...document.querySelectorAll('#out-menu [data-out]')].map(x => x.dataset.out), rec: [...document.querySelectorAll('#out-menu [data-out] .rec')].map(x => x.closest('[data-out]').dataset.out)}));
-    ok(m.k === 'Add an outside system' && /your client/.test(m.sub) && !/customer|Adobe products/.test(m.sub) && m.g.join('|') === 'Connects to this play' && m.items.join() === 'search,csrc' && m.rec.join() === 'search',
-      'its menu: your client\'s systems only (Search data tagged Recommended, Authoring documents), and no Adobe product', JSON.stringify(m));
+    ok(m.k === 'Add an outside system' && /your client/.test(m.sub) && !/customer|Adobe products/.test(m.sub) && m.g.join('|') === 'Connects to this play' && m.items.join() === 'search,csrc,chatgpt,claude' && m.rec.join() === 'search',
+      'its menu: your client\'s systems only (Search data tagged Recommended, Authoring documents, and since Nov 18 ChatGPT and Claude for Edge Delivery Services, with no tag), and no Adobe product', JSON.stringify(m));
     await p.evaluate(() => addOutside('aemassets')); await p.waitForTimeout(300);
     ok(!(await p.$('.node[data-p="aemassets"]')), 'AEM Assets cannot be added to the AEM play');
     await p.click('#out-menu [data-out="csrc"]'); await p.waitForTimeout(400);

@@ -110,9 +110,10 @@ const ok = (c, m, d = '') => { n++; console.log((c ? '✅ ' : '❌ ') + m + (c |
     links: [...document.querySelectorAll('.wke-connections details')].map(d => d.dataset.relationship).sort(),
     services: [...document.querySelector('.wke-services select').options].map(o => o.value)
   }));
-  // 18 since the Edge Delivery measurement relationship (eds-cja, service EDC01) joined the catalog
-  ok(catalog.links.length === 18 && catalog.links.includes('eds-cja') && catalog.services.length === 7 && same(displayed, catalog),
-    'the CJA inspector offers all 18 catalog relationships and seven product services', JSON.stringify(displayed));
+  // 18 since the Edge Delivery measurement relationship (eds-cja, service EDC01) joined the catalog; 21 and eight services since Nov 18 2026
+  // (ChatGPT, Claude and Microsoft Copilot, and Customer Journey Analytics questions in ChatGPT, Claude or Microsoft Copilot)
+  ok(catalog.links.length === 21 && catalog.links.includes('eds-cja') && ['chatgpt-cja', 'claude-cja', 'copilot-cja'].every(id => catalog.links.includes(id)) && catalog.services.length === 8 && same(displayed, catalog),
+    'the CJA inspector offers all 21 catalog relationships and eight product services', JSON.stringify(displayed));
   const relationship = q.locator('.wke-connections details').first();
   await relationship.locator('summary').click();
   await q.selectOption('.wke-services select', catalog.services[1]);

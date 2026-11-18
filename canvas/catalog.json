@@ -1,5 +1,5 @@
 {
- "checked": "2026-11-17",
+ "checked": "2026-11-18",
  "products": [
   {
    "id": "rtcdp",
@@ -58,7 +58,8 @@
     "CJ03",
     "CJ04",
     "CJ05",
-    "CJ06"
+    "CJ06",
+    "XT01"
    ]
   },
   {
@@ -166,7 +167,8 @@
     "MK06"
    ],
    "more": [
-    "MK07"
+    "MK07",
+    "XT07"
    ]
   },
   {
@@ -181,7 +183,9 @@
     "WF05",
     "WF06"
    ],
-   "more": []
+   "more": [
+    "XT05"
+   ]
   },
   {
    "id": "aemsites",
@@ -199,7 +203,8 @@
     "SI07",
     "SI08",
     "SI09",
-    "SI10"
+    "SI10",
+    "XT03"
    ]
   },
   {
@@ -215,7 +220,8 @@
    ],
    "more": [
     "AS05",
-    "AS07"
+    "AS07",
+    "XT04"
    ]
   },
   {
@@ -332,7 +338,9 @@
     "GS05",
     "GS06"
    ],
-   "more": []
+   "more": [
+    "XT06"
+   ]
   },
   {
    "id": "cdn",
@@ -434,6 +442,39 @@
    "outside": true,
    "systems": "Figma",
    "rec": "Adobe says Instruct to Assemble runs in Figma through the Adobe Brand Intelligence plugin. Add Figma when your client assembles variants there.",
+   "lines": [],
+   "more": []
+  },
+  {
+   "id": "chatgpt",
+   "name": "ChatGPT",
+   "title": "ChatGPT",
+   "icon": "chat",
+   "outside": true,
+   "systems": "Your client's staff use Adobe products from inside ChatGPT",
+   "systems_with_bv": "Your client's staff use Adobe products from inside ChatGPT. Not how Brand Visibility measures ChatGPT answers.",
+   "lines": [],
+   "more": []
+  },
+  {
+   "id": "claude",
+   "name": "Claude",
+   "title": "Claude",
+   "icon": "chat",
+   "outside": true,
+   "systems": "Your client's staff use Adobe products from inside Claude",
+   "systems_with_bv": "Your client's staff use Adobe products from inside Claude. Not a Brand Visibility connection.",
+   "lines": [],
+   "more": []
+  },
+  {
+   "id": "copilot",
+   "name": "Microsoft Copilot",
+   "title": "Microsoft Copilot",
+   "icon": "chat",
+   "outside": true,
+   "systems": "Your client's staff use Adobe products from inside Microsoft Copilot (Microsoft 365 Copilot, Copilot Studio or Copilot Cowork)",
+   "systems_with_bv": "Your client's staff use Adobe products from inside Microsoft Copilot.",
    "lines": [],
    "more": []
   },
@@ -594,6 +635,7 @@
    "id": "acrobat",
    "name": "Acrobat and Acrobat Services",
    "title": "Adobe Acrobat for enterprise and the Adobe Acrobat Services APIs",
+   "short": "Acrobat",
    "lines": [
     "AB01",
     "AB02",
@@ -9511,6 +9553,2204 @@
    ],
    "sowHow": "In Text to image in Adobe's Firefly Enterprise and GenStudio plugin for Figma, your designers pick a custom model they have created and place the generated images on the Figma canvas.",
    "sowGain": "Inside Figma, your designers generate images in the style or subject of the custom models they have created. The same models also generate in other Adobe apps."
+  },
+  {
+   "id": "chatgpt-cw",
+   "a": "chatgpt",
+   "b": "cw",
+   "lines": [],
+   "more": [],
+   "how": "Your client's ChatGPT administrator approves Adobe CX Enterprise Coworker for chosen users or the whole organization, and each person installs it from ChatGPT's plugin catalog. They then ask Coworker in plain words inside ChatGPT. Coworker returns read-only insights within the permissions each person already has in Adobe.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/coworker/content/ai-platforms",
+    "title": "Experience League: Adobe CX Enterprise Coworker for AI Platforms"
+   },
+   "gain": {
+    "title": "Coworker where the team already works",
+    "text": "Your client's team gets marketing answers from Coworker without leaving ChatGPT, at no extra cost beyond the Coworker license."
+   },
+   "flows": [
+    {
+     "from": "chatgpt",
+     "to": "cw",
+     "what": "Questions typed in plain words in ChatGPT",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/coworker/content/ai-platforms",
+      "title": "Experience League: Adobe CX Enterprise Coworker for AI Platforms"
+     }
+    },
+    {
+     "from": "cw",
+     "to": "chatgpt",
+     "what": "Read-only marketing insights, within each person's Adobe permissions",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/coworker/content/ai-platforms",
+      "title": "Experience League: Adobe CX Enterprise Coworker for AI Platforms"
+     }
+    }
+   ],
+   "no_services": true,
+   "kind": "outside",
+   "label": "Adobe publishes Coworker as a plugin in ChatGPT, approved by the ChatGPT administrator",
+   "availability": "",
+   "prereqs": [
+    "A Coworker license, with Coworker set up for your client's organization and each person's own access to it in Adobe",
+    "Adobe Experience Platform and at least one of Real-Time CDP, Journey Optimizer or Customer Journey Analytics",
+    "Your client's own ChatGPT, with its administrator approving Adobe CX Enterprise Coworker"
+   ],
+   "covered": "The Coworker set up in an AI platform service sits on Coworker itself. It covers one assistant; with two assistants it is the large size.",
+   "covered_by": "CW08",
+   "sowHow": "Your ChatGPT administrator approves Adobe CX Enterprise Coworker and your team installs it from the plugin catalog, then asks Coworker in plain words inside ChatGPT.",
+   "sowGain": "Your team gets marketing answers from Coworker without leaving ChatGPT."
+  },
+  {
+   "id": "claude-cw",
+   "a": "claude",
+   "b": "cw",
+   "lines": [],
+   "more": [],
+   "how": "Your client's Claude administrator approves Adobe CX Enterprise Coworker for chosen users or the whole organization. Each person finds it under Connectors in Claude and signs in with their Adobe login. They then ask Coworker in plain words inside Claude. Coworker returns read-only insights within the permissions each person already has in Adobe.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/coworker/content/ai-platforms",
+    "title": "Experience League: Adobe CX Enterprise Coworker for AI Platforms"
+   },
+   "gain": {
+    "title": "Coworker where the team already works",
+    "text": "Your client's team gets marketing answers from Coworker without leaving Claude, at no extra cost beyond the Coworker license."
+   },
+   "flows": [
+    {
+     "from": "claude",
+     "to": "cw",
+     "what": "Questions typed in plain words in Claude",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/coworker/content/ai-platforms",
+      "title": "Experience League: Adobe CX Enterprise Coworker for AI Platforms"
+     }
+    },
+    {
+     "from": "cw",
+     "to": "claude",
+     "what": "Read-only marketing insights, within each person's Adobe permissions",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/coworker/content/ai-platforms",
+      "title": "Experience League: Adobe CX Enterprise Coworker for AI Platforms"
+     }
+    }
+   ],
+   "no_services": true,
+   "kind": "outside",
+   "label": "Adobe publishes Coworker in Claude's connector list, approved by the Claude administrator",
+   "availability": "",
+   "prereqs": [
+    "A Coworker license, with Coworker set up for your client's organization and each person's own access to it in Adobe",
+    "Adobe Experience Platform and at least one of Real-Time CDP, Journey Optimizer or Customer Journey Analytics",
+    "Your client's own Claude, with its administrator approving Adobe CX Enterprise Coworker"
+   ],
+   "covered": "The Coworker set up in an AI platform service sits on Coworker itself. It covers one assistant; with two assistants it is the large size.",
+   "covered_by": "CW08",
+   "sowHow": "Your Claude administrator approves Adobe CX Enterprise Coworker and your team connects it under Connectors with their Adobe login, then asks Coworker in plain words inside Claude.",
+   "sowGain": "Your team gets marketing answers from Coworker without leaving Claude."
+  },
+  {
+   "id": "chatgpt-cja",
+   "a": "chatgpt",
+   "b": "cja",
+   "lines": [],
+   "more": [],
+   "how": "Each person adds Adobe's Customer Journey Analytics plugin in ChatGPT and signs in with their Adobe ID. They ask in plain words and get reports from their own data views. With the full permission they can also create and update segments, calculated metrics, date ranges, Workspace projects and audiences.",
+   "source": {
+    "url": "https://developer.adobe.com/analytics-mcp/docs/guides/chatgpt",
+    "title": "Adobe Developer: Analytics, Connect to ChatGPT"
+   },
+   "gain": {
+    "title": "Analytics answers by asking",
+    "text": "Your client's analysts and marketers ask Customer Journey Analytics in plain words inside ChatGPT, at no extra cost for Customer Journey Analytics customers."
+   },
+   "flows": [
+    {
+     "from": "chatgpt",
+     "to": "cja",
+     "what": "Questions about journeys and results, and requests to create segments or projects",
+     "needs": [],
+     "source": {
+      "url": "https://developer.adobe.com/analytics-mcp/docs/guides/chatgpt",
+      "title": "Adobe Developer: Analytics, Connect to ChatGPT"
+     }
+    },
+    {
+     "from": "cja",
+     "to": "chatgpt",
+     "what": "Reports from the person's own data views",
+     "needs": [],
+     "source": {
+      "url": "https://developer.adobe.com/analytics-mcp/docs/guides/chatgpt",
+      "title": "Adobe Developer: Analytics, Connect to ChatGPT"
+     }
+    }
+   ],
+   "no_services": true,
+   "kind": "outside",
+   "label": "Adobe publishes Customer Journey Analytics as a plugin in ChatGPT",
+   "availability": "",
+   "prereqs": [
+    "A Customer Journey Analytics license",
+    "An Adobe administrator adds the 'MCP Read-only Access' or 'MCP Full Access' permission to each person's product profile in the Admin Console",
+    "Each person signs in with their Adobe ID",
+    "A ChatGPT Plus or Pro subscription"
+   ],
+   "covered": "The Customer Journey Analytics questions in ChatGPT, Claude or Microsoft Copilot service sits on Customer Journey Analytics itself.",
+   "covered_by": "XT01",
+   "references": [
+    {
+     "url": "https://developer.adobe.com/analytics-mcp/docs/support/faq",
+     "title": "Adobe Developer: Analytics, Frequently asked questions"
+    }
+   ],
+   "sowHow": "Your team adds Adobe's Customer Journey Analytics plugin in ChatGPT, signs in with their Adobe ID, and asks for reports in plain words.",
+   "sowGain": "Your analysts and marketers get Customer Journey Analytics answers by asking in ChatGPT."
+  },
+  {
+   "id": "claude-cja",
+   "a": "claude",
+   "b": "cja",
+   "lines": [],
+   "more": [],
+   "how": "Each person adds Adobe's Customer Journey Analytics connector from Claude's connector directory and signs in with their Adobe ID. They ask in plain words and get reports from their own data views. With the full permission they can also create and update segments, calculated metrics, date ranges, Workspace projects and audiences.",
+   "source": {
+    "url": "https://developer.adobe.com/analytics-mcp/docs/guides/claude",
+    "title": "Adobe Developer: Analytics, Connect to Claude"
+   },
+   "gain": {
+    "title": "Analytics answers by asking",
+    "text": "Your client's analysts and marketers ask Customer Journey Analytics in plain words inside Claude, at no extra cost for Customer Journey Analytics customers."
+   },
+   "flows": [
+    {
+     "from": "claude",
+     "to": "cja",
+     "what": "Questions about journeys and results, and requests to create segments or projects",
+     "needs": [],
+     "source": {
+      "url": "https://developer.adobe.com/analytics-mcp/docs/guides/claude",
+      "title": "Adobe Developer: Analytics, Connect to Claude"
+     }
+    },
+    {
+     "from": "cja",
+     "to": "claude",
+     "what": "Reports from the person's own data views",
+     "needs": [],
+     "source": {
+      "url": "https://developer.adobe.com/analytics-mcp/docs/guides/claude",
+      "title": "Adobe Developer: Analytics, Connect to Claude"
+     }
+    }
+   ],
+   "no_services": true,
+   "kind": "outside",
+   "label": "Adobe publishes Customer Journey Analytics as a connector in Claude's connector directory",
+   "availability": "",
+   "prereqs": [
+    "A Customer Journey Analytics license",
+    "An Adobe administrator adds the 'MCP Read-only Access' or 'MCP Full Access' permission to each person's product profile in the Admin Console",
+    "Each person signs in with their Adobe ID",
+    "Your client's own Claude"
+   ],
+   "covered": "The Customer Journey Analytics questions in ChatGPT, Claude or Microsoft Copilot service sits on Customer Journey Analytics itself.",
+   "covered_by": "XT01",
+   "references": [
+    {
+     "url": "https://developer.adobe.com/analytics-mcp/docs/support/faq",
+     "title": "Adobe Developer: Analytics, Frequently asked questions"
+    }
+   ],
+   "sowHow": "Your team adds Adobe's Customer Journey Analytics connector in Claude, signs in with their Adobe ID, and asks for reports in plain words.",
+   "sowGain": "Your analysts and marketers get Customer Journey Analytics answers by asking in Claude."
+  },
+  {
+   "id": "chatgpt-aemsites",
+   "a": "chatgpt",
+   "b": "aemsites",
+   "lines": [],
+   "more": [],
+   "how": "Your client's authors install the Adobe Experience Manager plugin from ChatGPT's plugin marketplace and sign in with their Adobe ID. In plain words they find, create, change and publish pages and content fragments on AEM as a Cloud Service, within their own AEM permissions. With Adobe's agents trial or a paid license they can also check pages, text and images against the brand rules set up in AEM. If the checks do not appear in the ready-made listing, add Adobe's AEM address by hand.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/chat-applications/setup-chatgpt",
+    "title": "Experience League: Setting Up OpenAI ChatGPT with AEM MCP"
+   },
+   "gain": {
+    "title": "Page content by asking",
+    "text": "Your client's content team finds, drafts and updates pages and content fragments by asking in ChatGPT, under the AEM permissions each person already has; Adobe advises its own AI Assistant for everyday changes and deletions."
+   },
+   "flows": [
+    {
+     "from": "chatgpt",
+     "to": "aemsites",
+     "what": "Requests to find, create, change or publish pages and content fragments",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/chat-applications/setup-chatgpt",
+      "title": "Experience League: Setting Up OpenAI ChatGPT with AEM MCP"
+     }
+    },
+    {
+     "from": "aemsites",
+     "to": "chatgpt",
+     "what": "Results and the content found, for review before it goes live",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/chat-applications/setup-chatgpt",
+      "title": "Experience League: Setting Up OpenAI ChatGPT with AEM MCP"
+     }
+    }
+   ],
+   "no_services": true,
+   "kind": "outside",
+   "label": "Adobe publishes an Adobe Experience Manager plugin in ChatGPT's plugin marketplace",
+   "availability": "",
+   "prereqs": [
+    "AEM as a Cloud Service, on release 26309 or later",
+    "Each person signs in with their own Adobe ID and works within their AEM permissions",
+    "Where the environment limits access by IP address, Adobe's traffic rule that lets the AEM connection in",
+    "Your client's own ChatGPT"
+   ],
+   "covered": "The AEM content work in ChatGPT, Claude or Microsoft Copilot: rollout and rules service sits on AEM Sites itself.",
+   "covered_by": "XT03",
+   "references": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/using-mcp-with-aem-as-a-cloud-service",
+     "title": "Experience League: Using MCP with AEM as a Cloud Service"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/ai/mcp-servers/manage-your-website-with-ai",
+     "title": "Experience League: Manage your website with the help of AI"
+    }
+   ],
+   "sowHow": "Your authors install the Adobe Experience Manager plugin in ChatGPT, sign in with their Adobe ID, and ask for page and content fragment changes in plain words.",
+   "sowGain": "Your content team finds, drafts and updates pages and content fragments by asking, within the AEM permissions each person already has."
+  },
+  {
+   "id": "claude-aemsites",
+   "a": "claude",
+   "b": "aemsites",
+   "lines": [],
+   "more": [],
+   "how": "Your client's authors install the Adobe Experience Manager connector from Claude's connector marketplace and sign in with their Adobe ID. In plain words they find, create, change and publish pages and content fragments on AEM as a Cloud Service, within their own AEM permissions. With Adobe's agents trial or a paid license they can also check pages, text and images against the brand rules set up in AEM. If the checks do not appear in the ready-made listing, add Adobe's AEM address by hand. Designers also send a page made in Claude Design straight into AEM, where it becomes a managed page inside AEM's approval workflows.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/chat-applications/setup-claude",
+    "title": "Experience League: Setting Up Anthropic Claude with AEM MCP"
+   },
+   "gain": {
+    "title": "Page content by asking",
+    "text": "Your client's content team finds, drafts and updates pages and content fragments by asking in Claude, under the AEM permissions each person already has; Adobe advises its own AI Assistant for everyday changes and deletions."
+   },
+   "flows": [
+    {
+     "from": "claude",
+     "to": "aemsites",
+     "what": "Requests to find, create, change or publish pages and content fragments",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/chat-applications/setup-claude",
+      "title": "Experience League: Setting Up Anthropic Claude with AEM MCP"
+     }
+    },
+    {
+     "from": "aemsites",
+     "to": "claude",
+     "what": "Results and the content found, for review before it goes live",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/chat-applications/setup-claude",
+      "title": "Experience League: Setting Up Anthropic Claude with AEM MCP"
+     }
+    },
+    {
+     "from": "claude",
+     "to": "aemsites",
+     "what": "Pages made in Claude Design, sent into AEM",
+     "needs": [],
+     "source": {
+      "url": "https://business.adobe.com/blog/adobe-experience-manager-journey-optimizer-claude-design",
+      "title": "Adobe for Business blog: From Claude Design to production"
+     }
+    }
+   ],
+   "no_services": true,
+   "kind": "outside",
+   "label": "Adobe publishes an Adobe Experience Manager connector in Claude, and Claude Design sends pages into AEM",
+   "availability": "",
+   "prereqs": [
+    "AEM as a Cloud Service, on release 26309 or later",
+    "Each person signs in with their own Adobe ID and works within their AEM permissions",
+    "Where the environment limits access by IP address, Adobe's traffic rule that lets the AEM connection in",
+    "Your client's own Claude"
+   ],
+   "covered": "The AEM content work in ChatGPT, Claude or Microsoft Copilot: rollout and rules service sits on AEM Sites itself.",
+   "covered_by": "XT03",
+   "references": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/using-mcp-with-aem-as-a-cloud-service",
+     "title": "Experience League: Using MCP with AEM as a Cloud Service"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/ai/mcp-servers/manage-your-website-with-ai",
+     "title": "Experience League: Manage your website with the help of AI"
+    }
+   ],
+   "sowHow": "Your authors install the Adobe Experience Manager connector in Claude, sign in with their Adobe ID, and ask for page and content fragment changes in plain words.",
+   "sowGain": "Your content team finds, drafts and updates pages and content fragments by asking, within the AEM permissions each person already has."
+  },
+  {
+   "id": "chatgpt-aemassets",
+   "a": "chatgpt",
+   "b": "aemassets",
+   "lines": [],
+   "more": [],
+   "how": "The AEM connection in ChatGPT also covers AEM Assets. With the ready-made listing your client's team searches, imports and downloads assets, sees where an asset is used and finds unused assets, in plain words. With Adobe's AEM address added by hand they also upload, move, copy, delete, publish and unpublish assets and edit their details. With Dynamic Media with OpenAPI switched on they can also ask for resized and cropped versions.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/using-mcp-with-aem-as-a-cloud-service",
+    "title": "Experience League: Using MCP with AEM as a Cloud Service"
+   },
+   "gain": {
+    "title": "Asset work by asking",
+    "text": "Your client's team finds and fetches assets by asking in ChatGPT, under the AEM permissions each person already has."
+   },
+   "flows": [
+    {
+     "from": "chatgpt",
+     "to": "aemassets",
+     "what": "Requests to search, import, download or describe assets",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/using-mcp-with-aem-as-a-cloud-service",
+      "title": "Experience League: Using MCP with AEM as a Cloud Service"
+     }
+    },
+    {
+     "from": "aemassets",
+     "to": "chatgpt",
+     "what": "The assets found, where they are used, and the result of each action",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/using-mcp-with-aem-as-a-cloud-service",
+      "title": "Experience League: Using MCP with AEM as a Cloud Service"
+     }
+    }
+   ],
+   "no_services": true,
+   "kind": "outside",
+   "label": "The same AEM connection finds, imports and downloads assets from ChatGPT; uploading, moving, deleting and publishing come with Adobe's AEM address added by hand",
+   "availability": "",
+   "prereqs": [
+    "AEM as a Cloud Service, on release 26309 or later",
+    "Each person signs in with their own Adobe ID and works within their AEM permissions",
+    "Dynamic Media with OpenAPI switched on, for resized and cropped versions made on request",
+    "Your client's own ChatGPT"
+   ],
+   "covered": "The AEM Assets work in ChatGPT, Claude or Microsoft Copilot: rollout and rules service sits on AEM Assets itself.",
+   "covered_by": "XT04",
+   "references": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/chat-applications/setup-chatgpt",
+     "title": "Experience League: Setting Up OpenAI ChatGPT with AEM MCP"
+    }
+   ],
+   "sowHow": "Your team uses the AEM connection in ChatGPT to search, import and download assets in plain words.",
+   "sowGain": "Your team finds and fetches assets by asking, within the AEM permissions each person already has."
+  },
+  {
+   "id": "claude-aemassets",
+   "a": "claude",
+   "b": "aemassets",
+   "lines": [],
+   "more": [],
+   "how": "The AEM connection in Claude also covers AEM Assets. With the ready-made listing your client's team searches, imports and downloads assets, sees where an asset is used and finds unused assets, in plain words. With Adobe's AEM address added by hand they also upload, move, copy, delete, publish and unpublish assets and edit their details. With Dynamic Media with OpenAPI switched on they can also ask for resized and cropped versions.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/using-mcp-with-aem-as-a-cloud-service",
+    "title": "Experience League: Using MCP with AEM as a Cloud Service"
+   },
+   "gain": {
+    "title": "Asset work by asking",
+    "text": "Your client's team finds and fetches assets by asking in Claude, under the AEM permissions each person already has."
+   },
+   "flows": [
+    {
+     "from": "claude",
+     "to": "aemassets",
+     "what": "Requests to search, import, download or describe assets",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/using-mcp-with-aem-as-a-cloud-service",
+      "title": "Experience League: Using MCP with AEM as a Cloud Service"
+     }
+    },
+    {
+     "from": "aemassets",
+     "to": "claude",
+     "what": "The assets found, where they are used, and the result of each action",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/using-mcp-with-aem-as-a-cloud-service",
+      "title": "Experience League: Using MCP with AEM as a Cloud Service"
+     }
+    }
+   ],
+   "no_services": true,
+   "kind": "outside",
+   "label": "The same AEM connection finds, imports and downloads assets from Claude; uploading, moving, deleting and publishing come with Adobe's AEM address added by hand",
+   "availability": "",
+   "prereqs": [
+    "AEM as a Cloud Service, on release 26309 or later",
+    "Each person signs in with their own Adobe ID and works within their AEM permissions",
+    "Dynamic Media with OpenAPI switched on, for resized and cropped versions made on request",
+    "Your client's own Claude"
+   ],
+   "covered": "The AEM Assets work in ChatGPT, Claude or Microsoft Copilot: rollout and rules service sits on AEM Assets itself.",
+   "covered_by": "XT04",
+   "references": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/chat-applications/setup-claude",
+     "title": "Experience League: Setting Up Anthropic Claude with AEM MCP"
+    }
+   ],
+   "sowHow": "Your team uses the AEM connection in Claude to search, import and download assets in plain words.",
+   "sowGain": "Your team finds and fetches assets by asking, within the AEM permissions each person already has."
+  },
+  {
+   "id": "claude-workfront",
+   "a": "claude",
+   "b": "workfront",
+   "lines": [],
+   "more": [],
+   "how": "Your client's team finds Adobe Workfront in Claude's connector list, connects it and signs in. In plain words they find projects, tasks and issues and, once the Workfront administrator switches writing on, create, update and delete them. Claude acts with each person's own Workfront access.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/workfront/using/basics/workfront-mcp-server/configure-workfront-mcp-server",
+    "title": "Experience League: Configure the Adobe Workfront MCP server"
+   },
+   "gain": {
+    "title": "Work managed by asking",
+    "text": "Your client's team looks up and updates projects, tasks and issues by asking in Claude, within the Workfront access each person already has."
+   },
+   "flows": [
+    {
+     "from": "claude",
+     "to": "workfront",
+     "what": "Requests to find, create or update projects, tasks and issues",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront/using/basics/workfront-mcp-server/configure-workfront-mcp-server",
+      "title": "Experience League: Configure the Adobe Workfront MCP server"
+     }
+    },
+    {
+     "from": "workfront",
+     "to": "claude",
+     "what": "The Workfront items found and the result of each change",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront/using/basics/workfront-mcp-server/configure-workfront-mcp-server",
+      "title": "Experience League: Configure the Adobe Workfront MCP server"
+     }
+    }
+   ],
+   "no_services": true,
+   "kind": "outside",
+   "label": "Adobe Workfront is in Claude's connector list",
+   "availability": "",
+   "prereqs": [
+    "Workfront on Adobe's sign-in system (Adobe Identity Management System)",
+    "The Workfront administrator allows the connection in System Preferences: reading is on from the start, writing is off until switched on",
+    "Each person signs in and works within their own Workfront access level and permissions",
+    "On a Claude business plan, the Claude administrator enables the Adobe Workfront connector"
+   ],
+   "covered": "The Workfront in ChatGPT, Claude or Microsoft Copilot: rollout and write access service sits on Workfront itself.",
+   "covered_by": "XT05",
+   "references": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/basics/workfront-mcp-server/workfront-mcp-server-tools",
+     "title": "Experience League: Adobe Workfront MCP server tools"
+    }
+   ],
+   "sowHow": "Your team connects Adobe Workfront from Claude's connector list, signs in, and asks for projects, tasks and issues in plain words.",
+   "sowGain": "Your team looks up and updates work by asking, within the Workfront access each person already has."
+  },
+  {
+   "id": "chatgpt-workfront",
+   "a": "chatgpt",
+   "b": "workfront",
+   "lines": [],
+   "more": [],
+   "how": "Adobe hosts the Workfront connection and documents the steps for ChatGPT. A person adds Adobe's Workfront address in ChatGPT and signs in. In plain words they find projects, tasks and issues and, once the Workfront administrator switches writing on, create, update and delete them. ChatGPT acts with each person's own Workfront access.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/workfront/using/basics/workfront-mcp-server/configure-workfront-mcp-server",
+    "title": "Experience League: Configure the Adobe Workfront MCP server"
+   },
+   "gain": {
+    "title": "Work managed by asking",
+    "text": "Your client's team looks up and updates projects, tasks and issues by asking in ChatGPT, within the Workfront access each person already has."
+   },
+   "flows": [
+    {
+     "from": "chatgpt",
+     "to": "workfront",
+     "what": "Requests to find, create or update projects, tasks and issues",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront/using/basics/workfront-mcp-server/configure-workfront-mcp-server",
+      "title": "Experience League: Configure the Adobe Workfront MCP server"
+     }
+    },
+    {
+     "from": "workfront",
+     "to": "chatgpt",
+     "what": "The Workfront items found and the result of each change",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront/using/basics/workfront-mcp-server/configure-workfront-mcp-server",
+      "title": "Experience League: Configure the Adobe Workfront MCP server"
+     }
+    }
+   ],
+   "no_services": true,
+   "kind": "outside",
+   "label": "Each person adds Adobe's Workfront address in ChatGPT",
+   "availability": "",
+   "prereqs": [
+    "Workfront on Adobe's sign-in system (Adobe Identity Management System)",
+    "The Workfront administrator allows the connection in System Preferences: reading is on from the start, writing is off until switched on",
+    "Each person signs in and works within their own Workfront access level and permissions",
+    "On a ChatGPT business plan, the ChatGPT administrator allows adding the Workfront address"
+   ],
+   "covered": "The Workfront in ChatGPT, Claude or Microsoft Copilot: rollout and write access service sits on Workfront itself.",
+   "covered_by": "XT05",
+   "references": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/basics/workfront-mcp-server/workfront-mcp-server-tools",
+     "title": "Experience League: Adobe Workfront MCP server tools"
+    }
+   ],
+   "sowHow": "Your team adds Adobe's Workfront address in ChatGPT, signs in, and asks for projects, tasks and issues in plain words.",
+   "sowGain": "Your team looks up and updates work by asking, within the Workfront access each person already has."
+  },
+  {
+   "id": "chatgpt-planning",
+   "a": "chatgpt",
+   "b": "planning",
+   "lines": [],
+   "more": [],
+   "how": "Workfront Planning has no connection of its own. When your client's Workfront package includes Planning, the Workfront connection in ChatGPT also brings the Planning tools, so the team looks up, searches, creates and changes Planning records in plain words.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/workfront/using/basics/workfront-mcp-server/configure-workfront-mcp-server",
+    "title": "Experience League: Configure the Adobe Workfront MCP server"
+   },
+   "gain": {
+    "title": "Planning records by asking",
+    "text": "Your client's team searches and updates Planning records by asking in ChatGPT, within their own Workfront access."
+   },
+   "flows": [
+    {
+     "from": "chatgpt",
+     "to": "planning",
+     "what": "Requests to search, create or change Planning records",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront/using/basics/workfront-mcp-server/configure-workfront-mcp-server",
+      "title": "Experience League: Configure the Adobe Workfront MCP server"
+     }
+    },
+    {
+     "from": "planning",
+     "to": "chatgpt",
+     "what": "The Planning records found and the result of each change",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront/using/basics/workfront-mcp-server/configure-workfront-mcp-server",
+      "title": "Experience League: Configure the Adobe Workfront MCP server"
+     }
+    }
+   ],
+   "no_services": true,
+   "kind": "outside",
+   "label": "Workfront Planning rides on the Workfront connection in ChatGPT",
+   "availability": "",
+   "prereqs": [
+    "A Workfront package that includes Workfront Planning",
+    "The Workfront connection in ChatGPT, with its administrator switches"
+   ],
+   "covered": "The Workfront in ChatGPT, Claude or Microsoft Copilot: rollout and write access service sits on Workfront.",
+   "covered_by": "XT05",
+   "references": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/basics/workfront-mcp-server/workfront-mcp-server-tools",
+     "title": "Experience League: Adobe Workfront MCP server tools"
+    }
+   ],
+   "sowHow": "Your team uses the Workfront connection in ChatGPT to search and update Planning records in plain words.",
+   "sowGain": "Your team searches and updates Planning records by asking."
+  },
+  {
+   "id": "claude-planning",
+   "a": "claude",
+   "b": "planning",
+   "lines": [],
+   "more": [],
+   "how": "Workfront Planning has no connection of its own. When your client's Workfront package includes Planning, the Workfront connection in Claude also brings the Planning tools, so the team looks up, searches, creates and changes Planning records in plain words.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/workfront/using/basics/workfront-mcp-server/configure-workfront-mcp-server",
+    "title": "Experience League: Configure the Adobe Workfront MCP server"
+   },
+   "gain": {
+    "title": "Planning records by asking",
+    "text": "Your client's team searches and updates Planning records by asking in Claude, within their own Workfront access."
+   },
+   "flows": [
+    {
+     "from": "claude",
+     "to": "planning",
+     "what": "Requests to search, create or change Planning records",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront/using/basics/workfront-mcp-server/configure-workfront-mcp-server",
+      "title": "Experience League: Configure the Adobe Workfront MCP server"
+     }
+    },
+    {
+     "from": "planning",
+     "to": "claude",
+     "what": "The Planning records found and the result of each change",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront/using/basics/workfront-mcp-server/configure-workfront-mcp-server",
+      "title": "Experience League: Configure the Adobe Workfront MCP server"
+     }
+    }
+   ],
+   "no_services": true,
+   "kind": "outside",
+   "label": "Workfront Planning rides on the Workfront connection in Claude",
+   "availability": "",
+   "prereqs": [
+    "A Workfront package that includes Workfront Planning",
+    "The Workfront connection in Claude, with its administrator switches"
+   ],
+   "covered": "The Workfront in ChatGPT, Claude or Microsoft Copilot: rollout and write access service sits on Workfront.",
+   "covered_by": "XT05",
+   "references": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/basics/workfront-mcp-server/workfront-mcp-server-tools",
+     "title": "Experience League: Adobe Workfront MCP server tools"
+    }
+   ],
+   "sowHow": "Your team uses the Workfront connection in Claude to search and update Planning records in plain words.",
+   "sowGain": "Your team searches and updates Planning records by asking."
+  },
+  {
+   "id": "claude-gspm",
+   "a": "claude",
+   "b": "gspm",
+   "lines": [],
+   "more": [],
+   "how": "Adobe hosts the connection. A person adds Adobe's GenStudio for Performance Marketing address in Claude as a custom connector, on the web or the desktop app, and signs in with their Adobe ID. In plain words they ask how ads are performing, put together a draft ad from a template, and publish an approved ad to a connected channel.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/ai-assistants/connect-ai-assistants",
+    "title": "Experience League: GenStudio for Performance Marketing, Connect an AI Assistant"
+   },
+   "gain": {
+    "title": "Ad answers and drafts by asking",
+    "text": "Your client's marketers get performance answers and first drafts by asking in Claude, with their own GenStudio permissions."
+   },
+   "flows": [
+    {
+     "from": "claude",
+     "to": "gspm",
+     "what": "Questions about ad performance and requests for a draft or to publish an approved ad",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/ai-assistants/connect-ai-assistants",
+      "title": "Experience League: GenStudio for Performance Marketing, Connect an AI Assistant"
+     }
+    },
+    {
+     "from": "gspm",
+     "to": "claude",
+     "what": "Performance answers, drafts to review, and the result of publishing",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/ai-assistants/connect-ai-assistants",
+      "title": "Experience League: GenStudio for Performance Marketing, Connect an AI Assistant"
+     }
+    }
+   ],
+   "no_services": true,
+   "kind": "outside",
+   "label": "Each person adds Adobe's GenStudio address in Claude as a custom connector",
+   "availability": "",
+   "prereqs": [
+    "Access to GenStudio for Performance Marketing",
+    "A Claude Pro, Max, Team or Enterprise plan; on Team or Enterprise an organization owner may need to add the connector first",
+    "Each person signs in with their Adobe ID and picks the Adobe organization"
+   ],
+   "covered": "The GenStudio for Performance Marketing in ChatGPT, Claude or Microsoft Copilot: connection and publishing rules service sits on GenStudio for Performance Marketing itself.",
+   "covered_by": "XT06",
+   "references": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/ai-assistants/overview",
+     "title": "Experience League: GenStudio for Performance Marketing, AI Assistants"
+    }
+   ],
+   "sowHow": "Your team adds Adobe's GenStudio address in Claude, signs in with their Adobe ID, and asks about ad performance, drafts and publishing in plain words.",
+   "sowGain": "Your marketers get performance answers and first drafts by asking."
+  },
+  {
+   "id": "chatgpt-gspm",
+   "a": "chatgpt",
+   "b": "gspm",
+   "lines": [],
+   "more": [],
+   "how": "Adobe hosts the connection. A person switches on developer mode in ChatGPT on the web, adds Adobe's GenStudio for Performance Marketing address and signs in with their Adobe ID. In plain words they ask how ads are performing, put together a draft ad from a template, and publish an approved ad to a connected channel.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/ai-assistants/connect-ai-assistants",
+    "title": "Experience League: GenStudio for Performance Marketing, Connect an AI Assistant"
+   },
+   "gain": {
+    "title": "Ad answers and drafts by asking",
+    "text": "Your client's marketers get performance answers and first drafts by asking in ChatGPT, with their own GenStudio permissions."
+   },
+   "flows": [
+    {
+     "from": "chatgpt",
+     "to": "gspm",
+     "what": "Questions about ad performance and requests for a draft or to publish an approved ad",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/ai-assistants/connect-ai-assistants",
+      "title": "Experience League: GenStudio for Performance Marketing, Connect an AI Assistant"
+     }
+    },
+    {
+     "from": "gspm",
+     "to": "chatgpt",
+     "what": "Performance answers, drafts to review, and the result of publishing",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/ai-assistants/connect-ai-assistants",
+      "title": "Experience League: GenStudio for Performance Marketing, Connect an AI Assistant"
+     }
+    }
+   ],
+   "no_services": true,
+   "kind": "outside",
+   "label": "Each person adds Adobe's GenStudio address in ChatGPT on the web",
+   "availability": "",
+   "prereqs": [
+    "Access to GenStudio for Performance Marketing",
+    "A ChatGPT Plus, Pro, Business, Enterprise or Education account, on the web with developer mode on",
+    "Each person signs in with their Adobe ID and picks the Adobe organization"
+   ],
+   "covered": "The GenStudio for Performance Marketing in ChatGPT, Claude or Microsoft Copilot: connection and publishing rules service sits on GenStudio for Performance Marketing itself.",
+   "covered_by": "XT06",
+   "references": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/ai-assistants/overview",
+     "title": "Experience League: GenStudio for Performance Marketing, AI Assistants"
+    }
+   ],
+   "sowHow": "Your team adds Adobe's GenStudio address in ChatGPT on the web, signs in with their Adobe ID, and asks about ad performance, drafts and publishing in plain words.",
+   "sowGain": "Your marketers get performance answers and first drafts by asking."
+  },
+  {
+   "id": "claude-marketo",
+   "a": "claude",
+   "b": "marketo",
+   "lines": [],
+   "more": [],
+   "how": "Adobe hosts the connection, so your client runs no server. A Marketo administrator creates credentials for a dedicated API-only user, and they go into Claude Desktop (with Adobe's helper file and Node.js on the computer) or Claude Code. In plain words the team then looks up and changes forms, programs, smart campaigns, emails, people and lists, within that user's permissions.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/marketo-developer/marketo/mcp-server",
+    "title": "Experience League: Marketo Engage MCP Server"
+   },
+   "gain": {
+    "title": "Marketo work by asking",
+    "text": "Your client's marketing operations team looks up and updates Marketo Engage programs, emails and lists by asking in Claude."
+   },
+   "flows": [
+    {
+     "from": "claude",
+     "to": "marketo",
+     "what": "Requests to look up or change programs, campaigns, emails, people and lists",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-developer/marketo/mcp-server",
+      "title": "Experience League: Marketo Engage MCP Server"
+     }
+    },
+    {
+     "from": "marketo",
+     "to": "claude",
+     "what": "The Marketo items found and the result of each change",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-developer/marketo/mcp-server",
+      "title": "Experience League: Marketo Engage MCP Server"
+     }
+    }
+   ],
+   "no_services": true,
+   "kind": "outside",
+   "label": "Adobe hosts a Marketo Engage connection for Claude's desktop app and Claude Code",
+   "availability": "",
+   "prereqs": [
+    "A Marketo Engage instance with REST API access enabled, and enabled for this access by its Marketo administrator",
+    "Admin access to create API credentials in Marketo LaunchPoint",
+    "A dedicated API-only user with only the permissions the team needs",
+    "Claude Desktop, with Adobe's helper file and Node.js on each computer, or Claude Code"
+   ],
+   "covered": "The Marketo Engage connected to Claude service sits on Marketo Engage itself.",
+   "covered_by": "XT07",
+   "references": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-developer/marketo/mcp-server-operations",
+     "title": "Experience League: Marketo Engage MCP Server operations"
+    }
+   ],
+   "sowHow": "Your Marketo administrator creates credentials for a dedicated user, and your team connects Claude Desktop or Claude Code to Marketo Engage and asks for look-ups and changes in plain words.",
+   "sowGain": "Your marketing operations team looks up and updates Marketo programs, emails and lists by asking."
+  },
+  {
+   "id": "claude-fireflycp",
+   "a": "claude",
+   "b": "fireflycp",
+   "lines": [],
+   "more": [],
+   "how": "Your client's team connects Claude Code or Claude Desktop to Firefly Creative Production with an access token and an API key from the organization's administrator. In plain words they ask for production jobs, such as removing a background or making several sizes, and Claude picks the workflow actions, runs them and brings back the result.",
+   "source": {
+    "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/run-workflow-mcp-overview.html",
+    "title": "Adobe Firefly help: Run-Workflow MCP overview"
+   },
+   "gain": {
+    "title": "Production jobs by asking",
+    "text": "Your client's production team runs Firefly Creative Production workflows by asking in Claude and saves finished workflows for reuse."
+   },
+   "flows": [
+    {
+     "from": "claude",
+     "to": "fireflycp",
+     "what": "Requests for production jobs in plain words",
+     "needs": [],
+     "source": {
+      "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/run-workflow-mcp-overview.html",
+      "title": "Adobe Firefly help: Run-Workflow MCP overview"
+     }
+    },
+    {
+     "from": "fireflycp",
+     "to": "claude",
+     "what": "The finished outputs and reusable workflows",
+     "needs": [],
+     "source": {
+      "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/run-workflow-mcp-overview.html",
+      "title": "Adobe Firefly help: Run-Workflow MCP overview"
+     }
+    }
+   ],
+   "no_services": true,
+   "kind": "outside",
+   "label": "Claude Code and Claude Desktop run Firefly Creative Production workflows from a plain request",
+   "availability": "",
+   "prereqs": [
+    "An access token from the organization's administrator",
+    "An API key for the Run-Workflow service from the organization's administrator",
+    "Claude Code or Claude Desktop"
+   ],
+   "covered": "The Run-Workflow MCP for AI agents service sits on Firefly Creative Production itself.",
+   "covered_by": "FP07",
+   "references": [
+    {
+     "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/install-run-workflow-mcp.html",
+     "title": "Adobe Firefly help: Install Run-Workflow MCP"
+    }
+   ],
+   "sowHow": "Your team connects Claude Code or Claude Desktop to Firefly Creative Production with the token and key from your administrator and asks for production jobs in plain words.",
+   "sowGain": "Your production team runs creative workflows by asking and reuses the finished ones."
+  },
+  {
+   "id": "chatgpt-creativecloud",
+   "a": "chatgpt",
+   "b": "creativecloud",
+   "lines": [],
+   "more": [],
+   "how": "Anyone with ChatGPT installs the single Adobe plugin. By describing the job they edit photos, cut and resize video and generate images with tools from Photoshop, Premiere, Firefly and other Adobe apps. Signing in with an Adobe account unlocks more tools and saves the work to Creative Cloud.",
+   "source": {
+    "url": "https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/adobe-connectors/adobe-for-chatgpt.html",
+    "title": "Adobe Help: Adobe for ChatGPT overview"
+   },
+   "gain": {
+    "title": "Quick creative edits in the chat",
+    "text": "Your client's team makes quick photo and video edits by describing them in ChatGPT, and signed-in work is saved to Creative Cloud."
+   },
+   "flows": [
+    {
+     "from": "chatgpt",
+     "to": "creativecloud",
+     "what": "A description of the edit, with the files",
+     "needs": [],
+     "source": {
+      "url": "https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/adobe-connectors/adobe-for-chatgpt.html",
+      "title": "Adobe Help: Adobe for ChatGPT overview"
+     }
+    },
+    {
+     "from": "creativecloud",
+     "to": "chatgpt",
+     "what": "The edited files, saved to Creative Cloud when signed in",
+     "needs": [],
+     "source": {
+      "url": "https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/adobe-connectors/adobe-for-chatgpt.html",
+      "title": "Adobe Help: Adobe for ChatGPT overview"
+     }
+    }
+   ],
+   "no_services": true,
+   "kind": "outside",
+   "label": "One Adobe plugin brings Photoshop, Premiere and Firefly tools into ChatGPT",
+   "availability": "",
+   "prereqs": [
+    "Your client's own ChatGPT",
+    "An Adobe account for more tools and saved work; some tools need an eligible paid Adobe plan"
+   ],
+   "covered": "Each person adds Adobe's plugin themselves, so there is no separate service here.",
+   "references": [
+    {
+     "url": "https://www.adobe.com/adobe-connectors/adobe-for-chatgpt.html",
+     "title": "Adobe: Adobe for ChatGPT"
+    }
+   ],
+   "sowHow": "Your team installs the Adobe plugin in ChatGPT and makes quick photo and video edits by describing them.",
+   "sowGain": "Your team makes quick creative edits without leaving ChatGPT."
+  },
+  {
+   "id": "chatgpt-acrobat",
+   "a": "chatgpt",
+   "b": "acrobat",
+   "lines": [],
+   "more": [],
+   "how": "The single Adobe plugin in ChatGPT includes Acrobat tools. By describing the job a person creates PDFs and turns designs or data into formatted PDFs in the chat. Signing in with an Adobe account unlocks more tools and saves the work.",
+   "source": {
+    "url": "https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/adobe-connectors/adobe-for-chatgpt.html",
+    "title": "Adobe Help: Adobe for ChatGPT overview"
+   },
+   "gain": {
+    "title": "PDF jobs in the chat",
+    "text": "Your client's team creates PDFs by describing the job in ChatGPT."
+   },
+   "flows": [
+    {
+     "from": "chatgpt",
+     "to": "acrobat",
+     "what": "A description of the PDF job, with the files",
+     "needs": [],
+     "source": {
+      "url": "https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/adobe-connectors/adobe-for-chatgpt.html",
+      "title": "Adobe Help: Adobe for ChatGPT overview"
+     }
+    },
+    {
+     "from": "acrobat",
+     "to": "chatgpt",
+     "what": "The finished PDF",
+     "needs": [],
+     "source": {
+      "url": "https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/adobe-connectors/adobe-for-chatgpt.html",
+      "title": "Adobe Help: Adobe for ChatGPT overview"
+     }
+    }
+   ],
+   "no_services": true,
+   "kind": "outside",
+   "label": "The same Adobe plugin brings Acrobat PDF tools into ChatGPT",
+   "availability": "",
+   "prereqs": [
+    "Your client's own ChatGPT",
+    "An Adobe account for more tools and saved work; some tools need an eligible paid Adobe plan"
+   ],
+   "covered": "Each person adds Adobe's plugin themselves, so there is no separate service here.",
+   "references": [
+    {
+     "url": "https://www.adobe.com/adobe-connectors/adobe-for-chatgpt.html",
+     "title": "Adobe: Adobe for ChatGPT"
+    }
+   ],
+   "sowHow": "Your team installs the Adobe plugin in ChatGPT and creates PDFs by describing the job.",
+   "sowGain": "Your team handles quick PDF jobs without leaving ChatGPT."
+  },
+  {
+   "id": "chatgpt-express",
+   "a": "chatgpt",
+   "b": "express",
+   "lines": [],
+   "more": [],
+   "how": "The single Adobe plugin in ChatGPT includes Adobe Express. A person starts from an Express template, updates the text and colors by describing the change, and can animate the design for social media or turn it into a PDF.",
+   "source": {
+    "url": "https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/adobe-connectors/adobe-for-chatgpt.html",
+    "title": "Adobe Help: Adobe for ChatGPT overview"
+   },
+   "gain": {
+    "title": "Designs from templates in the chat",
+    "text": "Your client's team starts a design from an Express template by describing it in ChatGPT."
+   },
+   "flows": [
+    {
+     "from": "chatgpt",
+     "to": "express",
+     "what": "A description of the design, with text and images",
+     "needs": [],
+     "source": {
+      "url": "https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/adobe-connectors/adobe-for-chatgpt.html",
+      "title": "Adobe Help: Adobe for ChatGPT overview"
+     }
+    },
+    {
+     "from": "express",
+     "to": "chatgpt",
+     "what": "A design made from an Express template",
+     "needs": [],
+     "source": {
+      "url": "https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/adobe-connectors/adobe-for-chatgpt.html",
+      "title": "Adobe Help: Adobe for ChatGPT overview"
+     }
+    }
+   ],
+   "no_services": true,
+   "kind": "outside",
+   "label": "The same Adobe plugin brings Adobe Express templates into ChatGPT",
+   "availability": "",
+   "prereqs": [
+    "Your client's own ChatGPT",
+    "An Adobe account for more tools and saved work; some tools need an eligible paid Adobe plan"
+   ],
+   "covered": "Each person adds Adobe's plugin themselves, so there is no separate service here.",
+   "references": [
+    {
+     "url": "https://www.adobe.com/adobe-connectors/adobe-for-chatgpt.html",
+     "title": "Adobe: Adobe for ChatGPT"
+    }
+   ],
+   "sowHow": "Your team installs the Adobe plugin in ChatGPT and starts designs from Express templates by describing them.",
+   "sowGain": "Your team starts on-template designs without leaving ChatGPT."
+  },
+  {
+   "id": "chatgpt-target",
+   "a": "chatgpt",
+   "b": "target",
+   "lines": [],
+   "more": [],
+   "how": "Each person adds Adobe's Target address in ChatGPT and signs in with their Adobe login. In plain words they check the status, results and change history of tests, create and change A/B and Experience Targeting activities, audiences and offers, and switch activities on and off. What each person can do follows their Target role: Observer reads, Editor creates and changes, Approver switches activities on and off, and every change waits for the person to confirm it.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/target/using/mcp/target-mcp",
+    "title": "Experience League: Target connector for AI assistants"
+   },
+   "gain": {
+    "title": "Tests checked and changed by asking",
+    "text": "Your client's team checks how tests are doing and makes routine changes by asking in ChatGPT, within the Target roles each person already has."
+   },
+   "flows": [
+    {
+     "from": "chatgpt",
+     "to": "target",
+     "what": "Questions about tests, and requested changes",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/target/using/mcp/target-mcp",
+      "title": "Experience League: Target connector for AI assistants"
+     }
+    },
+    {
+     "from": "target",
+     "to": "chatgpt",
+     "what": "Test status, results and change history, and the result of each change",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/target/using/mcp/target-mcp",
+      "title": "Experience League: Target connector for AI assistants"
+     }
+    }
+   ],
+   "no_services": true,
+   "kind": "outside",
+   "label": "Each person adds Adobe's Target address in ChatGPT",
+   "availability": "",
+   "prereqs": [
+    "An active Target license with an Adobe Experience Platform organization",
+    "Target roles set in the Adobe Admin Console: Observer to read, Editor to create and change, Approver to switch activities on and off",
+    "Each person signs in with their Adobe login and picks the organization",
+    "Recommendations work needs Target Premium"
+   ],
+   "covered": "Each person adds Adobe's Target address themselves, so there is no separate service here.",
+   "references": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/target/using/mcp/target-mcp-get-started",
+     "title": "Experience League: Target connector: get started"
+    }
+   ],
+   "sowHow": "Your team adds Adobe's Target address in ChatGPT, signs in with their Adobe login, and checks test results and makes routine changes to activities in plain words, within each person's Target role.",
+   "sowGain": "Your team checks how tests are doing and makes routine changes by asking in ChatGPT."
+  },
+  {
+   "id": "claude-target",
+   "a": "claude",
+   "b": "target",
+   "lines": [],
+   "more": [],
+   "how": "Each person adds Adobe's Target address in Claude on the web, Claude Desktop or Claude Code and signs in with their Adobe login. In plain words they check the status, results and change history of tests, create and change A/B and Experience Targeting activities, audiences and offers, and switch activities on and off. What each person can do follows their Target role: Observer reads, Editor creates and changes, Approver switches activities on and off, and every change waits for the person to confirm it.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/target/using/mcp/target-mcp",
+    "title": "Experience League: Target connector for AI assistants"
+   },
+   "gain": {
+    "title": "Tests checked and changed by asking",
+    "text": "Your client's team checks how tests are doing and makes routine changes by asking in Claude, within the Target roles each person already has."
+   },
+   "flows": [
+    {
+     "from": "claude",
+     "to": "target",
+     "what": "Questions about tests, and requested changes",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/target/using/mcp/target-mcp",
+      "title": "Experience League: Target connector for AI assistants"
+     }
+    },
+    {
+     "from": "target",
+     "to": "claude",
+     "what": "Test status, results and change history, and the result of each change",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/target/using/mcp/target-mcp",
+      "title": "Experience League: Target connector for AI assistants"
+     }
+    }
+   ],
+   "no_services": true,
+   "kind": "outside",
+   "label": "Each person adds Adobe's Target address in Claude",
+   "availability": "",
+   "prereqs": [
+    "An active Target license with an Adobe Experience Platform organization",
+    "Target roles set in the Adobe Admin Console: Observer to read, Editor to create and change, Approver to switch activities on and off",
+    "Each person signs in with their Adobe login and picks the organization",
+    "Recommendations work needs Target Premium"
+   ],
+   "covered": "Each person adds Adobe's Target address themselves, so there is no separate service here.",
+   "references": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/target/using/mcp/target-mcp-get-started",
+     "title": "Experience League: Target connector: get started"
+    }
+   ],
+   "sowHow": "Your team adds Adobe's Target address in Claude, signs in with their Adobe login, and checks test results and makes routine changes to activities in plain words, within each person's Target role.",
+   "sowGain": "Your team checks how tests are doing and makes routine changes by asking in Claude."
+  },
+  {
+   "id": "chatgpt-rtcdp",
+   "a": "chatgpt",
+   "b": "rtcdp",
+   "lines": [],
+   "more": [],
+   "how": "Each person adds Adobe's Real-Time CDP address in ChatGPT as a connector and signs in with their Adobe login. In plain words they check audiences, destinations and data flows, for example which flow runs failed in the last day, naming the organization and sandbox. The connection looks only: it does not create, activate, change or delete anything, and it does not bring back delivery or conversion numbers from destination platforms.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-platform/rtcdp/intro/rtcdp-mcp",
+    "title": "Experience League: Real-Time CDP connector for AI assistants"
+   },
+   "gain": {
+    "title": "Audience and data flow checks by asking",
+    "text": "Your client's team checks audiences, destinations and data flows and spots failed runs by asking in ChatGPT."
+   },
+   "flows": [
+    {
+     "from": "chatgpt",
+     "to": "rtcdp",
+     "what": "Questions about audiences, destinations and data flows",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-platform/rtcdp/intro/rtcdp-mcp",
+      "title": "Experience League: Real-Time CDP connector for AI assistants"
+     }
+    },
+    {
+     "from": "rtcdp",
+     "to": "chatgpt",
+     "what": "What is set up and how the data flows ran (look only)",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-platform/rtcdp/intro/rtcdp-mcp",
+      "title": "Experience League: Real-Time CDP connector for AI assistants"
+     }
+    }
+   ],
+   "no_services": true,
+   "kind": "outside",
+   "label": "Each person adds Adobe's Real-Time CDP address in ChatGPT",
+   "availability": "",
+   "prereqs": [
+    "An active Real-Time CDP license (B2B Edition included)",
+    "Permission in Experience Platform to view audiences, destinations and data flows",
+    "The organization ID and the sandbox to ask about",
+    "Each person signs in with their Adobe login"
+   ],
+   "covered": "Each person adds Adobe's Real-Time CDP address themselves, so there is no separate service here.",
+   "sowHow": "Your team adds Adobe's Real-Time CDP address in ChatGPT, signs in with their Adobe login, and checks audiences, destinations and data flows in plain words. The connection looks only and changes nothing.",
+   "sowGain": "Your team checks audiences, destinations and data flows and spots failed runs by asking in ChatGPT."
+  },
+  {
+   "id": "claude-rtcdp",
+   "a": "claude",
+   "b": "rtcdp",
+   "lines": [],
+   "more": [],
+   "how": "Each person adds Adobe's Real-Time CDP address in Claude as a connector, or on a Claude Team or Enterprise plan the workspace owner adds it once and each person switches it on; then they sign in with their Adobe login. In plain words they check audiences, destinations and data flows, for example which flow runs failed in the last day, naming the organization and sandbox. The connection looks only: it does not create, activate, change or delete anything, and it does not bring back delivery or conversion numbers from destination platforms.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-platform/rtcdp/intro/rtcdp-mcp",
+    "title": "Experience League: Real-Time CDP connector for AI assistants"
+   },
+   "gain": {
+    "title": "Audience and data flow checks by asking",
+    "text": "Your client's team checks audiences, destinations and data flows and spots failed runs by asking in Claude."
+   },
+   "flows": [
+    {
+     "from": "claude",
+     "to": "rtcdp",
+     "what": "Questions about audiences, destinations and data flows",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-platform/rtcdp/intro/rtcdp-mcp",
+      "title": "Experience League: Real-Time CDP connector for AI assistants"
+     }
+    },
+    {
+     "from": "rtcdp",
+     "to": "claude",
+     "what": "What is set up and how the data flows ran (look only)",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-platform/rtcdp/intro/rtcdp-mcp",
+      "title": "Experience League: Real-Time CDP connector for AI assistants"
+     }
+    }
+   ],
+   "no_services": true,
+   "kind": "outside",
+   "label": "Each person adds Adobe's Real-Time CDP address in Claude",
+   "availability": "",
+   "prereqs": [
+    "An active Real-Time CDP license (B2B Edition included)",
+    "Permission in Experience Platform to view audiences, destinations and data flows",
+    "The organization ID and the sandbox to ask about",
+    "Each person signs in with their Adobe login"
+   ],
+   "covered": "Each person adds Adobe's Real-Time CDP address themselves, or on a Claude Team or Enterprise plan the workspace owner adds it once, so there is no separate service here.",
+   "sowHow": "Your team adds Adobe's Real-Time CDP address in Claude, signs in with their Adobe login, and checks audiences, destinations and data flows in plain words. The connection looks only and changes nothing.",
+   "sowGain": "Your team checks audiences, destinations and data flows and spots failed runs by asking in Claude."
+  },
+  {
+   "id": "claude-ajo",
+   "a": "claude",
+   "b": "ajo",
+   "lines": [],
+   "more": [],
+   "how": "Each person picks Adobe Journey Optimizer under Connectors in Claude on the web or Claude Desktop and signs in. In plain words they look into campaigns, journeys and offers: what is live, who a campaign targets, how a journey branches, which sender domains and unsubscribe settings a channel uses. The connection looks only; it changes nothing. Designers also send an email made in Claude Design straight into Journey Optimizer, where it arrives as a ready-to-use template, structured for personalization.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/combine/ajo-mcp",
+    "title": "Experience League: Journey Optimizer connector for AI assistants"
+   },
+   "gain": {
+    "title": "Campaign answers, and emails from Claude Design",
+    "text": "Your client's team checks campaigns and journeys by asking in Claude, and designers hand emails made in Claude Design to Journey Optimizer as templates, with no download and upload in between."
+   },
+   "flows": [
+    {
+     "from": "claude",
+     "to": "ajo",
+     "what": "Questions about campaigns, journeys and offers",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/combine/ajo-mcp",
+      "title": "Experience League: Journey Optimizer connector for AI assistants"
+     }
+    },
+    {
+     "from": "ajo",
+     "to": "claude",
+     "what": "Campaign, journey and channel details (look only)",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/combine/ajo-mcp",
+      "title": "Experience League: Journey Optimizer connector for AI assistants"
+     }
+    },
+    {
+     "from": "claude",
+     "to": "ajo",
+     "what": "Emails made in Claude Design, as ready-to-use templates",
+     "needs": [],
+     "source": {
+      "url": "https://business.adobe.com/blog/adobe-experience-manager-journey-optimizer-claude-design",
+      "title": "Adobe for Business blog: From Claude Design to production"
+     }
+    }
+   ],
+   "no_services": true,
+   "kind": "outside",
+   "label": "Adobe Journey Optimizer is in Claude's connector list, and Claude Design sends emails into it",
+   "availability": "",
+   "prereqs": [
+    "An active Journey Optimizer license",
+    "View permission in Journey Optimizer for the campaigns, journeys and offers people ask about",
+    "Claude on the web or Claude Desktop; Claude Design for the email hand-off"
+   ],
+   "covered": "Each person picks Adobe Journey Optimizer in Claude's connector list, so there is no separate service here.",
+   "sowHow": "Your team picks Adobe Journey Optimizer under Connectors in Claude, signs in, and looks into campaigns, journeys and offers in plain words; the connection looks only. Your designers also send emails made in Claude Design straight into Journey Optimizer as ready-to-use templates.",
+   "sowGain": "Your team checks campaigns and journeys by asking in Claude, and your designers hand emails from Claude Design to Journey Optimizer with no download and upload in between."
+  },
+  {
+   "id": "chatgpt-frameio",
+   "a": "chatgpt",
+   "b": "frameio",
+   "lines": [],
+   "more": [],
+   "how": "Each person connects Frame.io in ChatGPT and signs in with their Adobe login. In plain words they create projects and folders, upload files, make share links and request reviews, manage comments, access and metadata, and pull reports such as who approved what and the audit history. Everything follows the person's Frame.io permissions, and changes wait for their approval. The assistant reads file names and folders, not what is inside a video or image.",
+   "source": {
+    "url": "https://help.frame.io/en/articles/17218043-connecting-frame-io-mcp-server-with-ai-clients-beta",
+    "title": "Frame.io Help: connecting Frame.io to AI assistants"
+   },
+   "gain": {
+    "title": "Review work by asking",
+    "text": "Your client's team uploads, shares for review and reports on approvals by asking in ChatGPT, within their Frame.io permissions."
+   },
+   "flows": [
+    {
+     "from": "chatgpt",
+     "to": "frameio",
+     "what": "Requests to upload, organize, share and report",
+     "needs": [],
+     "source": {
+      "url": "https://help.frame.io/en/articles/17218043-connecting-frame-io-mcp-server-with-ai-clients-beta",
+      "title": "Frame.io Help: connecting Frame.io to AI assistants"
+     }
+    },
+    {
+     "from": "frameio",
+     "to": "chatgpt",
+     "what": "Files, review links, comments and reports",
+     "needs": [],
+     "source": {
+      "url": "https://help.frame.io/en/articles/17218043-connecting-frame-io-mcp-server-with-ai-clients-beta",
+      "title": "Frame.io Help: connecting Frame.io to AI assistants"
+     }
+    }
+   ],
+   "no_services": true,
+   "kind": "outside",
+   "label": "Frame.io connects to ChatGPT",
+   "availability": "",
+   "prereqs": [
+    "Frame.io (version 4)",
+    "Each person signs in with their Adobe login",
+    "Uploads need Contributor access or higher"
+   ],
+   "covered": "Each person connects Frame.io themselves, so there is no separate service here.",
+   "sowHow": "Your team connects Frame.io in ChatGPT, signs in with their Adobe login, and uploads, shares for review and pulls approval reports in plain words, within each person's Frame.io permissions.",
+   "sowGain": "Your team handles review work by asking in ChatGPT."
+  },
+  {
+   "id": "claude-frameio",
+   "a": "claude",
+   "b": "frameio",
+   "lines": [],
+   "more": [],
+   "how": "Each person connects Frame.io in Claude and signs in with their Adobe login. In plain words they create projects and folders, upload files, make share links and request reviews, manage comments, access and metadata, and pull reports such as who approved what and the audit history. Everything follows the person's Frame.io permissions, and changes wait for their approval. The assistant reads file names and folders, not what is inside a video or image.",
+   "source": {
+    "url": "https://help.frame.io/en/articles/17218043-connecting-frame-io-mcp-server-with-ai-clients-beta",
+    "title": "Frame.io Help: connecting Frame.io to AI assistants"
+   },
+   "gain": {
+    "title": "Review work by asking",
+    "text": "Your client's team uploads, shares for review and reports on approvals by asking in Claude, within their Frame.io permissions."
+   },
+   "flows": [
+    {
+     "from": "claude",
+     "to": "frameio",
+     "what": "Requests to upload, organize, share and report",
+     "needs": [],
+     "source": {
+      "url": "https://help.frame.io/en/articles/17218043-connecting-frame-io-mcp-server-with-ai-clients-beta",
+      "title": "Frame.io Help: connecting Frame.io to AI assistants"
+     }
+    },
+    {
+     "from": "frameio",
+     "to": "claude",
+     "what": "Files, review links, comments and reports",
+     "needs": [],
+     "source": {
+      "url": "https://help.frame.io/en/articles/17218043-connecting-frame-io-mcp-server-with-ai-clients-beta",
+      "title": "Frame.io Help: connecting Frame.io to AI assistants"
+     }
+    }
+   ],
+   "no_services": true,
+   "kind": "outside",
+   "label": "Frame.io connects to Claude",
+   "availability": "",
+   "prereqs": [
+    "Frame.io (version 4)",
+    "Each person signs in with their Adobe login",
+    "Uploads need Contributor access or higher"
+   ],
+   "covered": "Each person connects Frame.io themselves, so there is no separate service here.",
+   "sowHow": "Your team connects Frame.io in Claude, signs in with their Adobe login, and uploads, shares for review and pulls approval reports in plain words, within each person's Frame.io permissions.",
+   "sowGain": "Your team handles review work by asking in Claude."
+  },
+  {
+   "id": "claude-creativecloud",
+   "a": "claude",
+   "b": "creativecloud",
+   "lines": [],
+   "more": [],
+   "how": "Each person adds Adobe's connector in Claude. By describing the job they edit photos, make designs, cut video and generate images with tools from Photoshop, Lightroom, Illustrator, Firefly, Premiere and InDesign, and find Adobe Stock images. Signing in with an Adobe account saves the work to Creative Cloud.",
+   "source": {
+    "url": "https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/adobe-connectors/adobe-for-claude.html",
+    "title": "Adobe Help: Adobe for Claude"
+   },
+   "gain": {
+    "title": "Quick creative edits in the chat",
+    "text": "Your client's team makes quick photo, design and video edits by describing them in Claude."
+   },
+   "flows": [
+    {
+     "from": "claude",
+     "to": "creativecloud",
+     "what": "A description of the edit, with the files",
+     "needs": [],
+     "source": {
+      "url": "https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/adobe-connectors/adobe-for-claude.html",
+      "title": "Adobe Help: Adobe for Claude"
+     }
+    },
+    {
+     "from": "creativecloud",
+     "to": "claude",
+     "what": "The edited files",
+     "needs": [],
+     "source": {
+      "url": "https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/adobe-connectors/adobe-for-claude.html",
+      "title": "Adobe Help: Adobe for Claude"
+     }
+    }
+   ],
+   "no_services": true,
+   "kind": "outside",
+   "label": "One Adobe connector brings Photoshop, Illustrator, Firefly and Premiere tools into Claude",
+   "availability": "",
+   "prereqs": [
+    "Your client's own Claude",
+    "An Adobe account; some tools need an eligible paid Adobe plan"
+   ],
+   "covered": "Each person adds Adobe's connector themselves, so there is no separate service here.",
+   "sowHow": "Your team adds Adobe's connector in Claude and makes quick photo, design and video edits by describing them.",
+   "sowGain": "Your team makes quick creative edits without leaving Claude."
+  },
+  {
+   "id": "claude-acrobat",
+   "a": "claude",
+   "b": "acrobat",
+   "lines": [],
+   "more": [],
+   "how": "The same Adobe connector in Claude includes Acrobat. By describing the job a person creates, edits and reviews PDFs in the chat.",
+   "source": {
+    "url": "https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/adobe-connectors/adobe-for-claude.html",
+    "title": "Adobe Help: Adobe for Claude"
+   },
+   "gain": {
+    "title": "PDF jobs in the chat",
+    "text": "Your client's team handles PDFs by describing the job in Claude."
+   },
+   "flows": [
+    {
+     "from": "claude",
+     "to": "acrobat",
+     "what": "A description of the PDF job, with the files",
+     "needs": [],
+     "source": {
+      "url": "https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/adobe-connectors/adobe-for-claude.html",
+      "title": "Adobe Help: Adobe for Claude"
+     }
+    },
+    {
+     "from": "acrobat",
+     "to": "claude",
+     "what": "The finished PDF",
+     "needs": [],
+     "source": {
+      "url": "https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/adobe-connectors/adobe-for-claude.html",
+      "title": "Adobe Help: Adobe for Claude"
+     }
+    }
+   ],
+   "no_services": true,
+   "kind": "outside",
+   "label": "The same Adobe connector brings Acrobat PDF tools into Claude",
+   "availability": "",
+   "prereqs": [
+    "Your client's own Claude",
+    "An Adobe account; some tools need an eligible paid Adobe plan"
+   ],
+   "covered": "Each person adds Adobe's connector themselves, so there is no separate service here.",
+   "sowHow": "Your team uses Adobe's connector in Claude to create, edit and review PDFs by describing the job.",
+   "sowGain": "Your team handles quick PDF jobs without leaving Claude."
+  },
+  {
+   "id": "copilot-cw",
+   "a": "copilot",
+   "b": "cw",
+   "lines": [],
+   "more": [],
+   "how": "Your client's Microsoft 365 administrator approves Adobe CX Enterprise Coworker in the Microsoft 365 and Teams admin centers and deploys it to chosen people or the whole organization. They then ask Coworker in plain words in Teams, Word, Excel, PowerPoint and Copilot chat, and get marketing insights within the permissions they already have in Adobe.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/coworker/content/ai-platforms",
+    "title": "Experience League: Adobe CX Enterprise Coworker for AI Platforms"
+   },
+   "gain": {
+    "title": "Coworker where the team already works",
+    "text": "Your client's team gets marketing answers from Coworker in Teams and Office, at no extra cost beyond the Coworker license."
+   },
+   "flows": [
+    {
+     "from": "copilot",
+     "to": "cw",
+     "what": "Questions typed in plain words in Microsoft 365 Copilot",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/coworker/content/ai-platforms",
+      "title": "Experience League: Adobe CX Enterprise Coworker for AI Platforms"
+     }
+    },
+    {
+     "from": "cw",
+     "to": "copilot",
+     "what": "Marketing insights, within each person's Adobe permissions",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/coworker/content/ai-platforms",
+      "title": "Experience League: Adobe CX Enterprise Coworker for AI Platforms"
+     }
+    }
+   ],
+   "no_services": true,
+   "kind": "outside",
+   "label": "Adobe publishes Coworker as an agent for Microsoft 365 Copilot, approved by the Microsoft 365 administrator",
+   "availability": "",
+   "prereqs": [
+    "A Coworker license",
+    "Microsoft 365 Copilot",
+    "The Microsoft 365 administrator allows apps and agents from outside publishers"
+   ],
+   "covered": "The Coworker set up in an AI platform service sits on Coworker itself. It covers one assistant; with two assistants it is the large size.",
+   "covered_by": "CW08",
+   "sowHow": "Your Microsoft 365 administrator approves Adobe CX Enterprise Coworker and deploys it, then your team asks Coworker in plain words in Teams, Word, Excel, PowerPoint and Copilot chat.",
+   "sowGain": "Your team gets marketing answers from Coworker in Teams and Office."
+  },
+  {
+   "id": "copilot-aemsites",
+   "a": "copilot",
+   "b": "aemsites",
+   "lines": [],
+   "more": [],
+   "how": "Adobe lists Microsoft 365 Copilot among the chat applications for its AEM connection. A person adds Adobe's AEM address and signs in with their Adobe ID. In plain words they find, create, change and publish pages and content fragments on AEM as a Cloud Service, within their own AEM permissions.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/using-mcp-with-aem-as-a-cloud-service",
+    "title": "Experience League: Using MCP with AEM as a Cloud Service"
+   },
+   "gain": {
+    "title": "Page content by asking",
+    "text": "Your client's content team finds, drafts and updates pages and content fragments by asking in Microsoft 365 Copilot, under the AEM permissions each person already has."
+   },
+   "flows": [
+    {
+     "from": "copilot",
+     "to": "aemsites",
+     "what": "Requests to find, create, change or publish pages and content fragments",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/using-mcp-with-aem-as-a-cloud-service",
+      "title": "Experience League: Using MCP with AEM as a Cloud Service"
+     }
+    },
+    {
+     "from": "aemsites",
+     "to": "copilot",
+     "what": "Results and the content found, for review before it goes live",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/using-mcp-with-aem-as-a-cloud-service",
+      "title": "Experience League: Using MCP with AEM as a Cloud Service"
+     }
+    }
+   ],
+   "no_services": true,
+   "kind": "outside",
+   "label": "Each person adds Adobe's AEM address in Microsoft 365 Copilot",
+   "availability": "",
+   "prereqs": [
+    "AEM as a Cloud Service, on release 26309 or later",
+    "Each person signs in with their own Adobe ID and works within their AEM permissions"
+   ],
+   "covered": "The AEM content work in ChatGPT, Claude or Microsoft Copilot: rollout and rules service sits on AEM Sites itself.",
+   "covered_by": "XT03",
+   "sowHow": "Your authors add Adobe's AEM address in Microsoft 365 Copilot, sign in with their Adobe ID, and ask for page and content fragment changes in plain words.",
+   "sowGain": "Your content team finds, drafts and updates pages and content fragments by asking, within the AEM permissions each person already has."
+  },
+  {
+   "id": "copilot-aemassets",
+   "a": "copilot",
+   "b": "aemassets",
+   "lines": [],
+   "more": [],
+   "how": "The AEM connection in Microsoft 365 Copilot also covers AEM Assets. In plain words your client's team searches, imports, uploads, downloads, moves and publishes assets, edits their details and finds unused ones.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/using-mcp-with-aem-as-a-cloud-service",
+    "title": "Experience League: Using MCP with AEM as a Cloud Service"
+   },
+   "gain": {
+    "title": "Asset work by asking",
+    "text": "Your client's team finds and handles assets by asking in Microsoft 365 Copilot, under the AEM permissions each person already has."
+   },
+   "flows": [
+    {
+     "from": "copilot",
+     "to": "aemassets",
+     "what": "Requests to search, import, upload or publish assets",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/using-mcp-with-aem-as-a-cloud-service",
+      "title": "Experience League: Using MCP with AEM as a Cloud Service"
+     }
+    },
+    {
+     "from": "aemassets",
+     "to": "copilot",
+     "what": "The assets found and the result of each action",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/using-mcp-with-aem-as-a-cloud-service",
+      "title": "Experience League: Using MCP with AEM as a Cloud Service"
+     }
+    }
+   ],
+   "no_services": true,
+   "kind": "outside",
+   "label": "The same AEM connection works with assets from Microsoft 365 Copilot",
+   "availability": "",
+   "prereqs": [
+    "AEM as a Cloud Service, on release 26309 or later",
+    "Each person signs in with their own Adobe ID and works within their AEM permissions"
+   ],
+   "covered": "The AEM Assets work in ChatGPT, Claude or Microsoft Copilot: rollout and rules service sits on AEM Assets itself.",
+   "covered_by": "XT04",
+   "sowHow": "Your team uses the AEM connection in Microsoft 365 Copilot to search, upload, download, move and publish assets in plain words.",
+   "sowGain": "Your team finds and handles assets by asking, within the AEM permissions each person already has."
+  },
+  {
+   "id": "copilot-gspm",
+   "a": "copilot",
+   "b": "gspm",
+   "lines": [],
+   "more": [],
+   "how": "Adobe hosts the connection. Following Microsoft's steps for a custom connection, your client adds Adobe's GenStudio for Performance Marketing address in Microsoft Copilot, and each person signs in with their Adobe ID. In plain words they ask how ads are performing, put together a draft ad from a template, and publish an approved ad to a connected channel.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/ai-assistants/connect-ai-assistants",
+    "title": "Experience League: GenStudio for Performance Marketing: connect AI assistants"
+   },
+   "gain": {
+    "title": "Ad answers and drafts by asking",
+    "text": "Your client's marketers get performance answers and first drafts by asking in Microsoft Copilot, with their own GenStudio permissions."
+   },
+   "flows": [
+    {
+     "from": "copilot",
+     "to": "gspm",
+     "what": "Questions about ad performance and requests for a draft or to publish an approved ad",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/ai-assistants/connect-ai-assistants",
+      "title": "Experience League: GenStudio for Performance Marketing: connect AI assistants"
+     }
+    },
+    {
+     "from": "gspm",
+     "to": "copilot",
+     "what": "Performance answers, drafts to review, and the result of publishing",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/ai-assistants/connect-ai-assistants",
+      "title": "Experience League: GenStudio for Performance Marketing: connect AI assistants"
+     }
+    }
+   ],
+   "no_services": true,
+   "kind": "outside",
+   "label": "Your client adds Adobe's GenStudio address in Microsoft Copilot",
+   "availability": "",
+   "prereqs": [
+    "Access to GenStudio for Performance Marketing",
+    "A Microsoft Copilot plan that allows custom connections",
+    "Each person signs in with their Adobe ID"
+   ],
+   "covered": "The GenStudio for Performance Marketing in ChatGPT, Claude or Microsoft Copilot: connection and publishing rules service sits on GenStudio for Performance Marketing itself.",
+   "covered_by": "XT06",
+   "sowHow": "Your team adds Adobe's GenStudio address in Microsoft Copilot following Microsoft's steps, signs in with their Adobe ID, and asks about ad performance, drafts and publishing in plain words.",
+   "sowGain": "Your marketers get performance answers and first drafts by asking."
+  },
+  {
+   "id": "copilot-cja",
+   "a": "copilot",
+   "b": "cja",
+   "lines": [],
+   "more": [],
+   "how": "Your client's team adds Adobe's Customer Journey Analytics address as a tool in Copilot Studio and builds a small agent on it. People then ask that agent for Customer Journey Analytics data in plain words, in Microsoft Copilot.",
+   "source": {
+    "url": "https://developer.adobe.com/analytics-mcp/docs/guides/copilot",
+    "title": "Adobe Developer: connect to Copilot Studio"
+   },
+   "gain": {
+    "title": "Analytics answers by asking",
+    "text": "Your client's team gets Customer Journey Analytics answers by asking an agent in Microsoft Copilot."
+   },
+   "flows": [
+    {
+     "from": "copilot",
+     "to": "cja",
+     "what": "Questions about the data, in plain words",
+     "needs": [],
+     "source": {
+      "url": "https://developer.adobe.com/analytics-mcp/docs/guides/copilot",
+      "title": "Adobe Developer: connect to Copilot Studio"
+     }
+    },
+    {
+     "from": "cja",
+     "to": "copilot",
+     "what": "Answers from the data views each person can use",
+     "needs": [],
+     "source": {
+      "url": "https://developer.adobe.com/analytics-mcp/docs/guides/copilot",
+      "title": "Adobe Developer: connect to Copilot Studio"
+     }
+    }
+   ],
+   "no_services": true,
+   "kind": "outside",
+   "label": "Your client adds Adobe's Customer Journey Analytics address as a tool in Copilot Studio",
+   "availability": "",
+   "prereqs": [
+    "Customer Journey Analytics, with access for the connection set in the Admin Console",
+    "Copilot Studio"
+   ],
+   "covered": "The Customer Journey Analytics questions in ChatGPT, Claude or Microsoft Copilot service sits on Customer Journey Analytics itself.",
+   "covered_by": "XT01",
+   "sowHow": "Your team adds Adobe's Customer Journey Analytics address as a tool in Copilot Studio, builds a small agent on it, and asks it for reports in plain words in Microsoft Copilot.",
+   "sowGain": "Your analysts and marketers get Customer Journey Analytics answers by asking in Microsoft Copilot."
+  },
+  {
+   "id": "copilot-workfront",
+   "a": "copilot",
+   "b": "workfront",
+   "lines": [],
+   "more": [],
+   "how": "Adobe hosts the Workfront connection and names Microsoft Copilot among the platforms it works with. Your client adds Adobe's Workfront address following Microsoft's steps, and each person signs in. In plain words they find projects, tasks and issues and, once the Workfront administrator switches writing on, create, update and delete them, with each person's own Workfront access.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/workfront/using/basics/workfront-mcp-server/configure-workfront-mcp-server",
+    "title": "Experience League: Configure the Workfront MCP server"
+   },
+   "gain": {
+    "title": "Work managed by asking",
+    "text": "Your client's team looks up and updates projects, tasks and issues by asking in Microsoft Copilot, within the Workfront access each person already has."
+   },
+   "flows": [
+    {
+     "from": "copilot",
+     "to": "workfront",
+     "what": "Requests to find, create or update projects, tasks and issues",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront/using/basics/workfront-mcp-server/configure-workfront-mcp-server",
+      "title": "Experience League: Configure the Workfront MCP server"
+     }
+    },
+    {
+     "from": "workfront",
+     "to": "copilot",
+     "what": "The Workfront items found and the result of each change",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront/using/basics/workfront-mcp-server/configure-workfront-mcp-server",
+      "title": "Experience League: Configure the Workfront MCP server"
+     }
+    }
+   ],
+   "no_services": true,
+   "kind": "outside",
+   "label": "Your client adds Adobe's Workfront address in Microsoft Copilot",
+   "availability": "",
+   "prereqs": [
+    "Workfront on Adobe's sign-in system (Adobe Identity Management System)",
+    "The Workfront administrator allows the connection: reading is on from the start, writing is off until switched on",
+    "Each person signs in and works within their own Workfront access"
+   ],
+   "covered": "The Workfront in ChatGPT, Claude or Microsoft Copilot: rollout and write access service sits on Workfront itself.",
+   "covered_by": "XT05",
+   "sowHow": "Your team adds Adobe's Workfront address in Microsoft Copilot following Microsoft's steps, signs in, and asks for projects, tasks and issues in plain words.",
+   "sowGain": "Your team looks up and updates work by asking, within the Workfront access each person already has."
+  },
+  {
+   "id": "copilot-planning",
+   "a": "copilot",
+   "b": "planning",
+   "lines": [],
+   "more": [],
+   "how": "Workfront Planning has no connection of its own. When your client's Workfront package includes Planning, the Workfront connection in Microsoft Copilot also brings the Planning tools, so the team searches, creates and changes Planning records in plain words.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/workfront/using/basics/workfront-mcp-server/configure-workfront-mcp-server",
+    "title": "Experience League: Configure the Workfront MCP server"
+   },
+   "gain": {
+    "title": "Planning records by asking",
+    "text": "Your client's team searches and updates Planning records by asking in Microsoft Copilot, within their own Workfront access."
+   },
+   "flows": [
+    {
+     "from": "copilot",
+     "to": "planning",
+     "what": "Requests to search, create or change Planning records",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront/using/basics/workfront-mcp-server/configure-workfront-mcp-server",
+      "title": "Experience League: Configure the Workfront MCP server"
+     }
+    },
+    {
+     "from": "planning",
+     "to": "copilot",
+     "what": "The Planning records found and the result of each change",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront/using/basics/workfront-mcp-server/configure-workfront-mcp-server",
+      "title": "Experience League: Configure the Workfront MCP server"
+     }
+    }
+   ],
+   "no_services": true,
+   "kind": "outside",
+   "label": "Workfront Planning rides on the Workfront connection in Microsoft Copilot",
+   "availability": "",
+   "prereqs": [
+    "A Workfront package that includes Workfront Planning",
+    "The Workfront connection in Microsoft Copilot"
+   ],
+   "covered": "The Workfront in ChatGPT, Claude or Microsoft Copilot: rollout and write access service sits on Workfront.",
+   "covered_by": "XT05",
+   "sowHow": "Your team uses the Workfront connection in Microsoft Copilot to search and update Planning records in plain words.",
+   "sowGain": "Your team searches and updates Planning records by asking."
+  },
+  {
+   "id": "copilot-creativecloud",
+   "a": "copilot",
+   "b": "creativecloud",
+   "lines": [],
+   "more": [],
+   "how": "Your client's Microsoft administrator switches on Adobe's connector for Microsoft Copilot. In Copilot Cowork, on desktop and web, people then edit images and create designs with Adobe's creative tools by describing the job.",
+   "source": {
+    "url": "https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/adobe-connectors/adobe-for-copilot.html",
+    "title": "Adobe Help: Adobe for Microsoft Copilot"
+   },
+   "gain": {
+    "title": "Quick creative edits in Copilot",
+    "text": "Your client's team edits images and makes designs by describing them in Microsoft Copilot."
+   },
+   "flows": [
+    {
+     "from": "copilot",
+     "to": "creativecloud",
+     "what": "A description of the edit or design, with the files",
+     "needs": [],
+     "source": {
+      "url": "https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/adobe-connectors/adobe-for-copilot.html",
+      "title": "Adobe Help: Adobe for Microsoft Copilot"
+     }
+    },
+    {
+     "from": "creativecloud",
+     "to": "copilot",
+     "what": "The edited images and designs",
+     "needs": [],
+     "source": {
+      "url": "https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/adobe-connectors/adobe-for-copilot.html",
+      "title": "Adobe Help: Adobe for Microsoft Copilot"
+     }
+    }
+   ],
+   "no_services": true,
+   "kind": "outside",
+   "label": "Adobe's connector brings creative tools into Microsoft Copilot",
+   "availability": "",
+   "prereqs": [
+    "Microsoft Copilot for enterprise, with Copilot Cowork",
+    "The Microsoft administrator switches the connector on",
+    "Some tools need the matching Adobe subscription"
+   ],
+   "covered": "Your client's Microsoft administrator switches Adobe's connector on, so there is no separate service here.",
+   "sowHow": "Your Microsoft administrator switches on Adobe's connector, and your team edits images and creates designs by describing them in Copilot Cowork.",
+   "sowGain": "Your team makes quick image and design edits without leaving Microsoft Copilot."
+  },
+  {
+   "id": "copilot-acrobat",
+   "a": "copilot",
+   "b": "acrobat",
+   "lines": [],
+   "more": [],
+   "how": "The same Adobe connector in Microsoft Copilot works with PDFs: people create and edit PDFs by describing the job in Copilot Cowork.",
+   "source": {
+    "url": "https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/adobe-connectors/adobe-for-copilot.html",
+    "title": "Adobe Help: Adobe for Microsoft Copilot"
+   },
+   "gain": {
+    "title": "PDF jobs in Copilot",
+    "text": "Your client's team handles PDFs by describing the job in Microsoft Copilot."
+   },
+   "flows": [
+    {
+     "from": "copilot",
+     "to": "acrobat",
+     "what": "A description of the PDF job, with the files",
+     "needs": [],
+     "source": {
+      "url": "https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/adobe-connectors/adobe-for-copilot.html",
+      "title": "Adobe Help: Adobe for Microsoft Copilot"
+     }
+    },
+    {
+     "from": "acrobat",
+     "to": "copilot",
+     "what": "The finished PDF",
+     "needs": [],
+     "source": {
+      "url": "https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/adobe-connectors/adobe-for-copilot.html",
+      "title": "Adobe Help: Adobe for Microsoft Copilot"
+     }
+    }
+   ],
+   "no_services": true,
+   "kind": "outside",
+   "label": "The same connector brings Acrobat PDF tools into Microsoft Copilot",
+   "availability": "",
+   "prereqs": [
+    "Microsoft Copilot for enterprise, with Copilot Cowork",
+    "The Microsoft administrator switches the connector on"
+   ],
+   "covered": "Your client's Microsoft administrator switches Adobe's connector on, so there is no separate service here.",
+   "sowHow": "Your team uses Adobe's connector in Copilot Cowork to create and edit PDFs by describing the job.",
+   "sowGain": "Your team handles quick PDF jobs without leaving Microsoft Copilot."
+  },
+  {
+   "id": "aa-cstore",
+   "a": "aa",
+   "b": "cstore",
+   "lines": [],
+   "more": [],
+   "how": "Adobe Analytics delivers its data feeds, the raw data behind reports, on a schedule to a cloud storage account your client sets up as the destination.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/analytics/export/analytics-data-feed/create-feed",
+    "title": "Experience League: Create a data feed"
+   },
+   "gain": {
+    "title": "Raw Analytics data in your client's own storage",
+    "text": "Your client's data team gets the full Adobe Analytics data on a schedule, in its own cloud storage, for its own tools."
+   },
+   "flows": [
+    {
+     "from": "aa",
+     "to": "cstore",
+     "what": "Data feed files, on a schedule",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/analytics/export/analytics-data-feed/create-feed",
+      "title": "Experience League: Create a data feed"
+     }
+    }
+   ],
+   "no_services": true,
+   "kind": "outside",
+   "label": "Adobe Analytics data feeds land in your client's cloud storage",
+   "availability": "",
+   "prereqs": [
+    "A cloud storage account your client sets up as the destination"
+   ],
+   "covered": "The Data feeds and Data Warehouse exports service sits on Adobe Analytics itself.",
+   "covered_by": "AN07",
+   "sowHow": "Adobe Analytics delivers its data feeds, the raw data behind your reports, on a schedule to the cloud storage account you set up as the destination.",
+   "sowGain": "Your data team gets the full Adobe Analytics data in its own cloud storage, for its own tools."
+  },
+  {
+   "id": "gspm-ads",
+   "a": "gspm",
+   "b": "ads",
+   "lines": [],
+   "more": [],
+   "how": "Approved ads go from GenStudio for Performance Marketing to your client's ad accounts: ChatGPT ads, and for display ads Google Campaign Manager 360, Innovid, Amazon Ads or The Trade Desk.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/activation/paid-media-ads/activate-chatgpt-ad",
+    "title": "Experience League: GenStudio for Performance Marketing: activate a ChatGPT ad"
+   },
+   "gain": {
+    "title": "Approved ads straight to the ad accounts",
+    "text": "Your client's team sends approved ads to its ad platforms from GenStudio for Performance Marketing, without rebuilding them there."
+   },
+   "flows": [
+    {
+     "from": "gspm",
+     "to": "ads",
+     "what": "Approved ads, to the chosen ad accounts",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/activation/paid-media-ads/activate-chatgpt-ad",
+      "title": "Experience League: GenStudio for Performance Marketing: activate a ChatGPT ad"
+     }
+    }
+   ],
+   "no_services": true,
+   "kind": "outside",
+   "label": "GenStudio for Performance Marketing activates ads to ad platforms, ChatGPT ads among them",
+   "availability": "",
+   "prereqs": [
+    "Your client's ad accounts connected to GenStudio for Performance Marketing"
+   ],
+   "covered": "The Paid media connections and activation setup service sits on GenStudio for Performance Marketing itself.",
+   "covered_by": "GS04",
+   "references": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/activation/create-activation",
+     "title": "Experience League: GenStudio for Performance Marketing: create an activation"
+    }
+   ],
+   "sowHow": "Approved ads go from GenStudio for Performance Marketing to your ad accounts: ChatGPT ads, and display ads in Google Campaign Manager 360, Innovid, Amazon Ads or The Trade Desk.",
+   "sowGain": "Your team sends approved ads to its ad platforms without rebuilding them there."
+  },
+  {
+   "id": "claude-eds",
+   "a": "claude",
+   "b": "eds",
+   "lines": [],
+   "more": [],
+   "how": "When your client's Edge Delivery site is authored in Experience Workspace, each person adds Adobe's Experience Workspace address in Claude as a custom connector and signs in with their Adobe login. In plain words they browse the site's content, read files, create new pages, move things around and check version history, without leaving the chat.",
+   "source": {
+    "url": "https://www.aem.live/docs/ew/authoring/mcp",
+    "title": "Adobe aem.live: Experience Workspace MCP"
+   },
+   "gain": {
+    "title": "Site pages by asking",
+    "text": "Your client's team drafts, moves and checks pages of its Edge Delivery site by asking in Claude."
+   },
+   "flows": [
+    {
+     "from": "claude",
+     "to": "eds",
+     "what": "Requests to browse, create, change or move pages",
+     "needs": [],
+     "source": {
+      "url": "https://www.aem.live/docs/ew/authoring/mcp",
+      "title": "Adobe aem.live: Experience Workspace MCP"
+     }
+    },
+    {
+     "from": "eds",
+     "to": "claude",
+     "what": "The content found, and the result of each change",
+     "needs": [],
+     "source": {
+      "url": "https://www.aem.live/docs/ew/authoring/mcp",
+      "title": "Adobe aem.live: Experience Workspace MCP"
+     }
+    }
+   ],
+   "no_services": true,
+   "kind": "outside",
+   "label": "Each person adds Adobe's Experience Workspace address in Claude",
+   "availability": "",
+   "prereqs": [
+    "An Edge Delivery site authored in Experience Workspace",
+    "Each person signs in with their Adobe login"
+   ],
+   "covered": "Each person adds Adobe's Experience Workspace address themselves, so there is no separate service here.",
+   "sowHow": "When your Edge Delivery site is authored in Experience Workspace, your team adds Adobe's Experience Workspace address in Claude, signs in with their Adobe login, and browses, creates and moves pages in plain words.",
+   "sowGain": "Your team drafts, moves and checks site pages by asking in Claude."
+  },
+  {
+   "id": "chatgpt-eds",
+   "a": "chatgpt",
+   "b": "eds",
+   "lines": [],
+   "more": [],
+   "how": "When your client's Edge Delivery site is authored in Experience Workspace, each person adds Adobe's Experience Workspace address in ChatGPT as a custom connector and signs in with their Adobe login. In plain words they browse the site's content, read files, create new pages, move things around and check version history, without leaving the chat.",
+   "source": {
+    "url": "https://www.aem.live/docs/ew/authoring/mcp",
+    "title": "Adobe aem.live: Experience Workspace MCP"
+   },
+   "gain": {
+    "title": "Site pages by asking",
+    "text": "Your client's team drafts, moves and checks pages of its Edge Delivery site by asking in ChatGPT."
+   },
+   "flows": [
+    {
+     "from": "chatgpt",
+     "to": "eds",
+     "what": "Requests to browse, create, change or move pages",
+     "needs": [],
+     "source": {
+      "url": "https://www.aem.live/docs/ew/authoring/mcp",
+      "title": "Adobe aem.live: Experience Workspace MCP"
+     }
+    },
+    {
+     "from": "eds",
+     "to": "chatgpt",
+     "what": "The content found, and the result of each change",
+     "needs": [],
+     "source": {
+      "url": "https://www.aem.live/docs/ew/authoring/mcp",
+      "title": "Adobe aem.live: Experience Workspace MCP"
+     }
+    }
+   ],
+   "no_services": true,
+   "kind": "outside",
+   "label": "Each person adds Adobe's Experience Workspace address in ChatGPT",
+   "availability": "",
+   "prereqs": [
+    "An Edge Delivery site authored in Experience Workspace",
+    "Each person signs in with their Adobe login"
+   ],
+   "covered": "Each person adds Adobe's Experience Workspace address themselves, so there is no separate service here.",
+   "sowHow": "When your Edge Delivery site is authored in Experience Workspace, your team adds Adobe's Experience Workspace address in ChatGPT, signs in with their Adobe login, and browses, creates and moves pages in plain words.",
+   "sowGain": "Your team drafts, moves and checks site pages by asking in ChatGPT."
   }
  ],
  "lines": {
@@ -9895,6 +12135,19 @@
    "origin": "research",
    "scope": "Each month, run flow, fallout and attribution analysis on priority journeys, report findings to stakeholders and recommend next actions.",
    "evidence": "Advanced analysis leverages features like Flow diagrams, Attribution, Fallout diagrams, and dimension breakdowns."
+  },
+  "XT01": {
+   "id": "XT01",
+   "name": "Customer Journey Analytics questions in ChatGPT, Claude or Microsoft Copilot",
+   "unit": "one-time",
+   "low": 8,
+   "base": 16,
+   "high": 32,
+   "url": "https://developer.adobe.com/analytics-mcp/docs/support/faq",
+   "src": "Adobe Developer: Analytics, Frequently asked questions",
+   "origin": "research",
+   "scope": "Add the read-only or the full assistant permission to the product profiles of your client's pilot users in the Admin Console, help each person add Adobe's Customer Journey Analytics plugin in ChatGPT or connector in Claude and sign in with their Adobe ID, agree the data view each team uses, compare the first answers with Analysis Workspace, and write the starter questions and a one-page guide.",
+   "evidence": "Other users must be added to an Adobe Admin Console product profile that includes the MCP Read-only Access or MCP Full Access permission item."
   },
   "L01": {
    "id": "L01",
@@ -10618,6 +12871,19 @@
    "evidence": "Blocked people in the Marketo Engage database are marked blocklisted, unsubscribed, marketing suspended, or have an invalid or empty email.",
    "ext": "exports of people, subscription choices and suppression records from the current email platform"
   },
+  "XT07": {
+   "id": "XT07",
+   "name": "Marketo Engage connected to Claude",
+   "unit": "one-time",
+   "low": 16,
+   "base": 24,
+   "high": 48,
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-developer/marketo/mcp-server",
+   "src": "Experience League: Marketo Engage MCP Server",
+   "origin": "research",
+   "scope": "Create a dedicated API-only user in your client's Marketo Engage with only the permissions the team needs and its credentials in LaunchPoint, confirm with the Marketo administrator that the instance is enabled for this access, set up Claude Desktop (with Adobe's helper file and Node.js on each computer) or Claude Code for the pilot users, test first in a sandbox with a request that changes nothing, agree which changes may be asked for in Claude, and write the starter requests and a one-page guide.",
+   "evidence": "Use a dedicated API user in Marketo with only the permissions required for your work."
+  },
   "WF01": {
    "id": "WF01",
    "name": "Discovery, governance and system setup",
@@ -10737,6 +13003,19 @@
      "title": "Edit report settings"
     }
    ]
+  },
+  "XT05": {
+   "id": "XT05",
+   "name": "Workfront in ChatGPT, Claude or Microsoft Copilot: rollout and write access",
+   "unit": "one-time",
+   "low": 16,
+   "base": 24,
+   "high": 40,
+   "url": "https://experienceleague.adobe.com/en/docs/workfront/using/basics/workfront-mcp-server/configure-workfront-mcp-server",
+   "src": "Experience League: Configure the Adobe Workfront MCP server",
+   "origin": "research",
+   "scope": "Check that your client's Workfront is on Adobe's sign-in system, have the Workfront administrator review the read switch and decide with the governance board whether to turn on the write switch, have the ChatGPT or Claude administrator enable the Adobe Workfront connector or allow adding it by web address, help the pilot team connect and sign in, check that each person sees only what their Workfront access allows (Planning records too, where the package includes Planning), and write the starter requests and a one-page guide. Where a Coworker service on the same quote already set these permissions or made the write decision, this service reuses them.",
+   "evidence": "Your Workfront administrator controls MCP server access for your Workfront instance through two toggles in System Preferences: Read-only MCP tools (enabled by default) and Write MCP tools (disabled by default)."
   },
   "SI01": {
    "id": "SI01",
@@ -10881,6 +13160,19 @@
    "scope": "Where your client is moving from a CMS other than AEM: list every page and file on the current site with your client, agree which pages to retain, merge or retire, and map each content type to the new site's templates and components. Script the import that builds each retained page on its template, load the pages as content packages through Package Manager, bring their images and files in with Bulk Import, and publish them. Set up a redirect for every retired, merged or moved URL through a pipeline-free rewrite map or Dispatcher or CDN rules, and test that old URLs and inbound links reach the agreed pages.",
    "evidence": "You can use packages to install new content, transfer content between instances, and back up repository content.",
    "ext": "an Azure Blob Storage or Amazon S3 account to stage images and files for Bulk Import"
+  },
+  "XT03": {
+   "id": "XT03",
+   "name": "AEM content work in ChatGPT, Claude or Microsoft Copilot: rollout and rules",
+   "unit": "one-time",
+   "low": 16,
+   "base": 24,
+   "high": 40,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/using-mcp-with-aem-as-a-cloud-service",
+   "src": "Experience League: Using MCP with AEM as a Cloud Service",
+   "origin": "research",
+   "scope": "Check that your client's AEM as a Cloud Service environment is on release 26309 or later, add Adobe's traffic rule where the environment limits access by IP address, help the pilot authors add the Adobe Experience Manager plugin in ChatGPT or connector in Claude and sign in with their Adobe ID, agree with the content owner which changes, deletions and publishing may be asked for in the assistant and who reviews them, and write the starter requests and a one-page guide.",
+   "evidence": "Requests to AEM MCP tools run under the authenticated user's identity, and each tool enforces the user's existing AEM permissions."
   },
   "AS01": {
    "id": "AS01",
@@ -11031,6 +13323,19 @@
    "scope": "Set an expiration date in the Expires field on each document to be withdrawn or limited in time, so users without administrator permissions cannot publish it and the background job that runs every day at midnight by default removes it from Publish; unpublish at once any document that cannot wait for that run. Where your client's teams use the Experience Manager desktop app or Adobe Asset Link, apply the setting that keeps expired assets out of browsing and search there too. Upload each approved replacement under the existing asset's name and folder and keep it as a new version, check the pages its References tab lists before publishing, and if the replacement is wrong, revert to the previous version in the Timeline and publish it again.",
    "evidence": "Uploading an asset with the same path ... as an existing asset triggers a warning dialog that presents three resolution options ... A new version of the existing asset is created in the repository, preserving the earlier state so no work is lost. You can view the two versions in the Timeline and can revert to the previously existing version if necessary.",
    "ext": "AEM Sites for the pages that use the documents"
+  },
+  "XT04": {
+   "id": "XT04",
+   "name": "AEM Assets work in ChatGPT, Claude or Microsoft Copilot: rollout and rules",
+   "unit": "one-time",
+   "low": 8,
+   "base": 16,
+   "high": 32,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/using-mcp-with-aem-as-a-cloud-service",
+   "src": "Experience League: Using MCP with AEM as a Cloud Service",
+   "origin": "research",
+   "scope": "Set up or reuse your client's AEM connection in ChatGPT or Claude for the asset team, add Adobe's AEM address by hand where the team needs upload, move, delete or publish, check the folder permissions behind those actions, check whether Dynamic Media with OpenAPI is on for resized and cropped versions made on request, agree with the DAM owner which asset actions may be asked for in the assistant, and write a one-page guide.",
+   "evidence": "There is also support for asset upload, download, move/copy/delete, and publish/unpublish for assets, along with editing metadata, inspecting references, and identifying unused assets."
   },
   "AF01": {
    "id": "AF01",
@@ -11742,6 +14047,19 @@
    "origin": "research",
    "scope": "Each month, review Insights by campaign, media and attribute, generate and approve variants for weak ads, refresh hero content and update guidelines and templates as the brand changes.",
    "evidence": "Find content that is not performing well and use the integrated generative AI to create variations immediately"
+  },
+  "XT06": {
+   "id": "XT06",
+   "name": "GenStudio for Performance Marketing in ChatGPT, Claude or Microsoft Copilot: connection and publishing rules",
+   "unit": "one-time",
+   "low": 16,
+   "base": 24,
+   "high": 40,
+   "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/ai-assistants/overview",
+   "src": "Experience League: GenStudio for Performance Marketing, AI Assistants",
+   "origin": "research",
+   "scope": "Check your client's ChatGPT or Claude plan allows the connection, add Adobe's GenStudio address as a custom connector (in ChatGPT on the web with developer mode on) and have each pilot user sign in with their Adobe ID and pick the Adobe organization, test questions about ad performance and a draft from a template, agree who may publish an approved ad from a conversation, and write the starter requests and a one-page guide. Where a Coworker service on the same quote already set the publishing rule, this service reuses it.",
+   "evidence": "Once connected, you can query ad performance, assemble creative, and publish approved ads through natural-language conversations."
   },
   "EP01": {
    "id": "EP01",
@@ -17885,6 +20203,18 @@
     "search": [
      -1,
      0
+    ],
+    "chatgpt": [
+     2,
+     -1
+    ],
+    "claude": [
+     3,
+     0
+    ],
+    "copilot": [
+     3,
+     1
     ]
    },
    "ostart": [
@@ -17929,6 +20259,10 @@
     "search": [
      -1,
      0
+    ],
+    "crm": [
+     1,
+     1
     ]
    },
    "ostart": [
@@ -17984,6 +20318,14 @@
     "aemassets": [
      2,
      0
+    ],
+    "chatgpt": [
+     1,
+     -1
+    ],
+    "claude": [
+     2,
+     -1
     ]
    },
    "ostart": [
@@ -18059,7 +20401,21 @@
    },
    "products": [
     "cw"
-   ]
+   ],
+   "opos": {
+    "chatgpt": [
+     1,
+     0
+    ],
+    "claude": [
+     -1,
+     0
+    ],
+    "copilot": [
+     0,
+     1
+    ]
+   }
   },
   {
    "id": "custom",
@@ -18324,7 +20680,10 @@
     "search",
     "csrc",
     "cms",
-    "figma"
+    "figma",
+    "chatgpt",
+    "claude",
+    "copilot"
    ],
    "opos": {
     "cdn": [
@@ -18365,6 +20724,18 @@
     ],
     "figma": [
      7,
+     4
+    ],
+    "chatgpt": [
+     8,
+     2
+    ],
+    "claude": [
+     8,
+     3
+    ],
+    "copilot": [
+     8,
      4
     ]
    },

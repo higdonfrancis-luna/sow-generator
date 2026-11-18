@@ -939,14 +939,16 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
       return bad; });
 
     // 1. the menu on every Brand Visibility play; none on Coworker or Create your own play; nothing on when a play starts
-    const want = {cja: 'dwh,cstore,crm,ads,bi,search', commerce: 'search', aem: 'search,csrc', fsi: 'search,cms', abv: 'search'}, seen = {};
+    // Nov 18 2026: a play also offers every outside system that connects to a product on it: ChatGPT, Claude and Microsoft Copilot beside Customer Journey
+    // Analytics, ChatGPT and Claude beside Edge Delivery Services, the CRM beside Adobe Commerce
+    const want = {cja: 'dwh,cstore,crm,ads,bi,search,chatgpt,claude,copilot', commerce: 'search,crm', aem: 'search,csrc,chatgpt,claude', fsi: 'search,cms', abv: 'search'}, seen = {};
     for (const play of Object.keys(want)) { const p = await fresh(); await pick(p, play, 150);
       seen[play] = {btn: await p.isVisible('#out-btn'), menu: (await menuIds(p)).join(','), boxes: await outs(p), stored: (await canvasState(p)).out}; await p.context().close(); }
     ok(Object.entries(want).every(([k, v]) => seen[k].btn && seen[k].menu === v && seen[k].boxes === 'cdn' && JSON.stringify(seen[k].stored) === '["cdn"]'),
-      'S27: every Brand Visibility play has Add outside system; the CDN is on when the play starts (step 45), and the menu lists the other systems that connect to the play (search data on all five; a data warehouse, cloud storage, a CRM, ad platforms and BI tools on CJA; authoring documents on AEM; another CMS on FSI; step 96: no Adobe product on a built play)', JSON.stringify(seen));
+      'S27: every Brand Visibility play has Add outside system; the CDN is on when the play starts (step 45), and the menu lists the other systems that connect to the play (search data on all five; a data warehouse, cloud storage, a CRM, ad platforms and BI tools on CJA; authoring documents on AEM; another CMS on FSI; step 96: no Adobe product on a built play; Nov 18: ChatGPT, Claude and Microsoft Copilot on CJA, ChatGPT and Claude on AEM, the CRM on Commerce)', JSON.stringify(seen));
     const nob = {};
     for (const play of ['coworker', 'custom']) { const p = await fresh(); await pick(p, play); nob[play] = await p.isVisible('#out-btn'); await p.context().close(); }
-    ok(!nob.coworker && nob.custom, 'S27: Coworker has no Add outside system button (no outside system connects to it); Create your own play has one (step 44)', JSON.stringify(nob));
+    ok(nob.coworker && nob.custom, 'S27: Coworker has an Add outside system button (Nov 18 2026: ChatGPT, Claude and Microsoft Copilot connect to it); Create your own play has one (step 44)', JSON.stringify(nob));
 
     // 2. CJA at $150, Typical: the menu, the boxes, the icons and the totals
     const p = await fresh(); await pickNoCdn(p, 'cja', 150); await p.mouse.move(3, 3); await p.waitForTimeout(200);
@@ -955,8 +957,12 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     // the outside system is named "Existing CDN" (the reviewed canvas, 19b0363: the CDN the client already runs)
     const exp = {cdn: ['Existing CDN', 'Brand Visibility', 'Akamai, Cloudflare, Amazon CloudFront, Fastly, Imperva'], dwh: ['Data warehouse', 'CJA', 'Snowflake, Google BigQuery or Azure Databricks (Data Mirror for CJA and Journey Optimizer; tables copied on a schedule for Real-Time CDP)'],
       cstore: ['Cloud storage', 'CJA', 'Amazon S3, Azure Blob Storage'], crm: ['CRM', 'CJA', 'Salesforce, Microsoft Dynamics 365'],
-      ads: ['Ad platforms', 'CJA', 'Google Ads, Meta'], bi: ['BI tools', 'CJA', 'Power BI, Tableau'], search: ['Search data', 'Brand Visibility', 'Google Search Console']};
-    ok(items.length === 7 && items.every(x => x.rec === ['cdn', 'search'].includes(x.id)) && items.every(x => x.name === exp[x.id][0] && x.to === 'Connects to ' + exp[x.id][1] && x.sys.startsWith(exp[x.id][2]) && x.icon) && (await p.textContent('#out-menu .hd')).includes('Each connects through a route Adobe documents'),
+      ads: ['Ad platforms', 'CJA', 'Google Ads, Meta'], bi: ['BI tools', 'CJA', 'Power BI, Tableau'], search: ['Search data', 'Brand Visibility', 'Google Search Console'],
+      // Nov 18 2026: the AI assistants, each with its Brand Visibility wording from the build data
+      chatgpt: ['ChatGPT', 'CJA', "Your client's staff use Adobe products from inside ChatGPT. Not how Brand Visibility measures ChatGPT answers."],
+      claude: ['Claude', 'CJA', "Your client's staff use Adobe products from inside Claude. Not a Brand Visibility connection."],
+      copilot: ['Microsoft Copilot', 'CJA', "Your client's staff use Adobe products from inside Microsoft Copilot."]};
+    ok(items.length === 10 && items.every(x => x.rec === ['cdn', 'search'].includes(x.id)) && items.every(x => x.name === exp[x.id][0] && x.to === 'Connects to ' + exp[x.id][1] && x.sys.startsWith(exp[x.id][2]) && x.icon) && (await p.textContent('#out-menu .hd')).includes('Each connects through a route Adobe documents'),
       'S27: each menu item gives the system, its icon, the product it connects to and the systems Adobe documents for that route', JSON.stringify(items));
     await p.keyboard.press('Escape'); await p.waitForTimeout(100);
     ok(await p.isHidden('#out-menu') && await p.getAttribute('#out-btn', 'aria-expanded') === 'false', 'S27: Escape closes the menu');
@@ -964,7 +970,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     for (const id of ['dwh', 'cstore', 'crm', 'cdn']) { await addOut(p, id); steps.push(await canvasTotal(p)); }
     ok(t0 === '$219,600' && JSON.stringify(steps) === JSON.stringify(['$228,000', '$234,000', '$240,000', '$242,400']),
       'S27: CJA at $150, Typical is $219,600 with no outside system (unchanged); warehouse tables into CJA add $8,400, cloud storage files $6,000, CRM data $6,000, and the CDN $2,400 (CDN log forwarding starts on with it, step 45)', JSON.stringify([t0, ...steps]));
-    ok((await menuIds(p)).join() === 'ads,bi,search', 'S27: with those four on, the menu still offers ad platforms, BI tools and search data (step 45)', (await menuIds(p)).join());
+    ok((await menuIds(p)).join() === 'ads,bi,search,chatgpt,claude,copilot', 'S27: with those four on, the menu still offers ad platforms, BI tools and search data (step 45), and ChatGPT, Claude and Microsoft Copilot (Nov 18)', (await menuIds(p)).join());
     const SHAPE = {cdn: 'circle+path+path', dwh: 'ellipse+path+path', cstore: 'path', crm: 'rect+circle+path+path'};
     const look = await p.$$eval('.node.out', ns => ns.map(n => { const cs = getComputedStyle(n), bf = getComputedStyle(n, '::before'), svg = n.querySelector('svg');
       return {id: n.dataset.p, dashed: cs.borderLeftStyle === 'dashed' && cs.borderBottomStyle === 'dashed', bar: cs.borderTopStyle === 'solid' && parseFloat(cs.borderTopWidth) >= 6 && cs.borderTopColor === cs.color,
@@ -1178,6 +1184,8 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
       for (const c of ['dwh-cja', 'cstore-cja', 'crm-cja', 'cdn-bv']) { await p.evaluate(i => document.querySelector(`.ib[data-c="${i}"]`).click(), c); await p.waitForTimeout(300);
         badge[c] = await p.$eval('#card .kind b', e => getComputedStyle(e).borderTopStyle); await p.evaluate(() => hideCard(true)); await p.waitForTimeout(100); }
       ok(badge['dwh-cja'] === 'dotted' && badge['cstore-cja'] === 'dotted' && badge['crm-cja'] === 'dotted' && badge['cdn-bv'] === 'solid', 'S28: the Outside system badge on a connection card follows its line: dotted for the warehouse, cloud storage and CRM, solid for the CDN', JSON.stringify(badge));
+      // Nov 18 2026: the play also offers ChatGPT, Claude and Microsoft Copilot, which connect to Customer Journey Analytics (with them its 11 lines take the focus view, FOCUS_AT)
+      for (const id of ['chatgpt', 'claude', 'copilot']) await addOut(p, id);
       await p.click('#out-btn'); await p.waitForTimeout(150);
       const note = await p.$eval('#out-menu', m => { const q = m.querySelector('.hd p'); return {text: q.textContent, indent: Math.round(q.getBoundingClientRect().left - m.getBoundingClientRect().left), none: !!m.querySelector('p.none')}; });
       ok(note.text === 'Every outside system for this play is on your canvas.' && note.indent >= 18 && !note.none, 'S28: with every outside system on, the menu\'s note sits in its header, indented like the rest', JSON.stringify(note));
@@ -1186,7 +1194,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     // 8. a 320-pixel phone keeps each name on one line; 9. a phone held sideways shows items and scrolls to the rest
     { const p = await phone(320, 568); await p.goto(BASE); await p.waitForTimeout(300); await p.tap('#picker [data-play="cja"]'); await p.waitForTimeout(500); await p.tap('#out-btn'); await p.waitForTimeout(250);
       const names = await p.$$eval('#out-menu .it2', its => its.map(i => { const n = i.querySelector('.nm'), sv = n.querySelector('svg').getBoundingClientRect(), t = n.getBoundingClientRect(); return {id: i.dataset.out, h: Math.round(t.height), iconBeside: Math.abs((sv.top + sv.bottom) / 2 - (t.top + t.bottom) / 2) < 6, right: Math.round(i.getBoundingClientRect().right)}; }));
-      ok(names.length === 6 && names.every(x => x.h <= 24 && x.iconBeside && x.right <= 320) && await p.evaluate(() => document.documentElement.scrollWidth) <= 320, 'S28: on a 320-pixel phone each outside system\'s name stays on one line beside its icon, inside the screen', JSON.stringify(names));
+      ok(names.length === 9 && names.every(x => x.h <= 24 && x.iconBeside && x.right <= 320) && await p.evaluate(() => document.documentElement.scrollWidth) <= 320, 'S28: on a 320-pixel phone each outside system\'s name stays on one line beside its icon, inside the screen (Nov 18: Microsoft Copilot included)', JSON.stringify(names.slice(5)));
       await p.context().close(); }
     const side = [];
     for (const [w, h] of [[844, 390], [667, 375], [568, 320]]) { const p = await phone(w, h); await p.goto(BASE); await p.waitForTimeout(300); await p.tap('#picker [data-play="cja"]'); await p.waitForTimeout(500); await p.tap('#out-btn'); await p.waitForTimeout(250);

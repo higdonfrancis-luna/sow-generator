@@ -17,8 +17,9 @@ const server = http.createServer((req, res) => {
 });
 // what rule 1 and rule 2 forbid, wherever a partner or a client reads it
 const TRIAL = /\btrials?\b|paid (?:Brand Visibility )?offer|paid Brand Visibility/i;
-// Nov 17 2026: Coworker trial value sprint is Coworker's own trial (Adobe's CX Enterprise Coworker Trial), not a Brand Visibility one
-const TRIAL_OK = /Sites Optimizer trial|Trial sites authored in Google Drive or SharePoint|Adobe's trial page says headless delivery|Try Before You Buy, a trial or the Agentic SKU|Coworker trial/gi;
+// Nov 17 2026: Coworker trial value sprint is Coworker's own trial (Adobe's CX Enterprise Coworker Trial), not a Brand Visibility one.
+// Nov 18 2026: AEM's agents trial, which opens the brand checks to ChatGPT and Claude, is not one either
+const TRIAL_OK = /Sites Optimizer trial|Trial sites authored in Google Drive or SharePoint|Adobe's trial page says headless delivery|Try Before You Buy, a trial or the Agentic SKU|Coworker trial|Adobe's agents trial or a paid license/gi;
 const trial = t => TRIAL.test(String(t).replace(TRIAL_OK, ''));
 const aaFeed = t => String(t).split(/(?<=[.;])\s+/).some(s => /Adobe Analytics/.test(s) && /Brand Visibility|Business Impact/.test(s));
 const hit = t => { const s = String(t).replace(TRIAL_OK, ''), m = TRIAL.exec(s); return m ? s.slice(Math.max(0, m.index - 60), m.index + 80) : (String(t).split(/(?<=[.;])\s+/).find(x => /Adobe Analytics/.test(x) && /Brand Visibility|Business Impact/.test(x)) || '').slice(0, 160); };

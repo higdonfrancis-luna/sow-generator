@@ -1,5 +1,5 @@
 {
- "note": "Hand-kept map for the Build canvas. Service lines with ids from the live SOW tool (sow/index.html CATALOG) keep their names, hours and sources from there; researched lines come from canvas/research/*.json. 'lines' are on when the play starts, 'more' are optional. Each play lists its products, their places ([column, row] on the canvas grid) any optional lines it turns on from the start ('on') and any starting lines it turns off ('off'). The custom play, Create your own play, lists the products a partner can add and their places on its grid; the canvas packs the chosen ones together. Outside systems (step 27): products marked 'outside' are systems the client runs outside Adobe. A play lists the ones a partner can add ('outside') and their places ('opos'); none is on when the play starts. Step 45: 'ostart' lists the outside systems on the canvas when the play starts (the CDN in every Brand Visibility play); 'recommend' tags systems Recommended, with each one's reason in its 'rec'. A line or connection's 'tier' is the package it needs. Step 96: a built play offers outside systems only; 'kept' lists Adobe products a saved canvas keeps but the play no longer offers (AEM Assets on the AEM play).",
+ "note": "Hand-kept map for the Build canvas. Service lines with ids from the live SOW tool (sow/index.html CATALOG) keep their names, hours and sources from there; researched lines come from canvas/research/*.json. 'lines' are on when the play starts, 'more' are optional. Each play lists its products, their places ([column, row] on the canvas grid) any optional lines it turns on from the start ('on') and any starting lines it turns off ('off'). The custom play, Create your own play, lists the products a partner can add and their places on its grid; the canvas packs the chosen ones together. Outside systems (step 27): products marked 'outside' are systems the client runs outside Adobe. A play lists the ones a partner can add ('outside') and their places ('opos'); none is on when the play starts. Step 45: 'ostart' lists the outside systems on the canvas when the play starts (the CDN in every Brand Visibility play); 'recommend' tags systems Recommended, with each one's reason in its 'rec'. A line or connection's 'tier' is the package it needs. Step 96: a built play offers outside systems only; 'kept' lists Adobe products a saved canvas keeps but the play no longer offers (AEM Assets on the AEM play). Nov 18 2026 (Adam: \"a play should always offer them if there's a product on its canvas that connects to them\"): besides its own 'outside' list a play offers every outside system that connects to a product on its canvas, so 'opos' also places the ones a play offers that way from the start (ChatGPT, Claude and Microsoft Copilot beside Customer Journey Analytics and Coworker, ChatGPT and Claude beside Edge Delivery Services, and the CRM beside Adobe Commerce); once a product is added, the play takes Create your own play's grid, which places them all.",
  "products": [
   {
    "id": "rtcdp",
@@ -274,6 +274,36 @@
    "rec": "Adobe says Instruct to Assemble runs in Figma through the Adobe Brand Intelligence plugin. Add Figma when your client assembles variants there."
   },
   {
+   "id": "chatgpt",
+   "name": "ChatGPT",
+   "outside": true,
+   "icon": "chat",
+   "systems": "Your client's staff use Adobe products from inside ChatGPT",
+   "systems_with_bv": "Your client's staff use Adobe products from inside ChatGPT. Not how Brand Visibility measures ChatGPT answers.",
+   "lines": [],
+   "more": []
+  },
+  {
+   "id": "claude",
+   "name": "Claude",
+   "outside": true,
+   "icon": "chat",
+   "systems": "Your client's staff use Adobe products from inside Claude",
+   "systems_with_bv": "Your client's staff use Adobe products from inside Claude. Not a Brand Visibility connection.",
+   "lines": [],
+   "more": []
+  },
+  {
+   "id": "copilot",
+   "name": "Microsoft Copilot",
+   "outside": true,
+   "icon": "chat",
+   "systems": "Your client's staff use Adobe products from inside Microsoft Copilot (Microsoft 365 Copilot, Copilot Studio or Copilot Cowork)",
+   "systems_with_bv": "Your client's staff use Adobe products from inside Microsoft Copilot.",
+   "lines": [],
+   "more": []
+  },
+  {
    "id": "express",
    "name": "Adobe Express",
    "title": "Adobe Express for Enterprise",
@@ -338,6 +368,7 @@
   {
    "id": "acrobat",
    "name": "Acrobat and Acrobat Services",
+   "short": "Acrobat",
    "title": "Adobe Acrobat for enterprise and the Adobe Acrobat Services APIs",
    "lines": [],
    "more": []
@@ -1004,6 +1035,18 @@
     "search": [
      -1,
      0
+    ],
+    "chatgpt": [
+     2,
+     -1
+    ],
+    "claude": [
+     3,
+     0
+    ],
+    "copilot": [
+     3,
+     1
     ]
    },
    "ostart": [
@@ -1048,6 +1091,10 @@
     "search": [
      -1,
      0
+    ],
+    "crm": [
+     1,
+     1
     ]
    },
    "ostart": [
@@ -1103,6 +1150,14 @@
     "aemassets": [
      2,
      0
+    ],
+    "chatgpt": [
+     1,
+     -1
+    ],
+    "claude": [
+     2,
+     -1
     ]
    },
    "ostart": [
@@ -1178,7 +1233,21 @@
    },
    "products": [
     "cw"
-   ]
+   ],
+   "opos": {
+    "chatgpt": [
+     1,
+     0
+    ],
+    "claude": [
+     -1,
+     0
+    ],
+    "copilot": [
+     0,
+     1
+    ]
+   }
   },
   {
    "id": "custom",
@@ -1443,7 +1512,10 @@
     "search",
     "csrc",
     "cms",
-    "figma"
+    "figma",
+    "chatgpt",
+    "claude",
+    "copilot"
    ],
    "opos": {
     "cdn": [
@@ -1484,6 +1556,18 @@
     ],
     "figma": [
      7,
+     4
+    ],
+    "chatgpt": [
+     8,
+     2
+    ],
+    "claude": [
+     8,
+     3
+    ],
+    "copilot": [
+     8,
      4
     ]
    },

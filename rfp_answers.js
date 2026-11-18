@@ -87,7 +87,10 @@ const NAMES={
  search:['search console','google search console','google analytics 4','ga4'],
  csrc:['sharepoint','google drive','google docs'],
  cms:['wordpress','sitecore','drupal','contentful'],
- figma:['figma']};
+ figma:['figma'],
+ chatgpt:['chatgpt','chat gpt'],
+ claude:['claude'],
+ copilot:['microsoft copilot','microsoft 365 copilot','m365 copilot','copilot studio','copilot cowork','copilot']};
 const TOPICS={
  bv:['ai assistant','ai answer','ai generated answer','ai overview','chatgpt','perplexity','gemini','ai search','ai shopping','shopping assistant','agentic traffic','answer engine','generative engine','visible in ai','show up in ai','ai citation','ai visibility'],
  cja:['analytics','measure','measurement','measured','attribution','journey analysis','report on','reporting','dashboard','conversion data','customer journey','cross-channel analysis'],
@@ -172,7 +175,9 @@ function scan(text,scope){
     while((m=re.exec(raw))){const before=raw.slice(0,m.index),cap=m[0][0]===word[0],mid=/[a-z0-9,;:)'"\u2019]\s+$/.test(before);
       if(((cap&&mid)||(pid==='target'&&tested))&&!/\be-\s*$/i.test(before))hits.push({a:m.index+1,b:m.index+1+word.length,type:'name',pid,w:2});}}
   hits.sort((x,y)=>(y.b-y.a)-(x.b-x.a)||x.a-y.a);
-  const kept=[];for(const h of hits)if(!kept.some(k=>h.a<k.b&&k.a<h.b))kept.push(h);   // the longest words win: 'aem' inside 'AEM Assets' does not count
+  // the longest words win: 'aem' inside 'AEM Assets' does not count. Nov 18 2026: an AI assistant's name that is also a word of Brand Visibility's ('show up in ChatGPT')
+  // stands beside it, so where no sentence ties the assistant to a product it connects to (TIED), the word stays Brand Visibility's
+  const kept=[];for(const h of hits)if(!kept.some(k=>h.a<k.b&&k.a<h.b&&!(h.a===k.a&&h.b===k.b&&h.type!==k.type&&(TIED[h.pid]||TIED[k.pid]))))kept.push(h);
   for(const h of kept)h.neg=negated(raw,h.a-1);
   for(const h of kept)if(h.pid==='aemsites'&&h.type==='name'&&BARE_AEM.test(t.slice(h.a,h.b))){
     const count=id=>(String(scope||'').match(AEM_FULL[id])||[]).length;
@@ -185,12 +190,29 @@ function scan(text,scope){
 // into, from, to or with Figma, in Figma after anything but a word for where people work ('variants in Figma', not 'work in Figma'),
 // a Figma plugin, canvas, template, design, frame or file, or a plugin for Figma; not as one of a list of tools ('Figma and
 // Photoshop'). Its name stays evidence for the services about it (nameW in match)
-const TIED={figma:/\b(?:inside|within|into|from|to|with)\s+(?:(?:the|their|our|your)\s+)?figma\b|(?<!\b(?:work|design|creat|liv|sit)\w*\s+)\bin\s+(?:(?:the|their|our|your)\s+)?figma\b|\bfigma(?:\s+(?!(?:for|and|or|to|in|on|with|of|at|by)\b)\w+)?\s+(?:plugins?|add-?ons?|connectors?|canvas|templates?|designs?|frames?|files?)\b|\b(?:plugins?|add-?ons?|connectors?)\s+(?:for|in)\s+figma\b/i};
+// Nov 18 2026: ChatGPT, Claude and Microsoft Copilot too ('our analysts all use ChatGPT'), and Brand Visibility measures answers in them ('show up in ChatGPT'). An
+// assistant counts as named in a sentence that names a product it connects to and ties the work to an assistant: inside, within, into, through, via, from, to, with or
+// in it (not traffic, visitors or referrals from it, or showing up, cited or answers in it), its plugin, connector, app, agent, Desktop, Code, Design, Studio or
+// Cowork, or a plugin, connector or agent for it. Assistants are often named together ('inside ChatGPT, Claude or Copilot'), so the Figma rule on lists of tools is not theirs
+const AI_NAME='(?:chat\\s*gpt|claude|(?:microsoft\\s+(?:365\\s+)?)?copilot)';
+const AI_TIE=new RegExp('(?<!\\b(?:traffic|referrals?|referred|visits?|visitors?|sessions?|clicks?|arriv\\w*|com(?:e|es|ing)|came|appear\\w*|show\\w*\\s+up|visib\\w*|mention\\w*|cit\\w*|rank\\w*|surfac\\w*|answer\\w*|recommend\\w*|found|seen|discover\\w*)\\s+)'
+  +'\\b(?:inside|within|into|through|via|from|to|with|in)\\s+(?:(?:the|their|our|your|a)\\s+)?'+AI_NAME+'\\b(?!\\s+(?:answers?|results?|responses?|search\\w*|traffic|referrals?|overviews?))'
+  +'|\\b'+AI_NAME+'(?:\\s+(?:enterprise|team|business))?\\s+(?:plugins?|add-?ons?|connectors?|apps?|agents?|integrations?|desktop|code|design|studio|cowork)\\b'
+  +'|\\b(?:plugins?|add-?ons?|connectors?|apps?|agents?|integrations?)\\s+(?:for|in|inside)\\s+(?:the\\s+)?'+AI_NAME+'\\b','i');
+const AI_WORK=new RegExp('\\b'+AI_NAME+'\\b','i');   // a service named for work inside an AI assistant
+// such a service answers only a question that ties an assistant to the service's own product ('our team uses Claude for drafting' beside a Marketo Engage question asks
+// for no Marketo Engage work in Claude). With Edge Delivery Services in the question, an assistant's line to AEM Sites and the AEM Sites service for that work do not
+// answer: Adobe's AEM page for the assistants covers AEM as a Cloud Service (OWN_SITES on the canvas), and the assistant's Edge Delivery line does
+const viaEds=(id,prods)=>id==='aemsites'&&prods.includes('eds');
+const aiFits=(id,prods)=>!AI_WORK.test(LN[id].name)||ownersOf(id).some(o=>prods.includes(o)&&!viaEds(o,prods)&&prods.some(p=>TIED[p]===AI_TIE&&C.some(c=>[c.a,c.b].includes(p)&&[c.a,c.b].includes(o))));
+const aiLine=(c,prods)=>[c.a,c.b].some(id=>TIED[id]===AI_TIE)&&![c.a,c.b].some(id=>viaEds(id,prods));
+const TIED={figma:/\b(?:inside|within|into|from|to|with)\s+(?:(?:the|their|our|your)\s+)?figma\b|(?<!\b(?:work|design|creat|liv|sit)\w*\s+)\bin\s+(?:(?:the|their|our|your)\s+)?figma\b|\bfigma(?:\s+(?!(?:for|and|or|to|in|on|with|of|at|by)\b)\w+)?\s+(?:plugins?|add-?ons?|connectors?|canvas|templates?|designs?|frames?|files?)\b|\b(?:plugins?|add-?ons?|connectors?)\s+(?:for|in)\s+figma\b/i,
+ chatgpt:AI_TIE,claude:AI_TIE,copilot:AI_TIE};
 function tied(id,raw,h,hits){   // h: a name hit of the outside system id in raw
   const at=h.a-1,stop=/[.?!](?=\s|$)|\n/g;let s=0,e=raw.length,m;
   while((m=stop.exec(raw))){if(m.index<at)s=m.index+1;else{e=m.index;break;}}
-  const ends=new Set(C.filter(c=>(c.a===id||c.b===id)&&[...(c.lines||[]),...(c.more||[])].length).map(c=>c.a===id?c.b:c.a));
-  const listed=/^\s*(?:,|and\b|or\b|&)\s*[A-Z]/.test(raw.slice(h.b-1,e))||/\w\s*,\s*$/.test(raw.slice(s,at));
+  const ends=new Set(C.filter(c=>c.a===id||c.b===id).map(c=>c.a===id?c.b:c.a));   // Nov 18 2026: an AI assistant's lines carry no services; their work sits on the product's
+  const listed=TIED[id]!==AI_TIE&&(/^\s*(?:,|and\b|or\b|&)\s*[A-Z]/.test(raw.slice(h.b-1,e))||/\w\s*,\s*$/.test(raw.slice(s,at)));
   return !listed&&TIED[id].test(raw.slice(s,e))&&hits.some(x=>x.type==='name'&&!x.neg&&ends.has(x.pid)&&x.a-1>=s&&x.b-1<=e);
 }
 function detectAll(text,scope){
@@ -299,13 +321,18 @@ function match(text,opts){
   }
   // the connections between the products, the pair the question names most strongly first; a documented pair with no
   // services behind it (Journey Optimizer + Brand Concierge) never answers, it is named to the partner instead
-  const permits=id=>LN[id]&&!environmentConflict(LN[id].name)&&keepsLine(id)&&(!opts.q||!denied.size||kbPermitted(id,opts.q));
+  // Nov 18 2026: a service for work inside an AI assistant (Customer Journey Analytics questions in ChatGPT, Claude or Microsoft Copilot) answers only a question
+  // that ties an assistant to the product ('report on the customer journey' alone does not ask for it)
+  const permits=id=>LN[id]&&!environmentConflict(LN[id].name)&&keepsLine(id)&&(!opts.q||!denied.size||kbPermitted(id,opts.q))&&aiFits(id,prods);
   const sc=id=>d.score[id]||0,hasLines=c=>[...(c.lines||[]),...(c.more||[])].some(permits);
   const firstAt={};for(const h of scan(text))if(!h.neg&&h.type!=='uncovered'&&!(h.pid in firstAt&&firstAt[h.pid]<=h.a))firstAt[h.pid]=h.a;   // step 67: where the question first names or describes each product
   const at=c=>(c.a in firstAt?firstAt[c.a]:1e6)+(c.b in firstAt?firstAt[c.b]:1e6);
   // Supporting several products each month does not by itself request an integration between them.
   const productSupport=ongoing&&/\b(?:support|maintenance|operations?|managed services)\b/i.test(text)&&!/\b(?:connect\w*|integrat\w*|interface\w*|handoff|data exchange)\b/i.test(text);
   const conns=fromContext||productSupport?[]:C.filter(c=>prods.includes(c.a)&&prods.includes(c.b)&&hasLines(c)).map(c=>({c,s:sc(c.a)+sc(c.b),o:overlap(qt,tokens((c.label||'')+' '+(c.how||'')+' '+((c.gain||{}).text||''))),at:SOLUTION.test(text)?at(c):0})).sort((x,y)=>x.at-y.at||y.s-x.s||y.o-x.o).map(x=>x.c);
+  // Nov 18 2026: the line from an AI assistant the question ties to a product carries no services (its work sits on the product's own), so it chooses none: it leads
+  // the answer with how the two work together, and the product's services are chosen as for the product alone
+  const aiConn=fromContext||productSupport?null:C.filter(c=>prods.includes(c.a)&&prods.includes(c.b)&&aiLine(c,prods)).sort((x,y)=>sc(y.a)+sc(y.b)-sc(x.a)-sc(x.b))[0]||null;
   const conn=conns[0]||null,adobe=prods.filter(id=>!P[id].outside);
   // step 82: an after-launch question about the RFI's products is not asking how they connect, so no pair is checked for it
   const missing=[];if(!fromContext&&!productSupport)for(let i=0;i<adobe.length;i++)for(let j=i+1;j<adobe.length;j++){if(conns.some(c=>[c.a,c.b].includes(adobe[i])&&[c.a,c.b].includes(adobe[j])))continue;
@@ -317,7 +344,8 @@ function match(text,opts){
   if(!conns.length&&!opts.pick&&adobe.length===2&&missing.some(x=>/Experience League lists no services/.test(x)))return {products:prods,conn:null,conns:[],missing,lines:[],fromContext:false,via,uncovered:d.uncovered,excluded:d.excluded};
   // the words of the products the question itself names are not evidence for a line ('analytics' in Customer Journey
   // Analytics does not ask for the Adobe Analytics upgrade); words of a product found only by its topic still are
-  const owners=[...adobe.map(id=>P[id]),...conns],nameW=nameWords((via==='rfp'?adobe:d.named.filter(id=>prods.includes(id))).filter(id=>!TIED[id])),migrate=MIGRATE.test(text.replace(KNOWLEDGE,' '));
+  // Nov 18 2026: an AI assistant named in passing ('traffic from ChatGPT') is no evidence for a service about working inside it
+  const owners=[...adobe.map(id=>P[id]),...conns],nameW=nameWords([...(via==='rfp'?adobe:d.named.filter(id=>prods.includes(id))).filter(id=>!TIED[id]),...Object.keys(TIED).filter(id=>TIED[id]===AI_TIE&&!prods.includes(id))]),migrate=MIGRATE.test(text.replace(KNOWLEDGE,' '));
   const hasMonthly=owners.some(o=>[...(o.lines||[]),...(o.more||[])].some(l=>LN[l]&&LN[l].unit==='monthly'));
   const seen=new Set(),cands=[];
   for(const o of owners){const isConn='a' in o;for(const l of [...(o.lines||[]),...(o.more||[])]){if(seen.has(l)||!permits(l))continue;seen.add(l);   // step 91: a migration written for one source answers only an RFI moving from it
@@ -336,7 +364,9 @@ function match(text,opts){
     if(conn&&!isConn&&!nameHit&&!mig)s=-1;                                       // beside a matched connection, a product's own line needs one too
     cands.push({id:l,s,hit,strong:via==='rfp'?overlap(qt,nameT.filter(w=>!GENERIC.has(w)&&!WEAK.has(w))):0,isDefault,first});}}
   cands.sort((x,y)=>y.s-x.s);
-  let lines=cands.filter(x=>x.s>0&&(via==='rfp'?x.strong>1||(x.strong>0&&x.hit>3&&qt.length<26):x.hit>0||x.isDefault||x.first||fromContext)).slice(0,fromContext?8:adobe.length>2?6:4).map(x=>x.id);
+  // Nov 18 2026: the service for the work inside an AI assistant the question ties to the product comes on top of the product's own, which are chosen as before
+  const chosen=cands.filter(x=>x.s>0&&(via==='rfp'?x.strong>1||(x.strong>0&&x.hit>3&&qt.length<26):x.hit>0||x.isDefault||x.first||fromContext)),inside=chosen.filter(x=>AI_WORK.test(LN[x.id].name));
+  let lines=[...inside,...chosen.filter(x=>!inside.includes(x)).slice(0,fromContext?8:adobe.length>2?6:4)].map(x=>x.id);
   if(via==='rfp'&&!lines.length)return {products:[],conn:null,conns:[],missing:[],lines:[],fromContext:false,via,uncovered:d.uncovered,excluded:d.excluded};
   if(!lines.length&&!fromContext&&via!=='topic'){
     const o=conn||adobe.map(id=>P[id]).find(p=>(p.lines||[]).length);
@@ -353,7 +383,7 @@ function match(text,opts){
     const first=inputs.flatMap(c=>(c.lines||[]).filter(permits).slice(0,1));
     if(first.length)lines=[...new Set([...first,...lines])];
   }
-  return {products:prods,conn,conns,missing,lines,fromContext,via,uncovered:d.uncovered,excluded:d.excluded};
+  return {products:prods,conn,conns,aiConn,missing,lines,fromContext,via,uncovered:d.uncovered,excluded:d.excluded};
 }
 
 /* ---------- the partner's words to the client */
@@ -491,7 +521,7 @@ function doLine(id){const L=LN[id],scope=clientScrub(rfp(L.scope||(TPL[id]||{}).
 function sources(m){const out=[],seen=new Set();const add=(url,title)=>{if(!url||seen.has(url))return;seen.add(url);out.push({url,title:clientScrub(title||url)});};
   for(const id of m.lines){const L=LN[id];add(L.url,L.src);}
   for(const id of m.lines)for(const r of (LN[id].references||[]))if(!r.partner)add(r.url,r.title);
-  for(const c of (m.conns&&m.conns.length?m.conns:m.conn?[m.conn]:[])){if(c.source)add(c.source.url,c.source.title);for(const f of (c.flows||[]))if(f.source)add(f.source.url,f.source.title);}
+  for(const c of [...(m.aiConn?[m.aiConn]:[]),...(m.conns&&m.conns.length?m.conns:m.conn?[m.conn]:[])]){if(c.source)add(c.source.url,c.source.title);for(const f of (c.flows||[]))if(f.source)add(f.source.url,f.source.title);}
   return out.slice(0,Math.max(6,m.lines.length));}
 // The capability box: what a fact question names and where Adobe answers it (step 52)
 const TRUST={url:'https://www.adobe.com/trust.html',title:'Adobe Trust Center'};
@@ -616,14 +646,16 @@ function composeDraft(q,ctx){
   const names=m.products.filter(id=>!P[id].outside||(m.conn&&[m.conn.a,m.conn.b].includes(id))).map(id=>P[id].name);
   const approach=[],lead=q.requirement?'We would meet this by using ':'We would deliver this with ';
   const ex=explainFor(text,m);   // step 67: the sentences from Adobe's pages that answer what the question asks
-  if(m.conn){
-    if(q.requirement)approach.push(lead+listOf([P[m.conn.a].name,P[m.conn.b].name])+'.');
+  const head=m.aiConn||m.conn;   // Nov 18 2026: the line from the AI assistant the question ties to a product leads, before any connection with services
+  if(head){
+    if(q.requirement)approach.push(lead+listOf([P[head.a].name,P[head.b].name])+'.');
     approach.push(...ex.lead);
     // step 53: the client-voice how and gain written for the response, where the catalog has them; the partner's card text
     // otherwise, scrubbed of labels and canvas talk
-    const explained=ex.pairs.some(f=>f.includes(m.conn.a)&&f.includes(m.conn.b));   // step 67: the opening sentences already say how the two work together
-    if(!explained)approach.push(clientScrub(rfp(m.conn.sowHow||m.conn.how||'')));
-    if(explained);else if(m.conn.sowGain)approach.push(clientScrub(rfp(m.conn.sowGain)));else if(!m.conn.sowHow&&m.conn.gain&&m.conn.gain.text)approach.push(clientScrub(rfp(m.conn.gain.text)));
+    for(const c of [m.aiConn,m.conn].filter(Boolean)){
+      const explained=ex.pairs.some(f=>f.includes(c.a)&&f.includes(c.b));   // step 67: the opening sentences already say how the two work together
+      if(!explained)approach.push(clientScrub(rfp(c.sowHow||c.how||'')));
+      if(explained);else if(c.sowGain)approach.push(clientScrub(rfp(c.sowGain)));else if(!c.sowHow&&c.gain&&c.gain.text)approach.push(clientScrub(rfp(c.gain.text)));}
     const more=m.conns.slice(1,4).map(c=>P[c.a].name+' and '+P[c.b].name);
     approach.push(...ex.more);
     if(more.length)approach.push('The proposal also uses the documented connection'+(more.length>1?'s':'')+' between '+more.join(', and between ')+'.');
@@ -699,7 +731,7 @@ function noteItems(m,owned){
     return push(asks,n);};
   // every prerequisite of every connection the answer names (the approach names the first four), no cap; the SOW's client-voice version
   // of each (sowPrereqs, matched by its words, since the two lists are not always in the same order) is what a ticked ask says in the response
-  const conns=m.conns&&m.conns.length?m.conns.slice(0,4):(m.conn?[m.conn]:[]);
+  const conns=[...(m.aiConn?[m.aiConn]:[]),...(m.conns&&m.conns.length?m.conns.slice(0,4):(m.conn?[m.conn]:[]))];
   for(const c of conns){
     const pre=c.prereqs||[],sowPre=c.sowPrereqs||[];
     for(const p of pre){const cv=closest(p,sowPre);for(const x of pieces(p,false)){const before=asks.length;place(x,cv,false);if(asks.length>before&&cv&&x===p)clientAsks[p]=cv;}}
@@ -1190,7 +1222,7 @@ function scopeNote(q,d,products,excluded){
   return why+', so the catalog cannot draft an answer to this request.';
 }
 function chipsHTML(d,products,excluded){
-  const conns=d?.m.conn?[d.m.conn]:[],named=new Set(rfiProducts());
+  const conns=[d?.m.aiConn,d?.m.conn].filter(Boolean),named=new Set(rfiProducts());
   const eligible=CAT.products.filter(p=>!products.includes(p.id)&&!excluded.has(p.id));
   const group=(label,items)=>items.length?'<optgroup label="'+label+'">'+items.sort((a,b)=>a.name<b.name?-1:a.name>b.name?1:0)
     .map(p=>'<option value="'+esc(p.id)+'">'+esc(p.name)+'</option>').join('')+'</optgroup>':'';
@@ -1362,7 +1394,7 @@ function estimatedServices(q,d){
   const ids=[...new Set([...(d.ai?.services||d.m.lines),...(plan?.ids||[])])];
   const named=detectAll(q.text).named, deployment=/\b(?:implement(?:ing|ation)?|deploy(?:ing|ment)?|set ?up|roll ?out)\b/i.test(q.text);
   const lead=sentencesOf(q.text)[0]||q.text;
-  const explained=!!d.parts.explain.length&&(HOW_IT_WORKS.test(lead)||q.text.includes('?')&&named.length===1);
+  const explained=!!d.parts.explain.length&&(HOW_IT_WORKS.test(lead)||q.text.includes('?')&&named.filter(id=>TIED[id]!==AI_TIE).length===1);   // Nov 18 2026: the AI assistant a question ties to the product is no second product
   const route=d.m.conn?[...(d.m.conn.lines||[]),...(d.m.conn.more||[])]:[];
   return ids.filter(id=>{
     if(!LN[id]||!kbPermitted(id,q)||scopeConflict(LN[id].name,q))return false;
@@ -1946,7 +1978,7 @@ function kbPermitted(id,q,scope){const line=LN[id];if(!line||!siteServiceFits(id
   return true;}
 function kbAllowedMatch(q,m,scope){const excluded=kbExclusions(q,scope);if(!excluded.size)return m;
   const products=m.products.filter(id=>!excluded.has(id)),conns=(m.conns||[]).filter(c=>![c.a,c.b].some(id=>excluded.has(id)));
-  return Object.assign({},m,{products,conn:m.conn&&![m.conn.a,m.conn.b].some(id=>excluded.has(id))?m.conn:conns[0]||null,conns,
+  return Object.assign({},m,{products,conn:m.conn&&![m.conn.a,m.conn.b].some(id=>excluded.has(id))?m.conn:conns[0]||null,conns,aiConn:m.aiConn&&![m.aiConn.a,m.aiConn.b].some(id=>excluded.has(id))?m.aiConn:null,
     lines:m.lines.filter(id=>kbPermitted(id,q,scope)),excluded:[...new Set([...(m.excluded||[]),...[...excluded].map(id=>P[id].name)])]});}
 const KB_PRODUCT_OPTION_NAMES=Object.fromEntries(Object.entries(P).filter(([,p])=>!p.outside).flatMap(([id,p])=>[[p.name,id],[brandName(id),id]]));
 const KB_PRODUCT_OPTION_RE=new RegExp('(?:either\\s+)?((?:'+Object.keys(KB_PRODUCT_OPTION_NAMES).sort((a,b)=>b.length-a.length).map(x=>x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')+')(?:\\s*,\\s*(?:'+Object.keys(KB_PRODUCT_OPTION_NAMES).sort((a,b)=>b.length-a.length).map(x=>x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')+'))*\\s+(?:or)\\s+(?:'+Object.keys(KB_PRODUCT_OPTION_NAMES).sort((a,b)=>b.length-a.length).map(x=>x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')+'))','g');
@@ -2228,7 +2260,7 @@ function scopeEvidence(q,scope){if(!METHOD||!q||!scope||F.FIRM_ALWAYS.test(q.tex
   const allowed=choices.filter(id=>!excluded.has(id)&&!local.excluded.includes(P[id].name));
   const outside=local.named.filter(id=>P[id]&&P[id].outside),owners=[...allowed.map(id=>P[id]),...C.filter(c=>[c.a,c.b].every(id=>allowed.includes(id)||outside.includes(id)))];
   const pool=[...new Set(owners.flatMap(o=>[...(o.lines||[]),...(o.more||[])]))],qw=new Set(phraseWords(q.text)),index=phraseIndex();
-  const ranked=pool.filter(id=>METHOD[id]&&LN[id]&&keepsLine(id,scope)&&kbPermitted(id,q,scope)&&connectionFits(id,q.text)&&(LN[id].unit==='monthly')===isOngoing(q.text)&&(!MIGRATE_LINE.test(LN[id].name)||MOVE_ASK.test(q.text.replace(/\bmigrated\b/gi,'')))).map(id=>{   // review of round 4: a migration service answers only a question about moving something (step 91's rule); "migrated pages" to test is not a move (Vennor E.3)
+  const ranked=pool.filter(id=>METHOD[id]&&LN[id]&&keepsLine(id,scope)&&kbPermitted(id,q,scope)&&connectionFits(id,q.text)&&aiFits(id,[...allowed,...outside])&&(LN[id].unit==='monthly')===isOngoing(q.text)&&(!MIGRATE_LINE.test(LN[id].name)||MOVE_ASK.test(q.text.replace(/\bmigrated\b/gi,'')))).map(id=>{   // review of round 4: a migration service answers only a question about moving something (step 91's rule); "migrated pages" to test is not a move (Vennor E.3)
     const phrases=index.by[id].ps,shared=phrases.some(p=>{const hit=p.filter(w=>qw.has(w)&&!WEAK.has(w));return hit.length>=2&&hit.length/p.length>=0.5;});
     const direct=local.named.length===1&&local.named.some(p=>allowed.includes(p)&&[...(P[p].lines||[]),...(P[p].more||[])].includes(id));
     return {id,direct,score:shared||direct?phraseScore(id,qw):0};
@@ -2286,7 +2318,7 @@ function byPhrases(q,d){const lines=d.m.lines,qw=new Set(phraseWords(q.text)),le
   const inScope=new Set([...adobe,...namedOutside]);
   if(adobe.includes('cja')&&rfiProducts().includes('aemsites')&&/\b(?:page views?|button clicks?|website events?)\b/i.test(q.text))inScope.add('aemsites');
   for(const c of C)if([c.a,c.b].every(id=>inScope.has(id)))add(c,true);
-  return [...pool].filter(id=>METHOD[id]&&LN[id]&&keepsLine(id)&&kbPermitted(id,q)&&(LN[id].unit==='monthly')===ong&&connectionFits(id,q.text)&&specialistFits(id,q.text)).map(id=>{const at=lines.indexOf(id),ps=phraseScore(id,qw),head=at>=0&&(moving||!MIGRATE_LINE.test(LN[id].name));return {id,evidence:at>=0||strongPhrase(id,qw)||ps>=3.5||explicitConnectionLead(id,q.text),s:ps+phraseScore(id,lead)*1.25+(head?Math.max(0,3-at):0)+(explicitConnectionLead(id,q.text)?8:0)+(whole&&ps>0&&METHOD[id].kind==='workstream'?7:0)};}).filter(r=>r.evidence).sort((a,b)=>b.s-a.s).map(r=>r.id);}
+  return [...pool].filter(id=>METHOD[id]&&LN[id]&&keepsLine(id)&&kbPermitted(id,q)&&aiFits(id,d.m.products)&&(LN[id].unit==='monthly')===ong&&connectionFits(id,q.text)&&specialistFits(id,q.text)).map(id=>{const at=lines.indexOf(id),ps=phraseScore(id,qw),head=at>=0&&(moving||!MIGRATE_LINE.test(LN[id].name));return {id,evidence:at>=0||strongPhrase(id,qw)||ps>=3.5||explicitConnectionLead(id,q.text),s:ps+phraseScore(id,lead)*1.25+(head?Math.max(0,3-at):0)+(explicitConnectionLead(id,q.text)?8:0)+(whole&&ps>0&&METHOD[id].kind==='workstream'?7:0)};}).filter(r=>r.evidence).sort((a,b)=>b.s-a.s).map(r=>r.id);}
 /* The topic playbook (RFP_METHOD topics, playbook/BRIEF.md): a sourced method for a common ask the catalog has no service for
    (accessibility, page speed, the client's own CDN, A/B testing without Adobe Target, consent and privacy). A topic answers a
    question that says one of its triggers and is about one of its products, unless a service of its own answers it (the lead service
