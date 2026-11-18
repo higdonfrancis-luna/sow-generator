@@ -9,6 +9,7 @@ A 1:12 narrated overview of the tool for Adobe partners, built the same way as t
 | `out/SOW_Generator_and_RFI_Builder_First_Look.mp4` | The draft, 1920 x 1080, 12.4 MB |
 | `out/SOW_Generator_and_RFI_Builder_First_Look_web.mp4` | A lighter copy for a web page, 6.6 MB |
 | `out/SOW_Generator_and_RFI_Builder_First_Look.srt` | The captions as a file (they are also drawn into the video) |
+| `out/SOW_Generator_First_Look_Proto.zip` | The zip for Adobe Proto: the watch page, the poster and the video, 7.0 MB |
 
 ## The Proto zip (Nov 17 2026)
 
@@ -16,7 +17,7 @@ Adam can only upload zips to Adobe Proto, and asked for a picture to show before
 
 - **The poster** is `proto/poster.png`: the closing frame with a play button and the length, drawn by `node build/render_poster.js` (the length comes from the timeline).
 - **The page** is `proto/index.html`: the tool's masthead look, a heading, the video with the poster, and the Firefly credit. One click anywhere on the poster starts the video, and the browser's own controls appear once it plays. Burned-in captions, no outside files (the font and logo travel in the zip), and a `noindex` tag. No "Internal" or "Confidential" label, since partners watch it.
-- **The zip** is made by `python3 build/make_proto_zip.py`, which writes `out/SOW_Generator_First_Look_Proto.zip` (7.0 MB, not saved in the repository) with `index.html` at the root and six files beside it, no folders, and must end with ALL ZIP CHECKS PASSED.
+- **The zip** is made by `python3 build/make_proto_zip.py`, which writes `out/SOW_Generator_First_Look_Proto.zip` (7.0 MB, saved here since Adam asked for it on GitHub, Nov 17) with `index.html` at the root and six files beside it, no folders, and must end with ALL ZIP CHECKS PASSED.
 - **The page test:** unzip it into an empty folder, serve that folder (`python3 -m http.server 8766`) and run `node build/test_proto.js http://localhost:8766/`. It must end with ALL PAGE CHECKS PASSED (desktop and phone sizes: the poster, the font, no sideways scrolling, a 16 by 9 player, one click starts the video, no errors).
 - Pictures of the page as built: `../mockups/nov17_overview_video/proto_page_desktop.png` and `proto_page_phone.png`.
 - After any change to the video, run `render_poster.js` and `make_proto_zip.py` again.
@@ -93,7 +94,7 @@ Run everything from this folder. The recipe behind these scripts is `video/Firef
    Then copy `captions.srt` to `out/SOW_Generator_and_RFI_Builder_First_Look.srt`.
 6. **Check:** `python3 build/check.py <a checkout of the tool's build>` must end with ALL VIDEO CHECKS PASSED (57 checks: files, size, length, loudness at -16 LUFS, every spoken word in the captions, the name never split across two captions, no dashes, every number against the tool's own data, and a look at one frame of every scene).
 
-Python needs `numpy`, `scipy`, `Pillow`, `requests` and `pocketsphinx`; Node needs Playwright with Chromium; `ffmpeg` and `ffprobe` on the path. `out/silent.mp4`, `build/mix_timeline.wav` and the Proto zip are rebuilt each time and are not saved here.
+Python needs `numpy`, `scipy`, `Pillow`, `requests` and `pocketsphinx`; Node needs Playwright with Chromium; `ffmpeg` and `ffprobe` on the path. `out/silent.mp4` and `build/mix_timeline.wav` are rebuilt each time and are not saved here.
 
 ## Files
 

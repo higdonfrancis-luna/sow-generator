@@ -107,6 +107,7 @@ Nov 10 2026, step 68 (Adam, to `mockups/nov10_sources_caveat/*.png`: "sources ou
 | `check.py` | Checks: `python3 check.py index.html [screenshot folder]` prints ✅/❌ lines and must end with ALL CHECKS PASSED. Needs Playwright. |
 | `adobe_logo.png` | The logo the patch embeds (the same file as `exec/web_video/adobe_logo.png`). |
 | `site/` | The one website, built by `python3 sow/build_site.py`: the Build canvas as `index.html`, the SOW tool with the RFP Builder tab as `sow/index.html`, the file readers in `sow/lib/`, plus `_headers` (noindex, no framing) and `robots.txt`. Since Nov 9 it lives on Adobe Proto (proto.adobe.io/sow-generator): Adam uploads a zip of this folder's contents. abvsow.netlify.app is being turned off. |
+| `overview_video/` | The 1:12 overview video for Adobe partners, "Statement of Work Generator and RFI Builder: a first look" (Nov 17 2026): the MP4, the watch page and zip for Adobe Proto, and everything to rebuild it. Start with `overview_video/README.md`. The storyboard Adam approved is in `mockups/nov17_overview_video/`. |
 
 ## How the numbers work
 
