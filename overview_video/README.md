@@ -2,7 +2,7 @@
 
 A 1:12 narrated overview of the tool for Adobe partners, built the same way as the Brand Visibility videos: Firefly characters, the OpenAI Echo voice, and everything else drawn and assembled in code.
 
-**State (Nov 17 2026): a draft for Adam's review. It is not published anywhere and not linked from the tool.**
+**State (Nov 17 2026): Adam watched the draft ("impressive!!") and is putting it on Adobe Proto himself. Claude has not published it anywhere, and it is not linked from the tool.**
 
 | File | What it is |
 |---|---|
@@ -99,7 +99,7 @@ Python needs `numpy`, `scipy`, `Pillow`, `requests` and `pocketsphinx`; Node nee
 ## For Adam to decide
 
 - **Length.** It runs 1:12, not 1:30: Echo reads these seven lines in 60 seconds. Two more beats would bring it to about 1:30 without padding. Offered, not built: the Small, Typical and Large size switch with "change any line or add your own service"; and Create your own play with the GenStudio family.
-- **Where it goes.** Nothing is published. It could play on the tool's first page, where the "Start here" card now shows the five-minute Brand Visibility video.
+- **Where it goes.** Adam is putting it on Adobe Proto himself (Nov 17). Flagged: on Oct 29 a Proto link needed an Adobe employee login, so partners may not be able to open it there. It could also play on the tool's first page, where the "Start here" card now shows the five-minute Brand Visibility video. Offered, not built: a small watch page (the video with its captions, in the tool's look) zipped for Proto.
 - **A listen.** Every word was found and timed in the recordings by a forced aligner, which confirms the words are there but is not the same as hearing them. The name and "RFI" are the two readings worth a careful listen.
 
 ## Flagged, not changed
