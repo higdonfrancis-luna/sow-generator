@@ -3,7 +3,7 @@
 The ask: "a quick high-level walkthrough of the SOW generator, focused on HOW you built it, the databases you pulled from, how you connected the data, and how you refined it to where it is today."
 
 The short answer to all four, if you only get one sentence:
-**"I'm a seller, not an engineer. I wrote the rules and approved every change, and AI did the building. There's no database: it's three knowledge files built from 723 Adobe documentation pages, joined by service IDs, and it got here through 96 small approved steps and a lot of outside review."**
+**"I'm the builder. I wrote the rules and approved every change, and AI wrote the code. There's no database: it's three knowledge files built from 723 Adobe documentation pages, joined by service IDs, and it got here through 96 small approved steps and a lot of outside review."**
 
 Have open before the call, in this order of tabs:
 
