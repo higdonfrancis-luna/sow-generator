@@ -1161,10 +1161,14 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
       ok(esc === 'out-btn' && add.focus === 'out-btn' && add.out === 'dwh' && away.hidden && away.expanded === 'false' && back && rm.focus === 'out-btn' && rm.out === '',
         'S28: from the keyboard, Escape, adding a system and Remove from canvas put the focus back on Add outside system, and the menu closes when the focus leaves it either way', JSON.stringify({esc, add, away, back, rm}));
       // 5. with the menu open, hovering a box opens no card under it; a click closes the menu and pins the card
-      await p.click('#out-btn'); await p.waitForTimeout(150); const bx = await (await p.$('.node[data-p="cja"]')).boundingBox();
-      await p.mouse.move(bx.x + bx.width - 20, bx.y + bx.height - 10); await p.waitForTimeout(500);
+      // (Nov 18: Add product sits before Add outside system on every play, so the open menu covers one box and the right half of the other:
+      // the point is the first lower corner of a box, right then left, that the menu leaves free)
+      await p.click('#out-btn'); await p.waitForTimeout(150);
+      const bx = await p.evaluate(() => { const m = document.getElementById('out-menu').getBoundingClientRect();
+        for (const n of document.querySelectorAll('.node')) { const r = n.getBoundingClientRect(), y = r.bottom - 10; for (const x of [r.right - 20, r.left + 20]) if (x < m.left || x > m.right || y < m.top || y > m.bottom) return {x, y}; } return null; });
+      await p.mouse.move(bx.x, bx.y); await p.waitForTimeout(500);
       const hov = await p.evaluate(() => ({card: !document.getElementById('card').hidden, menu: !document.getElementById('out-menu').hidden}));
-      await p.mouse.click(bx.x + bx.width - 20, bx.y + bx.height - 10); await p.waitForTimeout(400);
+      await p.mouse.click(bx.x, bx.y); await p.waitForTimeout(400);
       const clk = await p.evaluate(() => ({card: !document.getElementById('card').hidden, menu: !document.getElementById('out-menu').hidden, pinned}));
       ok(!hov.card && hov.menu && clk.card && !clk.menu && clk.pinned, 'S28: while the menu is open, hovering a box opens no card under it, and a click on the box closes the menu and pins its card', JSON.stringify({hov, clk}));
       await p.evaluate(() => hideCard(true));

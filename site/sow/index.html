@@ -561,10 +561,13 @@ let CUSTOM_BV=true,AEM_MANAGED=false;
 const ctxOf=p=>({bv:p==='custom'?CUSTOM_BV:p!=='coworker',cdnown:!(p==='aem'&&AEM_MANAGED)});
 function neutralize(s,p,t,k){if(!s||!s.neutral||typeof t!=='string')return t;const f=ctxOf(p);for(const flag of Object.keys(s.neutral)){if(f[flag])continue;for(const [o,w] of (s.neutral[flag][k]||[]))t=ProductCopy.scrub(t).split(ProductCopy.scrub(o)).join(ProductCopy.scrub(w));}return t;}
 const contractText=(s,k,t)=>s.id.replace(/^CANVAS-/,'')==='A01'&&k==='assumptions'&&typeof t==='string'?t.replace("Confirm that route for the Edge Delivery site with Adobe before enabling it; otherwise the Client's CDN team applies", "The Client confirms the Edge Delivery route with Adobe before it is enabled; when the self-service route is unavailable, the Client's CDN team applies"):t;
+/* the products a partner added to a ready-made play, as handed over or saved: ids that are not the play's own, and their names */
+function addedProducts(p,ids,names){const products=Array.isArray(ids)?ids.filter(x=>typeof x==='string'&&/^[\w-]{1,40}$/.test(x)&&!CanvasPresets[p].products.includes(x)).slice(0,80):[];
+ return products.length?{products,names:Array.isArray(names)?names.filter(x=>typeof x==='string').slice(0,80).map(x=>x.slice(0,80)):[]}:null;}
 // A saved owner is one the partner selected. An authoring choice can supply another content provider.
 function actualScopeProduct(draft,p,id){
  const products=p==='custom'?draft.customProducts:CanvasPresets[p]?.products;
- if(products?.includes(id)||draft.outside?.[p]?.includes(id))return true;
+ if(products?.includes(id)||draft.added?.[p]?.products.includes(id)||draft.outside?.[p]?.includes(id))return true;
  if(p==='custom'&&!products?.length){
   const names=draft.customNames||[];
   if(id==='eds')return names.includes('AEM Sites with Edge Delivery Services')||names.includes('Edge Delivery Services');
@@ -596,6 +599,10 @@ function normalize(raw){
  if(d.exclusions===OLD_EXCL)d.exclusions=NEW_EXCL;
  if(d.responsibilities==='Customer: provide approved source material, required access, named reviewers and publishing approvals.\nPartner: deliver the agreed work, test the outputs, document changes and coordinate review.\nAdobe and application owners: confirm supported capabilities and perform any enablement assigned to them.')d.responsibilities=blank().responsibilities;
  d.sowReferences=s.sowReferences===true;CUSTOM_BV=d.customBV=s.customBV!==false;d.customNames=Array.isArray(s.customNames)?s.customNames.filter(x=>typeof x==='string').slice(0,80).map(x=>x.slice(0,80)):[];d.customProducts=Array.isArray(s.customProducts)?s.customProducts.filter(x=>typeof x==='string'&&/^[\w-]{1,40}$/.test(x)).slice(0,80):[];d.outside=normOutside(s.outside);
+ /* the canvas's goal, when one was given */
+ if(typeof s.goal==='string'&&/^[\w-]{1,60}$/.test(s.goal))d.goal=s.goal;
+ /* a ready-made play's added products: kept only when there are any, so an engagement nobody added to saves as before */
+ if(s.added&&typeof s.added==='object'){const a={};for(const p of Object.keys(CanvasPresets)){const v=p!=='custom'&&s.added[p]&&typeof s.added[p]==='object'&&addedProducts(p,s.added[p].products,s.added[p].names);if(v)a[p]=v;}if(Object.keys(a).length)d.added=a;}
  for(const p of Object.keys(PLAYS))d.canvasDecisions[p]=CanvasScope.restoreDecisions(s.canvasDecisions?.[p],id=>actualScopeProduct(d,p,id));
  d.size=validSize(s.size)?s.size:'typical';d.sizeManual=s.sizeManual===true;
  /* drafts from before the fix took their size from the prompt text, so they go back to Typical unless the partner chose it */
@@ -782,16 +789,16 @@ for(const t of ['click','keydown','input','change','submit'])document.addEventLi
 function save(){if(reloading||loadFailed)return;ProductCopy.state(state);try{const j=JSON.stringify(state);localStorage.setItem(KEY,j);lastSaved=j;localStorage.removeItem(OLD_KEY);syncCanvas();}catch(e){toast('Browser saving unavailable. Use Save draft.');}}
 /* each line's own settings for the canvas, in every play: on, typed hours or its own band (set on its card, or by the prompt count: p), line rate, cadence, a written-up concept, and the hours of a line the canvas doesn't show */
 function canvasEff(){const plays={};for(const p of Object.keys(PLAYS)){const est=state.estimates[p]||{},mb=monitoringBand(p),o={};
-  for(const s of catalog().filter(x=>x.plays.includes(p))){const r=est[s.id];if(!r)continue;const e={m:r.cadence==='monthly'?1:0};if(r.on)e.o=1;
+  for(const s of catalog().filter(x=>x.plays.includes(p))){const r=est[s.id];if(!r)continue;const e={m:r.cadence==='monthly'?1:0};if(r.on&&!s.locked)e.o=1;   /* a service that waits for its product is not on */
    if(isCustom(s)||r.hoursEdited)e.h=Number(r.hours)||0;else if(r.bandSet)e.b=r.band;else if(MONITORING.includes(baseId(s))&&mb){e.b=r.band;e.p=1;}
    if(r.rate!=='')e.r=Number(r.rate);if(s.concept&&conceptDone(s,r))e.w=1;if(e.o&&!isCustom(s))e.z=[s.low,s.base,s.high];
    if(e.o||'h' in e||e.b||'r' in e||e.w||e.m!==(s.unit==='monthly'?1:0))o[baseId(s)]=e;}
   plays[p]=o;}return {v:1,plays};}
 const canvasPlay=()=>{try{const c=JSON.parse(localStorage.getItem('abv-sow-build-v1')||'null');return c&&typeof c==='object'?c.play:null;}catch(e){return null;}};
 /* the rate, size, term, currency, every service choice and each line's own settings set here are the canvas's too, so a trip back to Build keeps them and both show the same total;
-   restore (an opened draft, or Build when the canvas holds another play) also gives the canvas this play and its products, even in an empty browser */
+   restore (an opened draft, or Build when the canvas holds another play) also gives the canvas this play and its products (on a ready-made play, the ones added to it), even in an empty browser */
 function syncCanvas(restore){let c=null;try{c=JSON.parse(localStorage.getItem('abv-sow-build-v1')||'null');}catch(e){}if(!c||typeof c!=='object'||Array.isArray(c)){if(!restore)return;c={};}const was=JSON.stringify(c);
- if(restore){c.play=state.play;c.ls={};c.keep={};delete c.fresh;delete c.recover;c.on=state.play==='custom'?state.customProducts.slice():[];c.out=((state.outside||{})[state.play]||[]).slice();if(state.play==='custom'&&!c.on.length&&state.customNames.length)c.recover=state.customNames.slice();}
+ if(restore){c.play=state.play;c.ls={};c.keep={};delete c.fresh;delete c.recover;c.on=state.play==='custom'?state.customProducts.slice():(state.added?.[state.play]?.products||[]).slice();c.out=((state.outside||{})[state.play]||[]).slice();if(state.goal)c.goal=state.goal;else delete c.goal;if(state.play==='custom'&&!c.on.length&&state.customNames.length)c.recover=state.customNames.slice();}
  if(c.play===state.play)c.decisions=CanvasScope.normalize(state.canvasDecisions[state.play]);
  c.rate=state.rate===''?0:Number(state.rate);c.size=state.size;c.months=state.months;c.cur=state.currency;c.v=2;c.eff=canvasEff();
  /* the FSI answer sets the canvas's starting services; the canvas's play-just-picked mark is spent once these steps hold that play */
@@ -855,7 +862,7 @@ function dependencyList(lines){const ids=new Set(lines.map(baseId)),has=(...x)=>
  if(has('F02','C04','FSI01','CW-FSI'))out.push('The Client names the Brand Concierge operating owner and keeps the approved sources current; answer tests and refusal and escalation scenarios are approved before launch.');
  if(lines.some(l=>/^CW/.test(baseId(l))||SPECIAL_SKILLS.includes(baseId(l))))out.push('Adobe\'s onboarding team enables Coworker and the eligible applications; Client administrators grant access and approve any connection or plugin.');
  if(has('O02','O04','O05','O07','O08','O09','C03','C05','A02','SO2'))out.push('Content and publishing approvals follow the Client\'s review cadence. Delays are handled through the change-control and pause terms in section 8.');
- if(outsideOn('dwh')){/* step 47: what each product on the canvas needs from the warehouse */const on=id=>state.play===id||(state.play==='custom'&&(state.customProducts||[]).includes(id));
+ if(outsideOn('dwh')){/* step 47: what each product on the canvas needs from the warehouse */const on=id=>actualScopeProduct(state,state.play,id);
   out.push(['Data warehouse: the Client\'s data team gives the access the source needs (for Google BigQuery, a dataset for temporary tables; for Azure Databricks, a SAS token in the cluster\'s Spark configuration) and allows Adobe\'s IP addresses where the warehouse needs it.',on('cja')?'Change tracking is on for each table; Data Mirror for CJA needs CJA Select, Prime or Ultimate.':'',on('rtcdp')?'The Real-Time CDP route copies tables on a schedule and needs Real-Time CDP Ultimate or the Advanced Enterprise Source Connectors.':'',on('ajo')?'Data Mirror for orchestrated campaigns needs a Journey Optimizer Campaigns package, with change tracking on and deletes managed at the source.':''].filter(Boolean).join(' '));}
  if(outsideOn('cstore'))out.push('Cloud storage: the Client gives access to the agreed storage location, keeps the file feeds in an agreed format and allows Adobe\'s IP addresses where needed.');
  if(outsideOn('crm'))out.push('CRM: the Client\'s CRM administrator gives an API user, agrees the objects and fields, and allows Adobe\'s IP addresses where needed.');
@@ -863,10 +870,11 @@ function dependencyList(lines){const ids=new Set(lines.map(baseId)),has=(...x)=>
  out.push('Client access, inputs and reviewer availability are confirmed in week one.');return out;}
 const FSI_MODEL=['A named operating owner for the Brand Concierge experience.','The current version of each approved source, with its owner and review date.','A golden-answer test set, run before launch and again after any source or configuration change.','Refusal and escalation scenarios: the questions the experience declines or hands to a person.','Failure handling for a missing source, an answer that fails review, or a handoff that is down.','Source-change triggers: a product, price or policy change starts a review before the update goes live.','Handoff ownership: who staffs live chat or meetings. The documented route is Adobe Marketo Qualifier (another platform is confirmed with Adobe first), which keeps live chat conversations for 30 days.','A controlled rollout: internal end-to-end tests, then a small share of the target pages (Adobe\'s example starts at 5%), widened as results hold, with at least weekly monitoring.'];
 const fsiModel=()=>{const o=String(brief().coverage.fsiOwner||'').trim().replace(/[.\s]+$/,'');return o?['Operating owner for the Brand Concierge experience: '+o+'.',...FSI_MODEL.slice(1)]:FSI_MODEL;};
-const DOC_TITLE={cja:'Services for Brand Visibility and Customer Journey Analytics',commerce:'Services for Brand Visibility and Adobe Commerce',aem:'Services for Brand Visibility, Sites Optimizer and AEM Sites with Edge Delivery Services',fsi:'Services for Brand Visibility and Brand Concierge',abv:'Services for Brand Visibility',coworker:'Services for Adobe CX Enterprise Coworker'};
+/* the title names each play's products, then the products added to it */
+const DOC_NAMES={cja:['Brand Visibility','Customer Journey Analytics'],commerce:['Brand Visibility','Adobe Commerce'],aem:['Brand Visibility','Sites Optimizer','AEM Sites with Edge Delivery Services'],fsi:['Brand Visibility','Brand Concierge'],abv:['Brand Visibility'],coworker:['Adobe CX Enterprise Coworker']};
 const listText=a=>a.length<2?a.join(''):a.slice(0,-1).join(', ')+' and '+a[a.length-1];
 function docTitle(){
- if(state.play!=='custom')return DOC_TITLE[state.play];
+ if(state.play!=='custom')return 'Services for '+listText([...DOC_NAMES[state.play],...(state.added?.[state.play]?.names||[])]);
  let names=state.customNames;
  if(actualScopeProduct(state,'custom','eds')){
   names=[...new Set(names.filter(name=>name!=='AEM Sites').map(name=>name==='Edge Delivery Services'?'AEM Sites with Edge Delivery Services':name))];
@@ -1055,8 +1063,13 @@ function applyHandoff(){const wasBV=CUSTOM_BV;let h=null;try{h=JSON.parse(localS
  if(!h||typeof h!=='object'||!validPlay(h.play)||!Array.isArray(h.lines)||!Number.isFinite(Number(h.at))||Number(h.at)===state.handoffAt)return;
  /* step 47: the same play picked again on an engagement that has had no hand-over yet (opened at ?play=) keeps the partner's work */
  const p=h.play,fresh=h.fresh===true&&!(p===state.play&&state.handoffAt===0&&hasWork(p));state.play=p;state.handoffAt=Number(h.at);
+ /* the services of this play the canvas showed last time */
+ const shownBefore=p==='custom'?[]:Object.keys(state.canvasSelection[p]?.defaults||{});
  if(h.selection)state.canvasSelection[p]=selectionState(h.selection);
  if(p==='custom'){CUSTOM_BV=state.customBV=Array.isArray(h.products)?h.products.includes('bv'):true;state.customNames=Array.isArray(h.names)?h.names.filter(x=>typeof x==='string').slice(0,80).map(x=>x.slice(0,80)):[];state.customProducts=Array.isArray(h.products)?h.products.filter(x=>typeof x==='string'&&/^[\w-]{1,40}$/.test(x)).slice(0,80):[];}
+ if(p!=='custom'){const a=addedProducts(p,h.added,h.addedNames);if(a)(state.added=state.added||{})[p]=a;else if(state.added){delete state.added[p];if(!Object.keys(state.added).length)delete state.added;}}
+ /* the canvas's goal: the engagement follows it, and a play just picked has none */
+ if(typeof h.goal==='string'&&/^[\w-]{1,60}$/.test(h.goal))state.goal=h.goal;else if(h.fresh===true)delete state.goal;
  state.outside=state.outside&&typeof state.outside==='object'?state.outside:{};state.outside[p]=Array.isArray(h.outside)?[...new Set(h.outside.filter(x=>typeof x==='string'&&outsideAllowed(p,x)))]:[];
  state.canvasDecisions[p]=CanvasScope.restoreDecisions(h.decisions,id=>actualScopeProduct(state,p,id));
  if(!Object.hasOwn(h.decisions||{},'authoring')&&actualScopeProduct(state,p,'eds')&&actualScopeProduct(state,p,'csrc')){
@@ -1082,10 +1095,11 @@ function applyHandoff(){const wasBV=CUSTOM_BV;let h=null;try{h=JSON.parse(localS
     else if(k==='assumptions'&&n.concept&&typeof o[k]==='string'&&/^Connection: /.test(o[k])&&typeof r[k]==='string'&&r[k].startsWith(o[k]))r[k]=lineText(n,p,r.band,k)+r[k].slice(o[k].length);}}}
  /* the play picked again starts over: every line back to its starting text, band, hours and rate (the partner's own services stay under Add service, off) */
  if(fresh)for(const id of Object.keys(state.estimates[p]||{}))if(!/^CUSTOM/.test(id))delete state.estimates[p][id];
- /* the canvas sets on or off only the lines it shows; a service added here that the canvas doesn't show keeps its choice, unless the play was just picked again */
+ /* the canvas sets on or off only the lines it shows; a service added here that the canvas doesn't show keeps its choice, unless the play was just picked again,
+    or the canvas showed it last time and no longer does (its product was removed from a ready-made play) */
  const managed=new Set((Array.isArray(h.managed)?h.managed:h.lines.map(l=>l&&l.id)).filter(x=>typeof x==='string'));
  for(const s of catalog().filter(x=>x.plays.includes(p))){if(isCustom(s))continue;const id=baseId(s),l=byId.get(id);
-  const r=state.estimates[p][s.id]||(state.estimates[p][s.id]=newLine(s,OUT_START.includes(s.id),state.size,p));if(managed.has(id)){if(l)r.on=!!(l.lock===true?l.want:l.on);}else if(fresh)r.on=STARTERS[p].includes(s.id);}
+  const r=state.estimates[p][s.id]||(state.estimates[p][s.id]=newLine(s,OUT_START.includes(s.id),state.size,p));if(managed.has(id)){if(l)r.on=!!(l.lock===true?l.want:l.on);}else if(fresh)r.on=STARTERS[p].includes(s.id);else if(shownBefore.includes(id)&&!s.id.startsWith('CANVAS-'))r.on=false;}
  // A pre-upgrade handoff contains effective selections but cannot identify the partner's overrides.
  if(!h.selection){
   if(fresh)state.canvasSelection[p]=selectionState();

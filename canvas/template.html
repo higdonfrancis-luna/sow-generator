@@ -557,6 +557,47 @@ details.mgrp[open] summary svg{transform:rotate(180deg)}
 .addmenu .sites-menu>summary{display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:700;padding:6px 0;list-style:none}
 .addmenu .sites-menu>summary svg{transform:none}.addmenu .sites-menu[open]>summary svg{transform:rotate(180deg)}
 .sites-menu .it2{margin:1px 0;padding:5px 9px;width:100%}
+/* Nov 18: next best product. The goal question and the ranked Add product list, wider than the grouped menu */
+.addmenu.rk{width:min(590px,calc(100vw - 32px))}
+.rk-sub{padding:9px 18px 0;font-size:12.5px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--ink2)}
+.rk-chips{display:flex;flex-wrap:wrap;gap:8px;padding:6px 18px}
+.rk-chips .bp-chip.own,.rk-chips .bp-chip.cur{border-color:var(--red);border-width:2px}
+.rk-now,.rk-heard{margin:8px 18px 0;font-size:15px;line-height:20px;color:var(--ink)}
+.rk-link{border:0;background:none;padding:0;font-weight:600;color:var(--dred);text-decoration:underline;white-space:nowrap}
+.rk-now .rk-link{margin-left:10px}
+.rk-form{padding:8px 18px 10px;font-size:15px;color:var(--ink2)}
+.rk-form label{display:block}
+.rk-form input{display:block;width:100%;margin-top:6px;border:1.5px solid var(--ink);border-radius:10px;padding:9px 12px;font:inherit;font-size:16px;color:var(--ink);background:#fff}
+.rk-form input::placeholder{color:var(--ink2);opacity:1}
+.rk-goal{display:flex;gap:10px;align-items:baseline;justify-content:space-between;margin:6px 18px 8px;padding:9px 12px;border:1.5px solid var(--ink);border-radius:12px;font-size:15px;line-height:20px}
+.rk-def{margin:0 18px 6px;font-size:14px;line-height:19px;color:var(--ink2)}
+.addmenu.rk .mgrp{border-top:1px solid var(--line);margin-top:6px}
+.addmenu.rk .mgrp summary{padding:10px 18px}
+.rk-row{padding:6px 18px 8px}
+.rk-add{display:grid;grid-template-columns:22px minmax(0,1fr) auto;column-gap:10px;row-gap:1px;width:100%;border:0;background:none;padding:2px 0;text-align:left;color:var(--ink)}
+button.rk-add:hover,button.rk-add:focus-visible{background:var(--soft)}
+button.rk-add:focus-visible,.rk-how:focus-visible,.rk-link:focus-visible,.rk-opt:focus-visible,.rk-strip:focus-visible,.rk-allb:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.rk-n{font-size:15px;line-height:23px;font-weight:600;color:var(--ink2)}
+.rk-nm{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:16.5px;line-height:23px;font-weight:600}
+.rk-next{background:var(--red);color:#fff;font-size:10.5px;line-height:15px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:20px}
+.rk-num,.rk-none{grid-column:3;grid-row:1/span 2;align-self:center}
+.rk-num{font-size:26px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.01em;white-space:nowrap}
+.rk-none{font-size:13px;font-weight:600;color:var(--ink2);white-space:nowrap}
+.rk-why{grid-column:2;font-size:14px;line-height:19px;color:var(--ink2)}
+.rk-cnt{margin:1px 0 0 32px;font-size:14px;line-height:19px;color:var(--ink2)}
+.rk-hw{white-space:nowrap}
+.rk-how{border:0;background:none;padding:0;color:var(--ink2);text-decoration:underline}
+.rk-calc{margin:5px 0 2px 32px;padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:var(--soft);font-size:14px;line-height:20px;color:var(--ink);font-variant-numeric:tabular-nums}
+.rk-calc p{margin:0 0 4px}
+.rk-calc p:last-child{margin:0}
+.rk-two{display:flex;flex-wrap:wrap;gap:8px;margin:5px 0 4px 32px}
+.rk-opt{border:1.5px solid var(--ink);border-radius:999px;background:#fff;padding:3px 12px;font-weight:600;font-size:14.5px;color:var(--ink)}
+.rk-opt:hover{border-color:var(--red)}
+.rk-strip{display:block;width:calc(100% - 36px);margin:0 18px 10px;border:1.5px solid var(--ink);border-radius:12px;background:#fff;padding:8px 12px;text-align:left;color:var(--ink)}
+.rk-strip b{display:block;font-size:15.5px;color:var(--dred)}
+.rk-strip span{display:block;font-size:14px;line-height:19px;color:var(--ink2)}
+.rk-allb{display:block;margin:10px 18px 4px;border:1.5px solid var(--ink);border-radius:4px;background:#fff;padding:6px 12px;font-weight:600;font-size:15px;color:var(--ink)}
+@media (max-width:540px){.rk-num{font-size:22px}}
 #map-info{padding:5px 30px;border-bottom:1px solid var(--line);background:white;font-size:13px}
 #map-info[hidden]{display:none}
 #t-legend{display:flex;align-items:center;gap:5px 16px;flex-wrap:wrap}
@@ -645,10 +686,10 @@ const C=CAT.connections, LN=CAT.lines, CBY=Object.fromEntries(C.map(c=>[c.id,c])
 const DEF={};for(const o of [...CAT.products,...C]){o.lines.forEach(l=>DEF[l]=true);o.more.forEach(l=>DEF[l]=false);}
 const KEY='abv-sow-build-v1',TOOL_KEY='partner-sow-studio-v6',HANDOFF='abv-sow-handoff';
 const CUSTOM=CAT.plays.find(p=>p.custom)||null;
-/* on: the products a partner put on Create your own play, in the order added */
+/* on: the products a partner put on the canvas, in the order added: all of them on Create your own play, the ones added to a ready-made play */
 let restorePriorDefaults=false,restorePriorRouting=false;
 let st={combinedDefaultsVersion:1,play:null,on:[],out:[],ls:{},keep:{},rate:0,size:'typical',months:12,v:2,eff:null,fresh:false,cur:'USD',def:null};
-try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&typeof s==='object'){st={...st,...s,play:PLAYS[s.play]?s.play:null,on:Array.isArray(s.on)&&CUSTOM?s.on.filter(id=>CUSTOM.products.includes(id)):[],out:Array.isArray(s.out)?[...new Set(s.out.filter(id=>P[id]&&(P[id].outside||CAT.plays.some(q=>(q.kept||[]).includes(id)))))]:[],ls:s.ls&&typeof s.ls==='object'?s.ls:{},keep:s.keep&&typeof s.keep==='object'?s.keep:{},rate:Number(s.rate)>0&&(s.v===2||Number(s.rate)!==150)?Number(s.rate):0,months:Number.isInteger(s.months)&&s.months>=1&&s.months<=120?s.months:12,v:2,eff:s.eff&&typeof s.eff==='object'&&s.eff.plays&&typeof s.eff.plays==='object'?s.eff:null,fresh:s.fresh===true,cur:['USD','EUR','GBP','CAD','AUD'].includes(s.cur)?s.cur:'USD',def:s.def&&typeof s.def==='object'?s.def:null};restorePriorDefaults=s.combinedDefaultsVersion!==1;restorePriorRouting=s.selectionVersion!==1;delete st.recover;
+try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&typeof s==='object'){st={...st,...s,play:PLAYS[s.play]?s.play:null,on:Array.isArray(s.on)&&CUSTOM?s.on.filter(id=>CUSTOM.products.includes(id)&&!(PLAYS[s.play]&&!PLAYS[s.play].custom&&PLAYS[s.play].products.includes(id))):[],out:Array.isArray(s.out)?[...new Set(s.out.filter(id=>P[id]&&(P[id].outside||CAT.plays.some(q=>(q.kept||[]).includes(id)))))]:[],ls:s.ls&&typeof s.ls==='object'?s.ls:{},keep:s.keep&&typeof s.keep==='object'?s.keep:{},rate:Number(s.rate)>0&&(s.v===2||Number(s.rate)!==150)?Number(s.rate):0,months:Number.isInteger(s.months)&&s.months>=1&&s.months<=120?s.months:12,v:2,eff:s.eff&&typeof s.eff==='object'&&s.eff.plays&&typeof s.eff.plays==='object'?s.eff:null,fresh:s.fresh===true,cur:['USD','EUR','GBP','CAD','AUD'].includes(s.cur)?s.cur:'USD',def:s.def&&typeof s.def==='object'?s.def:null};restorePriorDefaults=s.combinedDefaultsVersion!==1;restorePriorRouting=s.selectionVersion!==1;delete st.recover;
   /* a draft opened on the SOW steps names its products when their ids weren't saved: match them by name */
   if(CUSTOM&&st.play===CUSTOM.id&&!st.on.length&&Array.isArray(s.recover))st.on=CUSTOM.products.filter(id=>P[id]&&(s.recover.includes(P[id].name)||(id==='eds'&&s.recover.includes('Edge Delivery Services'))));}
   else{const t=JSON.parse(localStorage.getItem(TOOL_KEY)||'null');if(t&&typeof t==='object'){if(Number(t.rate)>0)st.rate=Number(t.rate);if(['small','typical','large'].includes(t.size))st.size=t.size;if(Number.isInteger(t.months)&&t.months>=1&&t.months<=120)st.months=t.months;if(['USD','EUR','GBP','CAD','AUD'].includes(t.currency))st.cur=t.currency;}}}catch(e){}
@@ -695,7 +736,7 @@ const play=()=>PLAYS[st.play]||null;
 const recd=id=>{const pl=play();return !!pl&&(pl.recommend||[]).includes(id);};
 const recNote=id=>`<p class="recp"><span class="rec">Recommended</span><br>${(play().ostart||[]).includes(id)?'On from the start. ':''}${esc(P[id].rec||'')}</p>`;
 const tierNote=t=>`<p class="tierp"><span class="tier">Needs ${esc(t)}</span><br>Check what your client owns. If they don't have it, it's an upsell for Adobe.</p>`;
-const actualHas=id=>{const pl=play();return !!pl&&((pl.custom?st.on.includes(id):pl.products.includes(id))||([...(pl.outside||[]),...(pl.kept||[])].includes(id)&&(st.out||[]).includes(id)));};   // step 96: 'kept' only on saved canvases
+const actualHas=id=>{const pl=play();return !!pl&&((!pl.custom&&pl.products.includes(id))||st.on.includes(id)||([...(pl.outside||[]),...(pl.kept||[])].includes(id)&&(st.out||[]).includes(id)));};   // step 96: 'kept' only on saved canvases
 const legacyDocumentSetup=!Object.hasOwn(st.decisions||{},'authoring')&&actualHas('eds')&&actualHas('csrc')&&actualHas('so');
 st.decisions=CanvasScope.restoreDecisions(st.decisions,actualHas);
 const has=id=>CanvasScope.hasProduct(id,actualHas,st.decisions);
@@ -790,10 +831,10 @@ const replaced=l=>l==='CW03'&&!st.keep.CW03&&specialOn();
 const overlapOn=l=>!!OVERLAP[l]&&!!LN[OVERLAP[l]]&&has('cja')&&counted(l)&&counted(OVERLAP[l]);
 const counted=l=>lineOn(l)&&met(l)&&!replaced(l);
 const short=id=>P[id].short||P[id].name;
-/* the lines this play's canvas can show: those of its products and of the connections between them */
+/* the lines this play's canvas can show: those of its products, of the products added to it, and of the connections between them */
 let UNI={k:'',s:new Set()};
-function universe(){const pl=play();if(!pl)return new Set();if(UNI.k===pl.id)return UNI.s;const ids=new Set([...pl.products,...(pl.outside||[]),...(pl.kept||[])]),s=new Set();if(ids.has('eds')){ids.add('aemsites');ids.add('csrc');}   // step 96: and a saved canvas's kept product
-  for(const o of [...CAT.products.filter(p=>ids.has(p.id)),...C.filter(c=>ids.has(c.a)&&ids.has(c.b))])for(const l of all(o))s.add(l);UNI={k:pl.id,s};return s;}
+function universe(){const pl=play();if(!pl)return new Set();const uk=pl.id+'|'+st.on.join();if(UNI.k===uk)return UNI.s;const ids=new Set([...pl.products,...st.on,...(pl.outside||[]),...(pl.kept||[])]),s=new Set();if(ids.has('eds')){ids.add('aemsites');ids.add('csrc');}   // step 96: and a saved canvas's kept product
+  for(const o of [...CAT.products.filter(p=>ids.has(p.id)),...C.filter(c=>ids.has(c.a)&&ids.has(c.b))])for(const l of all(o))s.add(l);UNI={k:uk,s};return s;}
 /* services added on the Services step that this canvas doesn't show (from the catalog, or the partner's own): still in the engagement and its total, unless the play was just picked again */
 function extras(){const e=!st.fresh&&st.eff&&st.eff.plays&&st.eff.plays[st.play];if(!e||typeof e!=='object')return [];const u=universe();
   return Object.keys(e).filter(id=>e[id]&&e[id].o&&!u.has(id)).map(id=>{const x=e[id],z=Array.isArray(x.z)?x.z:LN[id]?[LN[id].low,LN[id].base,LN[id].high]:[0,0,0],own=Number.isFinite(x.r);
@@ -805,11 +846,13 @@ function totals(){let one=0,mon=0,n=0,miss=0,connectionCount=0;for(const o of [.
 function ownerTotal(o){let one=0,mon=0,n=0;for(const l of all(o))if(counted(l)){n++;if(unitOf(l)==='monthly')mon+=fee(l);else one+=fee(l);}return{n,fees:one&&mon?money(one)+' + '+money(mon)+' a month':mon?money(mon)+' a month':money(one)};}
 
 /* ---------- layout ---------- */
-/* each play places its products by hand: pos(id) is [column, row] */
-const pos=id=>play().custom?packed()[id]:(play().pos[id]||play().opos[id]);
-/* Create your own play: products keep their places on the play's grid, packed together by dropping empty columns and rows */
+/* each play places its products by hand: pos(id) is [column, row]. A ready-made play keeps its own places until a product is added to it;
+   from then it uses Create your own play's grid, so the same products sit where they would there */
+const grid=()=>{const pl=play();return pl.custom||!st.on.length?pl:CUSTOM;};
+const pos=id=>grid().custom?packed()[id]:(play().pos[id]||play().opos[id]);
+/* Create your own play's grid: products keep their places on it, packed together by dropping empty columns and rows */
 let pkKey='',pkMap={};
-function packed(){const pl=play(),k=displayKey();if(k===pkKey)return pkMap;
+function packed(){const pl=grid(),k=displayKey();if(k===pkKey)return pkMap;
   /* step 44: outside systems added here take their places beside the product they connect to (opos) */
   const at0=id=>pl.pos[id]||(pl.opos||{})[id],ids=displayProducts().map(p=>p.id).filter(at0),cols=[...new Set(ids.map(id=>at0(id)[0]))].sort((a,b)=>a-b),rows=[...new Set(ids.map(id=>at0(id)[1]))].sort((a,b)=>a-b);
   pkMap=Object.fromEntries(ids.map(id=>[id,[cols.indexOf(at0(id)[0]),rows.indexOf(at0(id)[1])]]));pkKey=k;return pkMap;}
@@ -955,7 +998,7 @@ function render(){
     stage.appendChild(n);}
   shown=new Set(ps.map(p=>p.id));
   const pl=play(),own=!!pl&&!!pl.custom,nP=ps.filter(p=>!p.outside).length;$('picker').hidden=!!pl;$('save').hidden=own?!nP:!ps.length;$('playname').hidden=!pl;$('change-play').hidden=!pl;
-  $('addwrap').hidden=!own;$('outwrap').hidden=!pl||!(pl.outside||[]).length;if($('outwrap').hidden)openOut(false);else if(!$('out-menu').hidden){$('out-menu').innerHTML=outMenuHTML();placeAdd();}$('empty').hidden=!(own&&!nP);if(!own)openAdd(false);else if(!$('add-menu').hidden){$('add-menu').innerHTML=menuHTML();placeAdd();}
+  $('addwrap').hidden=!pl;$('outwrap').hidden=!pl||!(pl.outside||[]).length;if($('outwrap').hidden)openOut(false);else if(!$('out-menu').hidden){$('out-menu').innerHTML=outMenuHTML();placeAdd();}$('empty').hidden=!(own&&!nP);if(!pl)openAdd(false);else if(!$('add-menu').hidden)drawAdd();
   $('play-label').textContent=pl?(pl.title||pl.label):'';
   drawEdges();markNodes();barUI();
   totalsUI();legendUI();fit();
@@ -1223,7 +1266,7 @@ let tipOpen={};
 const tipButton=(l,name)=>TIPS[l]?`<button type="button" class="tipb" data-tip="${l}" aria-expanded="${!!tipOpen[l]}" aria-label="When to include ${esc(name)}">i</button>`:'';
 const tipText=(l,on)=>TIPS[l]?`<span class="tip"><b>${on?'Keep it if':'Add it if'}</b>${esc(TIPS[l][0])}<b>${on?'Remove it if':'Leave it out if'}</b>${esc(TIPS[l][1])}</span>`:'';
 function row(l){const L=LN[l],on=lineOn(l),off=!on;
-  if(!met(l)){const mm=missing(L);return `<div class="ln lock${play().custom?' can':''}" data-l="${l}"><span class="nm">${esc(L.name)}<a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a><span class="need">Needs ${missText(mm)}${play().custom?' on the canvas':', which is not in this play'}</span>${extNote(l)}</span><span class="hr">${hrs(l)} h</span>${play().custom?`<span class="addb">${mm[0].map(n=>authoringPrerequisite(n)?'<button class="addp" data-focus-authoring>Choose page authoring</button>':`<button class="addp" data-addp="${n}">Add ${esc(short(n))}</button>`).join('')}</span>`:''}</div>`;}
+  if(!met(l)){const mm=missing(L);return `<div class="ln lock can" data-l="${l}"><span class="nm">${esc(L.name)}<a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a><span class="need">Needs ${missText(mm)} on the canvas</span>${extNote(l)}</span><span class="hr">${hrs(l)} h</span><span class="addb">${mm[0].map(n=>authoringPrerequisite(n)?'<button class="addp" data-focus-authoring>Choose page authoring</button>':`<button class="addp" data-addp="${n}">Add ${esc(short(n))}</button>`).join('')}</span></div>`;}
   const cpt=L.origin==='research'?'<span class="cpt" title="A service concept from Adobe documentation: the SOW steps ask for its deliverable and acceptance criteria">Concept</span>':'';
   if(replaced(l))return `<div class="ln rp" data-l="${l}"><span class="nm"><s>${esc(L.name)}</s><a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a><span class="rep">Replaced by the specialized Skills on this canvas. Check to keep it for distinct Skills.</span></span><span class="hr">${hrs(l)} h</span><span class="fee"></span><button class="tg add" data-keep="${l}" aria-label="Keep ${esc(L.name)} for distinct Skills">${I.check}</button></div>`;
   const f=off?'Not selected':!priced(l)?'':money(fee(l))+(unitOf(l)==='monthly'?' a month':'');
@@ -1270,7 +1313,7 @@ function cardHTML(k,id){if(k==='p'&&P[id].outside)return outCardHTML(id);
     const pre=o.prereqs||[];
     if(pre.length)h+=`<div class="sec">Before it works</div><ul class="pre">${pre.slice(0,2).map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`+(pre.length>2?`<details class="pre" data-more="pre:${o.id}"${moreOpen['pre:'+o.id]?' open':''}><summary>${pre.length-2} more ${I.chev}</summary><ul>${pre.slice(2).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></details>`:'');
     if(o.gain)h+=`<div class="sec">What you get together</div><p class="gain"><b>${esc(o.gain.title)}</b>${esc(o.gain.text)}</p>`;
-    if(o.flows&&o.flows.length)h+=`<div class="sec">How it connects</div>`+o.flows.map(f=>{const ok=flowReady(f);return `<div class="flow${ok?'':' wait'}"><div class="fl"><span class="pc">${esc(short(f.from))}</span>${I.arrow}<span class="pc">${esc(short(f.to))}</span></div><div class="fw">${esc(f.what)}${ok?'':` <em>Needs ${missText(missing(f))}${play().custom?' on the canvas':', which is not in this play'}.</em>`}<a class="src" href="${esc(f.source.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(f.source.title)}" aria-label="Capability reference: ${esc(f.source.title)}">${I.ext}</a>${CapabilityReferences.supporting(f)}</div></div>`;}).join('');
+    if(o.flows&&o.flows.length)h+=`<div class="sec">How it connects</div>`+o.flows.map(f=>{const ok=flowReady(f);return `<div class="flow${ok?'':' wait'}"><div class="fl"><span class="pc">${esc(short(f.from))}</span>${I.arrow}<span class="pc">${esc(short(f.to))}</span></div><div class="fw">${esc(f.what)}${ok?'':` <em>Needs ${missText(missing(f))} on the canvas.</em>`}<a class="src" href="${esc(f.source.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(f.source.title)}" aria-label="Capability reference: ${esc(f.source.title)}">${I.ext}</a>${CapabilityReferences.supporting(f)}</div></div>`;}).join('');
     else h+=`<p class="how">${esc(o.how)}<a class="src" href="${esc(o.source.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(o.source.title)}" aria-label="Capability reference: ${esc(o.source.title)}">${I.ext}</a></p>`;
     h+=CapabilityReferences.supporting(o,true);
     h+=`<div class="sec">Services on this connection</div>`;
@@ -1281,11 +1324,11 @@ function cardHTML(k,id){if(k==='p'&&P[id].outside)return outCardHTML(id);
   if(listed.length||extra.length)h+=`<div class="ft"><span>${n?`${n} ${k==='p'?'product':'connection'} service${n===1?'':'s'} selected`:`No ${k==='p'?'product':'connection'} services selected`}</span><span>${st.rate?fees:''}</span></div>`;
   if(k==='p'&&linksOf(id).length)h+='<p class="how connection-note">Connection services are shown separately on the lines between products.</p>';
   if(k==='p'&&!(id==='aemsites'&&combinesSites()))h+=readyHTML(id);
-  if(k==='p'&&id==='eds'&&play().custom){
+  if(k==='p'&&id==='eds'&&st.on.includes('eds')){
     h+='<button class="rm" data-switch-publish>Switch to traditional AEM Publish</button>';
     h+=`<button class="rm" data-remove-sites>${I.x}Remove AEM Sites from canvas</button>`;
   }
-  else if(k==='p'&&play().custom&&!(id==='aemsites'&&combinesSites()))h+=`<button class="rm" data-rm="${id}">${I.x}Remove from canvas</button>`;
+  else if(k==='p'&&st.on.includes(id)&&!(id==='aemsites'&&combinesSites()))h+=`<button class="rm" data-rm="${id}">${I.x}Remove from canvas</button>`;
   else if(k==='p'&&(play().kept||[]).includes(id))h+=`<button class="rm" data-rmout="${id}">${I.x}Remove from canvas</button>`;
   return h;}
 function refreshCard(){if(!card)return;const box=$('card');box.innerHTML=cardHTML(card.k,card.id);applyHot();placeCard();}
@@ -1317,15 +1360,18 @@ $('card').addEventListener('click',e=>{e.stopPropagation();
     /* Get your team ready: the card stays where it was, then scrolls just far enough to show the opened box without losing its heading */
     if(d.classList.contains('ready')){box.scrollTop=y;const c=box.getBoundingClientRect(),r=d.getBoundingClientRect();if(d.open&&r.bottom>c.bottom)box.scrollTop+=Math.min(r.top-c.top-8,r.bottom-c.bottom+8);}},0);pinned=true;}});
 function pick(e){e.stopPropagation();const b=e.target.closest('[data-play],[data-start]');if(!b)return;st.play=b.dataset.play||CUSTOM.id;st.on=b.dataset.start?b.dataset.start.split(','):[];st.out=(PLAYS[st.play].ostart||[]).slice();st.decisions=CanvasScope.newDecisions();st.ls={};st.keep={};st.fresh=true;st.pubSig=null;moreOpen={};fsel=null;showAllEdges=false;render();if(play().custom&&!st.on.length&&document.documentElement.clientWidth>900)openAdd(true);}
-/* ---------- Create your own play: the Add product menu ---------- */
+/* ---------- The Add product menu (every play; Create your own play starts with it) ---------- */
 /* step 63: the menu's groups, under the headings of Adobe's own product menu and in its order; a product not listed falls under More products */
 const GROUPS=[['AI & agents',['bv','bc','cw','brandintel']],['Content & workflows',['aemsites','aemassets','eds','so','aemforms','commerce','workfront','gspm','frameio','planning']],['Creativity & design',['creativecloud','express','fireflycp','fireflycm']],['Data & analytics',['rtcdp','cja','aa','ca','mmm','collab']],['Campaign management',['ajo','ajob2b','xa','marketo','moptimizer','mqualifier','mmeasure','target']],['Document productivity',['acrobat','acrobatsign']]];
 const groupOf=id=>(GROUPS.find(g=>g[1].includes(id))||['More products'])[0],placeIn=id=>{const g=GROUPS.find(g=>g[1].includes(id));return g?g[1].indexOf(id):99;};
 let grpOpen={},findQ='';
 /* Nov 17: never go backwards. Adam's rules (never_suggest.json): while a product in when_on_canvas_any is on the canvas, the menu does not suggest
-   the products in never_suggest. heldBy gives the product on the canvas that holds one back, or nothing. The AEM Sites rule needs no row:
+   the products in never_suggest, in the grouped menu and in the ranked list. heldBy gives the product on the canvas that holds one back, or nothing. The AEM Sites rule needs no row:
    the list already leaves the AEM Sites entry out once Edge Delivery Services is on the canvas */
 const NEVER=/*NEVER_SUGGEST*/[];
+/* Nov 18: next best product. The summary numbers the ranked list reads (next_product_counts.json, checked by build.py): for every product set that
+   min_group or more customers own, how many own it and how many of those also own each product in numbered. Counts of customers, nothing else */
+const NEXT=/*NEXT_PRODUCT*/null;
 const heldBy=id=>{for(const r of NEVER)if(r.never_suggest.includes(id)){const t=r.when_on_canvas_any.find(actualHas);if(t)return t;}return '';};
 const linked=(a,b)=>C.some(c=>(c.a===a&&c.b===b)||(c.a===b&&c.b===a));
 const andList=a=>a.length<2?a.join(''):a.slice(0,-1).join(', ')+' and '+a[a.length-1];
@@ -1352,56 +1398,211 @@ function outCardHTML(id){const o=P[id],pl=play(),nm=q=>P[q].name,every=pl.produc
    `<p class="how">A system your client runs outside Adobe. For this route Adobe documents: ${esc(o.systems||'')}.</p>`+
    `<p class="how">${esc(con)}</p>`+
    `<button class="rm" data-rmout="${id}">${I.x}Remove from canvas</button>`;}
-function menuHTML(){const pl=play();if(!pl||!pl.custom)return '';
-  if(!pl.products.some(id=>!actualHas(id)&&!(id==='aemsites'&&actualHas('eds'))))return `<div class="hd"><div class="k">Add a product</div><p>Every product is on your canvas.</p></div>`;
-  const first=!st.on.length;
-  return `<div class="hd"><div class="k">${first?'Add your first product':'Add a product'}</div><p>${first?'Grouped the way Adobe\'s own menu groups them. Each one says how many of the others it connects to.':'Products that connect to your canvas come first.'}</p></div>`+
-    `<label class="mfind">${I.lens}<input id="add-find" type="search" placeholder="Find a product" aria-label="Find a product" autocomplete="off" value="${esc(findQ)}"></label><div id="add-list">${listHTML()}</div>`;}
-function listHTML(){const pl=play(),byName=(a,b)=>P[a].name.localeCompare(P[b].name);
+const byName=(a,b)=>P[a].name.localeCompare(P[b].name);
+const findBox=()=>`<label class="mfind">${I.lens}<input id="add-find" type="search" placeholder="Find a product" aria-label="Find a product" autocomplete="off" value="${esc(findQ)}"></label>`;
+/* typed in the find box: a product whose name matches (AEM Sites also by its two ways to deliver it) */
+const findHit=(id,q)=>[P[id].name,P[id].title,P[id].short,...(id==='eds'?['AEM Sites traditional AEM Publish Edge Delivery Services Universal Editor']:[])].some(s=>s&&s.toLowerCase().includes(q));
+/* AEM Sites: one entry with its two ways to deliver it (with traditional AEM Publish on the canvas, the move to Edge Delivery Services) */
+function sitesItem(tag){
+  const existing=actualHas('aemsites');
+  return '<details class="sites-menu" data-sites-offering><summary>'+(existing?'Configure AEM Sites delivery':'AEM Sites')+(tag?'<span class="ctag">'+tag+'</span>':'')+I.chev+'</summary>'+
+    '<button class="it2" data-add="eds" role="menuitem"><span class="nm">'+(existing?'Use Edge Delivery Services':'With Edge Delivery Services')+'</span></button>'+
+    (existing?'':'<button class="it2" data-add="aemsites" role="menuitem"><span class="nm">With traditional AEM Publish</span></button>')+'</details>';
+}
+/* a product a rule holds back leaves its group, or the ranking, and sits once under Not suggested, with why, where it can still be added */
+const notSuggested=ids=>{const held=ids.filter(heldBy).sort(byName);
+  return held.length?`<div class="g">Not suggested</div>`+held.map(id=>item(id,'Add anyway',`${P[heldBy(id)].name} is on your canvas. Add ${P[id].name} only if your client still runs it.`,true)).join(''):'';};
+function menuHTML(){const pl=play();if(!pl)return '';const view=addView();
+  if(view==='goal')return goalHTML();
+  if(!CUSTOM.products.some(id=>!actualHas(id)&&!(id==='aemsites'&&actualHas('eds'))))return `<div class="hd"><div class="k">Add a product</div><p>Every product is on your canvas.</p></div>`;
+  if(view==='ranked')return rankedHTML();
+  /* the grouped menu of Create your own play, with the way to the ranked list on top */
+  const first=!st.on.length,g=goalOf();
+  return (g?`<button class="rk-strip" data-all-view="0"><b>Back to the ranked list</b><span>Goal: ${esc(g.chip)}</span></button>`:`<button class="rk-strip" data-goal-ask><b>Rank this list for your client's goal</b><span>Say once what your client is trying to accomplish. The best fit comes first.</span></button>`)+
+    `<div class="hd"><div class="k">${first?'Add your first product':'Add a product'}</div><p>${first?'Grouped the way Adobe\'s own menu groups them. Each one says how many of the others it connects to.':'Products that connect to your canvas come first.'}</p></div>`+
+    findBox()+`<div id="add-list">${listHTML()}</div>`;}
+function listHTML(){const pl=play();
   const rest=pl.products.filter(id=>id!=='aemsites'&&!actualHas(id)),first=!st.on.length;
-  function sitesItem(){
-    const existing=actualHas('aemsites');
-    return '<details class="sites-menu" data-sites-offering><summary>'+(existing?'Configure AEM Sites delivery':'AEM Sites')+(tag('eds')?'<span class="ctag">'+tag('eds')+'</span>':'')+I.chev+'</summary>'+
-      '<button class="it2" data-add="eds" role="menuitem"><span class="nm">'+(existing?'Use Edge Delivery Services':'With Edge Delivery Services')+'</span></button>'+
-      (existing?'':'<button class="it2" data-add="aemsites" role="menuitem"><span class="nm">With traditional AEM Publish</span></button>')+'</details>';
-  }
   const candidateConnects=(id,q)=>id==='eds'?!['eds','aemsites'].includes(q)&&(linked('eds',q)||linked('aemsites',q)):id!==q&&linked(id,q);
   const deg=id=>new Set(pl.products.filter(q=>candidateConnects(id,q)).map(q=>q==='aemsites'?'eds':q)).size;
   const to=id=>[...new Set(prods().filter(p=>!p.outside&&candidateConnects(id,p.id)).map(p=>offeringId(p.id)))];
   const tag=id=>first?`Connects to ${deg(id)} product${deg(id)===1?'':'s'}`:to(id).length?`Connects to ${to(id).length} on your canvas`:'';
-  const row=id=>id==='eds'?sitesItem():item(id,tag(id),!first&&to(id).length?'Lines to '+andList(to(id).map(q=>P[q].name)):'');
-  /* a product a rule holds back leaves its group and sits once under Not suggested, with why, where it can still be added */
-  const notSuggested=ids=>{const held=ids.filter(heldBy).sort(byName);
-    return held.length?`<div class="g">Not suggested</div>`+held.map(id=>item(id,'Add anyway',`${P[heldBy(id)].name} is on your canvas. Add ${P[id].name} only if your client still runs it.`,true)).join(''):'';};
+  const row=id=>id==='eds'?sitesItem(tag('eds')):item(id,tag(id),!first&&to(id).length?'Lines to '+andList(to(id).map(q=>P[q].name)):'');
   /* typed in the box: every product whose name matches, with the heading it sits under */
   const q=findQ.trim().toLowerCase();
-  if(q){const hit=rest.filter(id=>[P[id].name,P[id].title,P[id].short,...(id==='eds'?['AEM Sites traditional AEM Publish Edge Delivery Services Universal Editor']:[])].some(s=>s&&s.toLowerCase().includes(q))).sort(byName),sug=hit.filter(id=>!heldBy(id));
-    return hit.length?(sug.length?`<div class="g">${sug.length} match${sug.length===1?'':'es'}</div>`+sug.map(id=>id==='eds'?sitesItem():item(id,tag(id),groupOf(id),true)).join(''):'')+notSuggested(hit):`<p class="nomatch">No product matches. Clear the box to see them all.</p>`;}
+  if(q){const hit=rest.filter(id=>findHit(id,q)).sort(byName),sug=hit.filter(id=>!heldBy(id));
+    return hit.length?(sug.length?`<div class="g">${sug.length} match${sug.length===1?'':'es'}</div>`+sug.map(id=>id==='eds'?sitesItem(tag('eds')):item(id,tag(id),groupOf(id),true)).join(''):'')+notSuggested(hit):`<p class="nomatch">No product matches. Clear the box to see them all.</p>`;}
   const sect=(list,openFirst)=>[...GROUPS.map(g=>g[0]),'More products'].map(name=>[name,list.filter(id=>groupOf(id)===name).sort((a,b)=>placeIn(a)-placeIn(b)||byName(a,b))]).filter(g=>g[1].length)
     .map(([name,ids],i)=>`<details class="mgrp" data-grp="${esc(name)}"${(name in grpOpen?grpOpen[name]:openFirst&&i===0)?' open':''}><summary><span>${esc(name)}</span><span class="cnt">${ids.length} product${ids.length===1?'':'s'}</span>${I.chev}</summary>${ids.map(row).join('')}</details>`).join('');
   if(first)return sect(rest,true);
   /* products on the canvas: the ones that connect to it first, the rest under their headings, closed */
   const free=rest.filter(id=>!heldBy(id)),yes=free.filter(id=>to(id).length).sort((a,b)=>to(b).length-to(a).length||byName(a,b)),no=free.filter(id=>!to(id).length);
   return (yes.length?`<div class="g">Connects to your canvas</div>`+yes.map(row).join(''):'')+notSuggested(rest)+(no.length?`<div class="g">Not connected to your canvas yet</div>`+sect(no,false):'');}
-function openAdd(on){const m=$('add-menu'),pl=play();if(on&&!(pl&&pl.custom))return;const was=!m.hidden;m.hidden=!on;$('add-btn').setAttribute('aria-expanded',!!on);
-  if(on){hideCard(true);m.innerHTML=menuHTML();placeAdd();}else{preview(null);findQ='';}if(was!==!!on&&pl)fit();}
+function openAdd(on){const m=$('add-menu'),pl=play();if(on&&!pl)return;const was=!m.hidden;m.hidden=!on;$('add-btn').setAttribute('aria-expanded',!!on);
+  if(on){hideCard(true);drawAdd();}else{preview(null);findQ='';goalAsk=goalAll=allView=false;goalHits=null;goalText='';howOpen={};}if(was!==!!on&&pl)fit();}
 /* pointing at a product in the menu outlines the products on the canvas it would connect to */
 function preview(id){document.querySelectorAll('.node.pre').forEach(n=>n.classList.remove('pre'));if(!id)return;
   prods().filter(p=>linked(id,p.id)).forEach(p=>{const n=document.querySelector(`.node[data-p="${offeringId(p.id)}"]`);if(n)n.classList.add('pre');});}
-function addProduct(id){if(!play().custom||st.on.includes(id))return;
+function addProduct(id){if(!play()||actualHas(id)||!CUSTOM.products.includes(id))return;
   if((id==='eds'&&actualHas('aemsites'))||(id==='aemsites'&&actualHas('eds')))st.decisions={...st.decisions,authoring:'universal'};
   else if(id==='eds')st.decisions={...st.decisions,authoring:actualHas('csrc')?'documents':''};
   st.on=[...st.on,id];findQ='';
   /* from a connection card in focus view, keep one end of that connection selected so the card and its line stay */
   const oc=card&&card.k==='c'?CBY[card.id]:null;fsel=fv()&&oc?(fsel===oc.a||fsel===oc.b?fsel:oc.a):null;render();}
-function removeProduct(id){st.on=st.on.filter(x=>x!==id);if(id==='eds')st.decisions={...st.decisions,authoring:''};
+function removeProduct(id){
+  /* what is on the canvas before anything changes (a box drawn through a choice, such as AEM Sites behind Edge Delivery Services authored in AEM, counts) */
+  const was=new Set(CAT.products.filter(p=>has(p.id)).map(p=>p.id));
+  st.on=st.on.filter(x=>x!==id);if(id==='eds')st.decisions={...st.decisions,authoring:''};
   /* step 47: an outside system goes with the last product it connects to (its line choices in st.ls stay, for when both come back) */
-  st.out=(st.out||[]).filter(o=>!P[o].outside||CAT.products.some(q=>!q.outside&&st.on.includes(q.id)&&linked(o,q.id)));if(fsel===id||(fsel&&!has(fsel)))fsel=null;hideCard(true);render();}
+  st.out=(st.out||[]).filter(o=>!P[o].outside||CAT.products.some(q=>!q.outside&&actualHas(q.id)&&linked(o,q.id)));
+  /* on a ready-made play, the services the Services step still has ticked for everything that left the canvas stop counting at once
+     (the mark is read only for services the canvas does not show, so a service another box still shows is not touched) */
+  {const e=!play().custom&&st.eff&&st.eff.plays&&st.eff.plays[st.play];if(e)for(const o of [...CAT.products,...C]){const gone='a' in o?was.has(o.a)&&was.has(o.b)&&!(has(o.a)&&has(o.b)):was.has(o.id)&&!has(o.id);if(gone)for(const l of all(o))if(e[l])delete e[l].o;}}
+  if(fsel===id||(fsel&&!has(fsel)))fsel=null;hideCard(true);render();}
+/* ---------- Next best product (Nov 18): the goal, asked once for each canvas, and the Add product list ranked for it ----------
+   Adam: "My boss wants to know with the ready-made plays [the] next best product opportunities, same thing with building your own play ... so both places."
+   The goal is one of the problems in problems.json. It sets the order: the products that solve it, that build on it, that connect to it, then the rest.
+   The number only sorts products under the same heading. It is the share of the customers who own every product on the canvas that also own the
+   product, steadied with pretend customers, worked out from the counts in NEXT exactly as "How this number was worked out" prints it. */
+/* what the menu is showing; all of it goes back to the start when the menu closes */
+let goalAsk=false,goalAll=false,goalHits=null,goalText='',allView=false,howOpen={};
+function goalOf(){return PROBS.find(p=>p.id===st.goal)||null;}
+/* the question (always first on a ready-made play), the ranked list once there is a goal, or the grouped menu (Create your own play: before a goal, or on request) */
+function addView(){const pl=play();return goalAsk||(!pl.custom&&!goalOf())?'goal':goalOf()&&!(pl.custom&&allView)?'ranked':'groups';}
+/* the question. The play's own problem comes first; a typed goal is matched as on the first page and sets nothing until the partner picks a chip */
+function goalHTML(){const pl=play(),g=goalOf(),own=pl.custom?[]:PROBS.filter(q=>q.play===pl.id),cur=q=>!!g&&g.id===q.id;
+  const chip=(q,cls)=>`<button type="button" class="bp-chip${cls||''}${cur(q)?' cur':''}" data-goal="${q.id}"${cur(q)?' aria-current="true"':''}>${esc(q.chip)}</button>`,
+    sub=t=>`<div class="rk-sub">${esc(t)}</div>`,chips=(list,more)=>`<div class="rk-chips">${list.map(q=>chip(q)).join('')}${more||''}</div>`,
+    all=`<button type="button" class="bp-chip red" data-goal-all="1">See all ${PROBS.length} problems</button>`;
+  let h=`<div class="hd"><div class="k">What is your client trying to accomplish?</div><p>You answer once for this canvas. Every suggestion after this follows it.</p></div>`;
+  if(g)h+=`<p class="rk-now">Your goal now: <b>${esc(g.chip)}</b><button type="button" class="rk-link" data-goal-back>Keep this goal</button></p>`;
+  if(goalHits)h+=`<p class="rk-heard">${goalHits.hit?'Closest to what you typed. Pick one:':'That doesn\'t match a problem on the list. Try one of the closest, or describe it another way:'}</p>`+chips(goalHits.ids.map(i=>PROBS[i]),all);
+  else if(goalAll)h+=bpGrouped(PROBS.map((p,i)=>i)).map(([t,m])=>sub(t)+chips(m.map(i=>PROBS[i]))).join('')+`<div class="rk-chips"><button type="button" class="bp-chip red" data-goal-all="0">Show fewer problems</button></div>`;
+  else h+=(own.length?sub(own.length>1?'This play\'s problems':'This play\'s problem')+`<div class="rk-chips">${own.map(q=>chip(q,' own')).join('')}</div>`:'')+sub(pl.custom?'Common problems':'Other problems')+chips(PROBS.filter(q=>q.starter&&!own.includes(q)),all);
+  h+=`<form id="goal-form" class="rk-form"><label for="goal-q">Or describe it in your own words</label><input id="goal-q" type="text" maxlength="300" autocomplete="off" placeholder="For example: leaders want a monthly readout on AI traffic" value="${esc(goalText)}"></form>`;
+  if(pl.custom&&!g)h+=`<button type="button" class="rk-allb" data-goal-back>Back to all products</button>`;
+  return h;}
+/* the products that read "New product." and lead the first two headings while they have no number: Brand Visibility (the New badge on its play) and Coworker (the picture Adam approved). One line to change when Adam names others. */
+const NEW_PRODUCTS=['bv','cw'];
+const FITS=['Solves the goal','Builds on the goal','Connects to the goal','Not tied to this goal'];
+const KIND_WITH={native:'Native integration with',platform:'Shared platform with',extension:'Extension with',partner:'Partner workflow with'};
+/* AEM Sites is one row for both ways to deliver it (the row is 'eds'), and one product in the customer counts ('aemsites') */
+const rowIds=r=>r==='eds'?['eds','aemsites']:[r],rowName=r=>r==='eds'?'AEM Sites':P[r].name,dataId=id=>id==='eds'?'aemsites':id,dataName=id=>id==='aemsites'?'AEM Sites':P[id].name;
+const whole=n=>n.toLocaleString('en-US'),aToZ=ids=>andList(ids.map(dataName).sort((a,b)=>a.localeCompare(b))),setKey=ids=>ids.slice().sort().join('+');
+/* the goal's own products: the ones its problem calls for (solves), and the ones its refine chips add (chip: their ids) */
+function goalFit(g){const adobe=id=>!P[id].outside,solves=g.products.filter(adobe),chip={};
+  for(const r of g.refine)for(const id of r.add)if(adobe(id)&&!solves.includes(id))chip[id]=true;
+  return {solves,chip,refine:g.refine};}
+/* a row's heading, the first it qualifies for: 0 solves the goal, 1 builds on it, 2 connects to a product that solves it, 3 not tied to it */
+const fitOf=(r,f)=>{const ids=rowIds(r);return ids.some(id=>f.solves.includes(id))?0:ids.some(id=>id in f.chip)?1:ids.some(id=>f.solves.some(s=>linked(id,s)))?2:3;};
+const kindOf=(a,b)=>{const c=C.find(c=>(c.a===a&&c.b===b)||(c.a===b&&c.b===a));return c?c.line||c.kind:'';};
+/* a row's documented connections to the products that solve the goal, in the legend's words, one sentence for each kind of connection.
+   AEM Sites gives traditional AEM Publish's, with Edge Delivery Services' in brackets where it is another kind */
+function connects(r,f){const by={};
+  for(const s of f.solves){if(rowIds(r).includes(s))continue;
+    const alt=r==='eds'?kindOf('eds',s):'',k=kindOf(dataId(r),s)||alt;
+    if(KIND_WITH[k])(by[k]=by[k]||[]).push(P[s].name+(KIND_WITH[alt]&&alt!==k?` (${KIND_WITH[alt].toLowerCase()} Edge Delivery Services)`:''));}
+  return Object.keys(KIND_WITH).filter(k=>by[k]).map(k=>KIND_WITH[k]+' '+andList(by[k])+'.').join(' ');}
+/* the reason on a row. Under "Builds on the goal" it is the client detail of the chip that adds the product; a chip that says the client already owns
+   the product is no reason to add it, so that row gives its documented connection. A chip that takes a product out keeps its note to itself, and so does one that adds an
+   outside system this play does not offer (the Adobe Coworker play offers none, so "the CDN belongs on the canvas" could not be followed there) */
+function whyOf(r,tier,f){if(tier===0)return 'The goal calls for it.';if(tier===2)return connects(r,f);if(tier===3)return 'No documented connection to the products that solve this goal.';
+  const ids=rowIds(r),c=f.refine.find(c=>c.add.some(id=>ids.includes(id))),offered=play().outside||[];
+  return ((c.owned||[]).some(id=>ids.includes(id)&&c.add.includes(id))&&connects(r,f))||c.chip+'.'+(c.note&&!c.remove&&c.add.every(id=>!P[id].outside||offered.includes(id))?' '+c.note:'');}
+/* similar customers (the method's steps 3 and 5): those who own every Adobe product on the canvas that the counts know. When fewer than min_group
+   own them all, one product at a time is set aside: first the ones that are not the goal's own, and in each kind the one the fewest customers own */
+function nextGroup(f){const ids=[...new Set(CAT.products.filter(p=>!p.outside&&actualHas(p.id)).map(p=>dataId(p.id)))],
+    known=id=>NEXT.products.includes(id)||NEXT.few.includes(id),owners=id=>NEXT.products.includes(id)?NEXT.sets[id][0]:-1,
+    own=id=>rowIds(id==='aemsites'?'eds':id).some(x=>f.solves.includes(x)||x in f.chip);
+  const kept=ids.filter(known).sort((a,b)=>own(a)-own(b)||owners(a)-owners(b)||(a<b?-1:1)),aside=[];
+  while(!(setKey(kept) in NEXT.sets))aside.push(kept.shift());
+  const n=NEXT.sets[setKey(kept)][0];
+  return {kept,aside,left:ids.filter(id=>!known(id)),n,rough:aside.length>0||(kept.length>0&&n<NEXT.min_number)};}
+/* a product's number in that group (steps 3 and 4), in whole ten-thousandths so each printed line redoes by hand: the share of all customers, then one
+   group at a time up to the canvas's, each steadied with the pretend customers who own the product as often as the group before */
+function nextNumber(x,grp){const c=NEXT.numbered.indexOf(x)+1;if(!c)return null;const steps=[];let t=0;
+  for(let i=grp.kept.length;i>=0;i--){const set=grp.kept.slice(i),row=NEXT.sets[setKey(set)],n=row[0],k=row[c];
+    t=set.length?Math.round((k*10000+NEXT.pretend*t)/(n+NEXT.pretend)):Math.round(k*10000/n);steps.push({set,k,n,t});}
+  const last=steps[steps.length-1];return {t,k:last.k,n:last.n,steps};}
+const shownNumber=t=>{const h=Math.floor((t+50)/100);return h===0?'under .01':h===100?'1.00':'.'+String(h).padStart(2,'0');};
+/* a count as the list prints it: a rounded count of 0 means fewer than one step of the rounding */
+const countOf=k=>NEXT.round>1&&!k?'fewer than '+NEXT.round:whole(k);
+/* every product that can still be added, as a row with its heading, reason and number, in the list's order; the products a rule holds back apart */
+function rankRows(){const g=goalOf(),f=goalFit(g),grp=nextGroup(f),sites=actualHas('eds')||actualHas('aemsites'),rows=[],held=[];
+  for(const id of CUSTOM.products){if(actualHas(id)||id==='aemsites'||(id==='eds'&&sites))continue;
+    if(heldBy(id)){held.push(id);continue;}
+    const tier=fitOf(id,f),num=nextNumber(dataId(id),grp);
+    rows.push({id,tier,num,why:whyOf(id,tier,f),lead:tier<2&&!num&&NEW_PRODUCTS.includes(id)?0:num?1:2});}
+  /* the goal's heading first; under it a new product without a number (first two headings), then the higher number, then the rest by name */
+  rows.sort((a,b)=>a.tier-b.tier||a.lead-b.lead||(a.num&&b.num?b.num.t-a.num.t||b.num.k-a.num.k:0)||rowName(a.id).localeCompare(rowName(b.id)));
+  rows.forEach((r,i)=>{r.rank=i+1;});
+  return {g,f,grp,rows,held};}
+/* the lines under a number: every group from all customers to the canvas's, with its count and its arithmetic */
+function calcHTML(x,num){const f4=t=>(t/10000).toFixed(4),pre=NEXT.pretend;
+  return num.steps.map((s,i)=>`<p>${s.set.length?'Customers who own '+esc(aToZ(s.set)):'All customers'}: ${countOf(s.k)} of ${whole(s.n)} own ${esc(dataName(x))}. ${i?`(${whole(s.k)} + ${pre} × ${f4(num.steps[i-1].t)}) ÷ (${whole(s.n)} + ${pre})`:`${whole(s.k)} ÷ ${whole(s.n)}`} = ${f4(s.t)}</p>`).join('')+
+    `<p>Shown as ${shownNumber(num.t)}.</p>`+(num.steps.length>1?`<p>We add ${pre} pretend customers to every group except all customers. They own the product as often as the next larger group does, so a small group cannot swing the number.</p>`:'');}
+/* one row: rank, name, number (or why there is none), the heading's words and the reason; under it the count and the link to the arithmetic.
+   The whole row adds the product; AEM Sites carries its two ways to deliver it */
+function rankRowHTML(r,grp,next){const id=r.id,x=dataId(id),isNew=NEW_PRODUCTS.includes(id),shown=r.num?shownNumber(r.num.t):'',cnt=r.num?countOf(r.num.k)+' of '+whole(r.num.n):'';
+  const none=NEXT.products.includes(x)||NEXT.few.includes(x)?(isNew?'New product. Too few customers own it yet for a number.':'Too few customers own it for a number.'):isNew?'New product. No customer numbers for it yet.':'No customer numbers for this product yet.';
+  const head=`<span class="rk-n">${r.rank}</span><span class="rk-nm">${esc(rowName(id))}${next?'<span class="rk-next">Next</span>':''}</span>${r.num?`<span class="rk-num">${shown}</span>`:'<span class="rk-none">No number yet</span>'}<span class="rk-why"><b>${FITS[r.tier]}.</b> ${esc(r.why)}</span>`;
+  return `<div class="rk-row">`+(id==='eds'?`<div class="rk-add">${head}</div><p class="rk-two"><button class="rk-opt" data-add="eds" role="menuitem" aria-label="Add AEM Sites with Edge Delivery Services">With Edge Delivery Services</button><button class="rk-opt" data-add="aemsites" role="menuitem" aria-label="Add AEM Sites with traditional AEM Publish">With traditional AEM Publish</button></p>`
+      :`<button class="rk-add" data-add="${id}" role="menuitem" aria-label="${esc(`Add ${rowName(id)}. ${FITS[r.tier]}. ${r.num?`Number ${shown}, ${cnt} customers.`:'No number yet.'}`)}">${head}</button>`)+
+    (r.num?`<p class="rk-cnt">${cnt}${grp.rough?' · Rough':''} <span class="rk-hw">· <button class="rk-how" data-how="${id}" aria-expanded="${!!howOpen[id]}">How this number was worked out</button></span></p><div class="rk-calc"${howOpen[id]?'':' hidden'}>${calcHTML(x,r.num)}</div>`:`<p class="rk-cnt">${none}</p>`)+`</div>`;}
+/* which customers the numbers count, in words: all of them, the canvas's group, or the group left after the fall-back set products aside */
+function groupText(grp){const N=whole(NEXT.sets[''][0]),n=whole(grp.n),m=grp.kept.length+grp.aside.length,names=ids=>andList(ids.map(dataName)),some=grp.left.length,
+    all=m===2?(some?'both counted products':'both products'):(some?'the '+m+' counted products':'all '+m+' products'),low=' That makes them rough, and probably too low.';
+  return 'The goal sets the order. The number is the share of similar customers who also own the product. It is a guide, not a forecast. '+
+    (!m?`These numbers count all ${N} customers.`
+     :!grp.aside.length?(grp.rough?`Only ${n} customers own ${aToZ(grp.kept)}, so these numbers are rough.`:`These numbers count the ${n} customers who own ${aToZ(grp.kept)}.`)
+     :grp.kept.length?`Fewer than ${NEXT.min_group} customers own ${all} on this canvas, so these numbers set ${names(grp.aside)} aside and use the ${n} customers who own ${aToZ(grp.kept)}.`+low
+     :m===1?`Too few customers own ${names(grp.aside)} to count them on their own, so these numbers use all ${N} customers.`+low
+     :`Fewer than ${NEXT.min_group} customers own ${all} on this canvas, so these numbers set them aside and use all ${N} customers.`+low)+
+    (!some?'':some>1&&grp.left.some(id=>dataName(id).includes(' and '))?` These have no customer numbers yet, so they are not counted: ${grp.left.map(dataName).join('; ')}.`
+     :` ${names(grp.left)} ${some>1?'have':'has'} no customer numbers yet, so ${some>1?'they are':'it is'} not counted.`)+
+    (NEXT.round>1?` Counts are rounded down to the nearest ${NEXT.round}.`:'');}
+/* the ranked list: the goal, which customers the numbers count, the find box and the rows */
+function rankedHTML(){const R=rankRows(),sv=R.f.solves;
+  return `<div class="hd"><div class="k">Add product</div><p>Ranked for your client's goal.${sv.length&&sv.every(has)?' '+esc(andList(sv.map(id=>P[id].name)))+(sv.length===1?' solves it, and it is':sv.length===2?' solve it, and both are':' solve it, and all are')+' on your canvas.':''}</p></div>`+
+    `<div class="rk-goal"><span><b>Goal:</b> ${esc(R.g.chip)}</span><button class="rk-link" data-goal-ask>Change</button></div><p class="rk-def">${esc(groupText(R.grp))}</p>`+
+    findBox()+`<div id="add-list">${rankListHTML(R)}</div>`+(play().custom?'<button class="rk-allb" data-all-view="1">All products, by group</button>':'');}
+/* the rows under their headings: every row that solves or builds on the goal, the first four that connect to it, the rest in folds; then the products
+   a rule holds back. Typed in the find box: every match in rank order, each with its rank, heading and number */
+function rankListHTML(R=rankRows()){const {grp,rows,held}=R,q=findQ.trim().toLowerCase(),row=(r,next)=>rankRowHTML(r,grp,next);
+  /* traditional AEM Publish on the canvas: the move to Edge Delivery Services stays in reach, unranked and without a number */
+  const move=actualHas('aemsites')&&!actualHas('eds');
+  if(q){const hit=rows.filter(r=>findHit(r.id,q)),mv=move&&findHit('eds',q),n=hit.length+(mv?1:0),out=notSuggested(held.filter(id=>findHit(id,q)));
+    return n||out?(n?`<div class="g">${n} match${n===1?'':'es'}</div>`+hit.map(r=>row(r)).join('')+(mv?sitesItem(''):''):'')+out:`<p class="nomatch">No product matches. Clear the box to see them all.</p>`;}
+  const of=t=>rows.filter(r=>r.tier===t),head=(t,list)=>list.length?`<div class="g">${FITS[t]}</div>`+list.map(r=>row(r,r.rank===1)).join(''):'',
+    fold=(name,list)=>list.length?`<details class="mgrp" data-grp="${name}"${grpOpen[name]?' open':''}><summary><span>${name}</span><span class="cnt">${list.length} product${list.length===1?'':'s'}</span>${I.chev}</summary>${list.map(r=>row(r)).join('')}</details>`:'';
+  return head(0,of(0))+head(1,of(1))+head(2,of(2).slice(0,4))+fold('More that connect to the goal',of(2).slice(4))+fold(FITS[3],of(3))+(move?sitesItem(''):'')+notSuggested(held);}
+/* draw the open menu: wider for the question and the ranked list, and named for a screen reader as what it is */
+function drawAdd(){const m=$('add-menu'),view=addView();m.classList.toggle('rk',view!=='groups');m.setAttribute('role',view==='goal'?'group':'menu');
+  if(view==='goal')m.setAttribute('aria-label','What is your client trying to accomplish?');else m.removeAttribute('aria-label');
+  m.innerHTML=menuHTML();placeAdd();}
+/* after the menu is drawn again, the keyboard goes on from its top: the first row, the first chip, or the goal that is set */
+function focusAdd(sel){const m=$('add-menu'),f=m.querySelector(sel);m.scrollTop=0;if(f){f.focus({preventScroll:true});f.scrollIntoView({block:'nearest'});}}
+/* the menu's own buttons: pick or change the goal, list more problems, switch between the ranked list and the grouped menu, open a number's arithmetic */
+function menuClick(t){const d=t.dataset;
+  if('how' in d){const on=howOpen[d.how]=!howOpen[d.how];t.setAttribute('aria-expanded',on);t.closest('.rk-row').querySelector('.rk-calc').hidden=!on;return;}
+  let to='button';
+  if('goal' in d){st.goal=d.goal;goalAsk=goalAll=allView=false;goalHits=null;goalText='';save();to='[data-add]';}
+  else if('goalAsk' in d){const g=goalOf();goalAsk=true;goalAll=!!g&&!g.starter&&(play().custom||g.play!==play().id);to=g?'[data-goal].cur':'[data-goal]';}
+  else if('goalAll' in d){goalAll=d.goalAll==='1';goalHits=null;to='[data-goal]';}
+  else if('goalBack' in d){goalAsk=goalAll=false;goalHits=null;}
+  else allView=d.allView==='1';
+  drawAdd();fit();focusAdd(to);}
 $('add-btn').addEventListener('click',e=>{e.stopPropagation();openAdd($('add-menu').hidden);});
 $('empty-add').addEventListener('click',e=>{e.stopPropagation();openAdd(true);});
-$('add-menu').addEventListener('click',e=>{e.stopPropagation();const a=e.target.closest('[data-add]');if(a){addProduct(a.dataset.add);return;}
+$('add-menu').addEventListener('click',e=>{e.stopPropagation();const a=e.target.closest('[data-add]');if(a){if(e.detail>1)return;   /* the second click of a double-click adds nothing: the list has moved up under the pointer */
+  const ranked=addView()==='ranked';addProduct(a.dataset.add);if(ranked)focusAdd('[data-add]');return;}
+  const t=e.target.closest('[data-goal],[data-goal-ask],[data-goal-all],[data-goal-back],[data-all-view],[data-how]');if(t){menuClick(t);return;}
   const sm=e.target.closest('[data-grp]>summary');if(sm)setTimeout(()=>{grpOpen[sm.parentElement.dataset.grp]=sm.parentElement.open;},0);});
-$('add-menu').addEventListener('input',e=>{if(e.target.id!=='add-find')return;findQ=e.target.value;preview(null);$('add-list').innerHTML=listHTML();});
+$('add-menu').addEventListener('input',e=>{if(e.target.id==='goal-q')goalText=e.target.value;if(e.target.id!=='add-find')return;findQ=e.target.value;preview(null);$('add-list').innerHTML=addView()==='ranked'?rankListHTML():listHTML();});
+/* a goal typed in the partner's own words: the closest problems to confirm, or, when nothing matches, the nearest ones as on the first page */
+$('add-menu').addEventListener('submit',e=>{e.preventDefault();goalText=$('goal-q').value.trim();if(!goalText){$('goal-q').focus();return;}
+  const m=bpMatch(goalText),near=m.sc.filter(([,v])=>v>0).slice(0,4).map(([i])=>i);
+  goalHits=m.hits.length?{hit:true,ids:m.hits.slice(0,3).map(([i])=>i)}:{hit:false,ids:near.length?near:PROBS.map((p,i)=>i).filter(i=>PROBS[i].starter)};drawAdd();fit();focusAdd('[data-goal]');});
 $('add-menu').addEventListener('mouseover',e=>{const it=e.target.closest('[data-add]');preview(it?it.dataset.add:null);});
 $('add-menu').addEventListener('mouseleave',()=>preview(null));
 $('out-btn').addEventListener('click',e=>{e.stopPropagation();openOut($('out-menu').hidden);});
@@ -1471,6 +1672,8 @@ const bpToks=s=>{let t=' '+String(s).toLowerCase().replace(/[‘’]/g,"'").repl
 const bpNorm=s=>' '+bpToks(s).filter(w=>!BP_STOP.has(w)).map(bpStem).join(' ')+' ';
 const bpWords=s=>new Set(bpToks(s).filter(w=>!BP_STOP.has(w)).map(bpStem));
 const BPW=PROBS.map(p=>bpWords(p.problem+' '+p.chip));
+/* a saved goal that is no longer one of the problems counts as not answered */
+if(st.goal&&!PROBS.some(p=>p.id===st.goal))delete st.goal;
 /* a keyword "a & b" needs both anywhere in the question (so a short word only counts in context, like "show up" with AI);
    a keyword counts once even when two of its spellings meet (insurer and insurance) */
 const bpKN=k=>k.split('&').map(bpNorm).filter(n=>n.trim());
@@ -1527,10 +1730,10 @@ const bpChip=(i,cls)=>`<button type="button" class="bp-chip${cls||''}" data-bpp=
 const BP_GROUPS=[['found','Get found in AI and search'],['site','Website and online store'],['leads','Leads and sales'],['messages','Customer messages and data'],['team','Content and team productivity']];
 const BP_ORDER=['ai-answers-missing','ai-traffic-revenue','organic-traffic-falling','seo-fix-backlog','product-pages-ai','slow-website','storefront-hard-to-update','site-visitors-cant-find-answers','same-site-for-everyone','fsi-complex-questions','b2b-leads-go-cold','reps-email-by-hand','chats-never-reach-sales','same-nurture-path','ad-audiences-stale','disconnected-messages','abandoned-carts','customer-data-silos','cant-see-what-works','content-too-slow','off-brand-assets','team-busywork','slow-reporting'];
 const bpRank=i=>{const k=BP_ORDER.indexOf(PROBS[i].id);return k<0?BP_ORDER.length+i:k;};
+const bpGrouped=ids=>{const known=new Set(BP_GROUPS.map(g=>g[0]));return [...BP_GROUPS,['','More problems']].map(([g,h])=>[h,ids.filter(i=>g?PROBS[i].group===g:!known.has(PROBS[i].group)).sort((a,b)=>bpRank(a)-bpRank(b))]).filter(x=>x[1].length);};
 function bpStartHTML(){const all=bp.view==='all',ids=PROBS.map((p,i)=>i).filter(i=>all||PROBS[i].starter);
   if(!all)return `<div class="bp-chips">${ids.map(i=>bpChip(i)).join('')}<button type="button" class="bp-chip red" data-bpa="all">See all problems</button></div>`;
-  const known=new Set(BP_GROUPS.map(g=>g[0])),groups=[...BP_GROUPS,['','More problems']].map(([g,h])=>[h,ids.filter(i=>g?PROBS[i].group===g:!known.has(PROBS[i].group)).sort((a,b)=>bpRank(a)-bpRank(b))]).filter(x=>x[1].length);
-  return groups.map(([h,m])=>`<h3 class="bp-gh">${esc(h)}</h3><div class="bp-chips">${m.map(i=>bpChip(i)).join('')}</div>`).join('')+'<div class="bp-chips" style="margin-top:18px"><button type="button" class="bp-chip red" data-bpa="fewer">Show fewer problems</button></div>';}
+  return bpGrouped(ids).map(([h,m])=>`<h3 class="bp-gh">${esc(h)}</h3><div class="bp-chips">${m.map(i=>bpChip(i)).join('')}</div>`).join('')+'<div class="bp-chips" style="margin-top:18px"><button type="button" class="bp-chip red" data-bpa="fewer">Show fewer problems</button></div>';}
 function bpAnswerHTML(){const p=PROBS[bp.hits[bp.i]],s=bp.setup,pl=PLAYS[s.play],ids=[...s.prods,...s.out],last=bp.steps[bp.steps.length-1];
   let heard;
   if(last)heard=`<b>Updated:</b> ${esc(bpYou(last.chip))}.${last.note?' '+esc(last.note):''}`;
@@ -1567,14 +1770,17 @@ function bpShow(ms){clearTimeout(bpT);bp.view='working';bpRender();bpT=setTimeou
 /* a typed problem, or a problem chip (forced): the best matches, and when one setup covers the other's, both are heard */
 /* ties go to the problem whose keywords matched more specifically */
 const bpKwPts=(i,t)=>bpKw(i,t).reduce((s,k)=>s+bpPts(k),0);
-function bpAsk(text,forced){const t=bpNorm(text),sc=PROBS.map((p,i)=>[i,bpScore(i,text),bpKwPts(i,t)]).sort((a,b)=>b[1]-a[1]||b[2]-a[2]);bp.asked=text;bp.steps=[];bp.pair=null;bp.i=0;
-  let hits=(forced!==undefined?[[forced,1/0],...sc.filter(([i])=>i!==forced)]:sc).filter(([,v])=>v>=BP_MIN);
+/* the problems a text matches, best first: the first page's problem box and the canvas's goal question share it */
+function bpMatch(text,forced){const t=bpNorm(text),sc=PROBS.map((p,i)=>[i,bpScore(i,text),bpKwPts(i,t)]).sort((a,b)=>b[1]-a[1]||b[2]-a[2]);
+  const hits=(forced!==undefined?[[forced,1/0],...sc.filter(([i])=>i!==forced)]:sc).filter(([,v])=>v>=BP_MIN);
+  /* a specialized problem whose required word is there and a keyword of its own matched (financial services) leads over the general one it specializes */
+  for(const h of hits){const g=bpKwPts(h[0],t)>0&&PROBS[h[0]].specializes,gi=hits.findIndex(x=>PROBS[x[0]].id===g),hi=hits.indexOf(h);if(g&&gi>=0&&gi<hi){hits.splice(hi,1);hits.splice(gi,0,h);}}
+  return {t,sc,hits};}
+function bpAsk(text,forced){const {t,sc,hits}=bpMatch(text,forced);bp.asked=text;bp.steps=[];bp.pair=null;bp.i=0;
   if(!hits.length){bp.near=sc.filter(([,v])=>v>0).slice(0,4).map(([i])=>i);if(!bp.near.length)bp.near=PROBS.map((p,i)=>i).filter(i=>PROBS[i].starter);clearTimeout(bpT);bp.view='nomatch';bpRender();return;}
   /* two problems only when the partner named both: the second scores 5 or more on keywords of its own (not shared with
      another problem, not part of a keyword the first matched, not built on one) and at least 40% of the first, and one setup covers both
      (it leads; with the same products, the higher score leads) */
-  /* a specialized problem whose required word is there and a keyword of its own matched (financial services) leads over the general one it specializes */
-  for(const h of hits){const g=bpKwPts(h[0],t)>0&&PROBS[h[0]].specializes,gi=hits.findIndex(x=>PROBS[x[0]].id===g),hi=hits.indexOf(h);if(g&&gi>=0&&gi<hi){hits.splice(hi,1);hits.splice(gi,0,h);}}
   let lead=hits[0][0];
   if(forced===undefined&&hits.length>1){const [a,va]=hits[0],[b,vb]=hits[1],ka=bpKw(a,t),kb=bpKw(b,t),cov=(x,y)=>PROBS[y].products.every(id=>PROBS[x].products.includes(id));
     const own=kb.filter(k=>!BPG.has(k[2])&&!ka.some(x=>x[2].includes(k[2])||(x[1].length===1&&k[1].some(part=>part.includes(x[1][0])||x[1][0].includes(part))))).reduce((s,k)=>s+bpPts(k),0);
@@ -1596,7 +1802,7 @@ $('bp').addEventListener('click',e=>{const pc=e.target.closest('[data-bpp]');if(
   if(k==='all'||k==='fewer'){bp.view=k==='all'?'all':'start';bpRender();return;}
   if(k==='again'){clearTimeout(bpT);bp.view='start';bpRender();$('bp-q').value='';$('bp-q').focus();return;}
   if(k==='another'){bp.i=(bp.i+1)%bp.hits.length;bp.steps=[];bp.setup=bpBase(PROBS[bp.hits[bp.i]]);bpShow(500);return;}
-  if(k==='build'){const s=bp.setup;clearTimeout(bpT);st.play=s.play;st.decisions=setupDecisions(s);st.on=PLAYS[s.play].custom?s.prods.slice():[];st.out=s.out.slice();st.ls=Object.fromEntries((s.off||[]).map(l=>[l,false]));st.keep={};st.fresh=true;st.pubSig=null;moreOpen={};fsel=null;
+  if(k==='build'){const s=bp.setup;clearTimeout(bpT);st.goal=PROBS[bp.hits[bp.i]].id;st.play=s.play;st.decisions=setupDecisions(s);st.on=PLAYS[s.play].custom?s.prods.slice():[];st.out=s.out.slice();st.ls=Object.fromEntries((s.off||[]).map(l=>[l,false]));st.keep={};st.fresh=true;st.pubSig=null;moreOpen={};fsel=null;
     bp.view='start';showAllEdges=false;$('bp-q').value='';bpRender();render();}});
 $('confirm-yes').addEventListener('click',()=>setTimeout(()=>{if(!play()&&bp.view==='answer')bpRender();},0));
 bpRender();
@@ -1619,7 +1825,7 @@ function chipHot(cid){document.querySelectorAll('.cx').forEach(x=>x.classList.re
 $('fb-m').addEventListener('mouseover',e=>{const c=e.target.closest('.chip');chipHot(c?c.dataset.c:null);});
 $('rate').addEventListener('input',e=>{let v=e.target.value.replace(/[^0-9.]/g,'');const i=v.indexOf('.');if(i>=0)v=v.slice(0,i+1)+v.slice(i+1).replace(/[.]/g,'').slice(0,2);v=v.slice(0,7);e.target.value=v;const n=parseFloat(v);st.rate=Number.isFinite(n)&&n>0?n:0;save();totalsUI();refreshCard();});
 $('size').addEventListener('click',e=>{const b=e.target.closest('[data-size]');if(!b)return;st.size=b.dataset.size;save();totalsUI();refreshCard();});
-/* Start over and Change play both clear the play and every service choice; rate and size stay */
+/* Start over and Change play both clear the play, the goal and every service choice; rate and size stay */
 const ASK={over:['Start over?','This clears the play, every service choice and the Scope details. Your rate and size stay.','Clear everything'],
   change:['Change the play?','One play per statement of work, so this clears the canvas and every service choice and edit. Your rate, size, client and partner details stay. Scope details are kept for each play, so the new play\'s Scope starts fresh and this play\'s come back if you return to it.','Choose another play']};
 function ask(k){ask.k=k;const [t,p,y]=ASK[k];$('confirm-title').textContent=t;$('confirm-text').textContent=p;$('confirm-yes').textContent=y;$('confirm').hidden=false;$('confirm-yes').focus();}
@@ -1639,20 +1845,20 @@ try{const m=sessionStorage.getItem('abv-sow-draft-msg');if(m){sessionStorage.rem
 $('change-play').addEventListener('click',e=>{e.stopPropagation();ask('change');});
 $('confirm-no').addEventListener('click',()=>{$('confirm').hidden=true;});
 $('confirm').addEventListener('click',e=>{if(e.target===e.currentTarget)$('confirm').hidden=true;});
-$('confirm-yes').addEventListener('click',()=>{$('confirm').hidden=true;hideCard(true);openAdd(false);if(ask.k==='over'){try{localStorage.removeItem(TOOL_KEY);localStorage.removeItem('partner-services-focused-v2');localStorage.removeItem(HANDOFF);}catch(e){}st.eff=null;st.cur='USD';st.def=null;st.months=12;}st.pubSig=null;st.play=null;st.on=[];st.out=[];st.ls={};st.keep={};moreOpen={};fsel=null;showAllEdges=false;render();});
+$('confirm-yes').addEventListener('click',()=>{$('confirm').hidden=true;hideCard(true);openAdd(false);if(ask.k==='over'){try{localStorage.removeItem(TOOL_KEY);localStorage.removeItem('partner-services-focused-v2');localStorage.removeItem(HANDOFF);}catch(e){}st.eff=null;st.cur='USD';st.def=null;st.months=12;}st.pubSig=null;st.play=null;st.on=[];delete st.goal;st.out=[];st.ls={};st.keep={};moreOpen={};fsel=null;showAllEdges=false;render();});
 let toastT=0;function toast(m){const t=$('toast');t.textContent=m;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>{t.hidden=true;},4200);}
 /* the next steps: hand the play, size, rate and every service line on the canvas to the Scope, Services and Statement of work steps at sow/ */
-/* the hand-over: the play, size, rate and every line (on, or waiting for a product with the partner's choice kept) */
+/* the hand-over: the play, size, rate and every line (on, or waiting for a product with the partner's choice kept); a ready-made play also names the products added to it (the boxes, in the order added), when there are any, and a canvas with a goal names it */
 /* a short signature of what is handed over, so an unchanged canvas doesn't hand over again */
 const sigOf=t=>{let h=2166136261;for(let i=0;i<t.length;i++){h^=t.charCodeAt(i);h=Math.imul(h,16777619);}return (h>>>0).toString(36)+'.'+t.length.toString(36);};
 function publish(force){const pl=play();if(!pl||(!prods().length&&!pl.custom))return false;
   const lines=[];for(const o of [...prods(),...conns()]){const conn='a' in o;for(const l of all(o)){const L=LN[l];
     lines.push({id:l,on:counted(l),lock:!met(l),want:lineOn(l),def:defOf(l),name:L.name,unit:L.unit,low:L.low,base:L.base,high:L.high,url:L.url,src:L.src,references:CapabilityReferences.list({references:[...CapabilityReferences.list(L),...(conn?CapabilityReferences.list(o):[]),...(conn?(o.flows||[]).flatMap(f=>CapabilityReferences.list(f)):[])]}),scope:L.scope||'',stage:L.unit==='monthly'?'Optimize':conn?'Connect':'Launch',prereqs:[L.origin==='research'&&conn&&(o.sowAvailability||o.availability)?'Availability: '+String(o.sowAvailability||o.availability).replace(/([^.])$/,'$1.'):'',L.origin==='research'&&conn&&o.prereqs&&o.prereqs.length?'Prerequisites for '+P[o.a].name+' + '+P[o.b].name+': '+(o.sowPrereqs||o.prereqs).join('; ').replace(/\.$/,'')+'.':'',L.ext?'Also needs '+L.ext.replace(/\.$/,'')+'.':'',L.tier?'Assumes your client has '+L.tier.replace(/\.$/,'')+'.':''].filter(Boolean).join(' ')});}}
   /* outside systems off the canvas (step 29): their services wait with the partner's choice, so the engagement keeps it while the system is off */
-  if(!pl.custom){const seen=new Set(lines.map(x=>x.id)),ids=[...pl.products,...(pl.outside||[])];
+  if(!pl.custom){const seen=new Set(lines.map(x=>x.id)),ids=[...pl.products,...st.on,...(pl.outside||[])];
     for(const x of (pl.outside||[]).filter(id=>!has(id)))for(const c of C.filter(c=>(c.a===x||c.b===x)&&ids.includes(c.a)&&ids.includes(c.b)))for(const l of all(c)){if(seen.has(l))continue;seen.add(l);const L=LN[l];
       lines.push({id:l,on:false,lock:true,want:lineOn(l),def:defOf(l),name:L.name,unit:L.unit,low:L.low,base:L.base,high:L.high,url:L.url,src:L.src,references:CapabilityReferences.list(L),scope:L.scope||'',stage:L.unit==='monthly'?'Optimize':'Connect',prereqs:''});}}
-  const body={v:1,play:pl.id,selection:{choices:st.ls,keepGeneric:st.keep.CW03===true,defaults:Object.fromEntries(lines.map(l=>[l.id,catalogDefault(l.id)]))},decisions:CanvasScope.normalize(st.decisions),size:st.size,rate:st.rate||'',lines,managed:[...universe()],fresh:!!st.fresh,products:CAT.products.filter(p=>!p.outside&&actualHas(p.id)).map(p=>p.id),names:displayProducts().filter(p=>!p.outside).map(p=>p.name),outside:(st.out||[]).filter(id=>has(id))},sig=sigOf(JSON.stringify(body));
+  const body={v:1,play:pl.id,selection:{choices:st.ls,keepGeneric:st.keep.CW03===true,defaults:Object.fromEntries(lines.map(l=>[l.id,catalogDefault(l.id)]))},decisions:CanvasScope.normalize(st.decisions),size:st.size,rate:st.rate||'',lines,managed:[...universe()],fresh:!!st.fresh,products:CAT.products.filter(p=>!p.outside&&actualHas(p.id)).map(p=>p.id),names:displayProducts().filter(p=>!p.outside).map(p=>p.name),outside:(st.out||[]).filter(id=>has(id)),...(pl.custom||!st.on.length?{}:{added:st.on.slice(),addedNames:st.on.filter(id=>displayProducts().some(p=>p.id===id)).map(id=>P[id].name)}),...(st.goal?{goal:st.goal}:{})},sig=sigOf(JSON.stringify(body));
   if(!force&&sig===st.pubSig)return true;
   try{localStorage.setItem(HANDOFF,JSON.stringify({...body,at:Date.now()}));st.pubSig=sig;return true;}catch(e){return false;}}
 function handoff(step){if(!prods().some(p=>!p.outside)){toast('Add a product to the canvas first.');return;}

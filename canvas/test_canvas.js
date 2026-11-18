@@ -165,8 +165,8 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   await p.click('#picker [data-play="aem"]'); await p.waitForTimeout(600); await p.fill('#rate', '150'); await p.waitForTimeout(100);
   ok(await p.isHidden('#picker') && JSON.stringify(await nodes(p)) === JSON.stringify(['bv', 'cdn', 'eds', 'so']), 'picking a play\'s box puts its products on the canvas, and the CDN (step 45: on from the start)', (await nodes(p)).join(','));
   ok(JSON.stringify(await edges(p)) === JSON.stringify(['bv-eds', 'cdn-bv', 'so-eds']) && (await p.$$('.ib')).length === 3, 'they connect themselves, a lightning bolt on each connection', (await edges(p)).join(','));
-  ok((await p.textContent('#play-label')).trim() === PL.aem.label && await p.isVisible('#change-play') && !(await p.$('#play-btn, #play-menu, #choose')) && await p.isHidden('#addwrap'),
-    'the toolbar shows the play name and Change play, and no Add product (a play\'s products are fixed)');
+  ok((await p.textContent('#play-label')).trim() === PL.aem.label && await p.isVisible('#change-play') && !(await p.$('#play-btn, #play-menu, #choose')) && await p.isVisible('#add-btn') && await p.isHidden('#add-menu'),
+    'the toolbar shows the play name, Change play and Add product, with its menu closed (Nov 18: a product can be added to a ready-made play)');
   ok((await Promise.all(['build', 'scope', 'services', 'sow'].map(k => p.isVisible(`.tabs [data-tab="${k}"]`)))).every(Boolean) && await p.isVisible('#rate') && await p.isVisible('#size') && await p.isVisible('#t-big') && await p.isVisible('#start-over'),
     'with a play picked, the steps, Your rate, Delivery size, the total and Start over show');
   ok(await p.isHidden('#fbar'), 'a small play draws every line, with no focus bar');
@@ -789,12 +789,17 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
       const on = await nodes(q), locked = await q.$$eval('#card .ln[data-l="XA29"]', xs => xs.map(x => x.classList.contains('lock')).join());
       ok(JSON.stringify(on) === '["aa","cja","cw"]' && locked === 'false', 'Nov 17: and the button puts Adobe Analytics on the canvas beside Customer Journey Analytics and unlocks the service', on.join() + ' ' + locked);
       await q.context().close(); }
-    // ready-made plays have no Add product menu, so nothing changes there, even on the plays that hold Customer Journey Analytics or Edge Delivery
+    // Nov 18: a ready-made play has Add product too, and its ranked list follows the same rules: with the play's own goal chosen, Adobe Analytics sits
+    // under "Not suggested" on the play that holds Customer Journey Analytics, and the play that holds Edge Delivery offers no AEM Sites row at all
     for (const id of ['cja', 'aem']) {
       const q = await fresh(); await q.goto(CANVAS); await choose(q, id);
-      const on = await nodes(q), menuHtml = await q.$eval('#add-menu', x => x.innerHTML);
-      ok(await q.isHidden('#add-btn') && await q.isHidden('#add-menu') && menuHtml === '' && PL[id].products.every(x => on.includes(x)),
-        `Nov 17: the ready-made play ${PL[id].label} is unchanged: its own products, no Add product button and no menu`, on.join() + ' ' + menuHtml.length);
+      const on = await nodes(q), shut = await q.isVisible('#add-btn') && await q.isHidden('#add-menu');
+      await q.click('#add-btn'); await q.waitForTimeout(300); await q.click('#add-menu [data-goal].own'); await q.waitForTimeout(300);
+      const list = await q.evaluate(() => { const m = document.getElementById('add-menu'), g = [...m.querySelectorAll('.g')].find(x => x.textContent === 'Not suggested'), held = [];
+        for (let x = g && g.nextElementSibling; x && x.matches('.it2'); x = x.nextElementSibling) held.push(x.dataset.add + ':' + x.querySelector('.ctag').textContent);
+        return {goal: st.goal || '', held: held.join(), ranked: [...m.querySelectorAll('.rk-row [data-add]')].map(x => x.dataset.add)}; });
+      ok(shut && PL[id].products.every(x => on.includes(x)) && list.goal && list.ranked.length > 20 && (id === 'cja' ? list.held === 'aa:Add anyway' && !list.ranked.includes('aa') : list.held === '' && !list.ranked.includes('eds') && !list.ranked.includes('aemsites')),
+        `Nov 18: the ready-made play ${PL[id].label} opens with its own products and the Add product button; with its own goal chosen, ${id === 'cja' ? 'Adobe Analytics sits under "Not suggested" with "Add anyway" and has no rank' : 'the ranked list offers no AEM Sites row and holds nothing back'}`, on.join() + ' ' + JSON.stringify(list).slice(0, 300));
       await q.context().close();
     }
   }

@@ -15,6 +15,7 @@ SOW = os.path.dirname(HERE)
 sys.path.insert(0, SOW)
 
 from review_amendments import apply_catalog
+from next_product_check import check as check_next_product
 from product_copy import tree as public_copy, runtime as copy_runtime, sow_view, connection_notes, plain
 DASHES = re.compile('[–—]')
 
@@ -399,11 +400,23 @@ def main():
     marker = '/*NEVER_SUGGEST*/[]'
     assert render_tpl.count(marker) == 1, marker
     render_tpl = render_tpl.replace(marker, json.dumps(rules, separators=(',', ':')))
+    # Next best product (Adam, Nov 18 2026): the summary numbers the ranked Add product list reads (next_product_counts.json): counts of customers
+    # per product set and nothing else. The checker refuses any other table, so the build stops when the file is missing or wrong.
+    table = json.load(open(os.path.join(HERE, 'next_product_counts.json'), encoding='utf-8'))
+    adobe = sorted(p['id'] for p in keep_p if not p.get('outside'))
+    check_next_product(table, set(adobe))
+    marker = '/*NEXT_PRODUCT*/null'
+    assert render_tpl.count(marker) == 1, marker
+    render_tpl = render_tpl.replace(marker, json.dumps(table, sort_keys=True, separators=(',', ':')))
+    in_data = set(table['products']) | set(table['few'])
+    print('next best product: %d products with a number (%s), %d without (too few owners: %s), %d with no customer numbers (%s)' % (
+        len(table['numbered']), ', '.join(table['numbered']), len(in_data) - len(table['numbered']), ', '.join(sorted(in_data - set(table['numbered']))),
+        len([i for i in adobe if i not in in_data and i != 'eds']), ', '.join(i for i in adobe if i not in in_data and i != 'eds')))
     out = (render_tpl.replace('/*CATALOG*/null', blob).replace('/*PROBLEMS*/null', pblob)
               .replace('{{FONT400}}', b64(fonts.format(400))).replace('{{FONT600}}', b64(fonts.format(600))).replace('{{FONT700}}', b64(fonts.format(700)))
               .replace('{{LOGO}}', b64(os.path.join(SOW, 'adobe_logo.png')))
               .replace('{{VIDEO_POSTER}}', b64(os.path.join(SOW, 'video_poster.jpg'))))
-    assert '{{' not in out and '/*CATALOG*/' not in out and '/*PROBLEMS*/' not in out and '/*KNOWLEDGE_EXPLORER_' not in out
+    assert '{{' not in out and '/*CATALOG*/' not in out and '/*PROBLEMS*/' not in out and '/*KNOWLEDGE_EXPLORER_' not in out and '/*NEXT_PRODUCT*/' not in out
     open(os.path.join(HERE, 'index.html'), 'w', encoding='utf-8').write(out)
     for w in warnings:
         print('note:', w)
