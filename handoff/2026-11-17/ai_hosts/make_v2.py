@@ -32,6 +32,7 @@ U = {
  'feed': ('4c19125c3468.html', 'https://experienceleague.adobe.com/en/docs/analytics/export/analytics-data-feed/create-feed', EL + 'Create a data feed'),
  'gs_chatgpt_ad': ('fee8896a0817.html', 'https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/activation/paid-media-ads/activate-chatgpt-ad', EL + 'GenStudio for Performance Marketing: activate a ChatGPT ad'),
  'gs_activation': ('c8d1de4b5a32.html', 'https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/activation/create-activation', EL + 'GenStudio for Performance Marketing: create an activation'),
+ 'ew': ('56105c00a9c4.html', 'https://www.aem.live/docs/ew/authoring/mcp', 'Adobe aem.live: Experience Workspace MCP'),
  'blog': ('adam_paste_2026-11-18_claude_design_blog.txt', 'https://business.adobe.com/blog/adobe-experience-manager-journey-optimizer-claude-design', 'Adobe for Business blog: From Claude Design to production (text pasted by Adam)'),
 }
 def q(key, quote):
@@ -194,6 +195,18 @@ new.append(conn('gspm-ads', 'gspm', 'ads', 'technical', 'GenStudio for Performan
     [('gspm', 'ads', 'Approved ads, to the chosen ad accounts')],
     ['Your client’s ad accounts connected to GenStudio for Performance Marketing']))
 
+# Edge Delivery Services authored in Experience Workspace, in Claude and in ChatGPT (aem.live, accepted by Adam on Nov 18)
+ew_q = q('ew', 'The Experience Workspace MCP connects AI assistants like Claude or ChatGPT to your Experience Workspace projects using the Model Context Protocol (MCP), an open standard for giving AI tools access to external services.')
+for host, name in (('claude', 'Claude'), ('chatgpt', 'ChatGPT')):
+    new.append(conn(f'{host}-eds', host, 'eds', 'address', f'Each person adds Adobe\u2019s Experience Workspace address in {name}',
+        f'When your client\u2019s Edge Delivery site is authored in Experience Workspace, each person adds Adobe\u2019s Experience Workspace address in {name} as a custom connector and signs in with their Adobe login. In plain words they browse the site\u2019s content, read files, create new pages, move things around and check version history, without leaving the chat.',
+        'ew', ew_q,
+        [q('ew', 'Once connected, AI assistants that observe the MCP standard can browse your content, read files, create new pages, move things around, and check version history without you ever leaving the chat window.'),
+         q('ew', 'Experience Workspace MCP can be added to Claude (and also others like ChatGPT) as a custom connector.')],
+        ('Site pages by asking', f'Your client\u2019s team drafts, moves and checks pages of its Edge Delivery site by asking in {name}.'),
+        [(host, 'eds', 'Requests to browse, create, change or move pages'), ('eds', host, 'The content found, and the result of each change')],
+        ['An Edge Delivery site authored in Experience Workspace', 'Each person signs in with their Adobe login']))
+
 # Claude Design pages into AEM: a second flow on the existing Claude + AEM Sites line
 for c in conns:
     if c['id'] == 'claude-aemsites':
@@ -230,6 +243,7 @@ rs['GS04'] = 'Paid media connections and activation setup: covers the new GenStu
 out['reused_services'] = rs
 for p in out['plays']:
     if p['play'] in ('cja', 'coworker', 'custom'): p['add'] = sorted(set(p['add']) | {'copilot'})
+    if p['play'] == 'aem': p['add'] = sorted(set(p['add']) | {'chatgpt', 'claude'}); p['standing'] = 'optional'
 out['build_rules'] = [r for r in d['build_rules'] if 'Good to know' not in r and 'tick' not in r] + [
   'No release label, date, caveat or note about what is coming or left out, anywhere in the tool (Adam, Nov 18).',
   'Real limits stay inside the how sentence (look only, roles, what the assistant cannot read); no new card section.',

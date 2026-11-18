@@ -3015,6 +3015,118 @@
    "prereqs": [
     "Your client’s ad accounts connected to GenStudio for Performance Marketing"
    ]
+  },
+  {
+   "id": "claude-eds",
+   "a": "claude",
+   "b": "eds",
+   "kind": "outside",
+   "setup_kind": "Adobe's own, added by web address: Adobe hosts it, a person pastes Adobe's address",
+   "label": "Each person adds Adobe’s Experience Workspace address in Claude",
+   "how": "When your client’s Edge Delivery site is authored in Experience Workspace, each person adds Adobe’s Experience Workspace address in Claude as a custom connector and signs in with their Adobe login. In plain words they browse the site’s content, read files, create new pages, move things around and check version history, without leaving the chat.",
+   "source": {
+    "url": "https://www.aem.live/docs/ew/authoring/mcp",
+    "title": "Adobe aem.live: Experience Workspace MCP"
+   },
+   "evidence": {
+    "quote": "The Experience Workspace MCP connects AI assistants like Claude or ChatGPT to your Experience Workspace projects using the Model Context Protocol (MCP), an open standard for giving AI tools access to external services.",
+    "url": "https://www.aem.live/docs/ew/authoring/mcp",
+    "title": "Adobe aem.live: Experience Workspace MCP",
+    "file": "pages/56105c00a9c4.html"
+   },
+   "more_evidence": [
+    {
+     "quote": "Once connected, AI assistants that observe the MCP standard can browse your content, read files, create new pages, move things around, and check version history without you ever leaving the chat window.",
+     "url": "https://www.aem.live/docs/ew/authoring/mcp",
+     "title": "Adobe aem.live: Experience Workspace MCP",
+     "file": "pages/56105c00a9c4.html"
+    },
+    {
+     "quote": "Experience Workspace MCP can be added to Claude (and also others like ChatGPT) as a custom connector.",
+     "url": "https://www.aem.live/docs/ew/authoring/mcp",
+     "title": "Adobe aem.live: Experience Workspace MCP",
+     "file": "pages/56105c00a9c4.html"
+    }
+   ],
+   "gain": {
+    "title": "Site pages by asking",
+    "text": "Your client’s team drafts, moves and checks pages of its Edge Delivery site by asking in Claude."
+   },
+   "flows": [
+    {
+     "from": "claude",
+     "to": "eds",
+     "what": "Requests to browse, create, change or move pages",
+     "needs": []
+    },
+    {
+     "from": "eds",
+     "to": "claude",
+     "what": "The content found, and the result of each change",
+     "needs": []
+    }
+   ],
+   "availability": "",
+   "prereqs": [
+    "An Edge Delivery site authored in Experience Workspace",
+    "Each person signs in with their Adobe login"
+   ]
+  },
+  {
+   "id": "chatgpt-eds",
+   "a": "chatgpt",
+   "b": "eds",
+   "kind": "outside",
+   "setup_kind": "Adobe's own, added by web address: Adobe hosts it, a person pastes Adobe's address",
+   "label": "Each person adds Adobe’s Experience Workspace address in ChatGPT",
+   "how": "When your client’s Edge Delivery site is authored in Experience Workspace, each person adds Adobe’s Experience Workspace address in ChatGPT as a custom connector and signs in with their Adobe login. In plain words they browse the site’s content, read files, create new pages, move things around and check version history, without leaving the chat.",
+   "source": {
+    "url": "https://www.aem.live/docs/ew/authoring/mcp",
+    "title": "Adobe aem.live: Experience Workspace MCP"
+   },
+   "evidence": {
+    "quote": "The Experience Workspace MCP connects AI assistants like Claude or ChatGPT to your Experience Workspace projects using the Model Context Protocol (MCP), an open standard for giving AI tools access to external services.",
+    "url": "https://www.aem.live/docs/ew/authoring/mcp",
+    "title": "Adobe aem.live: Experience Workspace MCP",
+    "file": "pages/56105c00a9c4.html"
+   },
+   "more_evidence": [
+    {
+     "quote": "Once connected, AI assistants that observe the MCP standard can browse your content, read files, create new pages, move things around, and check version history without you ever leaving the chat window.",
+     "url": "https://www.aem.live/docs/ew/authoring/mcp",
+     "title": "Adobe aem.live: Experience Workspace MCP",
+     "file": "pages/56105c00a9c4.html"
+    },
+    {
+     "quote": "Experience Workspace MCP can be added to Claude (and also others like ChatGPT) as a custom connector.",
+     "url": "https://www.aem.live/docs/ew/authoring/mcp",
+     "title": "Adobe aem.live: Experience Workspace MCP",
+     "file": "pages/56105c00a9c4.html"
+    }
+   ],
+   "gain": {
+    "title": "Site pages by asking",
+    "text": "Your client’s team drafts, moves and checks pages of its Edge Delivery site by asking in ChatGPT."
+   },
+   "flows": [
+    {
+     "from": "chatgpt",
+     "to": "eds",
+     "what": "Requests to browse, create, change or move pages",
+     "needs": []
+    },
+    {
+     "from": "eds",
+     "to": "chatgpt",
+     "what": "The content found, and the result of each change",
+     "needs": []
+    }
+   ],
+   "availability": "",
+   "prereqs": [
+    "An Edge Delivery site authored in Experience Workspace",
+    "Each person signs in with their Adobe login"
+   ]
   }
  ],
  "held_back": [
@@ -3569,8 +3681,11 @@
   {
    "play": "aem",
    "label": "Brand Visibility + Sites Optimizer and Edge Delivery Services",
-   "add": [],
-   "standing": "not at all"
+   "add": [
+    "chatgpt",
+    "claude"
+   ],
+   "standing": "optional"
   },
   {
    "play": "fsi",
