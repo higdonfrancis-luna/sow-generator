@@ -1,8 +1,8 @@
-# The SOW tool in 90 seconds: proposal (Nov 18 2026)
+# The SOW tool in 90 seconds: proposal (Nov 17 2026)
 
-Adam's ask (Nov 18): a video like the Brand Visibility ones (Firefly characters, OpenAI Echo voice, the rest built in code), about 90 seconds, showing the tool's most important features. The punchline, in his words: this is how we get partners to sell more of our technology, by showing them the services they can deploy from what we sell, which they aren't aware of today, and the money they could make from those services. That is what will compel them to sell more Adobe.
+Adam's ask (Nov 17): a video like the Brand Visibility ones (Firefly characters, OpenAI Echo voice, the rest built in code), about 90 seconds, showing the tool's most important features. The punchline, in his words: this is how we get partners to sell more of our technology, by showing them the services they can deploy from what we sell, which they aren't aware of today, and the money they could make from those services. That is what will compel them to sell more Adobe.
 
-**State: proposed. Nothing is recorded, rendered or built. Waiting for Adam's yes on the script and the storyboard.**
+**State: approved and built (Nov 17, Adam: "that really good!"). His answers: Adobe partners watch it ("we are giving them a heads up on what it can do"), the name is Statement of Work Generator and RFI Builder, and the money example is good. The draft video, its partner-facing lines and the rebuild steps are in `../../overview_video/` (start with its README). The lines in the table below are the first version, written for Adobe colleagues, kept as the record of what he saw.**
 
 ## Pictures
 
@@ -41,9 +41,9 @@ The same pipeline as the Brand Visibility videos (`video/Firefly_Explainer_Video
 4. Music and sound effects made in code, mixed to the same loudness as the other videos.
 5. Checks, then a draft MP4 for Adam. Nothing goes on a website until he says deploy.
 
-The cloud environment `sow-generator` allows the worker's address since Nov 18 (Adam approved it). The connection itself is not tested yet: the first call waits for his yes on the script.
+The cloud environment `sow-generator` allows the worker's address since Nov 17 (Adam approved it), and the seven lines were recorded through it that evening.
 
-## Open questions for Adam
+## Questions asked with the storyboard (answered Nov 17, see State above)
 
 1. Who watches it: Adobe colleagues and leaders (the script says "we" and "partners"), or partners themselves (the last line would speak to "you")?
 2. What to call the tool out loud. The frames say "Partner SOW Generator"; the tool's own masthead says "Partner services statement of work".

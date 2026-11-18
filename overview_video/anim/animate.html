@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Statement of Work Generator and RFI Builder: a first look</title>
+<link rel="stylesheet" href="anim.css">
+</head>
+<body>
+<div id="stage"></div>
+<script>
+  // ?tl=timeline picks the timeline file, as in the Brand Visibility videos
+  var tl = new URLSearchParams(location.search).get('tl') || 'timeline';
+  document.write('<script src="../build/' + tl + '.js"><\/script>');
+  document.write('<script src="anim.js"><\/script>');
+</script>
+</body>
+</html>
