@@ -20,10 +20,11 @@ The assistant lines sell few hours on their own (Adam: "it's a value add and the
 
 ## Pictures
 
-Painted on the built canvas by `discover_mock.js` (scratchpad `ai_hosts/round2/main/`), each marked as a mockup:
+Painted on the built canvas (with the ranked list saved) by `discover_mock.js` in this folder; the pictures are in `discovery_pictures/`, each marked as a mockup:
 
 - `d1_first_page_problem_and_play.png`: the new problem chip and the new play card on the first page.
 - `d2_new_play_canvas.png`: the new play's canvas.
-- `d2b_new_play_add_product.png`: the ranked Add product list on the new play.
+- `d2b_new_play_add_product.png`: Add product on the new play asks the client's goal once, with the play's own problem first.
+- `d2c_new_play_ranked_list.png`: then the ranked list; products that also work in the client's assistant say so.
 - `d3_hint_on_products.png`: Create your own play, with the "Works in ..." line on each product.
 - `d3b_out_menu_assistants_first.png`: the Add outside system menu with the assistants first.
