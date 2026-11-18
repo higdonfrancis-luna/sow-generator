@@ -1,0 +1,676 @@
+{
+ "slice": "creative",
+ "checked": "2026-11-18",
+ "method": "Pages fetched with plain curl (default headers, about one a second) from www.adobe.com, helpx.adobe.com, experienceleague.adobe.com, developer.adobe.com and news.adobe.com; every page held its text in the HTML, so no .md or JSON fallback was needed. Quotes proven with found() from handoff/2026-11-17/evidence_page/tools/verify.py against the saved files. business.adobe.com, blog.adobe.com, openai.com, claude.com, github.com and the frame.io sites were not opened. developer.adobe.com/frameio/ redirects to a frame.io host that the proxy refused (logged with status 000).",
+ "records": [
+  {
+   "index": 8,
+   "product": "Adobe Express (designs made in Claude opened in Express)",
+   "tool_product_ids": [
+    "express"
+   ],
+   "assistant": "Claude only, and specifically 'Claude Design' (Adobe's words); ChatGPT is not named for this",
+   "verdict": "partly confirmed",
+   "what_adobe_says": "A person who makes a social post, flyer or presentation in Claude Design can click 'Open in Adobe Express' and get a real, fully editable Express file to brand, refine, share and publish. They first connect the Adobe connector in Claude (the same one as record 14, so it is one shared setup, not a second connection). Why only partly confirmed: Adobe's own help page for that connector says its Adobe Express features are not available to enterprise accounts and that the connector is not tuned for enterprise use. Adobe does not say whether the 'Open in Adobe Express' step is covered by that limit, but it runs through the same connector, and partner clients are mostly enterprise accounts. The page that describes the hand-off is an undated article on www.adobe.com that still uses the connector's old name.",
+   "quotes": [
+    {
+     "quote": "You can export directly from Claude Design into Adobe Express as a fully editable Express document, where you can refine, brand, collaborate on, and publish it.",
+     "url": "https://www.adobe.com/express/learn/blog/adobe-creativity-connector",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/0ca32c06b113.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "Connect the Adobe for creativity connector in Claude.",
+     "url": "https://www.adobe.com/express/learn/blog/adobe-creativity-connector",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/0ca32c06b113.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "Unlike a rendered export, Claude-generated designs become native Adobe Express documents.",
+     "url": "https://www.adobe.com/express/learn/blog/adobe-creativity-connector",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/0ca32c06b113.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "Adobe for creativity connector in Claude has been renamed to Adobe, with new creativity and productivity capabilities.",
+     "url": "https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/adobe-connectors/adobe-for-claude.html",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/267f563fa9ce.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "Adobe for Claude isn't optimized for enterprise use and does not support EDU accounts. Adobe Express capabilities aren't available to enterprise accounts.",
+     "url": "https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/adobe-connectors/adobe-for-claude.html",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/267f563fa9ce.html",
+     "verified_on_saved_page": true
+    }
+   ],
+   "wrong_or_unsupported_in_research": [
+    "First source is on business.adobe.com, which this session may not open; nothing in this record rests on it (the www.adobe.com page carries the claim).",
+    "The record does not mention Adobe's own limit that Express features of the Claude connector are not available to enterprise accounts.",
+    "The page uses the older name 'Adobe for creativity connector'; Adobe's help page says it has been renamed to 'Adobe'.",
+    "'verify its editable elements' and the brand or layout steps in the scope are the research's own project wording, not Adobe's.",
+    "The research status 'Available through the Adobe creativity connector' reads as open to everyone; Adobe's help page limits the Express features to accounts that are not enterprise accounts.",
+    "Adobe names 'Claude Design' as the starting point, not Claude in general."
+   ],
+   "release_label": "none stated (the page says the connector 'has been available in Claude since April')",
+   "prerequisites": [
+    "Access to Claude, with the Adobe connector connected (shared with the Adobe for Claude record)",
+    "Adobe sign-in for saved work and more features (Adobe: an account 'isn't required to get started')",
+    "Not available for enterprise Adobe accounts as far as Express features go; EDU accounts not supported (Adobe for Claude help page)"
+   ],
+   "second_reader": "Verdict changed from confirmed to partly confirmed: the hand-off is real, but Adobe's help page says the Express features of the Claude connector are not available to enterprise accounts, which is the kind of client this tool is for."
+  },
+  {
+   "index": 12,
+   "product": "GenStudio for Performance Marketing",
+   "tool_product_ids": [
+    "gspm"
+   ],
+   "assistant": "both, plus others: Claude, ChatGPT on the web, Codex, Writer, Microsoft Copilot, and Adobe's own CX Enterprise Coworker",
+   "verdict": "confirmed",
+   "what_adobe_says": "A client's team can link GenStudio for Performance Marketing to Claude or ChatGPT and, by typing plain requests, ask how ads are performing, put together an editable draft ad from a template, and publish an approved ad to a connected channel. In Claude it is added as a custom connector by web address (works on the web and the desktop app). In ChatGPT it is added on the web after switching on developer mode. Each person signs in with their own Adobe ID and sees only what they are already allowed to see; one connection covers one Adobe organization. Publishing can put a live ad out and spend money, so it needs clear rules.",
+   "quotes": [
+    {
+     "quote": "GenStudio for Performance Marketing connects to supported AI assistants through the Model Context Protocol (MCP). Once connected, you can query ad performance, assemble creative, and publish approved ads through natural-language conversations.",
+     "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/ai-assistants/overview",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/adf6c303bdf2.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "AI assistant capabilities are generally available to customers enabled for GenStudio for Performance Marketing.",
+     "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/ai-assistants/overview",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/adf6c303bdf2.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "Each connection is scoped to one Adobe Identity Management System (IMS) organization.",
+     "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/ai-assistants/overview",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/adf6c303bdf2.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "Activate covers Meta, LinkedIn, and Google Campaign Manager 360.",
+     "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/ai-assistants/overview",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/adf6c303bdf2.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "Claude requires a Pro, Max, Team, or Enterprise plan. The same remote connector works in Claude on the web and in the desktop application.",
+     "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/ai-assistants/connect-ai-assistants",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/5f4f43ae5d74.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "ChatGPT requires a Plus, Pro, Business, Enterprise, or Education account. Custom MCP connections are available on the web through developer mode.",
+     "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/ai-assistants/connect-ai-assistants",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/5f4f43ae5d74.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "On a Team or Enterprise plan, an organization owner might need to add the connector first.",
+     "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/ai-assistants/connect-ai-assistants",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/5f4f43ae5d74.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "A supported plan that allows remote MCP connections when you use Claude, ChatGPT, or Microsoft Copilot.",
+     "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/ai-assistants/connect-ai-assistants",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/5f4f43ae5d74.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "Write and destructive. Can publish a live ad and incur ad spend.",
+     "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/ai-assistants/tools-reference",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/712781b4aa26.html",
+     "verified_on_saved_page": true
+    }
+   ],
+   "wrong_or_unsupported_in_research": [
+    "Nothing material is wrong. The record leaves out three assistants Adobe also lists: Writer, Microsoft Copilot and Adobe CX Enterprise Coworker.",
+    "'Authorize ... paid-media accounts' is loose: Adobe says the connection uses the person's Adobe identity and existing permissions; no separate paid-media authorization step is described.",
+    "Channel limits are missing: insights mostly Meta, LinkedIn and Innovid; drafts for Meta, LinkedIn, Display, TikTok and YouTube; publishing to Meta, LinkedIn and Google Campaign Manager 360."
+   ],
+   "release_label": "none (Adobe: \"generally available to customers enabled for GenStudio for Performance Marketing\")",
+   "prerequisites": [
+    "An active Adobe account with access to GenStudio for Performance Marketing",
+    "Claude: Pro, Max, Team or Enterprise plan; on Team or Enterprise an organization owner may need to add the connector first",
+    "ChatGPT: Plus, Pro, Business, Enterprise or Education account, on the web with developer mode switched on",
+    "Sign in with an Adobe ID and pick the Adobe organization; one organization per connection",
+    "The person's existing product permissions apply"
+   ],
+   "second_reader": "Verdict kept. Adobe's page names Claude and ChatGPT in its own table of supported assistants and says the feature is generally available. ChatGPT works only on the web with developer mode on; that is a real prerequisite, not a release label."
+  },
+  {
+   "index": 13,
+   "product": "Adobe for ChatGPT (one Adobe plugin with tools from Photoshop, Lightroom, Firefly, Acrobat, Premiere, Express, InDesign, Illustrator and more)",
+   "tool_product_ids": [
+    "creativecloud",
+    "express",
+    "acrobat"
+   ],
+   "assistant": "ChatGPT (including ChatGPT Work and Codex)",
+   "verdict": "confirmed",
+   "what_adobe_says": "Anyone with ChatGPT can install the single Adobe plugin and, by describing what they want, edit photos in bulk, cut and resize videos, design from Express templates, make and convert PDFs, find their Creative Cloud files (only when signed in) and turn data into documents such as badges or catalogs. It works without an Adobe account; signing in (a free account is enough) adds more tools, generative AI, storage and saved work, and some tools need a paid Adobe plan. English only. It does not include every feature of each Adobe app.",
+   "quotes": [
+    {
+     "quote": "Adobe for ChatGPT provides access to capabilities from Photoshop, Premiere, Firefly, Express, Acrobat, and other Adobe capabilities directly in ChatGPT through conversation.",
+     "url": "https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/adobe-connectors/adobe-for-chatgpt.html",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/116fedbd0fd3.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "The Photoshop plugin has been replaced by the Adobe plugin on ChatGPT — a single plugin for skills and tools across creativity, productivity, and more.",
+     "url": "https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/adobe-connectors/adobe-for-chatgpt.html",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/116fedbd0fd3.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "An Adobe account isn't required to get started; however, signing in or creating a free Adobe account unlocks more skills, generative AI tool calls, storage for your assets, and continuity across sessions.",
+     "url": "https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/adobe-connectors/adobe-for-chatgpt.html",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/116fedbd0fd3.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "Adobe for ChatGPT is available globally on ChatGPT Work and ChatGPT Codex on Desktop, as well as ChatGPT web, except in regions restricted by Adobe trade compliance. The feature currently only supports English.",
+     "url": "https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/adobe-connectors/adobe-for-chatgpt.html",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/116fedbd0fd3.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "The Adobe plugin brings capabilities across Photoshop, Lightroom, Firefly, Acrobat, Premiere, Express, InDesign, Illustrator, and more into ChatGPT. It does not include every feature from each Adobe app.",
+     "url": "https://www.adobe.com/adobe-connectors/adobe-for-chatgpt.html",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/36b3b7b80584.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "Many tools are available without signing in, while additional capabilities require an Adobe account. Some tools require an eligible paid Adobe plan.",
+     "url": "https://www.adobe.com/adobe-connectors/adobe-for-chatgpt.html",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/36b3b7b80584.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "Access tools from Photoshop, Adobe Express, Illustrator, Premiere, Acrobat, and more in ChatGPT, ChatGPT Work, and Codex.",
+     "url": "https://www.adobe.com/adobe-connectors/adobe-for-chatgpt.html",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/36b3b7b80584.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "When signed in, you can also access supported Creative Cloud assets by searching and save eligible work to Creative Cloud.",
+     "url": "https://www.adobe.com/adobe-connectors/adobe-for-chatgpt.html",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/36b3b7b80584.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "Adobe connectors are currently available for Anthropic's Claude, OpenAI's ChatGPT, Slack, and Google Gemini.",
+     "url": "https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/adobe-connectors/adobe-connectors-faq.html",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/efe38a15cbc8.html",
+     "verified_on_saved_page": true
+    }
+   ],
+   "wrong_or_unsupported_in_research": [
+    "'all nine products' is not what Adobe says for ChatGPT. The nine-product list (with Adobe Stock) is on the Claude pages. For ChatGPT Adobe names Photoshop, Lightroom, Firefly, Acrobat, Premiere, Express, InDesign and Illustrator 'and more'; Adobe Stock is not named on the two ChatGPT pages checked.",
+    "Two of the three sources do not count as evidence under Adam's rule (blog.adobe.com and openai.com); the helpx page carries the claims.",
+    "'workspace access' and 'an example handoff back into the Adobe app' are the research's project wording. Adobe only says signed-in work is saved to Creative Cloud so people can continue in Adobe."
+   ],
+   "release_label": "none stated",
+   "prerequisites": [
+    "Access to ChatGPT (web or desktop; ChatGPT Work and Codex also named)",
+    "Adobe account optional; signing in or a free Adobe account unlocks more; some tools need an eligible paid Adobe plan",
+    "English only",
+    "Not available in regions restricted by Adobe trade compliance",
+    "Browser and computer minimums listed on the help page (for example Chrome 143 or later)"
+   ],
+   "second_reader": "Verdict kept. Checked both pages for release labels: none on the feature (the only 'beta' words are in the site menu, about other products). Added that finding Creative Cloud files needs sign-in."
+  },
+  {
+   "index": 14,
+   "product": "Adobe for Claude (one Adobe connector with tools from Acrobat, Adobe Express, Photoshop, Lightroom, Illustrator, Firefly, Premiere, InDesign and Adobe Stock)",
+   "tool_product_ids": [
+    "creativecloud",
+    "express",
+    "acrobat"
+   ],
+   "assistant": "Claude (web, desktop app and Claude Code)",
+   "verdict": "confirmed",
+   "what_adobe_says": "Anyone with Claude, on a free or paid plan, can add the Adobe plugin and its connector and then, by describing the job, review and tidy PDFs, design from Express templates, edit photos in bulk, cut and resize video, find Creative Cloud files and turn data into documents. It works as a guest; signing in to Adobe adds more. Real limits Adobe states: it is not tuned for enterprise use, school (EDU) accounts are not supported, and the Express features are not available to enterprise accounts. Adobe says plainly that it is also available in Claude Code.",
+   "quotes": [
+    {
+     "quote": "Adobe for Claude connects Claude with capabilities from Acrobat, Adobe Express, Photoshop, Lightroom, Illustrator, Firefly, Premiere, InDesign, and Adobe Stock.",
+     "url": "https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/adobe-connectors/adobe-for-claude.html",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/267f563fa9ce.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "Adobe for creativity connector in Claude has been renamed to Adobe, with new creativity and productivity capabilities.",
+     "url": "https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/adobe-connectors/adobe-for-claude.html",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/267f563fa9ce.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "Adobe for Claude is available to guests and users on free and paid plans.",
+     "url": "https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/adobe-connectors/adobe-for-claude.html",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/267f563fa9ce.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "Adobe for Claude is also available in Claude Code.",
+     "url": "https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/adobe-connectors/adobe-for-claude.html",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/267f563fa9ce.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "Adobe for Claude isn't optimized for enterprise use and does not support EDU accounts. Adobe Express capabilities aren't available to enterprise accounts.",
+     "url": "https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/adobe-connectors/adobe-for-claude.html",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/267f563fa9ce.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "Adobe is available in Claude on web and desktop and Claude Code.",
+     "url": "https://www.adobe.com/adobe-connectors/adobe-for-claude.html",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/31dcbf81fb08.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "Many tools are available without signing in, while additional capabilities require an Adobe account. Some tools require an eligible paid Adobe plan.",
+     "url": "https://www.adobe.com/adobe-connectors/adobe-for-claude.html",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/31dcbf81fb08.html",
+     "verified_on_saved_page": true
+    }
+   ],
+   "wrong_or_unsupported_in_research": [
+    "The web address https://adobe-creativity.adobe.io/mcp is not on any of the Adobe pages checked; the research itself credits it to Anthropic's site, which is not evidence here.",
+    "'Adobe sources differ on Claude Code' is not supported: both official Adobe pages say it is available in Claude Code. The claim that sign-in fails there comes from a GitHub page, which does not count.",
+    "claude.com and github.com sources do not count as evidence under Adam's rule.",
+    "'limited enterprise optimization' softens Adobe's wording, which is \"isn't optimized for enterprise use\"."
+   ],
+   "release_label": "none stated",
+   "prerequisites": [
+    "Access to Claude (guest, free or paid plan); web, desktop app or Claude Code",
+    "Adobe account optional; signing in unlocks more; some tools need an eligible paid Adobe plan",
+    "Not tuned for enterprise use; EDU accounts not supported; Express features not available to enterprise accounts",
+    "Optimized for English; not available in regions restricted by Adobe trade compliance"
+   ],
+   "second_reader": "Verdict kept. Both Adobe pages name Claude and Claude Code; no release label on the feature. The enterprise and school-account limits are Adobe's own words and must travel with any wording."
+  },
+  {
+   "index": 15,
+   "product": "Firefly Creative Production (Run-Workflow connection for AI tools)",
+   "tool_product_ids": [
+    "fireflycp"
+   ],
+   "assistant": "Claude (Claude Code and Claude Desktop) and Cursor; ChatGPT is not named",
+   "verdict": "confirmed",
+   "what_adobe_says": "A client's team can link Claude Code, Claude Desktop or Cursor to Firefly Creative Production and ask in plain words for production jobs: remove a background, generate a scene, drop a product into a template, make several sizes of a video, chain steps together, and save a finished workflow for reuse. The job runs in the background and the assistant brings back the result. The organization's administrator has to hand out an access token and an API key first. The tool already has this as the service 'Run-Workflow MCP for AI agents', so nothing new is needed beyond showing Claude as the outside system.",
+   "quotes": [
+    {
+     "quote": "It allows AI assistants like Claude Code, Claude Desktop, and Cursor to discover available workflow capabilities from Firefly Creative Production, select appropriate actions, and execute workflows on your behalf using natural language instructions.",
+     "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/run-workflow-mcp-overview.html",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/7797c9544df3.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "Run-Workflow MCP supports the following MCP-compatible AI clients:",
+     "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/run-workflow-mcp-overview.html",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/7797c9544df3.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "Run-Workflow MCP works with MCP-compatible clients such as Claude Code, Claude Desktop, and Cursor.",
+     "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/install-run-workflow-mcp.html",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/49f495632ac3.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "An IMS access token for authentication received your org admin",
+     "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/install-run-workflow-mcp.html",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/49f495632ac3.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "An API key for the Run-Workflow service access received from your org admin",
+     "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/install-run-workflow-mcp.html",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/49f495632ac3.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "Publish completed workflows to obtain reusable workflow identifiers for future use.",
+     "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/run-workflow-mcp-overview.html",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/7797c9544df3.html",
+     "verified_on_saved_page": true
+    }
+   ],
+   "wrong_or_unsupported_in_research": [
+    "The product name 'Firefly Creative Production for Enterprise' and the status 'entitled enterprise workflows' are not on these pages; Adobe says 'Firefly Creative Production' (the pages sit under Firefly's enterprise features section).",
+    "'discover a published creative workflow' is narrower than Adobe's words: the assistant can also create a new workflow or pick a ready-made one, and publish it afterwards.",
+    "Nothing else is wrong; the tool's existing service already matches these pages."
+   ],
+   "release_label": "none stated",
+   "prerequisites": [
+    "An access token from the organization's administrator",
+    "An API key for the Run-Workflow service from the organization's administrator",
+    "Claude Code, Claude Desktop or Cursor"
+   ],
+   "second_reader": "Verdict kept. One quote had been stitched together from a sentence and three list items; replaced with the sentence itself plus a full sentence from the setup page that names the three tools. ChatGPT is not named anywhere on either page. No release label on the feature. The tool's existing service 'Run-Workflow MCP for AI agents' already names Claude Code, Claude Desktop and Cursor (checked in the catalog)."
+  },
+  {
+   "index": 16,
+   "product": "Brand Intelligence, Validate",
+   "tool_product_ids": [
+    "brandintel"
+   ],
+   "assistant": "Claude Desktop, as an example only ('or any MCP-compatible host'); ChatGPT is not named",
+   "verdict": "partly confirmed",
+   "what_adobe_says": "Adobe documents a web address that a client's own chat assistant can be linked to so it can send creative files to Brand Intelligence and bring back the brand-rule findings for each file. This is a developer guide for building it into the client's assistant; Claude Desktop is shown only as an example setup. The person signs in with their Adobe identity during the link-up; nothing has to be registered with Adobe beforehand. The tool's existing Validate service is about the programming interface, not this chat link, so this would be a new service if Adam wants it.",
+   "quotes": [
+    {
+     "quote": "This guide is for teams integrating Adobe Brand Intelligence Validate into their own chat assistant via its MCP (Model Context Protocol) server.",
+     "url": "https://developer.adobe.com/adobe-brand-intelligence/guides/mcp-integration/",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/76d8ee1d0ba4.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "Example config (e.g. for Claude Desktop or any MCP-compatible host):",
+     "url": "https://developer.adobe.com/adobe-brand-intelligence/guides/mcp-integration/",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/76d8ee1d0ba4.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "you do not need to pre-register anything with Adobe",
+     "url": "https://developer.adobe.com/adobe-brand-intelligence/guides/mcp-integration/",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/76d8ee1d0ba4.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "The validation result is the answer — never your own opinion.",
+     "url": "https://developer.adobe.com/adobe-brand-intelligence/guides/mcp-integration/",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/76d8ee1d0ba4.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "Validate checks creative assets - designs, images, documents, and layouts - against your organization's brand guidelines and campaign-specific rules.",
+     "url": "https://developer.adobe.com/adobe-brand-intelligence/",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/7aa3d1fdc14a.html",
+     "verified_on_saved_page": true
+    }
+   ],
+   "wrong_or_unsupported_in_research": [
+    "Adobe does not offer a ready-made Claude or ChatGPT connector here. The page is written 'for teams integrating ... into their own chat assistant'; Claude Desktop appears once, only as an example setting ('e.g. for Claude Desktop or any MCP-compatible host'). ChatGPT is not named.",
+    "'Verify the customer's Validate entitlement' is not on these pages; they say nothing about licences.",
+    "'Review BN02': the tool's existing Validate service uses the programming interface with Developer Console credentials, not the chat link, so it is not the same piece of work.",
+    "'test an approved asset and a known violation' and 'Reuse shared authentication' are the research's own project wording.",
+    "'The same endpoint also serves Simulate' is true in that both guides show the same web address, but no Adobe sentence says so.",
+    "Adobe's Brand Intelligence overview page points to the chat link only for Simulate; for Validate it points to the programming interface. The Validate chat guide exists but is not featured there."
+   ],
+   "release_label": "none stated",
+   "prerequisites": [
+    "A chat assistant that supports the open connection standard (Claude Desktop is Adobe's example)",
+    "Sign-in with the person's Adobe identity during setup; no advance registration with Adobe",
+    "Brand guidelines already set up in Brand Intelligence (implied by what Validate checks)"
+   ],
+   "second_reader": "Verdict kept at partly confirmed. Claude Desktop appears once, as an example; ChatGPT never. Adobe's Brand Intelligence overview page lists the chat link only under Simulate; the Validate chat guide is a separate page on the same official site."
+  },
+  {
+   "index": 17,
+   "product": "Brand Intelligence, Simulate",
+   "tool_product_ids": [
+    "brandintel"
+   ],
+   "assistant": "Claude Desktop, as an example only ('or any MCP-compatible host'); ChatGPT is not named",
+   "verdict": "partly confirmed",
+   "what_adobe_says": "Adobe documents a web address that a client's own chat assistant can be linked to so the team can pick a study template and an audience, send in creative and get back a summary of how a synthetic audience reacted. It is a developer guide; Claude Desktop is shown only as an example setup. The assistant must confirm five things with the person before each run because a run uses resources. The tool already has this as the service 'Simulate in your client's chat assistant', with the same Adobe page as evidence.",
+   "quotes": [
+    {
+     "quote": "This guide is for teams integrating Adobe Brand Intelligence Simulate into their own chat assistant via its MCP (Model Context Protocol) server.",
+     "url": "https://developer.adobe.com/adobe-brand-intelligence/simulate/using-mcp/",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/50c6b20d1bd1.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "Example config (e.g. for Claude Desktop or any MCP-compatible host):",
+     "url": "https://developer.adobe.com/adobe-brand-intelligence/simulate/using-mcp/",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/50c6b20d1bd1.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "Launches a simulation testing one or more creatives against an audience.",
+     "url": "https://developer.adobe.com/adobe-brand-intelligence/simulate/using-mcp/",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/50c6b20d1bd1.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "Lists the workspaces the user can access.",
+     "url": "https://developer.adobe.com/adobe-brand-intelligence/simulate/using-mcp/",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/50c6b20d1bd1.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "A simulation runs your creatives past a synthetic audience built from your organization's populations and segments, and returns an executive summary of how each one performed.",
+     "url": "https://developer.adobe.com/adobe-brand-intelligence/simulate/",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/de807e5339ba.html",
+     "verified_on_saved_page": true
+    }
+   ],
+   "wrong_or_unsupported_in_research": [
+    "Adobe does not offer a ready-made Claude or ChatGPT connector here. The page is written 'for teams integrating ... into their own chat assistant'; Claude Desktop appears once, only as an example setting ('e.g. for Claude Desktop or any MCP-compatible host'). ChatGPT is not named.",
+    "'Confirm the Simulate add-on' and 'licensed workspace': these pages say nothing about an add-on or licence (workspaces are mentioned, licences are not).",
+    "'Validate and Simulate use the same Adobe endpoint': both guides show the same web address, but no Adobe sentence states it.",
+    "The research's advice to 'Validate other hosts before naming them in a SOW' is its own; it fits what Adobe says (only Claude Desktop is given as an example)."
+   ],
+   "release_label": "none stated",
+   "prerequisites": [
+    "A chat assistant that supports the open connection standard (Claude Desktop is Adobe's example)",
+    "Sign-in with the person's Adobe identity during setup; no advance registration with Adobe",
+    "A workspace the person can access, with study templates, populations and segments already set up",
+    "The person confirms objective, assets, template, segments and sample size before each run"
+   ],
+   "second_reader": "Verdict kept at partly confirmed. Claude Desktop appears once, as an example; ChatGPT never. The tool's existing service 'Simulate in your client's chat assistant' uses the same Adobe sentence (checked in the catalog)."
+  },
+  {
+   "index": 21,
+   "product": "Frame.io",
+   "tool_product_ids": [
+    "frameio"
+   ],
+   "assistant": "none on an official Adobe page (the research says ChatGPT and Claude, from frame.io sites only)",
+   "verdict": "not confirmed",
+   "what_adobe_says": "No official Adobe page that this session could open says Frame.io links to ChatGPT or Claude. Both of the research's sources are on frame.io sites, which do not count under Adam's rule and are blocked here. Adobe's own developer pages for Frame.io (the guides and the changelog on developer.adobe.com) and the Frame.io page on adobe.com do not mention it. On top of that, the research itself calls it a public beta, so under the step 86 rule it would be left out even if an official page turns up. The second reader also checked the Frame.io developer FAQ on developer.adobe.com (no mention) and tried likely addresses on helpx.adobe.com and www.adobe.com (none exist).",
+   "quotes": [
+    {
+     "quote": "Frame.io V4 API Getting Started Guide",
+     "url": "https://developer.adobe.com/frameio/guides/",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/d6f091a2f40a.html",
+     "verified_on_saved_page": true
+    }
+   ],
+   "wrong_or_unsupported_in_research": [
+    "Both sources (developer.frame.io and help.frame.io) are not official Adobe sites under Adam's rule; they were not opened.",
+    "Every detail (the web address https://mcp.frame.io/v1/mcp, 'all Frame.io V4 plans', sign-in permissions, 'Legacy accounts are unsupported') is unverified.",
+    "'Adobe-hosted' is unsupported; the address given is on frame.io.",
+    "The record's own status is 'Public beta', which the tool does not publish as a connection."
+   ],
+   "release_label": "\"Public beta\" and \"(Beta)\" are the research's and its frame.io link's words, not checked on an official Adobe page; no official page found",
+   "prerequisites": [
+    "None confirmed on an official page (research lead only: Frame.io version 4 account and Adobe sign-in)"
+   ],
+   "second_reader": "Verdict kept at not confirmed. Looked further on official sites: the Frame.io developer FAQ on developer.adobe.com has no mention of ChatGPT, Claude or a chat link; guessed addresses on helpx.adobe.com and www.adobe.com for a Frame.io page do not exist."
+  },
+  {
+   "index": 29,
+   "product": "Acrobat (inside ChatGPT)",
+   "tool_product_ids": [
+    "acrobat"
+   ],
+   "assistant": "ChatGPT",
+   "verdict": "partly confirmed",
+   "what_adobe_says": "Adobe's December 2025 news release confirms Acrobat inside ChatGPT: edit PDFs in the chat, pull out text or tables, organize and merge files, compress, convert to PDF and redact, free to ChatGPT users. Adobe's current help page (September 2026) describes one Adobe plugin for ChatGPT that includes Acrobat tools and says it replaced the Photoshop plugin; no official Adobe page checked says a separate Acrobat entry still exists today. Treat Acrobat in ChatGPT as part of the one Adobe plugin (record 13), not as a second connection.",
+   "quotes": [
+    {
+     "quote": "Adobe (Nasdaq:ADBE) today launched Adobe Photoshop, Adobe Express and Adobe Acrobat for ChatGPT",
+     "url": "https://news.adobe.com/news/2025/12/adobe-photoshop-express-acrobat-chatgpt",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/de5ee11657bb.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "Transform and organize documents with Adobe Acrobat: Edit PDFs directly in the chat, extract text or tables, organize and merge multiple files, compress files and convert them to PDF while keeping formatting and quality intact. Acrobat for ChatGPT also enables people to easily redact sensitive details.",
+     "url": "https://news.adobe.com/news/2025/12/adobe-photoshop-express-acrobat-chatgpt",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/de5ee11657bb.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "Photoshop, Adobe Express and Acrobat for ChatGPT are free to ChatGPT users globally and available starting today on ChatGPT desktop, web and iOS.",
+     "url": "https://news.adobe.com/news/2025/12/adobe-photoshop-express-acrobat-chatgpt",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/de5ee11657bb.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "The Photoshop plugin has been replaced by the Adobe plugin on ChatGPT — a single plugin for skills and tools across creativity, productivity, and more.",
+     "url": "https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/adobe-connectors/adobe-for-chatgpt.html",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/116fedbd0fd3.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "Adobe for ChatGPT provides access to capabilities from Photoshop, Premiere, Firefly, Express, Acrobat, and other Adobe capabilities directly in ChatGPT through conversation.",
+     "url": "https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/adobe-connectors/adobe-for-chatgpt.html",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/116fedbd0fd3.html",
+     "verified_on_saved_page": true
+    }
+   ],
+   "wrong_or_unsupported_in_research": [
+    "The status 'Listed by OpenAI' rests on openai.com, which is not evidence under Adam's rule; whether a separate Acrobat entry is still listed today is not confirmed on any Adobe page.",
+    "'splitting' is not in Adobe's wording (Adobe says organize, merge, compress, convert, extract, edit and redact).",
+    "blog.adobe.com source does not count.",
+    "A separate connection for Acrobat would double-count the single Adobe plugin; the research itself warns about this."
+   ],
+   "release_label": "none stated for Acrobat in ChatGPT (the 2025 release says only that Android support for Photoshop and Acrobat was \"coming soon\")",
+   "prerequisites": [
+    "Access to ChatGPT",
+    "Free to ChatGPT users (Adobe, December 2025); Adobe sign-in optional and unlocks more in the current single plugin"
+   ],
+   "second_reader": "Verdict kept at partly confirmed. One quote carried a stray space before a colon (left over from stripping the page's formatting); fixed to read as the page reads. Tried likely addresses for a separate Acrobat-in-ChatGPT page on helpx.adobe.com and www.adobe.com: none exist. The 2025 news release is a year old; Adobe's current help page describes one Adobe plugin."
+  },
+  {
+   "index": 32,
+   "product": "Adobe Express (inside ChatGPT)",
+   "tool_product_ids": [
+    "express"
+   ],
+   "assistant": "ChatGPT",
+   "verdict": "partly confirmed",
+   "what_adobe_says": "Adobe's December 2025 news release confirms Adobe Express inside ChatGPT: browse Express designs, fill in text, swap images, animate and keep editing in the chat, free to ChatGPT users. Adobe's current pages describe one Adobe plugin for ChatGPT that includes Express templates; no official Adobe page checked says a separate Express entry still exists today. Treat Express in ChatGPT as part of the one Adobe plugin (record 13), not as a second connection.",
+   "quotes": [
+    {
+     "quote": "Adobe (Nasdaq:ADBE) today launched Adobe Photoshop, Adobe Express and Adobe Acrobat for ChatGPT",
+     "url": "https://news.adobe.com/news/2025/12/adobe-photoshop-express-acrobat-chatgpt",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/de5ee11657bb.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "Create and personalize designs with Adobe Express: Browse Adobe Express' extensive library of professional designs to find the best one for any moment, fill in the text, replace images, animate designs and iterate on edits",
+     "url": "https://news.adobe.com/news/2025/12/adobe-photoshop-express-acrobat-chatgpt",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/de5ee11657bb.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "Photoshop, Adobe Express and Acrobat for ChatGPT are free to ChatGPT users globally and available starting today on ChatGPT desktop, web and iOS.",
+     "url": "https://news.adobe.com/news/2025/12/adobe-photoshop-express-acrobat-chatgpt",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/de5ee11657bb.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "The Photoshop plugin has been replaced by the Adobe plugin on ChatGPT — a single plugin for skills and tools across creativity, productivity, and more.",
+     "url": "https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/adobe-connectors/adobe-for-chatgpt.html",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/116fedbd0fd3.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "Start from an Express template, update text and colors, and then animate for social media, or convert to a polished PDF.",
+     "url": "https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/adobe-connectors/adobe-for-chatgpt.html",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/116fedbd0fd3.html",
+     "verified_on_saved_page": true
+    }
+   ],
+   "wrong_or_unsupported_in_research": [
+    "The status 'Listed by OpenAI' rests on openai.com, which is not evidence under Adam's rule; whether a separate Express entry is still listed today is not confirmed on any Adobe page.",
+    "'presentations, flyers and social content' as a list is not Adobe's wording in the news release (it says 'professional designs'; the help page gives an Instagram Story and a flyer as examples).",
+    "blog.adobe.com source does not count.",
+    "A separate connection for Express would double-count the single Adobe plugin."
+   ],
+   "release_label": "none stated",
+   "prerequisites": [
+    "Access to ChatGPT",
+    "Free to ChatGPT users (Adobe, December 2025); Adobe sign-in optional and unlocks more in the current single plugin"
+   ],
+   "second_reader": "Verdict kept at partly confirmed. Tried likely addresses for a separate Express-in-ChatGPT page on helpx.adobe.com and www.adobe.com: none exist. The 2025 news release is a year old; Adobe's current help page describes one Adobe plugin."
+  },
+  {
+   "index": 33,
+   "product": "Adobe Express add-on development (a helper for programmers)",
+   "tool_product_ids": [
+    "express"
+   ],
+   "assistant": "Claude Desktop, Cursor and VS Code are named as editors; ChatGPT is not named",
+   "verdict": "not a connection",
+   "what_adobe_says": "This is a free helper for programmers who build add-ons for Adobe Express. It feeds Adobe's add-on documentation and code definitions to the AI helper in the programmer's editor so its answers and code are accurate. It does not link a client's Adobe Express to Claude or ChatGPT and it does nothing with the client's designs or data, so it is not an outside-system connection for the canvas. At most it is a working tool a partner uses when a custom Express add-on is in scope.",
+   "quotes": [
+    {
+     "quote": "Get Adobe Express Add-ons documentation and TypeScript definitions directly in your AI-assisted IDE through the Model Context Protocol (MCP).",
+     "url": "https://developer.adobe.com/express/add-ons/docs/guides/getting-started/local-development/mcp-server",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/b6fa3551c218.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "MCP-compatible IDE - Such as Cursor, Claude Desktop, VS Code or other editors supporting the Model Context Protocol",
+     "url": "https://developer.adobe.com/express/add-ons/docs/guides/getting-started/local-development/mcp-server",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/b6fa3551c218.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "which is now officially supported and production ready",
+     "url": "https://developer.adobe.com/express/add-ons/docs/guides/getting-started/local-development/mcp-server",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/b6fa3551c218.html",
+     "verified_on_saved_page": true
+    },
+    {
+     "quote": "Adobe Express add-on developers who want faster, more accurate development workflows.",
+     "url": "https://developer.adobe.com/express/add-ons/docs/guides/getting-started/local-development/mcp-server",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/b6fa3551c218.html",
+     "verified_on_saved_page": true
+    }
+   ],
+   "wrong_or_unsupported_in_research": [
+    "Filed as a 'Direct connector' between Adobe Express and Claude; Adobe describes a documentation helper for programmers, not a link to the product.",
+    "The facts quoted (package name, Node.js 18 or later, stable and supported) do match the page."
+   ],
+   "release_label": "none; Adobe: \"now officially supported and production ready\" (it replaced an earlier version Adobe labelled Beta, now deprecated)",
+   "prerequisites": [
+    "Node.js 18 or later",
+    "An editor with an AI helper that supports the open connection standard (Cursor, Claude Desktop, VS Code)",
+    "Free"
+   ],
+   "second_reader": "Verdict kept at not a connection. One quote joined a question heading and its answer; trimmed to the answer sentence."
+  }
+ ],
+ "other_leads": [
+  "Adobe for Microsoft Copilot: a new help page (last updated Nov 17, 2026) says the Adobe connector is available to Microsoft Copilot enterprise customers in Copilot Cowork, switched on by the Microsoft administrator. https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/adobe-connectors/adobe-for-copilot.html (saved as 13ae3325cc3a.html). Not in the research slice.",
+  "Adobe for Google Gemini and Adobe for Slack are listed next to ChatGPT and Claude on Adobe's connectors overview (https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/adobe-connectors/adobe-connector-overview.html and https://www.adobe.com/adobe-connectors.html). Gemini needs an Adobe sign-in; Slack needs an administrator to switch it on.",
+  "GenStudio for Performance Marketing also lists Writer, Microsoft Copilot and Adobe CX Enterprise Coworker as supported assistants on the same page as Claude and ChatGPT (a GenStudio to Coworker connection is described there as 'Native connection managed by your organization').",
+  "Enterprise limit to carry into any wording: Adobe's Claude help page says the connector 'isn't optimized for enterprise use', does not support EDU accounts, and Express features 'aren't available to enterprise accounts'. The ChatGPT help page carries no such sentence.",
+  "Frame.io: developer.adobe.com/frameio/ redirects to a frame.io site that is blocked here; if Adam wants the Frame.io link checked he would need to paste text from an official Adobe page that names it. The research itself labels it beta.",
+  "The www.adobe.com/express/learn/blog page (record 8) is on www.adobe.com, which is on Adam's list, but it is a blog-style page; the helpx Adobe for Claude page is the stronger anchor for the connector itself."
+ ],
+ "second_reader": {
+  "checked": "2026-11-18",
+  "quotes_checked_first_file": 58,
+  "quotes_in_this_file": 61,
+  "quotes_failed": [],
+  "method": "Every quote re-proven against the saved file with found() from verify.py, and also against the page text with formatting removed two ways. Each page read around the quote for release labels and limiting sentences. Ten more addresses tried with plain curl on developer.adobe.com, helpx.adobe.com, www.adobe.com and news.adobe.com (logged in pages/index.tsv).",
+  "verdicts_changed": [
+   {
+    "index": 8,
+    "from": "confirmed",
+    "to": "partly confirmed",
+    "why": "Adobe's help page for the Claude connector says its Adobe Express features are not available to enterprise accounts; the hand-off page is undated and names Claude Design specifically."
+   }
+  ]
+ }
+}

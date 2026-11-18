@@ -1,0 +1,856 @@
+{
+ "slice": "aem",
+ "checked_on": "2026-11-18",
+ "method": "Each source on an official Adobe site this session can reach was fetched with curl (default headers, about one request a second) and saved under pages/ with a line in pages/index.tsv. Experience League pages came back as full HTML, so no .md or JSON fallback was needed. Every quote was matched word for word against the saved file with the same matcher idea as handoff/2026-11-17/evidence_page/tools/verify.py (tags stripped, white space and curly quotes normalised). business.adobe.com and aem.live were not tried. To look for pages the research missed, the Experience League and Adobe newsroom site lists (sitemaps) were searched by page address; full-text search of those sites was not available.",
+ "records": [
+  {
+   "index": 3,
+   "product": "AEM Sites as a Cloud Service",
+   "tool_product_ids": [
+    "aemsites"
+   ],
+   "assistant": "both (Adobe also names Microsoft 365 Copilot as a chat app, and coding tools including Claude Code, OpenAI Codex, Cursor and GitHub Copilot)",
+   "verdict": "confirmed",
+   "what_adobe_says": "A client's team can connect Claude or ChatGPT to their AEM as a Cloud Service author environment and then, in plain language, find, create, change, delete and publish pages and content fragments. There are two ways in: a one-click Adobe Experience Manager connector in Claude's connector marketplace (an Adobe Experience Manager plugin in ChatGPT's plugin marketplace), or adding Adobe's single AEM web address by hand. Everything runs under the signed-in person's own AEM permissions. Adobe's own advice is that for changes and deletions, everyday authors should use Adobe's AI Assistant rather than the outside assistant, and that every action that changes content should be reviewed before it is approved.",
+   "quotes": [
+    {
+     "quote": "Many Adobe Experience Manager (AEM) teams now work in Integrated Development Environments (IDEs) and chat-based applications such as Cursor, OpenAI ChatGPT, Anthropic Claude, and Microsoft Copilot Studio.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/using-mcp-with-aem-as-a-cloud-service",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/79a0eafe9ddf.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "Adobe offers a unified AEM MCP Server so you can configure a single URL in your chat application or coding agent to get access to a growing set of tools.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/using-mcp-with-aem-as-a-cloud-service",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/79a0eafe9ddf.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "Content operations including create, read, update, and delete (CRUD) for pages and content fragments, plus asset importing and assets search (minimum required AEM release version is 26309).",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/using-mcp-with-aem-as-a-cloud-service",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/79a0eafe9ddf.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "Note that the AEM MCP Server is used by the AEM Claude Connector and AEM ChatGPT Plugin.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/using-mcp-with-aem-as-a-cloud-service",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/79a0eafe9ddf.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "Requests to AEM MCP tools run under the authenticated user's identity, and each tool enforces the user's existing AEM permissions.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/using-mcp-with-aem-as-a-cloud-service",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/79a0eafe9ddf.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "For scenarios that modify or delete content, practitioners should use the AI Assistant interface rather than invoking MCP tools directly.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/using-mcp-with-aem-as-a-cloud-service",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/79a0eafe9ddf.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "All applications listed under Supported MCP Applications are permitted by default.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/using-mcp-with-aem-as-a-cloud-service",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/79a0eafe9ddf.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "Install the Adobe Experience Manager Connector from Anthropic's connector marketplace. It currently has feature parity with Content MCP Server and will expose a growing subset of tools available in AEM's MCP servers.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/chat-applications/setup-claude",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/694a5c2e930d.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "Install the Adobe Experience Manager plugin from the ChatGPT plugin marketplace. It currently has feature parity with Content MCP Server and will expose a growing subset of tools available in AEM's MCP servers.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/chat-applications/setup-chatgpt",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/679cc5ad030b.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "Claude users can browse Anthropic's Connector marketplace to 1-click install the Adobe Experience Manager Connector. This MCP server exposes a growing set of tools to interact with AEM, including editing content through prompting.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/release-notes/release-notes/2026/2026-4-0",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/97fad161943f.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "ChatGPT users can browse OpenAI's Plugin marketplace to 1-click install the Adobe Experience Manager Plugin. This MCP server exposes a growing set of tools to interact with AEM, including editing content through prompting.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/release-notes/release-notes/2026/2026-7-0",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/6d37b15252fd.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "These MCP servers include tools for working with Pages, Content Fragments, and Assets, and can be used from the following MCP clients: ChatGPT, Claude, Cursor, and Microsoft Copilot Studio.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/release-notes/release-notes/2026/2026-1-0",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/e7124cee4b32.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "Use the AEM MCP Server from any AI-powered chat client, such as ChatGPT, Claude, or Cursor, to update your website content and publish changes in natural language, no manual editing in the AEM UI.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/ai/mcp-servers/manage-your-website-with-ai",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/cef154692daa.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "Enable Developer mode so you can add and configure a custom plugin.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/chat-applications/setup-chatgpt",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/679cc5ad030b.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "Administrators can also disable access for specific MCP client applications at the organization level if their organization's policies require it.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/using-mcp-with-aem-as-a-cloud-service",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/79a0eafe9ddf.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "Always review outputs before applying changes to production content.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/using-mcp-with-aem-as-a-cloud-service",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/79a0eafe9ddf.html",
+     "found_word_for_word": true
+    }
+   ],
+   "wrong_or_unsupported_in_research": [
+    "Nothing in the record contradicts Adobe. Two things it leaves out matter for a client: Adobe tells everyday authors to use Adobe's own AI Assistant, not the outside assistant, for changes and deletions; and Adobe calls the ChatGPT side a plugin, not a connector.",
+    "\"Choose access level\": the person setting up cannot pick read-only for the whole connection themselves. Adobe's page says the default (read and write) is changed by emailing Adobe. Inside Claude a person can set each tool to always allow, ask or never allow.",
+    "\"Price shared AEM connector setup once across Sites, Assets and other enabled categories\" is the research's own advice, not something an Adobe page says. What Adobe does say is that one web address covers all the categories.",
+    "The record's product id aemsites is right. Adobe does not say whether this covers sites built on Edge Delivery Services, so nothing is claimed for that product."
+   ],
+   "release_label": "none stated. Adobe's pages give the AEM MCP Server, the Claude connector and the ChatGPT plugin no beta or preview label (the release notes announce the content tools for ChatGPT and Claude in 2026.1.0, and list the Claude connector under New Features for 2026.4.0 and the ChatGPT plugin under New Features for 2026.7.0).",
+   "prerequisites": [
+    "AEM as a Cloud Service (Adobe's pages apply to the cloud version only); the content tools need AEM release 26309 or later",
+    "Each person signs in with their own Adobe ID, and can only do what their AEM permissions already allow",
+    "Claude and ChatGPT are allowed by default; the client's Adobe administrator can ask Adobe (by email to the address on Adobe's page) to switch the server off, limit it to read-only, or block a given assistant",
+    "On environments that restrict access by IP address, a CDN traffic filter rule that lets Adobe's AEM MCP Server in (Adobe gives the rule)",
+    "In ChatGPT, adding the server by its web address needs Developer mode switched on; the one-click plugin from ChatGPT's plugin marketplace does not"
+   ],
+   "second_reader": "Verdict kept. All 13 quotes are on the saved pages word for word. The page names OpenAI ChatGPT and Anthropic Claude by name in its list of supported chat apps and has a set-up page for each; no beta, preview or early-access wording appears on the user guide or either set-up page, and the release notes list the Claude connector (April 2026) and the ChatGPT plugin (July 2026) under New Features, not under Early Adopter Features. Two limits to carry into any wording: Adobe says the one-click connector and plugin hold 'a subset of the tools', and Adobe steers everyday authors to its own AI Assistant for changes and deletions."
+  },
+  {
+   "index": 4,
+   "product": "AEM Assets as a Cloud Service",
+   "tool_product_ids": [
+    "aemassets"
+   ],
+   "assistant": "both (same Adobe server and same list of supported apps as AEM Sites)",
+   "verdict": "confirmed",
+   "what_adobe_says": "Through the same connection as AEM Sites, a client's team can ask Claude or ChatGPT to search and import assets, upload, download, move, copy, delete, publish and unpublish them, edit their descriptive details, see where an asset is used and find unused assets. Making resized or cropped image versions on request needs Dynamic Media with OpenAPI switched on. It is one connection for Sites and Assets together, not a separate one.",
+   "quotes": [
+    {
+     "quote": "There is also support for asset upload, download, move/copy/delete, and publish/unpublish for assets, along with editing metadata, inspecting references, and identifying unused assets. If you have Dynamic Media with OpenAPI enabled, you can also generate on-the-fly renditions.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/using-mcp-with-aem-as-a-cloud-service",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/79a0eafe9ddf.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "Content operations including create, read, update, and delete (CRUD) for pages and content fragments, plus asset importing and assets search (minimum required AEM release version is 26309).",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/using-mcp-with-aem-as-a-cloud-service",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/79a0eafe9ddf.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "Minimum required AEM release version to access Assets Search via MCP endpoint is 26309.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/using-mcp-with-aem-as-a-cloud-service",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/79a0eafe9ddf.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "You must have Dynamic Media with OpenAPI enabled to generate on-the-fly renditions.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/using-mcp-with-aem-as-a-cloud-service",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/79a0eafe9ddf.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "Note that the AEM MCP Server is used by the AEM Claude Connector and AEM ChatGPT Plugin.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/using-mcp-with-aem-as-a-cloud-service",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/79a0eafe9ddf.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "Practitioners and content architects can manage sites and content fragments, and import assets, with AI assistance while staying within AEM's existing permission model.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/using-mcp-with-aem-as-a-cloud-service",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/79a0eafe9ddf.html",
+     "found_word_for_word": true
+    }
+   ],
+   "wrong_or_unsupported_in_research": [
+    "Nothing in the record contradicts Adobe. It understates the reach: Adobe also lists upload, download, move, copy, delete and unpublish, and finding unused assets. Delete and unpublish matter for how carefully a client sets permissions.",
+    "\"Availability of operations depends on the AEM release and enabled services\": Adobe states one release floor (26309) and one switch (Dynamic Media with OpenAPI for on-request image versions). It does not say operations vary beyond that.",
+    "\"Reuse the AEM connection already configured for Sites\" is correct in substance (one web address covers both) but is the research's wording, not Adobe's."
+   ],
+   "release_label": "none stated. No beta or preview label on Adobe's page for the asset tools.",
+   "prerequisites": [
+    "AEM as a Cloud Service (Adobe's pages apply to the cloud version only); the content tools need AEM release 26309 or later",
+    "Each person signs in with their own Adobe ID, and can only do what their AEM permissions already allow",
+    "Claude and ChatGPT are allowed by default; the client's Adobe administrator can ask Adobe (by email to the address on Adobe's page) to switch the server off, limit it to read-only, or block a given assistant",
+    "On environments that restrict access by IP address, a CDN traffic filter rule that lets Adobe's AEM MCP Server in (Adobe gives the rule)",
+    "In ChatGPT, adding the server by its web address needs Developer mode switched on; the one-click plugin from ChatGPT's plugin marketplace does not",
+    "Dynamic Media with OpenAPI switched on, only if the team wants resized, cropped or converted image versions made on request"
+   ],
+   "second_reader": "Verdict kept. All 6 quotes found. The asset actions sit in the Content row of the same table on the same page, so the ChatGPT and Claude naming carries over. One limit to keep: the one-click connector and plugin are described as holding a subset of the tools, so some asset actions may need Adobe's web address added by hand."
+  },
+  {
+   "index": 6,
+   "product": "AEM Sites (Claude Design hand-off)",
+   "tool_product_ids": [
+    "aemsites"
+   ],
+   "assistant": "Claude (Claude Design), according to the research only",
+   "verdict": "needs text Adam pastes",
+   "what_adobe_says": "Nothing could be checked. The record's only source is a business.adobe.com blog page, which automated tools cannot open. No mention of Claude Design or a \"Send to\" hand-off into AEM was found on the official pages that could be searched: the Experience League site list has no page with \"claude-design\" in its address, and the nine 2026 AEM release notes plus the current one, and eight 2026 newsroom announcements about AI platforms and Coworker, were searched for the words \"Claude Design\" without a hit. If Adam pastes the text of that blog page, the claim can be checked against it.",
+   "quotes": [],
+   "wrong_or_unsupported_in_research": [
+    "The whole record is unverified: \"Available in Claude Design's Send to workflow, per Adobe\" rests on one business.adobe.com page that could not be opened.",
+    "Whether the hand-off lands in AEM Sites, in Edge Delivery Services or in Experience Workspace is not established; the record assumes AEM Sites.",
+    "Whether Adobe gives it a release label (for example beta) is unknown until the page text is read."
+   ],
+   "release_label": "unknown: the only source could not be opened",
+   "prerequisites": [
+    "unknown until the page text is read"
+   ],
+   "second_reader": "Verdict kept. Looked again for an official page: the Experience League address list (37,138 addresses) has no page with 'claude-design' in it, and the only saved Adobe page that uses the words 'Claude Design' is an Adobe Express blog page on www.adobe.com about exporting into Adobe Express, not AEM. Nothing found for AEM."
+  },
+  {
+   "index": 23,
+   "product": "AEM Edge Functions (AEM Sites, on traditional AEM or Edge Delivery Services)",
+   "tool_product_ids": [
+    "eds",
+    "aemsites"
+   ],
+   "assistant": "both, in one sentence, as an example of something a client could build",
+   "verdict": "not a connection",
+   "what_adobe_says": "This is not a ready-made link to ChatGPT or Claude. AEM Edge Functions lets a client's developers run their own JavaScript on Adobe's managed CDN; it is generally available and approved for production. While it was still a beta program (release notes for January to April 2026) Adobe listed, as one possible use, a client building its own server on it so that assistants like ChatGPT and Claude could reach the client's custom tools. Adobe dropped that line afterwards: the August 2026 notes that announce Edge Functions for everyone repeat the list of uses without it, and today's product page and tutorial do not mention ChatGPT, Claude or such a server. Adobe gives no instructions for it. A partner could offer it as custom development on a generally available building block, but it should not be shown as a connection.",
+   "quotes": [
+    {
+     "quote": "AEM Edge Functions (Beta Program)",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/release-notes/release-notes/2026/2026-4-0",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/97fad161943f.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "Exposing an MCP server for AI Assistants like ChatGPT and Claude to access custom tools",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/release-notes/release-notes/2026/2026-4-0",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/97fad161943f.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "Exposing an MCP server for LLMs like ChatGPT and Claude to access custom tools",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/release-notes/release-notes/2026/2026-2-0",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/cfff5ed9a5c0.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "We have a limited number of opportunities available for either AEM Publish Delivery or Edge Delivery Services projects for live production sites.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/release-notes/release-notes/2026/2026-4-0",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/97fad161943f.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "AEM Edge Functions is now Generally Available (GA) as part of AEM as a Cloud Service – Sites with Edge Delivery Services.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-cloud-kcs/kbarticles/ka-45209",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/1a030049ea4b.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "It's approved for use with Production traffic on AEM as a Cloud Service programs that include Sites and Edge Delivery Services.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-cloud-kcs/kbarticles/ka-45209",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/1a030049ea4b.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "AEM Edge Functions allows you to execute JavaScript at the Adobe-Managed CDN, bringing data processing closer to the end user. This reduces latency and enables responsive, dynamic experiences at the edge. It's available for both AEM Cloud Service Java Stack and Edge Delivery Services projects, for AEM Sites customers.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/release-notes/release-notes/2026/2026-8-0",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/fced5e94bfda.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "AEM Edge Functions is compatible with both Edge Delivery Services and AEM as a Cloud Service Java-stack, for AEM Sites customers.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/developing/edge-functions",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/847579873652.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "For example, you are entitled to up to 5 AEM Edge Function executions per licensed content request.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/developing/edge-functions",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/847579873652.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "Up to 5 million edge function execution requests per 1 million licensed Content Requests.",
+     "url": "https://helpx.adobe.com/legal/product-descriptions/aem-cloud-service.html",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/2053dbdcefe1.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "Experience Manager as a Cloud Service Foundation Early Adopter Features",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/release-notes/release-notes/2026/2026-4-0",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/97fad161943f.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "AEM Edge Functions has transitioned from public beta to general availability",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-cloud-kcs/kbarticles/ka-45209",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/1a030049ea4b.html",
+     "found_word_for_word": true
+    }
+   ],
+   "wrong_or_unsupported_in_research": [
+    "\"Adobe identifies exposing an MCP server to both assistants as a use case\": true only of the release notes for January to April 2026 (the record cites April), written while Edge Functions was a beta program. Adobe's later notes, including the general-availability notes of August 2026, and the current product page drop that use. The record does not say so.",
+    "\"GA infrastructure for eligible Sites with Edge Delivery Services programs\": Adobe's product page and August release notes say it works for both traditional AEM (Java stack) and Edge Delivery Services, for AEM Sites customers. The support note's wording is \"programs that include Sites and Edge Delivery Services\". The record's product id (eds only) is too narrow; AEM Sites belongs too.",
+    "The scope steps (\"define the tool contract, authorize the client, implement an Edge Function, configure the CDN route and test an authorized tool call\") are the research's own plan. Adobe publishes no guide for building such a server on Edge Functions.",
+    "\"Keep an existing third-party CDN configuration separate\" is not on any of the three cited pages."
+   ],
+   "release_label": "For Edge Functions itself: \"AEM Edge Functions is now Generally Available (GA)\". For the ChatGPT and Claude use: named only under the headings \"Early Adopter Features\" and \"AEM Edge Functions (Beta Program)\", and removed from Adobe's later pages.",
+   "prerequisites": [
+    "AEM Sites as a Cloud Service, on traditional AEM or Edge Delivery Services, with a Cloud Manager program and a configuration pipeline (an Edge Delivery Services pipeline for Edge Delivery sites)",
+    "The site served through Adobe's managed CDN; Edge Delivery sites need a custom domain",
+    "The AEM Administrator product profile on the author environment, or the Cloud Manager Deployment Manager role for Edge Delivery sites",
+    "Usage limits in the AEM product description: up to 5 million Edge Function runs per 1 million licensed content requests; one Edge Function per environment on traditional AEM and three per program on Edge Delivery Services",
+    "The client's own developers (or the partner) write, host and secure the server; nothing is supplied ready-made"
+   ],
+   "second_reader": "Verdict changed from 'partly confirmed' to 'not a connection'. All quotes found. Checked the May, June, July and August 2026 release notes, the product page and the Edge Functions tutorial: none contains the ChatGPT and Claude line."
+  },
+  {
+   "index": 25,
+   "product": "Workfront Fusion AI modules for AEM, Marketo Engage, Workfront and Fusion",
+   "tool_product_ids": [
+    "workfront",
+    "aemsites",
+    "aemassets",
+    "marketo"
+   ],
+   "assistant": "other: OpenAI and Anthropic (Claude) as the AI model behind a Fusion step, chosen with the client's own key; Amazon Bedrock is a third choice. Not the ChatGPT or Claude apps.",
+   "verdict": "confirmed",
+   "what_adobe_says": "This is not a link to the ChatGPT or Claude apps. Inside Workfront Fusion, four Adobe modules (for AEM, Marketo Engage, Workfront and Fusion itself) take a plain-English instruction and let an AI model carry it out in that Adobe product. By default the model is Adobe's own, with nothing to set up. As an optional, advanced setting, a client can instead supply its own key for OpenAI, Anthropic (Claude) or Amazon Bedrock and pick the model. The client can also limit which read actions and which change-or-delete actions the AI may use. So this supports a line about OpenAI or Anthropic as the AI model behind a Fusion step (with the client's own key); it does not support showing ChatGPT or Claude, the chat apps, as connected to AEM, Marketo Engage or Workfront.",
+   "quotes": [
+    {
+     "quote": "By default, this module processes your prompt using Adobe's own AI service, and you do not need to select a key.",
+     "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/aem-mcp-modules",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/6a6feaeb1f8b.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "Supported providers are OpenAI, Anthropic Claude, and Amazon Bedrock.",
+     "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/aem-mcp-modules",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/6a6feaeb1f8b.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "You can instead select a specific LLM key to use OpenAI, Anthropic Claude, or Amazon Bedrock, if your organization has an account with one of these.",
+     "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-marketo-engage-mcp-module",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/9066d9800a11.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "By default, this module uses Adobe Managed AI, which uses the claude-sonnet-5 model. You can configure the module to use a different LLM, using a key and other credentials you provide.",
+     "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/workfront-mcp-modules",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/f6617dacc46b.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "Supported providers are OpenAI, Anthropic, and Amazon Bedrock.",
+     "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/workfront-mcp-modules",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/f6617dacc46b.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "Usage of Adobe Managed AI is limited to $25 per organization, per month.",
+     "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/workfront-mcp-modules",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/f6617dacc46b.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "Supported providers are OpenAI, Anthropic, and Amazon Bedrock.",
+     "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-fusion-mcp-modules",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/d881a2ee9b11.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "To guarantee that an unattended scenario never takes a destructive action, we recommend leaving this field set to a deliberately empty selection rather than leaving it unrestricted.",
+     "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/aem-mcp-modules",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/6a6feaeb1f8b.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "If your organization has a Select or Prime Workfront package that does not include Workfront Automation and Integration, your organization must purchase Adobe Workfront Fusion.",
+     "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/aem-mcp-modules",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/6a6feaeb1f8b.html",
+     "found_word_for_word": true
+    }
+   ],
+   "wrong_or_unsupported_in_research": [
+    "The record leaves out that the client's own key is optional: by default the modules use Adobe's own AI and need no OpenAI or Anthropic account. A partner reading the record could think a key is required.",
+    "It leaves out Amazon Bedrock, which Adobe names beside OpenAI and Anthropic on all four pages.",
+    "It leaves out the limit Adobe states on its own default AI in the Workfront module: $25 of use per organization per month.",
+    "\"A model chosen by the customer\": only when the client supplies a key. Otherwise Adobe chooses (the Workfront page names the model Adobe uses).",
+    "The tool already has a service on the AEM module (\"Fusion scenarios on AEM pages\") and the AEM Sites to Workfront connection already cites this Adobe page, so most of this record is not new to the tool."
+   ],
+   "release_label": "none stated on any of the four pages",
+   "prerequisites": [
+    "Workfront Fusion, as Adobe's access table lists it: any Workfront Workflow package together with any Workfront Automation and Integration package, or Workfront Ultimate, or Workfront Prime or Select with Workfront Fusion bought in addition",
+    "A Workfront Standard licence (Work or higher on the older licence model)",
+    "An account in the Adobe product the module works on (AEM, Marketo Engage with an API-only user, Workfront, or Fusion)",
+    "Only if the client wants its own model: the client's own paid account and key with OpenAI, Anthropic or Amazon Bedrock"
+   ],
+   "second_reader": "Verdict kept: Adobe's four pages do say what the first checker reports, and none carries a beta or preview label. Read with care: 'confirmed' here means the client can bring its own OpenAI or Anthropic key into Fusion. The pages never mention the ChatGPT or Claude apps. The words 'Anthropic Claude' appear on the AEM and Marketo Engage pages; the Workfront and Fusion pages say only 'Anthropic'."
+  },
+  {
+   "index": 34,
+   "product": "AEM Cloud Manager and Cloud Migration (parts of Adobe's AEM MCP Server)",
+   "tool_product_ids": [],
+   "assistant": "neither is named for these two parts. Adobe's pages name ChatGPT and Claude for the shared AEM server as a whole, but describe Cloud Manager and Cloud Migration only for coding tools",
+   "verdict": "partly confirmed",
+   "what_adobe_says": "Two more parts of the same Adobe AEM server. Cloud Manager: a client's technical team can look at and manage programs, environments, code repositories and deployment pipelines, and start a pipeline. Cloud Migration: read-only; it fetches the findings of Adobe's Best Practices Analyzer report from Cloud Acceleration Manager so a coding assistant can help move code from AEM 6.x to AEM as a Cloud Service. Every Adobe page that describes either part speaks of a developer's coding tool, not of Claude or ChatGPT chat. That Claude or ChatGPT can reach them is a reading of two facts put together (both parts are in the shared server's table, and both assistants are on its list of supported apps); Adobe does not say it in so many words. The one-click Claude connector and ChatGPT plugin are described as matching the content tools only, so it would mean adding Adobe's web address by hand. Neither Cloud Manager nor Cloud Migration is a product on the tool's canvas.",
+   "quotes": [
+    {
+     "quote": "Manage Cloud Manager entities including programs, environments, repositories and pipelines, which can also be triggered.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/using-mcp-with-aem-as-a-cloud-service",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/79a0eafe9ddf.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "In addition to Content operations (pages, content fragments, and assets) and Experience Governance checks, AEM MCP now supports Cloud Manager operations to manage programs, environments, and pipelines.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/release-notes/release-notes/2026/2026-9-0",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/aaff7e288231.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "Fetch Best Practices Analyzer (BPA) findings from Cloud Acceleration Manager (CAM) by migration pattern or severity level, enabling AI agents to drive code migration from AEM 6.x to AEM as a Cloud Service.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/using-mcp-with-aem-as-a-cloud-service",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/79a0eafe9ddf.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "AEM Cloud Migration capabilities are available through the AEM MCP Server, a hosted Model Context Protocol (MCP) server that connects your IDE agent to Cloud Acceleration Manager (CAM).",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/migration-journey/cloud-migration-skill/using-cloud-migration-mcp",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/fae298df6a4f.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "The AEM MCP Server's Cloud Migration category is enabled by default and provides read-only access through two tools that the migration skill invokes automatically during a session:",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/migration-journey/cloud-migration-skill/using-cloud-migration-mcp",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/fae298df6a4f.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "An AI-enabled IDE that supports remote MCP servers.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/migration-journey/cloud-migration-skill/using-cloud-migration-mcp",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/fae298df6a4f.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "A Cloud Acceleration Manager project with an uploaded BPA report.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/migration-journey/cloud-migration-skill/using-cloud-migration-mcp",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/fae298df6a4f.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "The AEM MCP Server now supports the Cloud Migration capabilities, used by the Cloud Migration Agent skill described earlier, which migrates AEM 6.5 (or earlier) Java-stack projects to AEM as a Cloud Service in the IDE.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/release-notes/release-notes/release-notes-current",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/c1074b3d8bd5.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "The Cloud Manager MCP Server allows you to interact with Cloud Manager APIs directly from your IDE using prompts. Supported scenarios include executing pipelines, checking environment status, and more.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/release-notes/release-notes/2026/2026-3-0",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/ca51bc3e50ed.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "The Cloud Manager MCP Server lets AEM Developers run pipelines, debug failures, and access Cloud Manager tools directly in their IDE - no context switching.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/ai/mcp-servers/cloud-manager",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/daf73eb55b7b.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "It currently has feature parity with Content MCP Server and will expose a growing subset of tools available in AEM's MCP servers.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/chat-applications/setup-claude",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/694a5c2e930d.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "Cloud Manager and Cloud Migration aren't part of /aem yet, so they still need their own registration.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/ai/mcp-servers/overview",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/642eb4455ad6.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "Cloud Manager is not yet part of the unified AEM MCP Server",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/ai/mcp-servers/cloud-manager",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/daf73eb55b7b.html",
+     "found_word_for_word": true
+    }
+   ],
+   "wrong_or_unsupported_in_research": [
+    "Naming ChatGPT and Claude for Cloud Migration is not supported. Adobe's Cloud Migration page speaks only of a coding tool (\"connects your IDE agent\") and lists \"An AI-enabled IDE that supports remote MCP servers\" as a prerequisite.",
+    "The product id aemsites is a stretch. Cloud Manager serves every AEM as a Cloud Service product, and Cloud Migration is about moving from AEM 6.x; neither is a product in the tool.",
+    "\"trigger eligible pipelines\": Adobe says pipelines \"can also be triggered\"; the word eligible is not Adobe's.",
+    "The record does not mention that the one-click Claude connector and ChatGPT plugin are described as covering the content tools only.",
+    "Adobe's own pages disagree with each other: a tutorial page dated October 9, 2026 still says Cloud Manager and Cloud Migration are not yet part of the single AEM address, while the user guide (October 29, 2026) and the release notes say they are. The newer pages are quoted here as the current position.",
+    "Naming ChatGPT and Claude for Cloud Manager is also not stated by Adobe. It follows only by putting the server's table together with its list of supported apps; Adobe's Cloud Manager release note and tutorial both say \"from your IDE\" or \"in their IDE\"."
+   ],
+   "release_label": "none stated today for either part. History: the Cloud Manager server was \"Now available in beta\" in the February 2026 release notes and moved to New Features, with no beta label, in March 2026. The older separate Cloud Manager and Cloud Migration addresses are now marked \"deprecated\"; the single AEM address replaces them.",
+   "prerequisites": [
+    "AEM as a Cloud Service, and an Adobe ID with Cloud Manager access; actions follow that person's existing permissions",
+    "For Cloud Migration: a Cloud Acceleration Manager project with a Best Practices Analyzer report already uploaded, an Adobe ID with access to that project, and an AI coding tool that can connect to remote servers",
+    "From Claude or ChatGPT: Adobe's AEM web address added by hand (ChatGPT needs Developer mode for that)"
+   ],
+   "second_reader": "Verdict kept at 'partly confirmed', but the first checker's 'both for Cloud Manager' was too strong and is corrected: no Adobe sentence names ChatGPT or Claude for Cloud Manager. Two Adobe tutorial pages dated October 9, 2026 still say Cloud Manager is not yet part of the single AEM address; the user guide (October 29) and current release notes say it is. Nothing here should become a connection in the tool: there is no canvas product for it."
+  },
+  {
+   "index": 35,
+   "product": "AEM Edge Delivery Services, Experience Workspace (DA.live)",
+   "tool_product_ids": [
+    "eds"
+   ],
+   "assistant": "none on an official Adobe page (the research says ChatGPT and Claude)",
+   "verdict": "not confirmed",
+   "what_adobe_says": "No official Adobe page backs this record. Both of its sources are on aem.live, which this project does not accept as evidence. Experience League does name Experience Workspace as the default way to author Edge Delivery Services sites, but for details it links out to aem.live and says nothing there about connecting ChatGPT or Claude. The Experience League site list has no page about an assistant connection for Experience Workspace or Document Authoring. Kept only as a lead: if Adobe publishes this on Experience League, it can be checked then.",
+   "quotes": [
+    {
+     "quote": "Experience Workspace is the modern default face to AEM and is the default for all new projects.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/overview",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/b1c1e2ef87b2.html",
+     "found_word_for_word": true
+    }
+   ],
+   "wrong_or_unsupported_in_research": [
+    "Every claim in the record (an Adobe-hosted server for Experience Workspace; ChatGPT and Claude as the assistants; file, version-history and media access; creating, moving and updating pages) rests only on aem.live pages. None is on an official Adobe site.",
+    "\"Formerly Document Authoring\" is likewise only on aem.live. Experience League uses the name Experience Workspace but does not state the rename on the page read.",
+    "The band \"Direct connector\" is unsupported for the same reason."
+   ],
+   "release_label": "none found on an official page (nothing official to read)",
+   "prerequisites": [
+    "none can be stated from official pages"
+   ],
+   "second_reader": "Verdict kept. Searched the Experience League address list again for 'experience-workspace', 'da-live' and Edge Delivery pages about assistants: nothing. The Experience League pages on document authoring are about Microsoft Word and Google Docs and do not mention ChatGPT or Claude. The Edge Delivery overview page links out to aem.live for Experience Workspace."
+  },
+  {
+   "index": 36,
+   "product": "AEM Experience Governance (brand checks; part of Adobe's AEM MCP Server)",
+   "tool_product_ids": [
+    "aemsites",
+    "aemassets"
+   ],
+   "assistant": "both",
+   "verdict": "confirmed",
+   "what_adobe_says": "Through the same AEM connection, a client's team can ask Claude or ChatGPT to check text, images and pages against the brand rules the client has set up in AEM, and to list its brand setups and checks. This part is read-only: it checks and reports, it does not change content. It only works if the client is in Adobe's agents trial or has a paid licence for Adobe's agents. The brand rules must already be in AEM (the tool already sells a service for that: \"Brand rules in Experience Context with a site audit\").",
+   "quotes": [
+    {
+     "quote": "Evaluate content (text, images, pages) against brand governance rules, and list brand configurations and checks.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/using-mcp-with-aem-as-a-cloud-service",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/79a0eafe9ddf.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "If you are interested, you must sign up for the agents trial or have a paid license in order to access the Experience Governance MCP.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/using-mcp-with-aem-as-a-cloud-service",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/79a0eafe9ddf.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "The AEM MCP Server lets AEM practitioners or content authors manage brand integrity and compliance requirements for their website in natural language from their favorite chat-based AI application. This capability requires an Agents trial or paid license.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/ai/mcp-servers/experience-governance-mcp-server",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/4abaa7478280.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "Install the AEM plugin from the ChatGPT plugin store, or follow the step-by-step setup guide.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/ai/mcp-servers/experience-governance-mcp-server",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/4abaa7478280.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "Add the AEM connector from Claude's connector directory, or follow the step-by-step setup guide.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/ai/mcp-servers/experience-governance-mcp-server",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/4abaa7478280.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "These integrations enable the agentic capability to connect with advanced AI orchestrators such as ChatGPT, Claude, and other external AI systems, ensuring flexible and scalable intelligence across platforms.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-governance/overview",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/2c1b56a07734.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "Certain eligible CX Enterprise customers may have access to a usage-bound trial to experience the value of Adobe's agentic AI offerings in their own environment before making the commitment to purchase.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-cloud-ai/experience-cloud-ai/agents/trial",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/9c3e8bc0be74.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "Customer eligibility for the trial is fully at Adobe's discretion.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-cloud-ai/experience-cloud-ai/agents/trial",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/9c3e8bc0be74.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "Experience Governance MCP Server",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/release-notes/release-notes/2026/2026-4-0",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/97fad161943f.html",
+     "found_word_for_word": true
+    }
+   ],
+   "wrong_or_unsupported_in_research": [
+    "Nothing in the record contradicts Adobe.",
+    "\"AEM Experience Governance\" is not a product in the tool; it is a part of AEM (the Governance Agent). The record's product ids (AEM Sites and AEM Assets) are a fair fit, since Adobe says it checks pages, text and images.",
+    "\"Test a known compliant and a noncompliant asset with the brand team\" is the research's own advice, not Adobe's.",
+    "The record does not say the brand rules must first be loaded into AEM; Adobe's Governance Agent page describes that step.",
+    "The one-click Claude connector and ChatGPT plugin are described on their set-up pages as matching the content tools; the brand-check tutorial nevertheless points to them. If the brand checks do not appear there, the AEM web address added by hand is the documented route."
+   ],
+   "release_label": "none stated. Adobe's table marks it on by default \"Yes, but see note\", the note being the trial or paid licence. The trial itself is offered \"at Adobe's discretion\" to \"certain eligible\" customers.",
+   "prerequisites": [
+    "Adobe's agents trial or a paid licence for Adobe's agents (AI credits); the trial is by Adobe's choice and limited to 10,000 credits",
+    "AEM as a Cloud Service, with the client's brand rules already set up in AEM",
+    "Each person signs in with their Adobe ID; the same AEM connection as for Sites and Assets"
+   ],
+   "second_reader": "Verdict kept. All quotes found. Adobe's brand-check tutorial names OpenAI ChatGPT and Anthropic Claude under 'Choose your client', and the April 2026 release notes list the Experience Governance server under New Features, not Early Adopter Features. No beta or preview wording on the user guide, the tutorial or the Governance Agent page. The licence condition is real and must stay in any wording: Adobe's agents trial or a paid licence."
+  },
+  {
+   "index": 37,
+   "product": "AEM Guides as a Cloud Service",
+   "tool_product_ids": [],
+   "assistant": "Claude (Adobe also names Cursor and Visual Studio Code; ChatGPT is not named for the cloud version)",
+   "verdict": "confirmed",
+   "what_adobe_says": "AEM Guides is Adobe's product for technical documentation; it is not in the tool. For the cloud version, a client's documentation team can connect Claude to a separate Adobe web address for Guides and, in plain language, work with topics and maps (create, view, update, version, lock, delete), create and manage baselines, and run reports such as broken links, all under their own AEM permissions. It is opt-in: Guides must be switched on in the client's AEM as a Cloud Service environment and Adobe's Guides team must add the client's organization to its allowed list, requested through the Adobe Customer Success team.",
+   "quotes": [
+    {
+     "quote": "It allows an MCP-enabled AI assistant, such as Anthropic Claude, to connect to your Experience Manager Guides environment and act on your behalf, under your own AEM permissions.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-guides/using/install-conf-guide/aemg-integrations/mcp/conf-aem-guides-mcp",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/6c56b1318894.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "Access to the Experience Manager Guides MCP server is opt-in per organization.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-guides/using/install-conf-guide/aemg-integrations/mcp/configure-aem-guides-mcp",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/0871c1fb43fc.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "Experience Manager Guides must be enabled on your AEM as a Cloud Service environment.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-guides/using/install-conf-guide/aemg-integrations/mcp/configure-aem-guides-mcp",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/0871c1fb43fc.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "Your organization's IMS Organization ID (Org ID) must be allow-listed by the Adobe Guides team.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-guides/using/install-conf-guide/aemg-integrations/mcp/configure-aem-guides-mcp",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/0871c1fb43fc.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "To request access, contact your Adobe Customer Success team.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-guides/using/install-conf-guide/aemg-integrations/mcp/configure-aem-guides-mcp",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/0871c1fb43fc.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "Work with topics and maps, new baselines, and reports in Experience Manager Guides.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-guides/using/install-conf-guide/aemg-integrations/mcp/configure-aem-guides-mcp",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/0871c1fb43fc.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "When adding the custom connector, use the Experience Manager Guides endpoint:",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-guides/using/install-conf-guide/aemg-integrations/mcp/configure-aem-guides-mcp",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/0871c1fb43fc.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "For both Cloud Service and on-premises environments, baseline capabilities are available only when new baseline is enabled.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-guides/using/install-conf-guide/aemg-integrations/mcp/conf-aem-guides-mcp",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/6c56b1318894.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "An MCP server is also available for AEM Guides as a Cloud Service, for guides-specific operations such as managing topics, maps, and baselines.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/using-mcp-with-aem-as-a-cloud-service",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/79a0eafe9ddf.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "Cloud Services 2608 and later",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-guides/using/knowledge-base/expert-session/guides-mcp-oct2026",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/03075858f25a.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "Know how to connect AI clients such as VS Code, Claude, and Cursor to AEM Guides",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-guides/using/knowledge-base/expert-session/guides-mcp-oct2026",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/03075858f25a.html",
+     "found_word_for_word": true
+    }
+   ],
+   "wrong_or_unsupported_in_research": [
+    "Nothing in the record contradicts Adobe. Its two source links both open and say what it claims.",
+    "It leaves out the version Adobe gives in its October 2026 session note: Guides Cloud Services 2608 and later.",
+    "It leaves out that the request for access goes through the Adobe Customer Success team.",
+    "AEM Guides is not a product in the tool, so there is nothing on the canvas to attach this to today."
+   ],
+   "release_label": "none stated. Adobe's own words are \"opt-in per organization\".",
+   "prerequisites": [
+    "An AEM Guides licence, with Guides switched on in the client's AEM as a Cloud Service environment (Guides Cloud Services 2608 or later)",
+    "The client's Adobe organization added to the allowed list by Adobe's Guides team, requested through Adobe Customer Success",
+    "Each person signs in with their Adobe ID and works within their own AEM permissions",
+    "For baselines: the new baseline feature switched on"
+   ],
+   "second_reader": "Verdict kept. All quotes found; Anthropic Claude is the only chat assistant named for the cloud version (ChatGPT appears on the page only in the on-premises part). Adobe uses no beta or preview word, but access is by request: Adobe's Guides team has to add the client's organization to its allowed list. That is a real limit and has to stay in any wording. AEM Guides is not one of the tool's 34 products, so there is nowhere on the canvas to put this today."
+  },
+  {
+   "index": 38,
+   "product": "AEM Guides on-premises",
+   "tool_product_ids": [],
+   "assistant": "both: Claude Desktop and ChatGPT (web and desktop); Adobe also names Cursor",
+   "verdict": "confirmed",
+   "what_adobe_says": "For clients who run AEM Guides on their own servers (not in the tool), Adobe documents how to connect Claude Desktop (by installing an extension file named aem-guides-mcp.mcpb; the page says to obtain it but not from where), ChatGPT on the web or desktop (as a custom connector) and Cursor. People sign in with their AEM account and can only do what that account allows. ChatGPT works only if the client's AEM author server is reachable from the public internet over a secure address with a certificate from a recognised authority; Claude Desktop also works with internal company addresses.",
+   "quotes": [
+    {
+     "quote": "You can connect supported AI clients to an Experience Manager Guides on-premises instance using the Model Context Protocol (MCP).",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-guides/using/install-conf-guide/aemg-integrations/mcp/configure-aem-guides-mcp",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/0871c1fb43fc.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "Claude Desktop supports Desktop Extensions (.mcpb).",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-guides/using/install-conf-guide/aemg-integrations/mcp/configure-aem-guides-mcp",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/0871c1fb43fc.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "You can configure the Experience Manager Guides MCP server as a custom connector in ChatGPT.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-guides/using/install-conf-guide/aemg-integrations/mcp/configure-aem-guides-mcp",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/0871c1fb43fc.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "ChatGPT requires the MCP server to be available through a publicly accessible HTTPS endpoint with a valid, publicly trusted TLS certificate.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-guides/using/install-conf-guide/aemg-integrations/mcp/configure-aem-guides-mcp",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/0871c1fb43fc.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "Connector availability depends on your ChatGPT plan and workspace configuration. Your workspace administrator might need to enable custom or developer connectors.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-guides/using/install-conf-guide/aemg-integrations/mcp/configure-aem-guides-mcp",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/0871c1fb43fc.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "All operations are performed using your AEM identity and permissions.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-guides/using/install-conf-guide/aemg-integrations/mcp/configure-aem-guides-mcp",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/0871c1fb43fc.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "Verify that the MCP feature is deployed.: Ensure that the MCP feature is deployed and running on your Experience Manager Guides instance.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-guides/using/install-conf-guide/aemg-integrations/mcp/configure-aem-guides-mcp",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/0871c1fb43fc.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "AI tools such as Claude, Cursor, and Codex can connect to Experience Manager Guides using Model Context Protocol (MCP).",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-guides/using/install-conf-guide/aemg-integrations/mcp/configure-aem-guides-mcp-on-prem",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/14fe8b94521f.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "On-prem 5.2.1 or later",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-guides/using/knowledge-base/expert-session/guides-mcp-oct2026",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/03075858f25a.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "Obtain the aem-guides-mcp.mcpb extension file.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-guides/using/install-conf-guide/aemg-integrations/mcp/configure-aem-guides-mcp",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/0871c1fb43fc.html",
+     "found_word_for_word": true
+    }
+   ],
+   "wrong_or_unsupported_in_research": [
+    "Nothing in the record contradicts Adobe.",
+    "\"Documented for supported on-premises releases\": the cited page names no release. The version (on-premises 5.2.1 or later) is on a different Adobe page, the October 2026 session note.",
+    "\"OAuth registration\" as something to confirm: Adobe says no client ID or secret is needed because the server registers the assistant automatically; what the AEM administrator must set are two server settings (the base address and the external author address).",
+    "It leaves out that ChatGPT's custom connectors depend on the client's ChatGPT plan and may need the ChatGPT workspace administrator to allow them.",
+    "AEM Guides is not a product in the tool, and the tool has no on-premises AEM product, so there is nothing on the canvas to attach this to today."
+   ],
+   "release_label": "none stated",
+   "prerequisites": [
+    "AEM Guides on the client's own servers, version 5.2.1 or later, with the assistant feature deployed by the AEM administrator",
+    "Two server settings checked by the AEM administrator: the base address used for sign-in and the external address of the author server",
+    "For ChatGPT: the author server reachable from the public internet over a secure address with a publicly trusted certificate, and a ChatGPT plan and workspace that allow custom connectors",
+    "For Claude Desktop: the extension file aem-guides-mcp.mcpb (Adobe's page does not say where to get it) and a current version of Claude Desktop",
+    "Each person signs in with their AEM account and is limited to that account's permissions"
+   ],
+   "second_reader": "Verdict kept. All quotes found; the table on Adobe's page names Claude Desktop, ChatGPT (web and desktop) and Cursor for on-premises. One small correction: the first checker wrote that Adobe provides the Claude Desktop extension file; the page only says to obtain it. No beta or preview wording. AEM Guides is not in the tool, and the tool has no on-premises AEM product."
+  },
+  {
+   "index": 47,
+   "product": "AEM Content Fragment Console with AEM Assets (developer example that calls OpenAI's image service)",
+   "tool_product_ids": [
+    "aemsites",
+    "aemassets"
+   ],
+   "assistant": "other: OpenAI's image-generation API (DALL·E 2). Not ChatGPT, and Claude is not mentioned.",
+   "verdict": "not a connection",
+   "what_adobe_says": "This is a how-to for developers, not a connection Adobe provides. An Adobe tutorial shows sample code for a custom button in AEM's Content Fragment Console: an author types a description, the code asks OpenAI's image service for a picture, saves it into AEM Assets and points the selected content fragment at it. The client's developers would have to build, host and maintain it with Adobe App Builder and the client's own OpenAI key.",
+   "quotes": [
+    {
+     "quote": "This example AEM Content Fragment Console extension is an action bar extension that generates digital image from natural language input using OpenAI API or DALL·E 2.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/developing/extensibility/ui/content-fragments/examples/console-image-generation-and-image-upload",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/f5e058c94f2f.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "The generated image is uploaded to the AEM DAM and selected Content Fragment's image property is updated to refer this newly generated, uploaded image from DAM.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/developing/extensibility/ui/content-fragments/examples/console-image-generation-and-image-upload",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/f5e058c94f2f.html",
+     "found_word_for_word": true
+    },
+    {
+     "quote": "Sign up for a free OpenAI API account and create an API key",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/developing/extensibility/ui/content-fragments/examples/console-image-generation-and-image-upload",
+     "file": "/tmp/claude-0/-home-user-sow-generator/e88698e0-9171-589a-9f89-0f508776c935/scratchpad/ai_hosts/pages/f5e058c94f2f.html",
+     "found_word_for_word": true
+    }
+   ],
+   "wrong_or_unsupported_in_research": [
+    "The record is accurate about what the tutorial does and is right to call it a custom developer example.",
+    "\"Historical Adobe reference implementation\": Adobe's page does not call itself historical; it shows a last update of September 22, 2026. It does still name DALL·E 2.",
+    "It should not be read as a ChatGPT or Claude connection: the page never mentions ChatGPT or Claude."
+   ],
+   "release_label": "none stated (it is an example in Adobe's tutorials, not a product feature)",
+   "prerequisites": [
+    "AEM as a Cloud Service with the Content Fragment Console",
+    "Adobe App Builder and an Adobe Developer Console project to host the custom code",
+    "The client's own OpenAI account and key",
+    "A developer to build and maintain it"
+   ],
+   "second_reader": "Verdict kept. All 3 quotes found. The page is sample code that calls OpenAI's image service; it never mentions ChatGPT or Claude."
+  }
+ ],
+ "other_leads": [
+  "Adobe's AEM server also works in Microsoft 365 Copilot (listed beside Claude and ChatGPT as a supported chat app), and in Microsoft Copilot Studio, Amazon Quick and Snowflake CoWork as business platforms. Source: the same Experience League page, 'Using MCP with AEM as a Cloud Service'. If ChatGPT and Claude become outside systems, Adam may want to decide whether Copilot is a third.",
+  "Workfront Fusion has its own Adobe-hosted server that Adobe says works with Anthropic Claude, OpenAI ChatGPT and Microsoft 365 Copilot: experienceleague.adobe.com/en/docs/workfront-fusion/using/set-up-and-manage-fusion/use-fusion-mcp-server/configure-fusion-mcp-server (saved as 2e1356ce6f96.html, last updated November 9, 2026). Not in my slice; worth checking against the Workfront records.",
+  "Workfront Fusion also has ready-made 'OpenAI (ChatGPT & DALL-E) modules' and a general 'MCP Agent module' that can point at any such server: experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/third-party-app-connectors/openai-chatgpt-modules and .../tools-and-transformers/model-context-protocol-mcp-connector (both saved). These are a second, different way Fusion touches OpenAI.",
+  "A 'Content AI MCP Server', described as a companion to the AEM server, lets people search AEM content in plain language. Adobe's tutorial shows it only from Adobe's own Coworker, not from ChatGPT or Claude: experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/ai/mcp-servers/content-ai-mcp-server (saved as 1f85052cf1df.html).",
+  "The 2026.4.0 AEM release notes say Azure OpenAI can be set up as a translation provider in AEM, with the client's own licence ('Azure OpenAI can be configured as a translation provider in AEM ... Customers use their own LLM licenses for this capability.'). That is Microsoft's Azure OpenAI service, not ChatGPT, but it is an OpenAI-model link the research's AEM records do not list.",
+  "Adobe newsroom, June 2026 ('adobe-accelerates-agentic-ai-adoption', saved as 24b65d16421e.html): 'Now Adobe CX skills and MCP servers are also generally available in Anthropic's Claude Enterprise and Microsoft 365 Copilot Cowork'. A general-availability statement that names Claude Enterprise; useful for whoever checks the cross-product records.",
+  "Adobe's AEM Governance Agent page says its checks can connect with 'advanced AI orchestrators such as ChatGPT, Claude, and other external AI systems' (saved as 2c1b56a07734.html). The tool already cites this page for its brand-rules service, so that service is the natural home for a ChatGPT or Claude line.",
+  "The tool already has a connection between AEM Sites and Workfront that cites the Fusion AEM module page, and it repeats Adobe's advice to use AI Assistant rather than the outside tools for changes. Any new AEM to ChatGPT or Claude connection should carry the same advice so the tool stays consistent.",
+  "Adobe's AEM pages disagree on one point: the tutorial page 'AEM MCP Server' (October 9, 2026) says Cloud Manager and Cloud Migration still need their own separate address, while the user guide (October 29) and the current release notes (November 16) say the single address now covers them. Quote the newer pages.",
+  "aem.live was not opened (it is outside what this session may reach and is not accepted as evidence), so the Experience Workspace record stays a lead. If Adam can paste the two aem.live pages, they still would not count as evidence under the project's rule; an Experience League or business.adobe.com page would be needed."
+ ],
+ "second_reader": {
+  "checked_on": "2026-11-18",
+  "method": "Every quote in the first checker's file was matched again against its saved page with the project's own matcher (handoff/2026-11-17/evidence_page/tools/verify.py, found()). Each saved file was checked against pages/index.tsv for the right address and a 200 status, and every source address is on experienceleague.adobe.com or helpx.adobe.com. For each confirmed or partly confirmed record the saved page was read around the quote, the heading above each quote was worked out, and each page was searched for beta, preview, early access, early adopter, private, limited, coming and similar words. One more Experience League page was fetched with curl while looking for missed sources (saved as pages/2003a618754a.html); it added nothing.",
+  "quotes_checked": 90,
+  "quotes_failed": [],
+  "verdicts_changed": [
+   {
+    "index": 23,
+    "from": "partly confirmed",
+    "to": "not a connection",
+    "why": "The only Adobe sentences that name ChatGPT and Claude are in the January to April 2026 release notes, under the heading 'Early Adopter Features' and the sub-heading 'AEM Edge Functions (Beta Program)'. When Edge Functions became generally available (August 2026 notes) Adobe repeated the list of uses without that line, and the current product page and tutorial do not mention ChatGPT, Claude or such a server at all. Even read at its strongest it is something the client's developers would build themselves, not a link Adobe provides. This is the same situation as record 47, which the first checker already marked 'not a connection'; 'partly confirmed' would invite publishing a connection that rests on beta-era wording Adobe has since dropped."
+   }
+  ]
+ }
+}
