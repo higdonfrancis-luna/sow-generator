@@ -42,3 +42,7 @@ The proposal now (pictures `e1_agentic_explainer.png` and `e2_first_page_agentic
 - **Teach the AI connectors by example (from ChatGPT's view):** each assistant line opens with a question the team would really ask, then what Adobe does, then what the partner sets up. The explainer shows four, each within what Adobe's connector for that product does: Real-Time CDP (look only), Journey Optimizer (Claude only, look only), Target, Customer Journey Analytics.
 - **Taken from ChatGPT's view as well:** keep and grow do not need a website rebuild, so Edge Delivery Services and Sites Optimizer stay with the existing Brand Visibility play; its five-minute "find" demo is a good partner script. Its demo step "Claude checks a graphic against brand guidelines" holds: Adobe's developer guide for Brand Intelligence (https://developer.adobe.com/adobe-brand-intelligence/guides/mcp-integration/) names Claude Desktop as the example host for Validate. So a Claude + Brand Intelligence line goes in after the three-box build (round one had held it back).
 - The earlier single-assistant play ("Adobe in your client's AI assistant", pictures d1 to d3b) is replaced by this card. The "Works in ..." hints on products (d3, d3b) still apply to every canvas.
+
+## Dropped: a "Services around Coworker" table (Nov 18)
+
+Adam dropped it from the tool on Nov 18: the tool shows Coworker's own services on its card and each connection's services on that connection's card, and nothing more. The picture `f2_coworker_card_services_around.png` and `coworker_services_mock.js` stay only as a record.
