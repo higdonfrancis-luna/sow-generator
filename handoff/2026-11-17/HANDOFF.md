@@ -88,6 +88,16 @@ Read this first in the new chat. Everything below is on GitHub, so a new account
 - help.frame.io was added to the session's network (Adam accepted it as evidence on Nov 10; README, step 64).
 - Adam added business.adobe.com to the session's network (Nov 18). The network now lets requests through, but the site's own bot protection still turns away plain automated requests: its home page answers "OK Bot." and every other page drops the connection. The rule stands (never disguise a request), so business.adobe.com pages still come from text Adam pastes. The two that matter: https://business.adobe.com/blog/adobe-experience-manager-journey-optimizer-claude-design (Claude Design to AEM Sites and Journey Optimizer) and https://business.adobe.com/products/commerce/ai-commerce.html (Adobe Commerce product feed for ChatGPT shopping).
 
+**business.adobe.com pages Adam pasted (Nov 18)**
+- Adam pasted the text of both pages. They are saved exactly as pasted in the session scratchpad: `ai_hosts/pages/adam_paste_2026-11-18_claude_design_blog.txt` and `ai_hosts/pages/adam_paste_2026-11-18_commerce_ai_commerce.txt`. business.adobe.com is on the evidence list, so they count; a quote must match the saved text word for word.
+- What they settle is checked claim by claim in `ai_hosts/round2/checks/business_adobe_paste.checked.json` (18 quotes, all proven present). Round two's architect, skeptics and settle step read that file with the other round-two checks.
+  - Claude Design to AEM: confirmed ("now available as workflow destinations in Claude Design's new 'Send to' export feature"). The design becomes a managed page inside AEM; Adobe does not say which AEM delivery.
+  - Claude Design to Journey Optimizer: confirmed for email templates. Mobile and conversational are "on the roadmap", so they are not published.
+  - Claude Design to Adobe Express: in the launch, but it runs through Adobe's connector in Claude, whose help page says Express "capabilities aren't available to enterprise accounts". Still no Claude line to Express.
+  - Adobe's own post lists Experience Manager, Journey Optimizer, Customer Journey Analytics and Workfront as "available Connectors in Claude". That backs those Claude lines, Journey Optimizer included.
+  - Commerce: the page never names ChatGPT, so there is no ChatGPT line for product feeds. Commerce "supports" OpenAI's Agentic Commerce Protocol and Google's, but Adobe names the protocol, not ChatGPT. The Commerce Storefront server lets developers connect "any MCP-compatible assistant or platform" to the live store (catalog search, prices and stock, cart, checkout); Experience League marks it "coming soon". Adobe names no assistant, so it is a Commerce build, not a line to a box.
+- Refined reading of the Nov 12 rule (this session's; to confirm with Adam): his words cover "will be released on this day or next day ... they're going to come", so a feature Adobe marks "coming soon" is published as available too. A feature Adobe puts "on the roadmap" or dates months ahead (early 2027) stays out and is listed for him.
+
 **Questions waiting for Adam**
 1. Answered: he wants Add product back on the ready-made plays, with the ranked list ("both places").
 2. Answered: the play keeps its name.
