@@ -73,6 +73,12 @@ Read this first in the new chat. Everything below is on GitHub, so a new account
 - **Segments stay behind the scenes** (confirmed twice). No segment names in the tool.
 - He has not said whether real counts may go on the brief's tab. Default: they wait, and they never go to GitHub.
 
+**ChatGPT and Claude as outside systems (Adam, Nov 18)**
+- His words: "we never looked at adding Anthropic and OpenAI MCP connectors as outside systems... this was I think a pretty big miss. I guess add this to what we need to do. I guess you'll have to go through every single play and see where these fit in... I'll leave it to you in your expertise." He also asked "what else are we missing?" among outside systems.
+- He uploaded research made by another AI assistant (`Adobe-AI-SOW-RFI-Claude-Handoff.zip`: 87 records, a start note and a page). It is a set of leads, not evidence: about a quarter of its sources are on sites outside the evidence standard (claude.com, openai.com, github.com, blog.adobe.com, aem.live, semrush, two on partners.adobe.com, which must never be opened). The upload is unpacked in the session scratchpad under `ai_hosts/upload/` and is not in the repository.
+- Status: every record is being checked word for word on Adobe's own pages, two sweeps look for other missing outside systems, and a proposal with pictures follows (scratchpad `ai_hosts/PROPOSAL.md`, `proposal_data.json`, `pictures/`; lost if the machine is recycled before they are copied into `handoff/`). Nothing is built. Adam approves from the pictures first.
+- The session's network environment now also allows developer.adobe.com and www.adobe.com (approved by Adam, Nov 18). business.adobe.com still needs text Adam pastes.
+
 **Questions waiting for Adam**
 1. Answered: he wants Add product back on the ready-made plays, with the ranked list ("both places").
 2. Answered: the play keeps its name.
