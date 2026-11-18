@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>Statement of Work Generator and RFI Builder: a first look</title>
+<style>
+@font-face{font-family:"Source Sans 3";font-weight:400;font-display:swap;src:url(source-sans-3-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:"Source Sans 3";font-weight:600;font-display:swap;src:url(source-sans-3-latin-600-normal.woff2) format("woff2")}
+@font-face{font-family:"Source Sans 3";font-weight:700;font-display:swap;src:url(source-sans-3-latin-700-normal.woff2) format("woff2")}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Source Sans 3",Arial,sans-serif;color:#1a1a1a;background:#f4f4f4;border-top:6px solid #EB1000}
+header{background:#fff;border-bottom:1px solid #d9d9d9;padding:18px 32px;display:flex;align-items:center;gap:20px}
+header img{height:28px;width:auto;display:block}
+header span{border-left:1px solid #d9d9d9;padding-left:20px;font-size:21px;line-height:1.2}
+main{max-width:1280px;margin:0 auto;padding:28px 24px 40px}
+.eyebrow{font-size:15px;font-weight:700;letter-spacing:2.5px;color:#EB1000;text-transform:uppercase}
+h1{font-size:38px;line-height:1.12;letter-spacing:-.4px;margin-top:6px}
+.lead{font-size:20px;line-height:1.4;margin-top:8px;max-width:980px}
+.frame{margin-top:22px;max-width:max(560px,calc((100vh - 330px)*16/9));background:#fff;border:2px solid #1a1a1a;border-top:10px solid #EB1000;border-radius:16px;overflow:hidden}
+.player{position:relative;aspect-ratio:16/9}
+.player video{position:absolute;inset:0;width:100%;height:100%;display:block;background:#fff}
+.player button{position:absolute;inset:0;width:100%;height:100%;border:0;background:transparent;cursor:pointer;font:inherit}
+.player button:focus-visible{outline:4px solid #1a1a1a;outline-offset:-6px}
+.player button span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.credit{font-size:16px;margin-top:14px}
+@media (max-width:700px){header{padding:14px 16px;gap:14px}header span{font-size:17px;padding-left:14px}main{padding:20px 16px 32px}h1{font-size:28px}.lead{font-size:18px}}
+</style>
+</head>
+<body>
+<header><img src="adobe_logo.png" alt="Adobe"><span>Statement of Work Generator and RFI Builder</span></header>
+<main>
+  <p class="eyebrow">A first look · For Adobe partners</p>
+  <h1>See the services, the hours and the fees behind every Adobe product</h1>
+  <p class="lead">A 72-second overview: pick a play, see the services on every connection, enter your own rate, and turn it into a statement of work. Have an RFI? Drop it in for drafted answers with Adobe's sources.</p>
+  <div class="frame"><div class="player">
+    <video id="v" controls playsinline preload="metadata" poster="poster.png" aria-label="Video: a first look at the Statement of Work Generator and RFI Builder, 1 minute 12 seconds, with captions on screen">
+      <source src="sow-generator-and-rfi-builder-first-look.mp4" type="video/mp4">
+    </video>
+    <button id="play" type="button"><span>Play the video</span></button>
+  </div></div>
+  <p class="credit">Character art created with Adobe Firefly.</p>
+</main>
+<script>
+// The poster carries the play button; one click anywhere on it starts the video, then the player's own controls take over.
+(function () {
+  var v = document.getElementById('v'), b = document.getElementById('play');
+  v.controls = false;
+  b.addEventListener('click', function () { b.hidden = true; v.controls = true; var p = v.play(); if (p && p.catch) p.catch(function () { b.hidden = false; v.controls = false; }); });
+  v.addEventListener('play', function () { b.hidden = true; v.controls = true; });
+})();
+</script>
+</body>
+</html>
