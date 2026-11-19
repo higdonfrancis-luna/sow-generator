@@ -338,7 +338,10 @@ const server = http.createServer((req, res) => {
     const bad = [];
     for (const id of ['rtcdp', 'ajo', 'cja', 'bc']) { await tapNode(p, id); await p.waitForTimeout(300); const first = await p.isHidden('#card');
       await tapNode(p, id); await p.waitForTimeout(500); const dock = await p.$eval('#card', c => c.classList.contains('dock'));
-      const cov = [...await covered(p, `.node[data-p="${id}"]`), ...(dock ? [] : await covered(p, '.ib'))]; if (!first || cov.length) bad.push(`${id}: first ${first}, covered ${cov}`);
+      // as in step 71 (23b below): a bolt that sits under the Continue button is covered by Continue, not by the card, so it is not the card's
+      // to keep clear (at 768 wide the Real-Time CDP + AEM Forms and Coworker + CJA bolts land there; the canvas pans to reach them)
+      const underSave = await p.evaluate(() => { const sv = document.getElementById('save').getBoundingClientRect(); return [...document.querySelectorAll('.ib')].filter(b => { const r = b.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2; return x > sv.left && x < sv.right && y > sv.top && y < sv.bottom; }).map(b => b.dataset.c); });
+      const cov = [...await covered(p, `.node[data-p="${id}"]`), ...(dock ? [] : (await covered(p, '.ib')).filter(c => !underSave.includes(c)))]; if (!first || cov.length) bad.push(`${id}: first ${first}, covered ${cov}`);
       const b = await p.$$eval('.ib', es => es.map(e => e.dataset.c)); for (const c of b.slice(0, 3)) { if (!(await covered(p, `.ib[data-c="${c}"]`)).length) { await tapAt(p, `.ib[data-c="${c}"]`); await p.waitForTimeout(350);
         const cc = await covered(p, `.ib[data-c="${c}"]`); if (cc.length) bad.push(`${c} card covers its bolt`); } }
       await p.keyboard.press('Escape'); await p.click('#fb-clear'); await p.waitForTimeout(200); }
@@ -368,6 +371,10 @@ const server = http.createServer((req, res) => {
       const a = document.querySelector(card.k === 'p' ? `.node[data-p="${card.id}"]` : `.ib[data-c="${card.id}"]`), ar = a.getBoundingClientRect(), sel = F ? fcur() : card.k === 'p' ? card.id : null;
       const sv = document.getElementById('save').getBoundingClientRect(), underSave = b => { const r = b.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2; return x > sv.left && x < sv.right && y > sv.top && y < sv.bottom; };
       // step 71: a bolt that sits under the Continue button is not the card's to keep clear (Coworker's eleventh line puts one there at 768 wide; the canvas pans)
+      // Nov 19 2026: likewise a bolt under the focus bar. With every product on at 768 wide, Real-Time CDP's focus bar runs to five rows of
+      // "connects to" chips and covers the top of the map (the canvas pans to reach what is under it); the bar hides those bolts, not the card, so they are not
+      // counted as blocked by it (the card still keeps clear of them when it finds its spot)
+      const fbr = F && !document.getElementById('fbar').hidden ? document.getElementById('fbar').getBoundingClientRect() : null, underBar = b => { if (!fbr) return false; const r = b.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2; return x > fbr.left && x < fbr.right && y > fbr.top && y < fbr.bottom; };
       const mine = [...document.querySelectorAll('.ib')].filter(b => b !== a && inV(b) && !underSave(b) && (F || (sel && [CBY[b.dataset.c].a, CBY[b.dataset.c].b].includes(sel))));
       const hard = [ar, ...mine.map(b => b.getBoundingClientRect())]; if (F && sel && card.k === 'c') hard.push(document.querySelector(`.node[data-p="${sel}"]`).getBoundingClientRect());
       const boxes = [...document.querySelectorAll('#stage .node')].filter(n => n !== a && inV(n)).map(n => n.getBoundingClientRect());
@@ -377,7 +384,10 @@ const server = http.createServer((req, res) => {
       const bad = [];
       if (!(cr.top >= V.t - 1 && cr.bottom <= V.b + 1 && cr.left >= V.l - 1 && cr.right <= V.r + 1 && cr.bottom <= innerHeight)) bad.push('outside the room ' + Math.round(cr.bottom));
       if (hit(cr, ar) || !at(a)) bad.push('covers its anchor');
-      const blocked = mine.filter(b => !at(b)).map(b => b.dataset.c); if (cH && blocked.length) bad.push('blocks ' + blocked);
+      // and a bolt cut by the window's edge (half of it below the window, its middle on the last pixel row) is cut off by the window, not
+      // the card: with every product on at 768x1024 the Coworker + Content Analytics bolt rests there while the card sits far above it
+      const cut = b => { const r = b.getBoundingClientRect(); return r.top < 0 || r.left < 0 || r.bottom > innerHeight || r.right > innerWidth; };
+      const blocked = mine.filter(b => !at(b) && !underBar(b) && !cut(b)).map(b => b.dataset.c); if (cH && blocked.length) bad.push('blocks ' + blocked);
       if (cB && boxes.some(k => hit(cr, k))) bad.push('covers a box with a clear spot free');
       const fl = Math.min(c.scrollHeight + 8, 600, V.b - V.t - 20); let cT = false;
       for (let x = V.l + 10; x <= V.r - 10 - w && !cT; x += 6) for (let y = V.t + 10; y <= V.b - 10 - fl; y += 6) if (!hard.some(k => hit({left: x, top: y, right: x + w, bottom: y + fl}, k, 4))) { cT = true; break; }

@@ -1,7 +1,7 @@
 // Rendered-copy check for the partner SOW generator (Nov 8 2026). Drives the built site in a browser the way a partner
 // would and scans everything it shows or downloads for release-status labels and feature-release dates: the Build canvas
 // (every play, every product card and connection card, the add menus, the problem picker and its refine chips), the SOW
-// tool (every play, every service turned on, every size, the readiness notes, the SOW preview, the downloaded SOW and the
+// tool (every play, every service turned on, every size, the readiness notes, the SOW preview, the printed SOW and the
 // services CSV), and the canvas-to-SOW hand-off for every play. The data checks in check_product_copy.py read the files;
 // this one reads the pages, so text the code assembles at run time is covered too.
 // Run from the repo root after python3 sow/build_site.py:
@@ -150,7 +150,11 @@ const HARVEST = `(() => { document.querySelectorAll('details').forEach(d => d.op
     await p.evaluate(() => { state.customer = state.customer || 'Acme Co'; state.partner = state.partner || 'Partner Co'; state.timeline = state.timeline || 'Weeks 1 to 4: setup and baseline; monthly reviews from week 5.'; state.rate = state.rate || 150; save(); go('document'); });
     await p.waitForTimeout(300);
     await harvest(p, `${label}: statement of work`);
-    add(`${label}: downloaded SOW`, strip(await download(p, '#download-sow')));
+    // Nov 13: the HTML "Download SOW" button was removed; "Print / Save PDF" (#print-sow) is now the SOW's only export.
+    // Read exactly what that button sends to the printer (window.print is stubbed so no dialog opens).
+    await p.evaluate(() => { window.__printedSow = null; window.print = () => { window.__printedSow = document.getElementById('sow-preview').innerHTML; }; });
+    await p.click('#print-sow');
+    add(`${label}: printed SOW`, strip(await p.evaluate(() => window.__printedSow || '')));
     add(`${label}: services CSV`, await download(p, '#export-csv'));
   };
   p = await fresh();
@@ -161,7 +165,7 @@ const HARVEST = `(() => { document.querySelectorAll('details').forEach(d => d.op
     await p.evaluate(pl => { state.play = pl; go('scope'); }, play);
     await everything(p, `sow ${play}`);
   }
-  ok(toolPlays.length >= 6, `sow tool: read ${toolPlays.length - 1} plays with every service on at every size, the SOW preview and both downloads`);
+  ok(toolPlays.length >= 6, `sow tool: read ${toolPlays.length - 1} plays with every service on at every size, the SOW preview, the printed SOW and the services CSV`);
   await p.context().close();
 
   // ---------- the hand-off from the canvas to the SOW tool, every play, with every outside system added
@@ -240,24 +244,24 @@ const HARVEST = `(() => { document.querySelectorAll('details').forEach(d => d.op
     const wre = new RegExp(WATCH.source, 'gi'), wtext = WF_CARD.test(where) ? text.replace(ADOBE_NOTE, '') : text;
     while ((m = wre.exec(wtext))) { const k = m[0].toLowerCase(); if (!watch.has(k)) watch.set(k, [0, where, wtext.slice(Math.max(0, m.index - 80), m.index + m[0].length + 80)]); watch.get(k)[0]++; }
   }
-  // Nov 8 (Adam: "number three"): what the Client reads (the SOW preview, the downloaded SOW, the CSV) carries no lifecycle
+  // Nov 8 (Adam: "number three"): what the Client reads (the SOW preview, the printed SOW, the CSV) carries no lifecycle
   // label, while the partner's canvas cards keep Adobe's eligibility note on Coworker. Step 86 (Nov 12) took the note off the cards;
   // Nov 17 put Adobe's own words back on the Workfront + Coworker card only
   const clientHits = [];
   let partnerNote = 0, wfNote = 0;
   for (const [where, text] of seen) {
-    if (/statement of work|downloaded SOW|services CSV/.test(where)) { let m; const re = new RegExp(CLIENT.source, 'gi'); while ((m = re.exec(text))) clientHits.push([where, m[0], text.slice(Math.max(0, m.index - 90), m.index + m[0].length + 90)]); }
+    if (/statement of work|printed SOW|services CSV/.test(where)) { let m; const re = new RegExp(CLIENT.source, 'gi'); while ((m = re.exec(text))) clientHits.push([where, m[0], text.slice(Math.max(0, m.index - 90), m.index + m[0].length + 90)]); }
     if (/^canvas /.test(where)) {
       const own = WF_CARD.test(where);
       if (own && text.includes(ADOBE_NOTE)) wfNote++;
       if (/health care(?:,| and) finance|not (?:currently )?(?:offered|available) to (?:organizations in )?health care|industries with sensitive data|confirm eligibility/i.test(own ? text.replace(ADOBE_NOTE, '') : text)) partnerNote++;
     }
   }
-  // voice (Nov 8): the canvas speaks to the partner, the downloaded SOW and the CSV to the Client
+  // voice (Nov 8): the canvas speaks to the partner, the printed SOW and the CSV to the Client
   const canvasClient = [], docPartner = [];
   for (const [where, text] of seen) {
     if (/^canvas /.test(where)) { let m; const re = /\bthe Client\b(?! ID)|\bClient's|\bThe Client\b/g; while ((m = re.exec(text))) canvasClient.push([where, m[0], text.slice(Math.max(0, m.index - 80), m.index + m[0].length + 80)]); }
-    if (/downloaded SOW|services CSV/.test(where)) { let m; const re = /\byour client\b/gi; while ((m = re.exec(text))) docPartner.push([where, m[0], text.slice(Math.max(0, m.index - 80), m.index + m[0].length + 80)]); }
+    if (/printed SOW|services CSV/.test(where)) { let m; const re = /\byour client\b/gi; while ((m = re.exec(text))) docPartner.push([where, m[0], text.slice(Math.max(0, m.index - 80), m.index + m[0].length + 80)]); }
   }
   const uniq = rows => { const s = new Set(); return rows.filter(r => { const k = r[1].toLowerCase() + '|' + r[2]; if (s.has(k)) return false; s.add(k); return true; }); };
   const h = uniq(hits), d = uniq(dates);
@@ -265,12 +269,12 @@ const HARVEST = `(() => { document.querySelectorAll('details').forEach(d => d.op
   for (const [where, word, ctx] of h.slice(0, 40)) console.log(`   ❌ ${where} <${word}> ...${ctx}...`);
   ok(d.length === 0, 'no date or dated version next to a release word (client dates stay)', d.length + ' found');
   const ch = uniq(clientHits);
-  ok(ch.length === 0, 'the SOW preview, the downloaded SOW and the CSV carry no lifecycle label (Legacy, maintenance mode, co-innovation, a limited number of customers, the Coworker industry note)', ch.length + ' found');
+  ok(ch.length === 0, 'the SOW preview, the printed SOW and the CSV carry no lifecycle label (Legacy, maintenance mode, co-innovation, a limited number of customers, the Coworker industry note)', ch.length + ' found');
   for (const [where, word, ctx] of ch.slice(0, 20)) console.log(`   ❌ ${where} <${word}> ...${ctx}...`);
   const cc = uniq(canvasClient), dp = uniq(docPartner);
   ok(cc.length === 0, 'the canvas never speaks in the Client\'s voice ("the Client" belongs to the SOW)', cc.length + ' found');
   for (const [where, word, ctx] of cc.slice(0, 20)) console.log(`   ❌ ${where} <${word}> ...${ctx}...`);
-  ok(dp.length === 0, 'the downloaded SOW and the CSV never say "your client"', dp.length + ' found');
+  ok(dp.length === 0, 'the printed SOW and the CSV never say "your client"', dp.length + ' found');
   for (const [where, word, ctx] of dp.slice(0, 20)) console.log(`   ❌ ${where} <${word}> ...${ctx}...`);
   ok(partnerNote === 0 && wfNote > 0, `step 86 and Nov 17: only the Workfront + Coworker connection card carries Adobe's note that Coworker is not offered to health care or finance, in Adobe's words (${wfNote} views of it), and no card tells the partner to confirm eligibility (${partnerNote} views elsewhere)`);
   const rc = uniq(rfpClient);

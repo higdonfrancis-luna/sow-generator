@@ -102,7 +102,8 @@ const withStart = (play, ids) => [...new Set([...ids, ...starting(play, ids.filt
   // a switch to Create your own play keeps the CDN box (step 44: outside systems on every play)
   await page.click('[data-bpp="1"]'); await answer(page);
   await page.click('[data-bpr="3"]'); await answer(page); c = await read(page);
-  ok(/Create your own play/.test(c.heard) && !/leaves the setup/.test(c.heard) && c.boxes.includes('CDN'), 'S44: readouts move the setup to Create your own play and keep the CDN box', c.heard);
+  // the CDN box is now named "Existing CDN"
+  ok(/Create your own play/.test(c.heard) && !/leaves the setup/.test(c.heard) && c.boxes.includes('Existing CDN'), 'S44: readouts move the setup to Create your own play and keep the CDN box', c.heard);
   await page.click('[data-bpa="again"]');
 
   // typed questions, as partners would ask them
@@ -138,7 +139,8 @@ const withStart = (play, ids) => [...new Set([...ids, ...starting(play, ids.filt
   const edsK = PROBS[0].refine.findIndex(r => (r.owned || []).includes('eds'));
   await page.click(`[data-bpr="${edsK}"]`); await answer(page); const own1 = await read(page);
   const hrs = d => Number((d.match(/([\d,]+) one-time hour/) || [0, '0'])[1].replace(/,/g, ''));
-  ok(/already has Edge Delivery Services, so these services start off: .*Implement AEM Sites on Edge Delivery/.test(own1.heard), 'S41: "site runs on Edge Delivery" says the services that stand it up start off', own1.heard);
+  // the Edge Delivery box is now named "AEM Sites with Edge Delivery Services" (AEM Sites became part of that one box), so the note uses that name
+  ok(/already has AEM Sites with Edge Delivery Services, so these services start off: .*Implement AEM Sites on Edge Delivery/.test(own1.heard), 'S41: "site runs on Edge Delivery" says the services that stand it up start off', own1.heard);
   ok(!/Implement AEM Sites on Edge Delivery|SEO-safe content migration/.test(own1.del) && hrs(own1.del) < 600, 'S41: and the answer no longer quotes building or migrating that site', own1.del);
   const own2 = await build(page);
   ok(own1.total === own2.total, 'S41: Build this lands on the same total, with those services off', own1.total + ' vs ' + own2.total);
@@ -267,7 +269,7 @@ const withStart = (play, ids) => [...new Set([...ids, ...starting(play, ids.filt
   ok(PROBS.every(p => p.refine.every(r => !r.note || (/^[A-Z]/.test(r.note) && /\.$/.test(r.note) && r.note.split(' ').length >= 4))), 'S41: every refine note is a full sentence');
   await page.click('[data-bpp="1"]'); await answer(page); await page.click('[data-bpr="1"]'); await answer(page); await page.click('[data-bpr="3"]'); await answer(page);
   const lc = await read(page);
-  ok(lc.boxes.includes('Data warehouse') && lc.boxes.includes('CDN') && !/leaves the setup/.test(lc.heard), 'S44: the data warehouse and CDN boxes stay when the setup moves to Create your own play', lc.boxes.join(', ') + ' / ' + lc.heard);
+  ok(lc.boxes.includes('Data warehouse') && lc.boxes.includes('Existing CDN') && !/leaves the setup/.test(lc.heard), 'S44: the data warehouse and CDN boxes stay when the setup moves to Create your own play', lc.boxes.join(', ') + ' / ' + lc.heard);
   ok(await page.evaluate(() => { const s = bpNext({play: 'custom', prods: ['cja', 'bv'], out: ['dwh', 'cdn'], off: []}, {chip: 'x', add: ['bc'], play: 'fsi'}); return s && s.out.join() === 'cdn'; }), 'S44: a move to a play without the data warehouse keeps only the outside systems that play offers');
   await page.click('[data-bpa="again"]');
 

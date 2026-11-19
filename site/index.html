@@ -2076,7 +2076,9 @@ function bpAnswerHTML(){const p=PROBS[bp.hits[bp.i]],s=bp.setup,pl=PLAYS[s.play]
   else if(bp.pair&&bp.i===0)heard=`<b>Two problems here:</b> ${esc(bpYou(PROBS[bp.pair[0]].chip))}, and ${esc(bpYou(PROBS[bp.pair[1]].chip))}. Here's the setup you can offer for both.`;
   else heard=`<b>Heard:</b> ${esc(bpYou(p.chip))}. Here's the setup you can offer for that.`;
   if(!last&&p.note)heard+=' '+esc(p.note);
-  const boxes=ids.map(id=>`<span class="bp-p${P[id].outside?' out':''}">${esc(P[id].name)}${P[id].outside?' (outside system)':''}</span>`).join(''),
+  /* the boxes the canvas will draw: beside Edge Delivery Services, AEM Sites is part of the one "AEM Sites with Edge Delivery Services"
+     box (its AEM authoring), as on the canvas (combinesSites), so it is not shown as a box of its own */
+  const boxes=ids.filter(id=>!(id==='aemsites'&&ids.includes('eds'))).map(id=>`<span class="bp-p${P[id].outside?' out':''}">${esc(P[id].name)}${P[id].outside?' (outside system)':''}</span>`).join(''),
     links=bpConns(s).map(c=>`<div class="bp-cx"><span class="bp-pill" aria-hidden="true">${I.bolt}</span><span><b>${esc(P[c.a].name)} + ${esc(P[c.b].name)}</b> · ${esc(KIND[c.kind]||'Connection')}.${c.label?' '+esc(bpVoice(c.label.replace(/\s*$/,'').replace(/([^.])$/,'$1.'))):''}</span></div>`).join('');
   const gone=bpBase(p).prods.filter(id=>!s.prods.includes(id)),sents=q=>q.why.replace(/\.\s+(?=[A-Z])/g,'.\n').split('\n'),kept=sents(p).filter(w=>!gone.some(id=>[P[id].name,P[id].short].filter(Boolean).some(n=>w.includes(n)))),own=PROBS.find(q=>q.play===s.play),why=kept.length||pl.custom||!own?kept:sents(own);
   const priced=st.rate>0,lo=bpSim(s,priced?undefined:100),hi=priced?null:bpSim(s,300),n=lo.names.length;
