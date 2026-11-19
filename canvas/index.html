@@ -339,7 +339,6 @@ details.more[open] summary svg{transform:rotate(180deg)}
 .fam-area .s{font-size:15.5px;line-height:20px}
 .fam-area .chips{display:flex;flex-wrap:wrap;gap:6px}
 .fam-area .chips span{font-size:13.5px;font-weight:700;border:1.5px solid var(--ink);border-radius:999px;padding:0 6px;line-height:21px}
-.fam-fee{font-size:14px;line-height:19px;color:var(--ink2)}
 .fam-all{align-self:flex-start;margin-top:12px;background:none;border:0;padding:0;font-size:15px;font-weight:700;text-decoration:underline;color:var(--ink)}
 .fam-all:hover,.fam-all:focus-visible{color:var(--red)}
 /* Nov 19 2026: a product's i, beside its name on its box and its chips, and the note it opens (a wider tap area than it shows; the i is drawn, so the name reads alone) */
@@ -1255,7 +1254,6 @@ let shown=new Set(),shownC=new Set(),card=null,pinned=false,moreOpen={};
 function render(){
   if(fsel)fsel=has(fsel)?offeringId(fsel):null;
   document.body.classList.toggle('picking',!play());
-  if(!play())familyFees();
   setLayout();
   const stage=$('stage'),ps=displayProducts(),F=fv();
   stage.querySelectorAll('.node').forEach(e=>e.remove());
@@ -1423,17 +1421,10 @@ const playRow=ids=>{const n=ids.reduce((k,id)=>k+1+startsBy('before',id).length+
   return `<div class="grid" style="--cols:${Math.max(4,n)}">`+ids.map(id=>startCards('before',id)+playCard(PLAYS[id])+startCards('after',id)).join('')+'</div>';};
 /* an area is a button that holds its products' chips, and a product's i (infoI) is a button of its own inside it */
 const famCard=k=>{const F=CUSTOM[k],w=famAll(F);return `<div class="pc-fam" data-card="${k}">${F.label?`<b>${esc(F.label)}</b>`:''}${F.sub?`<span class="s">${esc(F.sub)}</span>`:''}<div class="fam-areas">`+
-    F.areas.map(a=>`<div class="fam-area" role="button" tabindex="0" data-start="${a.products.join(',')}"${famName(F,a.label)}><b>${esc(a.label)}</b>${a.line?`<span class="s">${esc(a.line)}</span>`:''}<span class="chips">${a.products.map(id=>`<span>${esc(P[id].name)}${infoI(id)}</span>`).join('')}</span><span class="fam-fee"></span></div>`).join('')+
+    F.areas.map(a=>`<div class="fam-area" role="button" tabindex="0" data-start="${a.products.join(',')}"${famName(F,a.label)}><b>${esc(a.label)}</b>${a.line?`<span class="s">${esc(a.line)}</span>`:''}<span class="chips">${a.products.map(id=>`<span>${esc(P[id].name)}${infoI(id)}</span>`).join('')}</span></div>`).join('')+
     `</div><button class="fam-all" data-start="${w.products.join(',')}"${famName(F,w.name)}>${esc(w.label)}</button></div>`;};
 $('picker-list').innerHTML=CAT.rows.map(r=>`<div class="sh">${esc(r.head)}</div>`+(r.card?famCard(r.card):playRow(r.plays))).join('');
 $('picker-list').addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('.fam-area')){e.preventDefault();e.target.click();}});
-/* each area's fee for its starting services (Nov 18 2026: the services of the outside systems it starts with too, bpSim): the partner's own rate once
-   entered, else $100 to $300 an hour, as the problem finder shows */
-let famKey='';
-function familyFees(){if(!FAMS.length)return;const k=[st.rate,st.months,st.size,st.cur].join('|');if(k===famKey)return;famKey=k;
-  const sim=(ids,r)=>bpSim({play:CUSTOM.id,prods:ids,out:[],off:[]},r);
-  document.querySelectorAll('#picker-list .fam-fee').forEach(e=>{const ids=e.parentElement.dataset.start.split(','),priced=st.rate>0,lo=sim(ids,priced?undefined:100),term=lo.mh?' over '+st.months+' months':'';
-    e.textContent=priced?money(lo.yr)+' at '+money(st.rate)+' an hour'+term:money(lo.yr)+' to '+money(sim(ids,300).yr)+' at '+money(100)+' to '+money(300)+' an hour'+term;});}
 
 /* ---------- cards ---------- */
 /* step 42: a click (or a tap) opens a card and pins it; hovering opens nothing. It stays until its X, a click elsewhere

@@ -152,17 +152,17 @@ const COPILOT_STUDIO = 'https://experienceleague.adobe.com/en/docs/experience-ma
       ok(!lay.sideways && lay.cols === (w > 1100 ? 4 : 1), `2. at ${w} px nothing runs off the side, and each row of plays is ${w > 1100 ? 'four cards across' : 'one card above another'}`, JSON.stringify(lay)); }
     await p.context().close(); }
 
-  // ============ 3. the Client KBO plays: products, outside systems, names and fees ============
+  // ============ 3. the Client KBO plays: products, outside systems, names, and no fee line ============
   { const p = await page(1440, 900), seen = [];
     for (const [name] of KBO) { await home(p); await clickIn(p, `#picker-list [data-name="${name}"]`); seen.push(await state(p)); }
     ok(seen.every((s, i) => s.play === 'custom' && same(s.on, KBO[i][2]) && same(s.out, KBO[i][3]) && s.area === KBO[i][0] && s.label === KBO[i][0]),
       '3. each Client KBO area and all three together open Your own play with their products placed, every outside system they connect to on (the rule), and the canvas named "Find new customers", "Keep customers", "Grow share of wallet" or "Find, keep and grow customers"',
       JSON.stringify(seen.map(s => [s.label, s.on, s.out])));
-    await home(p); await p.evaluate(() => { st.rate = 175; render(); }); const got = [];
-    for (let i = 0; i < 3; i++) { const want = await p.evaluate(i => document.querySelectorAll('#picker-list .pc-fam[data-card="agentic"] .fam-fee')[i].textContent, i);
-      await clickIn(p, `#picker-list [data-name="${KBO[i][0]}"]`); got.push([want, await p.evaluate(() => money(totals().yr))]);
-      await p.click('#change-play'); await p.click('#confirm-yes'); await p.waitForTimeout(300); }
-    ok(got.every(([want, total]) => want.startsWith(total + ' at $175 an hour')), '3. each area\'s fee is the total of the canvas it opens, outside systems\' services included (Find new customers now with GenStudio for Performance Marketing)', JSON.stringify(got));
+    // Nov 19 2026: the area cards show no fee line (Adam: that is what the canvas estimates and the Services step are for), before or after a rate is entered
+    await home(p); const look = () => p.evaluate(() => [...document.querySelectorAll('#picker-list .pc-fam[data-card="agentic"] .fam-area')].map(a => ({fee: !!a.querySelector('.fam-fee'), text: a.textContent})));
+    const before = await look(); await p.evaluate(() => { st.rate = 175; render(); }); const after = await look();
+    ok(before.length === 3 && [...before, ...after].every(a => !a.fee && !/\$|an hour/.test(a.text)),
+      '3. no Client KBO area shows a fee line, before or after the partner enters a rate', JSON.stringify(after));
     await p.context().close(); }
 
   // ============ 4. one start card per AI assistant: its assistant alone, its products, its name, its places ============

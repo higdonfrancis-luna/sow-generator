@@ -137,19 +137,15 @@ const fix = s => s.replace(/’/g, "'");
           ['Scaled content production', '', 'Brand Intelligence|Firefly Creative Production|Firefly Custom Models', ''], ['Marketer-led creation', '', 'GenStudio for Performance Marketing|Adobe Express', ''],
           ['Asset management', '', 'AEM Assets|Workfront', ''], ['Content insights', '', 'Content Analytics|GenStudio for Performance Marketing', '']]) && gs.all[0] === 'Or open the whole family together' && !gs.all[2],
       '2. the GenStudio card keeps its words, its six areas and its button, and its canvases are still Your own play', JSON.stringify(gs));
-    // each fee on the agentic card is the estimate of the canvas it opens, at $100 to $300 an hour and at the partner's own rate
-    const fees = await p.evaluate(() => [...document.querySelectorAll('#picker-list .pc-fam')[1].querySelectorAll('.fam-fee')].map(e => e.textContent));
-    const range = [];
-    for (let i = 0; i < 3; i++) { await famClick(p, AG, i);
-      range.push(await p.evaluate(() => { const at = r => { st.rate = r; UNI = {k: '', s: new Set()}; return money(totals().yr); }; const lo = at(100), hi = at(300); st.rate = 0; return [lo, hi]; }));
-      await p.click('#change-play'); await p.click('#confirm-yes'); await p.waitForTimeout(300); }
-    ok(fees.length === 3 && fees.every((f, i) => f.startsWith(range[i][0] + ' to ' + range[i][1] + ' at $100 to $300 an hour')),
-      '2. before a rate, each area\'s fee is the low and high estimate of the canvas it opens, outside systems\' services included', JSON.stringify({fees, range}));
-    await p.evaluate(() => { st.rate = 185; render(); });
-    const got = [];
-    for (let i = 0; i < 3; i++) { const want = await p.evaluate(i => document.querySelectorAll('#picker-list .pc-fam')[1].querySelectorAll('.fam-fee')[i].textContent, i);
-      await famClick(p, AG, i); got.push([want, await p.evaluate(() => money(totals().yr))]); await p.click('#change-play'); await p.click('#confirm-yes'); await p.waitForTimeout(300); }
-    ok(got.every(([want, total]) => want.startsWith(total + ' at $185 an hour')), '2. with the partner\'s rate, each area\'s fee is the total of the canvas it opens', JSON.stringify(got));
+    // Nov 19 2026: the area cards show no fee line (Adam: the canvas estimates and the Services step are where fees live), before or after a rate is entered
+    const noFee = () => p.evaluate(() => [...document.querySelectorAll('#picker-list .fam-area')].map(a => ({fee: !!a.querySelector('.fam-fee'), text: a.textContent})));
+    const before = await noFee(); await p.evaluate(() => { st.rate = 185; render(); }); const after = await noFee();
+    ok(before.length === 9 && [...before, ...after].every(a => !a.fee && !/\$|an hour/.test(a.text)),
+      '2. no area on the GenStudio or Client KBO card shows a fee line, before or after the partner enters a rate', JSON.stringify(after.filter(a => a.fee || /\$|an hour/.test(a.text))));
+    const opened = [];
+    for (let i = 0; i < 3; i++) { await famClick(p, AG, i); opened.push(await state(p)); await p.click('#change-play'); await p.click('#confirm-yes'); await p.waitForTimeout(300); }
+    ok(opened.every((s, i) => s.play === 'custom' && same(s.on, A.areas[i][2]) && same(s.out.slice().sort(), A.areas[i][3].slice().sort()) && s.n > 0),
+      '2. each Client KBO area still opens Your own play with its products placed, its outside systems on and their services counted', JSON.stringify(opened.map(s => [s.on, s.out, s.n])));
     await p.context().close(); }
 
   // ============ 3. every starting canvas: its outside systems, their starting services, the view it opens in ============

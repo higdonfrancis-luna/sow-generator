@@ -221,15 +221,17 @@ const server = http.createServer((req, res) => {
     const bi = await f.evaluate(() => ({play: st.play, on: st.on.join(), boxes: [...document.querySelectorAll('#stage .node')].map(n => n.dataset.p).join(), services: totals().n}));
     await f.evaluate(() => localStorage.clear()); await f.reload(); await f.waitForFunction(() => window.READY);
     ok(bi.play === 'custom' && bi.on === 'brandintel' && bi.boxes === 'figma,claude,brandintel' && bi.services > 0, 'Adobe Brand Intelligence opens Your own play with Brand Intelligence placed, Figma and Claude beside it, and its services selected', JSON.stringify(bi));
-    const fam = await f.$$eval('#picker-list .pc-fam[data-card="family"] .fam-area', x => x.map(a => ({start: a.dataset.start, label: a.querySelector('b').textContent, fee: a.querySelector('.fam-fee').textContent})));
-    ok(fam.length === 6 && fam.every(a => /^\$[\d,]+ to \$[\d,]+ at \$100 to \$300 an hour( over 12 months)?$/.test(a.fee)),
-      'GenStudio shows its six areas, each priced at $100 to $300 an hour until the partner enters a rate, as the problem finder does', JSON.stringify(fam));
+    const fam = await f.$$eval('#picker-list .pc-fam[data-card="family"] .fam-area', x => x.map(a => ({start: a.dataset.start, label: a.querySelector('b').textContent, fee: !!a.querySelector('.fam-fee'), text: a.textContent})));
+    ok(fam.length === 6 && fam.every(a => !a.fee && !/\$|an hour/.test(a.text)),
+      'GenStudio shows its six areas with no fee line (Nov 19 2026: removed, fees live on the canvas and the Services step)', JSON.stringify(fam));
     await f.evaluate(() => { st.rate = 185; render(); });
+    ok(await f.$$eval('#picker-list .pc-fam[data-card="family"] .fam-area', x => x.every(a => !a.querySelector('.fam-fee') && !/\$|an hour/.test(a.textContent))),
+      'GenStudio\'s areas still show no fee line once the partner enters a rate');
     for (let i = 0; i < fam.length; i++) {
-      const want = await f.$eval(`#picker-list .pc-fam[data-card="family"] .fam-area:nth-child(${i + 1}) .fam-fee`, e => e.textContent);
       await f.click(`#picker-list .pc-fam[data-card="family"] .fam-area:nth-child(${i + 1})`); await f.waitForTimeout(300);
-      const got = await f.evaluate(() => ({on: st.on.join(), total: money(totals().yr)}));
-      ok(got.on === fam[i].start && want.startsWith(got.total + ' at $185 an hour'), `GenStudio, ${fam[i].label}: opens Your own play with its products placed, and the canvas total is the fee its area showed`, JSON.stringify({want, got}));
+      const got = await f.evaluate(() => ({play: st.play, on: st.on.join(), boxes: [...document.querySelectorAll('#stage .node')].map(n => n.dataset.p), services: totals().n}));
+      ok(got.play === 'custom' && got.on === fam[i].start && fam[i].start.split(',').every(id => got.boxes.includes(id)) && got.services > 0,
+        `GenStudio, ${fam[i].label}: opens Your own play with its products placed and its services selected`, JSON.stringify(got));
       await f.click('#change-play'); await f.click('#confirm-yes'); await f.waitForTimeout(300);
     }
     await f.click('#picker-list .pc-fam[data-card="family"] .fam-all'); await f.waitForTimeout(300);   // Nov 19 2026: the GenStudio card comes first, before the Client KBO plays
