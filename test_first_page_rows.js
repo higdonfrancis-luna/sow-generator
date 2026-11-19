@@ -145,8 +145,9 @@ const COPILOT_STUDIO = 'https://experienceleague.adobe.com/en/docs/experience-ma
     ok(cards.length === 3 && cards.every(c => { const [label, sub, products] = CARDS[c.ai]; return c.label === label && c.name === label && c.sub === sub &&
         same(c.chips, [[P[c.ai].name, 'dashed'], ...products.map(id => [short(id), 'solid'])]); }),
       '2. each assistant card shows its assistant first, drawn like an outside system (a dashed outline), then its products', JSON.stringify(cards));
+    // the product map at the bottom (Nov 19) scrolls sideways inside its own box on a phone, as it does under the canvas; that box stays inside the page
     for (const w of [1440, 390]) { await p.setViewportSize({width: w, height: 900}); await p.waitForTimeout(300);
-      const lay = await p.evaluate(() => ({sideways: document.scrollingElement.scrollWidth > document.scrollingElement.clientWidth + 1 || [...document.querySelectorAll('#picker .in *')].some(e => e.getBoundingClientRect().right > innerWidth + 1),
+      const lay = await p.evaluate(() => ({sideways: document.scrollingElement.scrollWidth > document.scrollingElement.clientWidth + 1 || [...document.querySelectorAll('#picker .in *')].some(e => !e.closest('.wke-graph-scroll svg') && e.getBoundingClientRect().right > innerWidth + 1),
         cols: getComputedStyle(document.querySelector('#picker-list .grid')).gridTemplateColumns.split(' ').length}));
       ok(!lay.sideways && lay.cols === (w > 1100 ? 4 : 1), `2. at ${w} px nothing runs off the side, and each row of plays is ${w > 1100 ? 'four cards across' : 'one card above another'}`, JSON.stringify(lay)); }
     await p.context().close(); }

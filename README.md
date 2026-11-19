@@ -27,6 +27,16 @@ Adam's rules for it (Oct 29 2026):
 - Adobe red (#EB1000), black and white, Source Sans 3 like the video page, the Adobe logo in the masthead. The SOW document itself carries the partner's name and no Adobe logo: it's the partner's paper to its customer.
 - Nothing about Adobe Consulting Services.
 
+## The product map at the bottom of the first page (November 19, 2026)
+
+Adam approved, November 19: the product map (the knowledge explorer that sits under the canvas once a play is open) also shows, open, at the very bottom of the first page, after the five play rows and the "One play per statement of work" note, the same on a computer and a phone.
+
+- **One map, two places:** there is still one explorer (`canvas/knowledge-explorer.js`, mounted once by `canvas/canvas-adapter.js`). `syncKnowledgeExplorer` moves its section into `#picker-map` at the bottom of the first page while no play is open, and back under the canvas when one is picked; it moves only when its place changes, so a click inside it keeps its focus. Picking a play opens the map on that play, as before (a product clicked on the first page is let go).
+- **Nothing is on a canvas yet:** the adapter passes `hasCanvas` (true once a play is open). Without a canvas the explorer draws no red products, no blue dots, no Reset to my play tab, no On my canvas key and no On my canvas / Not on my canvas line, and its panel starts with "Click any product or outside system to see what it connects to and the services it has." Clicking a product works as on the canvas: its lines light up and the panel lists what it connects to and its services, read-only.
+- **Heading:** "See how every product connects", in the rows' heading style, with one line under it: "Every Adobe product and outside system in this tool, and the lines that connect them."
+- **The method numbers stay:** the section moves whole, so the four method-coverage numbers and their note show under the map on the first page too, the same as under the canvas.
+- **Checks:** `node test_map_first_page.js`. `canvas/test_canvas.js` now reads the row headings from the rows themselves (`#picker-list`), and `test_first_page_rows.js`'s nothing-runs-off-the-side check lets the map's drawing scroll sideways inside its own box on a phone, as it does under the canvas.
+
 ## The first page in Adam's row order, the Client KBO plays, one card per AI assistant, two videos, the assistant lines' own look, Copilot's steps and an i on Creative Cloud (November 19, 2026)
 
 Adam, November 18 (evening): "First row should be those 4 Brand Visibility plays that we already had. Second row should be our Adobe agentic offering ... Third row should be GenStudio ... Client KBO plays ... last row would be build your own play"; "Third row should be GenStudio ... call it Adobe GenStudio lineup"; on the outcome card under Client KBO plays, "doesn't make sense"; on the assistants, "I think you would choose your platform"; "at the top we need two videos"; and on Creative Cloud, "maybe there's an i we can put over it so if people click on it or hover over it, they'll understand". The pictures he approved are `h1_first_page_rows.png`, `h2_two_videos.png` and `h3_first_page_kbo_and_assistant_cards.png`, and the research behind the products is `KBO_AND_ASSISTANT_CARDS.md`, in `handoff/2026-11-17/ai_hosts/` on the handoff branch.

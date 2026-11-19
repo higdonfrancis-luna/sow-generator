@@ -80,10 +80,12 @@
     var o = options || {}, catalog = normalizeCatalog(o.catalog);
     if (typeof o.getCanvasProductIds !== 'function') throw new TypeError('getCanvasProductIds is required.');
     var doc = root.ownerDocument, uid = 'wke-' + (++sequence), destroyed = false;
-    var selected = '', canvas = {ids:[],unknownIds:[]}, stateError = '', notice = '';
+    var selected = '', canvas = {ids:[],unknownIds:[]}, stateError = '', notice = '', noCanvas = false;
     var expanded = new Set(), selectedService = '';
     root.classList.add('wke');
     function readCanvas() {
+      // the first page has no canvas yet: nothing is marked as on it, and there is no play to go back to
+      noCanvas = typeof o.hasCanvas === 'function' && !o.hasCanvas();
       try { canvas = canvasSelection(catalog, o.getCanvasProductIds()); stateError = ''; }
       catch (error) { canvas = {ids:[],unknownIds:[]}; stateError = 'Canvas selection is unavailable.'; }
     }
@@ -116,7 +118,7 @@
         var highlighted = outsidePlay ? inspected : inSolution, label = short(p);
         return '<g class="wke-node'+(highlighted?' wke-node-focus':'')+(neighbors.has(p.id)?' wke-node-near':'')+(p.outside?' wke-node-outside':'')+'" role="button" tabindex="0" data-action="focus-product" data-id="'+escapeHTML(p.id)+'" data-focus-key="node-'+escapeHTML(p.id)+'" aria-label="Explore '+escapeHTML(p.name)+(inSolution?', on my canvas':'')+'" aria-pressed="'+inspected+'" transform="translate('+at.x+','+at.y+')"><title>'+escapeHTML(p.name)+(inSolution?' · on my canvas':'')+'</title><circle class="wke-node-circle" r="'+(highlighted?31:27)+'"/><text class="'+(label.length>10?'wke-node-small':'')+'" text-anchor="middle" dominant-baseline="central">'+escapeHTML(label)+'</text>'+(inSolution?'<circle class="wke-on-canvas" cx="23" cy="-23" r="5"/>':'')+'</g>';
       }).join('');
-      var graphLabel = outsidePlay ? 'Catalog relationships of '+catalog.byId[selected].name : 'Catalog product relationships, with the products on my canvas in red';
+      var graphLabel = outsidePlay ? 'Catalog relationships of '+catalog.byId[selected].name : noCanvas ? 'Catalog product relationships' : 'Catalog product relationships, with the products on my canvas in red';
       return '<div class="wke-graph-scroll" tabindex="0" aria-label="Product connection graph. Scroll horizontally on small screens."><svg class="wke-graph" viewBox="0 0 860 570" role="group" aria-label="'+escapeHTML(graphLabel)+'">'+edges+nodes+'</svg></div>';
     }
     function playMarkup(data) {
@@ -125,6 +127,7 @@
       return '<aside class="wke-inspector wke-play" aria-label="My play"><p class="wke-eyebrow">Your play</p><h3>'+escapeHTML(name||'Your canvas')+'</h3>'+(mine.length?'<p class="wke-lead">The '+mine.length+' '+(mine.some(function(p){return p.outside;})?(mine.length===1?'system':'products and systems'):(mine.length===1?'product':'products'))+' on your canvas, in red, inside the whole catalog. Select a product to see its connections and services.</p><ul class="wke-play-list">'+mine.map(function(p){return '<li>'+escapeHTML(p.name)+'</li>';}).join('')+'</ul>'+(mine.length>1?'<p class="wke-lead"><strong>'+n+'</strong> connection'+(n===1?'':'s')+' between them in the catalog.</p>':''):'<p class="wke-lead">Nothing is on your canvas yet. Add products above, or click any product here to see what it connects with.</p>')+'</aside>';
     }
     function inspectorMarkup(data) {
+      if (!selected && noCanvas) return '<aside class="wke-inspector" aria-label="Selected product details"><p class="wke-lead">Click any product or outside system to see what it connects to and the services it has.</p></aside>';
       if (!selected) return playMarkup(data);
       var p=catalog.byId[selected],related=data.connections.filter(function(c) {return c.a===selected||c.b===selected;}).sort(function(a,b) {
         return catalog.byId[a.a===selected?a.b:a.a].name.localeCompare(catalog.byId[b.a===selected?b.b:b.a].name);
@@ -136,7 +139,7 @@
       }).join('');
       if (!p.services.includes(selectedService)) selectedService=p.services[0] || '';
       var service=catalog.services[selectedService];
-      return '<aside class="wke-inspector" aria-label="Selected product details"><p class="wke-eyebrow">'+(p.outside?'Outside system':'Adobe product')+'</p><h3>'+escapeHTML(p.name)+'</h3><p class="wke-membership">'+(inSolution?'On my canvas':'Not on my canvas')+'</p><div class="wke-counts"><div><strong>'+related.length+'</strong><span>relationships in the catalog</span></div><div><strong>'+p.services.length+'</strong><span>available product services</span></div></div>'+'<h4>Connected to</h4>'+(related.length?'<ul class="wke-connections">'+list+'</ul>':'<p class="wke-small">No relationships are recorded for this product.</p>')+(service?'<div class="wke-services"><label for="'+uid+'-service">Inspect a product service</label><select id="'+uid+'-service" data-control="service" data-focus-key="service">'+p.services.map(function(id){return '<option value="'+escapeHTML(id)+'"'+(id===selectedService?' selected':'')+'>'+escapeHTML(catalog.services[id].name)+'</option>';}).join('')+'</select><p class="wke-service-id">'+escapeHTML(service.id)+'</p><p class="wke-small">'+escapeHTML(service.scope || 'No scope description is included in this catalog record. Open the source for context.')+'</p>'+link({url:service.url,title:service.sourceTitle})+(typeof o.onInspectService==='function'?'<button class="wke-inspect" type="button" data-action="inspect-service" data-focus-key="inspect-service">Inspect service in the SOW builder →</button>':'<p class="wke-small">Service details are read-only in this explorer.</p>')+'</div>':'')+'</aside>';
+      return '<aside class="wke-inspector" aria-label="Selected product details"><p class="wke-eyebrow">'+(p.outside?'Outside system':'Adobe product')+'</p><h3>'+escapeHTML(p.name)+'</h3>'+(noCanvas?'':'<p class="wke-membership">'+(inSolution?'On my canvas':'Not on my canvas')+'</p>')+'<div class="wke-counts"><div><strong>'+related.length+'</strong><span>relationships in the catalog</span></div><div><strong>'+p.services.length+'</strong><span>available product services</span></div></div>'+'<h4>Connected to</h4>'+(related.length?'<ul class="wke-connections">'+list+'</ul>':'<p class="wke-small">No relationships are recorded for this product.</p>')+(service?'<div class="wke-services"><label for="'+uid+'-service">Inspect a product service</label><select id="'+uid+'-service" data-control="service" data-focus-key="service">'+p.services.map(function(id){return '<option value="'+escapeHTML(id)+'"'+(id===selectedService?' selected':'')+'>'+escapeHTML(catalog.services[id].name)+'</option>';}).join('')+'</select><p class="wke-service-id">'+escapeHTML(service.id)+'</p><p class="wke-small">'+escapeHTML(service.scope || 'No scope description is included in this catalog record. Open the source for context.')+'</p>'+link({url:service.url,title:service.sourceTitle})+(typeof o.onInspectService==='function'?'<button class="wke-inspect" type="button" data-action="inspect-service" data-focus-key="inspect-service">Inspect service in the SOW builder →</button>':'<p class="wke-small">Service details are read-only in this explorer.</p>')+'</div>':'')+'</aside>';
     }
     function render(focusKey) {
       if(destroyed)return;
@@ -148,7 +151,7 @@
       var outsidePlay = Boolean(selected) && !canvas.ids.includes(selected);
       var data={products:catalog.products,connections:catalog.connections};
       var unknown=canvas.unknownIds.length?' '+canvas.unknownIds.length+' canvas product ID'+(canvas.unknownIds.length===1?' is':'s are')+' absent from this catalog and omitted.':'';
-      root.innerHTML='<p class="wke-status" role="status" aria-live="polite">'+escapeHTML(stateError || notice)+escapeHTML(unknown)+'</p><div class="wke-legend"><span><i class="wke-adobe-key"></i>Adobe product</span><span><i class="wke-outside-key"></i>Outside system</span><span><i class="wke-canvas-key"></i>On my canvas</span><span><i class="wke-partner-key"></i>Partner-designed relationship</span></div><div class="wke-stage"><button class="wke-reset'+(outsidePlay?' wke-reset-away':'')+'" type="button" data-action="reset" data-focus-key="reset">Reset to my play</button><div class="wke-layout">'+graphMarkup(data, outsidePlay)+inspectorMarkup(data)+'</div></div><p class="wke-footnote">Relationships describe catalog knowledge, not a guarantee of a deployed integration. Inspect each relationship’s type, prerequisites and source. Browsing and inspecting services do not add scope or change estimates.</p>';
+      root.innerHTML='<p class="wke-status" role="status" aria-live="polite">'+escapeHTML(stateError || notice)+escapeHTML(unknown)+'</p><div class="wke-legend"><span><i class="wke-adobe-key"></i>Adobe product</span><span><i class="wke-outside-key"></i>Outside system</span>'+(noCanvas?'':'<span><i class="wke-canvas-key"></i>On my canvas</span>')+'<span><i class="wke-partner-key"></i>Partner-designed relationship</span></div><div class="wke-stage'+(noCanvas?' wke-stage-browse">':'"><button class="wke-reset'+(outsidePlay?' wke-reset-away':'')+'" type="button" data-action="reset" data-focus-key="reset">Reset to my play</button>')+'<div class="wke-layout">'+graphMarkup(data, outsidePlay)+inspectorMarkup(data)+'</div></div><p class="wke-footnote">Relationships describe catalog knowledge, not a guarantee of a deployed integration. Inspect each relationship’s type, prerequisites and source. Browsing and inspecting services do not add scope or change estimates.</p>';
       restoreFocus(focusKey);
     }
     function select(id,key) {
