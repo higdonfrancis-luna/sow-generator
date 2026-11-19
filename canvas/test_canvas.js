@@ -43,7 +43,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   const need = l => (CAT.lines[l].needs || []).every(x => on.has(x)) && (!(CAT.lines[l].needs_any || []).length || CAT.lines[l].needs_any.some(x => on.has(x)));
   const counted = [];
   for (const o of owners) {
-    for (const l of o.lines) if ((l in ls ? ls[l] : !(pl.off || []).includes(l)) && need(l)) counted.push(l);   // a play can start a line off (step 18)
+    for (const l of o.lines) if ((l in ls ? ls[l] : !(pl.off || []).includes(l) && !(l === 'CS2' && on.has('eds'))) && need(l)) counted.push(l);   // a play can start a line off (step 18); Nov 18 2026: so does the write-back beside Edge Delivery Services (CanvasScope.defaultSelection), now that Authoring docs starts on
     for (const l of o.more) if ((l in ls ? ls[l] : extra.includes(l)) && need(l)) counted.push(l);
   }
   const special = counted.some(l => SPECIAL.includes(l));
@@ -132,7 +132,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
     const p = await fresh(); await p.goto(CANVAS); await choose(p, id);
     const t = await read(p);
     const liveSub = `${ls[0]} one-time + ${ls[1].replace(' a month', '')} a month for 12 months`;
-    ok(t.big === ls[2] && t.sub === liveSub, `${play.label}: the canvas total matches the live tool (${ls[2]}, ${ls[0]} one-time + ${ls[1]})`, `${t.big} / ${t.sub}`);
+    ok(t.big === ls[2] && t.sub === liveSub, `${play.label}: the canvas total matches the live tool (${ls[2]}, ${ls[0]} one-time + ${ls[1]}; Nov 19 2026: a new engagement there starts with the services the play's starting outside systems bring on the canvas)`, `${t.big} / ${t.sub}`);
     await p.context().close(); await live.context().close();
   }
 
@@ -143,16 +143,16 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   ok((await p.textContent('.total .k')).trim() === 'Illustrative fees: implementation + 12-month term' && (await p.textContent('.toolbar')).includes('Delivery size') && !(await p.textContent('.toolbar')).includes('year one'),
     'the total reads Illustrative fees: implementation + 12-month term, beside Delivery size', (await p.textContent('.total .k')).trim());
   ok(await p.isVisible('#picker') && (await nodes(p)).length === 0, 'opens on the play picker, with nothing on the canvas');
-  ok((await p.$$('#picker .pc-card')).length === 9, 'the picker shows nine cards: seven plays and the two that open Your own play with one product placed');
+  ok((await p.$$('#picker .pc-card')).length === 12, 'the picker shows twelve cards: seven plays and the five that open Your own play with products placed (Nov 19 2026: the three AI assistant cards joined)');
   const secs0 = await p.$$eval('#picker .sh', x => x.map(y => y.textContent.trim()));
-  ok(secs0.join('|') === 'Brand Visibility plays|Adobe agentic lineup, or build your own play|Adobe GenStudio: a family, not one product', 'in three groups: Brand Visibility plays; Adobe agentic lineup, or build your own play; and Adobe GenStudio', secs0.join('|'));
+  ok(secs0.join('|') === 'Brand Visibility plays|Adobe agentic lineup|Adobe GenStudio lineup|Client KBO plays|Build your own play', 'in five rows, in Adam\'s order (Nov 19 2026): Brand Visibility plays; Adobe agentic lineup; Adobe GenStudio lineup; Client KBO plays; Build your own play', secs0.join('|'));
   ok((await p.textContent('#picker [data-play="custom"]')).includes('Create your own play') && (await p.textContent('#picker [data-play="custom"] .cchip')).trim() === `${N} products to choose from`,
     `the last card is Create your own play, with ${N} products to choose from`);
   ok((await p.textContent('#picker')).includes('One play per statement of work. To quote a second play, start a second SOW.'), 'the picker says one play per statement of work');
-  const chips = await p.$$eval('#picker .pc-card[data-play]:not([data-play="custom"])', cs => cs.map(c => c.querySelectorAll('.chips span').length));
-  ok(chips.length === FIXED.length && chips.every((n, i) => n === FIXED[i].products.length), 'each play card shows a chip for each of its products');
+  const chips = await p.$$eval('#picker .pc-card[data-play]:not([data-play="custom"])', cs => cs.map(c => [c.dataset.play, c.querySelectorAll('.chips span').length]));
+  ok(chips.length === FIXED.length && chips.every(([id, n]) => n === PL[id].products.length), 'each play card shows a chip for each of its products', JSON.stringify(chips));
   const starts = await p.$$eval('#picker .pc-card[data-start]', cs => cs.map(c => [c.dataset.start, c.querySelectorAll('.chips span').length].join(':')));
-  ok(starts.join('|') === CAT.plays.find(p => p.custom).starts.map(x => x.products.join(',') + ':' + x.products.length).join('|'), 'so does each card that opens Your own play with its products placed', starts.join('|'));
+  ok(starts.join('|') === CAT.plays.find(p => p.custom).starts.map(x => x.products.join(',') + ':' + (x.products.length + (x.assistant ? 1 : 0))).join('|'), 'so does each card that opens Your own play with its products placed, an assistant card with a chip for its assistant first (Nov 19 2026)', starts.join('|'));
   ok(await p.isHidden('.tabs') && await p.isHidden('.toolbar') && await p.isHidden('#start-over') && await p.isHidden('#change-play') && await p.isHidden('#save') && await p.isHidden('#addwrap'),
     'the steps, the toolbar and Start over wait for a play; so do Change play, Add product and Save');
   ok(fs.readFileSync(path.join(HERE, 'index.html'), 'utf8').includes('<body class="picking">'), 'the page starts on the boxes, so a slow first load never shows the steps, the toolbar or Start over');
@@ -163,8 +163,8 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
 
   // 3. a fixed play, chosen from its box
   await p.click('#picker [data-play="aem"]'); await p.waitForTimeout(600); await p.fill('#rate', '150'); await p.waitForTimeout(100);
-  ok(await p.isHidden('#picker') && JSON.stringify(await nodes(p)) === JSON.stringify(['bv', 'cdn', 'eds', 'so']), 'picking a play\'s box puts its products on the canvas, and the CDN (step 45: on from the start)', (await nodes(p)).join(','));
-  ok(JSON.stringify(await edges(p)) === JSON.stringify(['bv-eds', 'cdn-bv', 'so-eds']) && (await p.$$('.ib')).length === 3, 'they connect themselves, a lightning bolt on each connection', (await edges(p)).join(','));
+  ok(await p.isHidden('#picker') && JSON.stringify(await nodes(p)) === JSON.stringify(['bv', 'cdn', 'chatgpt', 'claude', 'csrc', 'eds', 'search', 'so']), 'picking a play\'s box puts its products on the canvas, and every outside system it offers (step 45: the CDN; Nov 18 2026: Search data, Authoring docs, ChatGPT and Claude too)', (await nodes(p)).join(','));
+  ok(JSON.stringify(await edges(p)) === JSON.stringify(['bv-eds', 'cdn-bv', 'chatgpt-eds', 'claude-eds', 'csrc-eds', 'csrc-so', 'search-bv', 'search-so', 'so-eds']) && (await p.$$('.ib')).length === 9, 'they connect themselves, a lightning bolt on each connection', (await edges(p)).join(','));
   ok((await p.textContent('#play-label')).trim() === PL.aem.label && await p.isVisible('#change-play') && !(await p.$('#play-btn, #play-menu, #choose')) && await p.isVisible('#add-btn') && await p.isHidden('#add-menu'),
     'the toolbar shows the play name, Change play and Add product, with its menu closed (Nov 18: a product can be added to a ready-made play)');
   ok((await Promise.all(['build', 'scope', 'services', 'sow'].map(k => p.isVisible(`.tabs [data-tab="${k}"]`)))).every(Boolean) && await p.isVisible('#rate') && await p.isVisible('#size') && await p.isVisible('#t-big') && await p.isVisible('#start-over'),
@@ -254,7 +254,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   await p.click('#change-play'); await p.waitForTimeout(150);
   ok(await p.isVisible('#confirm') && (await p.textContent('#confirm h3')).trim() === 'Change the play?' && (await p.textContent('#confirm-yes')).trim() === 'Choose another play', 'Change play asks first');
   await p.click('#confirm-no'); await p.waitForTimeout(150);
-  ok((await nodes(p)).length === 4 && await p.isHidden('#confirm'), 'Cancel keeps the play as it was');
+  ok((await nodes(p)).length === 8 && await p.isHidden('#confirm'), 'Cancel keeps the play as it was');
   await p.click('#change-play'); await p.click('#confirm-yes'); await p.waitForTimeout(400);
   ok(await p.isVisible('#picker') && (await nodes(p)).length === 0, 'Choose another play clears the canvas and opens the picker');
   const om1 = await onlyMasthead(p);
@@ -281,6 +281,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   // 9. every fixed play: its products, its connections, and a clean layout
   for (const pl of FIXED) {
     const q = await fresh(); await q.goto(CANVAS); await choose(q, pl.id);
+    if (await q.evaluate(() => fv())) { await q.click('#view-all'); await q.waitForTimeout(500); }   // Nov 18 2026: Brand Visibility + Customer Journey Analytics opens in Explore one product
     const start = [...pl.products, ...(pl.ostart || [])], want = CAT.connections.filter(c => start.includes(c.a) && start.includes(c.b)).map(c => c.id).sort();   // step 45: the CDN starts on
     const tq = await read(q), eq = expected(pl.id);
     ok(JSON.stringify(await nodes(q)) === JSON.stringify([...start].sort()) && JSON.stringify(await edges(q)) === JSON.stringify(want) && tq.big === money(eq.yr) && await layoutClean(q),
@@ -480,7 +481,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   // 15. text and readability
   await addP(p, 'bv'); await addP(p, 'cja'); await p.waitForTimeout(200);
   const body = await p.evaluate(() => document.body.innerText);
-  ok(!/[–—]/.test(body) && !/[–—]/.test(JSON.stringify(CAT)), 'no en or em dashes anywhere');
+  ok(!/[–—]/.test(body) && !/[–—]/.test(JSON.stringify(CAT, (k, v) => k === 'ask' ? undefined : v)), 'no en or em dashes anywhere (Nov 18 2026: but one Ask it question, Adobe\'s own example word for word, on its card)');
   const faded = await p.evaluate(() => [...document.querySelectorAll('.node,.card,.save,.total,.toolbar *,.picker *,.addmenu *,.fbar *,.empty *,#knowledge-model-section *')].filter(e => parseFloat(getComputedStyle(e).opacity) < 1).length);
   ok(faded === 0, 'no faded or low-opacity text');
   const unsourced = Object.values(CAT.lines).filter(l => !/^https?:\/\//.test(l.url));
@@ -512,14 +513,16 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   await kb.keyboard.press('Tab');
   ok(await kb.evaluate(() => document.activeElement.id) === 'vid-play', 'the next on the plays video at the top of the page (step 83)');
   await kb.keyboard.press('Tab'); await kb.keyboard.press('Tab');
-  ok(await kb.evaluate(() => document.activeElement.id) === 'bp-q', 'then, after Watch the video, the question box above the play boxes');
+  ok(await kb.evaluate(() => document.activeElement.id) === 'look-play', 'then, after Watch the video, the first look beside it (Nov 19 2026)');
+  await kb.keyboard.press('Tab'); await kb.keyboard.press('Tab');
+  ok(await kb.evaluate(() => document.activeElement.id) === 'bp-q', 'then, after its Watch the video, the question box above the play boxes');
   let walk = [];
   for (let i = 0; i < 12 && await kb.evaluate(() => !document.activeElement.dataset.play); i++) { await kb.keyboard.press('Tab'); walk.push(await kb.evaluate(() => { const e = document.activeElement, r = e.getBoundingClientRect(); return !!(r.width && r.height) && !e.closest('[hidden]'); })); }
   ok(await kb.evaluate(() => document.activeElement.dataset.play) === first && walk.every(Boolean), 'then Tab reaches the first play box, with nothing hidden above it taking focus', walk.length + ' stops');
   await kb.keyboard.press('Enter'); await kb.waitForTimeout(500);
   ok(await kb.isHidden('#picker') && await kb.isVisible('.tabs') && (await kb.textContent('#play-label')).trim() === (PL[first].title || PL[first].label), 'Enter on a box picks that play and brings back the steps and the toolbar');
   await choose(ph, 'aem');
-  ok(await ph.evaluate(() => document.documentElement.scrollWidth) <= 390 && (await nodes(ph)).length === 4, 'on a phone a play still draws, with no sideways scroll');
+  ok(await ph.evaluate(() => document.documentElement.scrollWidth) <= 390 && (await nodes(ph)).length === 8, 'on a phone a play still draws, with no sideways scroll');
   await ph.click('#change-play'); await ph.click('#confirm-yes'); await ph.waitForTimeout(300); await choose(ph, 'custom');
   ok(await ph.isHidden('#add-menu') && await ph.isVisible('#empty'), 'on a phone, Create your own play waits for a tap on Add product (the menu does not open by itself)');
   await ph.click('#empty-add'); await ph.waitForTimeout(300);
@@ -553,10 +556,10 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
       ADOBE_C.filter(c => !KINDS.includes(c.kind) || typeof c.availability !== 'string' || CAVEAT.test(c.availability) || CAVEAT.test(c.label) || LABEL.test(c.availability) || LABEL.test(c.label) || !Array.isArray(c.prereqs) || !c.prereqs.length || c.prereqs.some(x => !x || CAVEAT.test(x))).map(c => c.id).join(',') + ` (${AV.length} with, ${NOAV.length} without)`);
     const OUTC = CAT.connections.filter(c => !ADOBE_C.includes(c));
     // Nov 18 2026: the 41 lines of ChatGPT, Claude and Microsoft Copilot, and Adobe Analytics + Cloud storage and GenStudio for Performance Marketing + Ad platforms,
-    // have no route style (Adobe calls none of them a native integration), so they are drawn plain
-    const PLAIN = c => ['chatgpt', 'claude', 'copilot'].some(id => [c.a, c.b].includes(id)) || ['aa-cstore', 'gspm-ads'].includes(c.id);
-    ok(OUTC.length === 65 && OUTC.filter(PLAIN).length === 41 && OUTC.some(c => c.id === 'commerce-crm' && c.line === 'native') && OUTC.every(c => c.kind === 'outside' && (PLAIN(c) ? !('line' in c) : ['native', 'platform'].includes(c.line)) && c.label && c.prereqs.length >= (['cdn-bv', 'dwh-cja', 'cstore-cja', 'crm-cja'].includes(c.id) ? 3 : 1) && c.source && c.source.url && c.how),
-      `steps 27, 45 and 85: each outside system's connection (65 with Adobe Commerce + CRM, Brand Intelligence + Figma, Figma's four to AEM Assets, GenStudio for Performance Marketing, Adobe Express and Firefly Custom Models, and since Nov 18 the 41 drawn plain) is typed Outside system, with its line style or none, how it connects, prerequisites and source (${OUTC.map(c => c.id + ' ' + c.line).join(', ')})`);
+    // came in with no route style. Nov 19 2026: the assistants' lines have a style of their own ('assistant', thinner and grey), and the other two are native
+    const AIC = c => ['chatgpt', 'claude', 'copilot'].some(id => [c.a, c.b].includes(id)), PLAIN = c => AIC(c) || ['aa-cstore', 'gspm-ads'].includes(c.id);
+    ok(OUTC.length === 66 && OUTC.filter(PLAIN).length === 42 && OUTC.some(c => c.id === 'commerce-crm' && c.line === 'native') && OUTC.every(c => c.kind === 'outside' && (AIC(c) ? c.line === 'assistant' : ['native', 'platform'].includes(c.line)) && c.label && c.prereqs.length >= (['cdn-bv', 'dwh-cja', 'cstore-cja', 'crm-cja'].includes(c.id) ? 3 : 1) && c.source && c.source.url && c.how),
+      `steps 27, 45 and 85: each outside system's connection (66 with Adobe Commerce + CRM, Brand Intelligence + Figma, Figma's four to AEM Assets, GenStudio for Performance Marketing, Adobe Express and Firefly Custom Models, and since Nov 18 the 42 of the assistants and two more boxes, Claude + Brand Intelligence the last) is typed Outside system, with its line style (the assistants' their own), how it connects, prerequisites and source (${OUTC.map(c => c.id + ' ' + c.line).join(', ')})`);
     const q = await fresh(); await q.goto(CANVAS); await choose(q, 'fsi');
     ok(await q.$eval('.edge[data-c="bv-bc"]', e => e.classList.contains('pw')) && (await q.textContent('#t-legend')).includes('Partner workflow'),
       'Brand Visibility + Brand Concierge draws dashed, and the key above the map says what each line style means');
@@ -610,7 +613,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   { const q = await fresh(1600, 950); await q.goto(CANVAS); await choose(q, 'aem'); await q.reload(); await q.waitForTimeout(900);
     const at = async () => q.$$eval('.node', ns => ns.map(n => { const r = n.getBoundingClientRect(); return [Math.round(r.left), Math.round(r.top)]; }));
     const a = await at(); await q.evaluate(() => fit()); await q.waitForTimeout(700); const c = await at();
-    ok(a.length === 4 && JSON.stringify(a) === JSON.stringify(c), 'after a reload the products sit where the layout puts them, with no shift on the next resize', `${JSON.stringify(a)} then ${JSON.stringify(c)}`);
+    ok(a.length === 8 && JSON.stringify(a) === JSON.stringify(c), 'after a reload the products sit where the layout puts them, with no shift on the next resize', `${JSON.stringify(a)} then ${JSON.stringify(c)}`);
     await q.context().close(); }
 
   // step 44: Add outside system on Create your own play

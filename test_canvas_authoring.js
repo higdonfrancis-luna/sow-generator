@@ -18,6 +18,13 @@ async function start(page, play = 'aem') {
   await click(page, '#size [data-size="large"]');
 }
 
+/* Nov 18 2026: a ready-made play starts with every outside system it offers (the AEM play: the CDN, Search data, Authoring docs, ChatGPT and
+   Claude). The checks of switching the authoring choice run on the AEM play as it started before, the CDN its one outside system */
+async function startAsBefore(page) {
+  await start(page);
+  await page.evaluate("for (const id of st.out.filter(x => x !== 'cdn')) removeOutside(id)");
+}
+
 async function addCustomProduct(page, id) {
   await page.evaluate("if (document.getElementById('add-menu').hidden) document.getElementById('add-btn').click()");
   if (id === 'eds' || id === 'aemsites') {
@@ -135,12 +142,14 @@ async function runAuthoringChecks(newSession) {
     assert.equal(field.value, field.options[0].value);
     assert.deepEqual(Array.from(field.options.slice(1), o => o.text).sort(), ['AEM Universal Editor', 'Word or Google Docs'].sort());
     const nodes = await read(page, 'Array.from(document.querySelectorAll(".node"), n=>n.dataset.p).sort()');
-    assert.deepEqual(nodes, ['bv','cdn','eds','so']);
+    assert.deepEqual(nodes, ['bv','cdn','chatgpt','claude','csrc','eds','search','so']);
     const pending = await roundTrip(page);
     expectRows(pending, aemAuthorRows, false);
     expectRows(pending, separateSiteRows, false);
-    expectRows(pending, documentRows, false);
-    assert.equal(pending.total, 1107040);
+    // Nov 18 2026: Authoring docs starts on the canvas, so its setup counts while the choice awaits discovery; the write-back stays optional
+    expectRows(pending, ['CS1', 'SD1'], true);
+    expectRows(pending, ['CS2'], false);
+    assert.equal(pending.total, 1107040 + (32 + 16) * 185);
     expectRows(pending, ['A01', 'SO2', 'OX1'], true);
     // Native key behavior and focus restoration require a real browser.
     if (page.keyboardSelect) {
@@ -152,7 +161,7 @@ async function runAuthoringChecks(newSession) {
   });
 
   await check('switching the authoring method recomputes Services and fees in both directions', async page => {
-    await start(page);
+    await startAsBefore(page);
     const pending = await buildQuote(page);
     await choose(page, /Universal Editor/);
     const aem = await roundTrip(page);
@@ -231,7 +240,7 @@ async function runAuthoringChecks(newSession) {
   });
 
   await check('edited Services, zero rates and named-draft choices survive switching and reopening', async page => {
-    await start(page);
+    await startAsBefore(page);
     await choose(page, /Universal Editor/);
     await services(page);
     const removeId = await page.evaluate("selectedLines().find(s=>baseId(s)==='SI05').id");

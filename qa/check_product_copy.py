@@ -76,8 +76,9 @@ assert not found, f'{len(found)} release label(s) or date(s) in shipped product 
 # Nov 17 2026: Figma connects to AEM Assets, GenStudio for Performance Marketing, Adobe Express and Firefly Custom Models: four connections, and six
 # service definitions and canvas services (XF01 to XF06)
 # Nov 18 2026 (Adam: three boxes, lines that sell no hours are fine, no Adobe Analytics lines): ChatGPT, Claude and Microsoft Copilot connect to 18 products
-# with 41 connections (two of them between boxes the tool already had), and six service definitions and canvas services sit on the products (XT01, XT03 to XT07)
-assert len(templates) == 48 and len(concepts) == 529 and len(canvas['connections']) == 203 and len(canvas['lines']) == 575, (len(templates), len(concepts), len(canvas['connections']), len(canvas['lines']))
+# with 41 connections (two of them between boxes the tool already had), and six service definitions and canvas services sit on the products (XT01, XT03 to XT07).
+# Later on Nov 18 (the Adobe agentic AI play): Claude + Brand Intelligence, a 42nd line with no service of its own
+assert len(templates) == 48 and len(concepts) == 529 and len(canvas['connections']) == 204 and len(canvas['lines']) == 575, (len(templates), len(concepts), len(canvas['connections']), len(canvas['lines']))
 NOV17 = ['CW09', 'CW10', 'CW11', 'XA28', 'XA29', 'XA30', 'XA31', 'XL27', 'XA32', 'XA33', 'XA34', 'XA35', 'XA36', 'XA37', 'XA38', 'XA39', 'XA40',
          'AXD13', 'AXD14', 'AXD15', 'AXD16', 'XB17', 'XB18', 'XB19', 'XQ09', 'XQ10']
 assert all(i in canvas['lines'] for i in NOV17) and all((i in concepts) == (not i.startswith('CW')) for i in NOV17), 'a Nov 17 Coworker service is missing'

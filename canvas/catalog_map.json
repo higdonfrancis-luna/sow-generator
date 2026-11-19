@@ -1,5 +1,7 @@
 {
- "note": "Hand-kept map for the Build canvas. Service lines with ids from the live SOW tool (sow/index.html CATALOG) keep their names, hours and sources from there; researched lines come from canvas/research/*.json. 'lines' are on when the play starts, 'more' are optional. Each play lists its products, their places ([column, row] on the canvas grid) any optional lines it turns on from the start ('on') and any starting lines it turns off ('off'). The custom play, Create your own play, lists the products a partner can add and their places on its grid; the canvas packs the chosen ones together. Outside systems (step 27): products marked 'outside' are systems the client runs outside Adobe. A play lists the ones a partner can add ('outside') and their places ('opos'); none is on when the play starts. Step 45: 'ostart' lists the outside systems on the canvas when the play starts (the CDN in every Brand Visibility play); 'recommend' tags systems Recommended, with each one's reason in its 'rec'. A line or connection's 'tier' is the package it needs. Step 96: a built play offers outside systems only; 'kept' lists Adobe products a saved canvas keeps but the play no longer offers (AEM Assets on the AEM play). Nov 18 2026 (Adam: \"a play should always offer them if there's a product on its canvas that connects to them\"): besides its own 'outside' list a play offers every outside system that connects to a product on its canvas, so 'opos' also places the ones a play offers that way from the start (ChatGPT, Claude and Microsoft Copilot beside Customer Journey Analytics and Coworker, ChatGPT and Claude beside Edge Delivery Services, and the CRM beside Adobe Commerce); once a product is added, the play takes Create your own play's grid, which places them all.",
+ "note": "Hand-kept map for the Build canvas. Service lines with ids from the live SOW tool (sow/index.html CATALOG) keep their names, hours and sources from there; researched lines come from canvas/research/*.json. 'lines' are on when the play starts, 'more' are optional. Each play lists its products, their places ([column, row] on the canvas grid) any optional lines it turns on from the start ('on') and any starting lines it turns off ('off'). The custom play, Create your own play, lists the products a partner can add and their places on its grid; the canvas packs the chosen ones together. Outside systems (step 27): products marked 'outside' are systems the client runs outside Adobe. A play lists the ones a partner can add ('outside') and their places ('opos'); none is on when the play starts. Step 45: 'ostart' listed the outside systems on the canvas when the play starts (the CDN in every Brand Visibility play) until Nov 18 2026 (below); 'recommend' tags systems Recommended, with each one's reason in its 'rec'. A line or connection's 'tier' is the package it needs. Step 96: a built play offers outside systems only; 'kept' lists Adobe products a saved canvas keeps but the play no longer offers (AEM Assets on the AEM play). Nov 18 2026 (Adam: \"a play should always offer them if there's a product on its canvas that connects to them\"): besides its own 'outside' list a play offers every outside system that connects to a product on its canvas, so 'opos' also places the ones a play offers that way from the start (ChatGPT, Claude and Microsoft Copilot beside Customer Journey Analytics and Coworker, ChatGPT and Claude beside Edge Delivery Services, and the CRM beside Adobe Commerce); once a product is added, the play takes Create your own play's grid, which places them all. Nov 18 2026 (Adam: \"for every single play we have and every single play we're going to build, we should automatically put those outside systems in and then people can delete them if they want\"): a canvas that opens with products on it starts with every outside system that connects to one of them, and a ready-made play also with every system on its own 'outside' list, each with its connection's starting services; Create your own play opened empty starts with none. 'ostart' is no longer kept here: canvas/build.py works it out for each ready-made play (catalog.json and the SOW steps' CanvasPresets), and the canvas works it out for a card that opens Your own play. 'agentic' is the Client KBO plays card (Adam, Nov 18), built like GenStudio's 'family': each area has its one-line sentence ('line'); 'all' opens all three together with its own products; a card marked 'named' names the canvases it opens after the area ('Find new customers') or 'all.name', and they keep their own compact 'places' (each product and starting system) until a box they do not place is added. Nov 19 2026: 'rows' is the first page, top to bottom: each row's heading ('head') and either its plays in order ('plays', with the start cards placed 'before' or 'after' the play they name) or one of the custom play's cards ('card': 'family' or 'agentic'). A start card for an AI assistant names it ('assistant'): its chips show the assistant first, and its canvas starts with that assistant only among the AI assistants, the other outside systems as the rule says; marked 'named', its canvas takes the card's name. A product's 'info' is a short note an i beside its name opens, on its canvas box and its chip in the GenStudio and Client KBO cards.",
+ "own_sites_note": "Nov 19 2026: the AEM Sites rule. Adobe's AEM page for the assistants covers AEM as a Cloud Service, not Edge Delivery Services, so beside Edge Delivery Services these connections (and the line XT03) do not show and bring no outside system.",
+ "own_sites": ["chatgpt-aemsites", "claude-aemsites", "copilot-aemsites", "XT03"],
  "products": [
   {
    "id": "rtcdp",
@@ -321,6 +323,7 @@
    "id": "creativecloud",
    "name": "Creative Cloud",
    "title": "Creative Cloud for enterprise",
+   "info": "Creative Cloud for enterprise: the creative apps rolled out across your client's company. The services here cover user setup, app deployment packages, shared libraries, sharing rules, custom fonts, training and monthly administration, not any one app.",
    "lines": [],
    "more": []
   },
@@ -941,7 +944,6 @@
  "plays": [
   {
    "id": "abv",
-   "section": "Brand Visibility plays",
    "label": "Adobe Brand Visibility",
    "sub": "Prompt strategy and optimization",
    "badge": "New",
@@ -971,9 +973,6 @@
      0
     ]
    },
-   "ostart": [
-    "cdn"
-   ],
    "recommend": [
     "cdn",
     "search"
@@ -981,7 +980,6 @@
   },
   {
    "id": "cja",
-   "section": "Brand Visibility plays",
    "label": "Brand Visibility + Customer Journey Analytics",
    "sub": "Cross-sell to CJA customers",
    "pos": {
@@ -1049,9 +1047,6 @@
      1
     ]
    },
-   "ostart": [
-    "cdn"
-   ],
    "recommend": [
     "cdn",
     "search"
@@ -1059,7 +1054,6 @@
   },
   {
    "id": "commerce",
-   "section": "Brand Visibility plays",
    "label": "Brand Visibility + Adobe Commerce",
    "sub": "Cross-sell to Commerce customers",
    "pos": {
@@ -1097,9 +1091,6 @@
      1
     ]
    },
-   "ostart": [
-    "cdn"
-   ],
    "recommend": [
     "cdn",
     "search"
@@ -1107,7 +1098,6 @@
   },
   {
    "id": "aem",
-   "section": "Brand Visibility plays",
    "label": "Brand Visibility + Sites Optimizer and Edge Delivery Services",
    "sub": "Three products, new sales pursuit",
    "pos": {
@@ -1160,9 +1150,6 @@
      -1
     ]
    },
-   "ostart": [
-    "cdn"
-   ],
    "recommend": [
     "cdn",
     "search"
@@ -1173,7 +1160,6 @@
   },
   {
    "id": "fsi",
-   "section": "Brand Visibility plays",
    "label": "Brand Visibility + Brand Concierge",
    "sub": "Two products, new sales pursuit",
    "pos": {
@@ -1212,9 +1198,6 @@
      0
     ]
    },
-   "ostart": [
-    "cdn"
-   ],
    "recommend": [
     "cdn",
     "search"
@@ -1222,7 +1205,6 @@
   },
   {
    "id": "coworker",
-   "section": "Adobe agentic lineup, or build your own play",
    "label": "Adobe Coworker",
    "sub": "Context, skills and adoption",
    "pos": {
@@ -1251,14 +1233,13 @@
   },
   {
    "id": "custom",
-   "section": "Adobe agentic lineup, or build your own play",
    "label": "Create your own play",
    "title": "Your own play",
    "sub": "Pick any Adobe products",
    "custom": true,
    "starts": [
     {
-     "before": "coworker",
+     "after": "abv",
      "label": "Adobe Brand Concierge",
      "sub": "Turns visits into customers",
      "products": [
@@ -1266,16 +1247,496 @@
      ]
     },
     {
-     "after": "coworker",
+     "after": "abv",
      "label": "Adobe Brand Intelligence",
      "sub": "Checks content against brand guidelines",
      "products": [
       "brandintel"
      ]
+    },
+    {
+     "after": "custom",
+     "label": "Adobe in Claude",
+     "sub": "For clients who work in Claude",
+     "named": true,
+     "assistant": "claude",
+     "products": [
+      "cw",
+      "cja",
+      "ajo",
+      "aemsites",
+      "workfront"
+     ],
+     "places": {
+      "claude": [
+       0,
+       1
+      ],
+      "workfront": [
+       1,
+       0
+      ],
+      "cw": [
+       1,
+       1
+      ],
+      "aemsites": [
+       1,
+       2
+      ],
+      "ajo": [
+       2,
+       0
+      ],
+      "cja": [
+       2,
+       1
+      ],
+      "ads": [
+       2,
+       2
+      ],
+      "dwh": [
+       3,
+       0
+      ],
+      "crm": [
+       3,
+       1
+      ],
+      "cstore": [
+       3,
+       2
+      ],
+      "bi": [
+       3,
+       3
+      ]
+     }
+    },
+    {
+     "after": "custom",
+     "label": "Adobe in ChatGPT",
+     "sub": "For clients who work in ChatGPT",
+     "named": true,
+     "assistant": "chatgpt",
+     "products": [
+      "cw",
+      "cja",
+      "aemsites",
+      "gspm",
+      "express"
+     ],
+     "places": {
+      "chatgpt": [
+       0,
+       1
+      ],
+      "aemsites": [
+       1,
+       0
+      ],
+      "cw": [
+       1,
+       1
+      ],
+      "gspm": [
+       1,
+       2
+      ],
+      "express": [
+       1,
+       3
+      ],
+      "cja": [
+       2,
+       0
+      ],
+      "ads": [
+       2,
+       1
+      ],
+      "figma": [
+       2,
+       2
+      ],
+      "dwh": [
+       3,
+       0
+      ],
+      "crm": [
+       3,
+       1
+      ],
+      "cstore": [
+       3,
+       2
+      ],
+      "bi": [
+       3,
+       3
+      ]
+     }
+    },
+    {
+     "after": "custom",
+     "label": "Adobe in Microsoft Copilot",
+     "sub": "For clients who work in Microsoft 365",
+     "named": true,
+     "assistant": "copilot",
+     "products": [
+      "cw",
+      "cja",
+      "aemsites",
+      "workfront"
+     ],
+     "places": {
+      "copilot": [
+       0,
+       1
+      ],
+      "workfront": [
+       1,
+       0
+      ],
+      "cw": [
+       1,
+       1
+      ],
+      "aemsites": [
+       1,
+       2
+      ],
+      "bi": [
+       2,
+       0
+      ],
+      "cja": [
+       2,
+       1
+      ],
+      "ads": [
+       2,
+       2
+      ],
+      "dwh": [
+       3,
+       0
+      ],
+      "crm": [
+       3,
+       1
+      ],
+      "cstore": [
+       3,
+       2
+      ]
+     }
     }
    ],
+   "agentic": {
+    "named": true,
+    "areas": [
+     {
+      "label": "Find new customers",
+      "line": "Reach new buyers in ad and media channels, and show up when they ask AI.",
+      "products": [
+       "rtcdp",
+       "gspm",
+       "bv",
+       "cw",
+       "cja"
+      ],
+      "places": {
+       "chatgpt": [
+        0,
+        0
+       ],
+       "cstore": [
+        1,
+        0
+       ],
+       "dwh": [
+        2,
+        0
+       ],
+       "bv": [
+        3,
+        0
+       ],
+       "cdn": [
+        4,
+        0
+       ],
+       "claude": [
+        0,
+        1
+       ],
+       "cw": [
+        1,
+        1
+       ],
+       "cja": [
+        2,
+        1
+       ],
+       "crm": [
+        3,
+        1
+       ],
+       "search": [
+        4,
+        1
+       ],
+       "copilot": [
+        0,
+        2
+       ],
+       "rtcdp": [
+        1,
+        2
+       ],
+       "ads": [
+        2,
+        2
+       ],
+       "bi": [
+        3,
+        2
+       ],
+       "gspm": [
+        1,
+        3
+       ],
+       "figma": [
+        2,
+        3
+       ]
+      }
+     },
+     {
+      "label": "Keep customers",
+      "line": "Journeys that keep customers coming back, and answers when they ask.",
+      "products": [
+       "ajo",
+       "bc",
+       "cw",
+       "cja"
+      ],
+      "places": {
+       "chatgpt": [
+        0,
+        0
+       ],
+       "dwh": [
+        1,
+        0
+       ],
+       "ads": [
+        2,
+        0
+       ],
+       "crm": [
+        3,
+        0
+       ],
+       "claude": [
+        0,
+        1
+       ],
+       "ajo": [
+        1,
+        1
+       ],
+       "cja": [
+        2,
+        1
+       ],
+       "bi": [
+        3,
+        1
+       ],
+       "cstore": [
+        4,
+        1
+       ],
+       "copilot": [
+        0,
+        2
+       ],
+       "cw": [
+        1,
+        2
+       ],
+       "bc": [
+        2,
+        2
+       ],
+       "cms": [
+        3,
+        2
+       ]
+      }
+     },
+     {
+      "label": "Grow share of wallet",
+      "line": "The right offer for each customer on the site, and journeys that cross-sell.",
+      "products": [
+       "target",
+       "ajo",
+       "cw",
+       "cja"
+      ],
+      "places": {
+       "chatgpt": [
+        0,
+        0
+       ],
+       "target": [
+        1,
+        0
+       ],
+       "crm": [
+        2,
+        0
+       ],
+       "cstore": [
+        3,
+        0
+       ],
+       "claude": [
+        0,
+        1
+       ],
+       "cw": [
+        1,
+        1
+       ],
+       "cja": [
+        2,
+        1
+       ],
+       "ads": [
+        3,
+        1
+       ],
+       "copilot": [
+        0,
+        2
+       ],
+       "ajo": [
+        1,
+        2
+       ],
+       "dwh": [
+        2,
+        2
+       ],
+       "bi": [
+        3,
+        2
+       ]
+      }
+     }
+    ],
+    "all": {
+     "label": "Or open all three together",
+     "name": "Find, keep and grow customers",
+     "products": [
+      "rtcdp",
+      "gspm",
+      "bv",
+      "ajo",
+      "bc",
+      "target",
+      "cw",
+      "cja"
+     ],
+     "places": {
+      "copilot": [
+       0,
+       0
+      ],
+      "crm": [
+       1,
+       0
+      ],
+      "cstore": [
+       2,
+       0
+      ],
+      "bi": [
+       3,
+       0
+      ],
+      "bv": [
+       4,
+       0
+      ],
+      "chatgpt": [
+       0,
+       1
+      ],
+      "target": [
+       1,
+       1
+      ],
+      "cja": [
+       2,
+       1
+      ],
+      "ads": [
+       3,
+       1
+      ],
+      "cdn": [
+       4,
+       1
+      ],
+      "search": [
+       5,
+       1
+      ],
+      "claude": [
+       0,
+       2
+      ],
+      "cw": [
+       1,
+       2
+      ],
+      "rtcdp": [
+       2,
+       2
+      ],
+      "bc": [
+       3,
+       2
+      ],
+      "cms": [
+       4,
+       2
+      ],
+      "figma": [
+       0,
+       3
+      ],
+      "gspm": [
+       1,
+       3
+      ],
+      "ajo": [
+       2,
+       3
+      ],
+      "dwh": [
+       3,
+       3
+      ]
+     }
+    }
+   },
    "family": {
-    "section": "Adobe GenStudio: a family, not one product",
     "label": "Adobe GenStudio",
     "sub": "People think it is one product. It is a family of products in six areas. Pick the area your client is buying.",
     "areas": [
@@ -1555,25 +2016,57 @@
      0
     ],
     "figma": [
-     7,
+     8,
      4
     ],
     "chatgpt": [
      8,
-     2
+     0
     ],
     "claude": [
      8,
-     3
+     1
     ],
     "copilot": [
      8,
-     4
+     2
     ]
    },
    "recommend": [
     "cdn",
     "search"
+   ]
+  }
+ ],
+ "rows": [
+  {
+   "head": "Brand Visibility plays",
+   "plays": [
+    "cja",
+    "commerce",
+    "aem",
+    "fsi"
+   ]
+  },
+  {
+   "head": "Adobe agentic lineup",
+   "plays": [
+    "coworker",
+    "abv"
+   ]
+  },
+  {
+   "head": "Adobe GenStudio lineup",
+   "card": "family"
+  },
+  {
+   "head": "Client KBO plays",
+   "card": "agentic"
+  },
+  {
+   "head": "Build your own play",
+   "plays": [
+    "custom"
    ]
   }
  ]

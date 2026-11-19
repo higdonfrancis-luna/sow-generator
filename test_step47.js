@@ -24,7 +24,8 @@ const server = http.createServer((req, res) => {
   const toSow = async (p, play) => { await pick(p, play); await p.fill('#rate', '150'); await cont(p); };
   const build = async p => { await p.click('.steps [data-build]'); await p.waitForURL(u => !/\/sow\//.test(String(u))); await p.waitForTimeout(600); };
   const services = async p => { await p.click('[data-step="services"]'); await p.waitForTimeout(350); };
-  const addOut = async (p, id) => { await p.click('#out-btn'); await p.waitForTimeout(200); await p.click(`#out-menu [data-out="${id}"]`); await p.waitForTimeout(400); };
+  // Nov 18 2026: a ready-made play starts with every outside system it offers, so one already on its canvas is not added again
+  const addOut = async (p, id) => { if (await p.evaluate(id => st.out.includes(id), id)) return; await p.click('#out-btn'); await p.waitForTimeout(200); await p.click(`#out-menu [data-out="${id}"]`); await p.waitForTimeout(400); };
   // step 96: AEM Assets is no longer offered on the AEM play; a saved canvas from before keeps it, so it is put on the way that canvas holds it
   const addKept = async (p, id) => { await p.evaluate(id => { st.out = [...st.out, id]; save(); }, id); await p.reload(); await p.waitForTimeout(700); };
   const addSys = (p, id) => id === 'aemassets' ? addKept(p, id) : addOut(p, id);
@@ -266,12 +267,16 @@ const server = http.createServer((req, res) => {
   for (const [w, h] of [[390, 844], [768, 1024]]) for (const play of ['cja', 'custom']) {
     const p = await fresh({width: w, height: h}); await pick(p, play); await p.fill('#rate', '150');
     if (play === 'custom') await all14(p);
+    // Nov 19 2026: CJA now opens in Explore one product; on a phone its canvas grows by the focus bar, so the map sits below the bar: scrolled into view, as a partner does
+    if (play === 'cja' && w < 600) { await p.evaluate(() => document.getElementById('scroller').scrollIntoView({block: 'end'})); await p.waitForTimeout(300); }
     const r = await p.evaluate(() => { const s = Number((/scale\(([0-9.]+)\)/.exec(document.getElementById('stage').style.transform) || [])[1]), own = [...document.querySelectorAll('.node')].filter(n => !n.classList.contains('out'));
       const first = own.filter(n => { const b = n.getBoundingClientRect(); return b.top >= 0 && b.bottom <= innerHeight && b.right > 0 && b.left < innerWidth; }).map(n => n.dataset.p);
       return {s, first, n: own.length, page: document.documentElement.scrollWidth <= innerWidth, pan: document.getElementById('canvas').classList.contains('pan')}; });
     const okFirst = play === 'cja' ? r.first.length === 2 : r.first.length >= 2;
     ok(r.s >= 0.7 - 1e-9 && okFirst && r.page, `item 3: ${play} at ${w} px: the stage keeps scale ${r.s} (0.7 or more), ${r.first.length} of the play's products are on the first screen, no sideways page scroll`, JSON.stringify(r));
-    if (play === 'custom') { await tapNode(p, 'cja'); await p.waitForTimeout(400); }
+    // Nov 19 2026: on the phone the map sits below the focus bar, under the first screen, so the box is tapped where it is with the map scrolled into view
+    if (play === 'cja' && w < 600) { const bx = await (await p.$('.node[data-p="cja"]')).boundingBox(); await p.mouse.click(bx.x + bx.width / 2, bx.y + bx.height / 2); await p.waitForTimeout(400); }
+    else if (play === 'custom' || await p.evaluate(() => fv())) { await tapNode(p, 'cja'); await p.waitForTimeout(400); }   // Nov 18 2026: CJA opens in Explore one product too
     // the bolts pop in over 0.6 s (.ib.enter); measured mid-pop, a tap 18 px off centre can miss, on any build: wait for the pop to end
     await p.waitForFunction(() => [...document.querySelectorAll('.ib')].every(b => !b.getAnimations().length));
     const bolt = await p.evaluate(() => { const cv = document.getElementById('canvas').getBoundingClientRect(), fb = document.getElementById('fbar'), top = fb.hidden ? cv.top : fb.getBoundingClientRect().bottom, sv = document.getElementById('save').getBoundingClientRect();
@@ -339,7 +344,8 @@ const server = http.createServer((req, res) => {
       await p.keyboard.press('Escape'); await p.click('#fb-clear'); await p.waitForTimeout(200); }
     ok(!bad.length, `item 26: at ${w} px in focus view, the first click draws a product's lines, the second opens its card clear of its box and bolts, and a connection card never covers its bolt`, bad.join(' | '));
     await p.evaluate(() => localStorage.clear());
-    for (const play of ['cja', 'aem']) { await pick(p, play); await addOut(p, play === 'cja' ? 'dwh' : 'search'); const bb = [];
+    // Nov 18 2026: each play as it started before, the CDN its one outside system, with the warehouse or Search data added from the menu
+    for (const play of ['cja', 'aem']) { await pick(p, play); await p.evaluate(() => { for (const id of st.out.filter(x => x !== 'cdn')) removeOutside(id); }); await addOut(p, play === 'cja' ? 'dwh' : 'search'); const bb = [];
       for (const c of await p.$$eval('.ib', es => es.map(e => e.dataset.c))) { await tapAt(p, `.ib[data-c="${c}"]`); await p.waitForTimeout(350); if ((await covered(p, `.ib[data-c="${c}"]`)).length) bb.push(c); await p.keyboard.press('Escape'); }
       const sys = play === 'cja' ? 'dwh' : 'search'; await tapNode(p, sys); await p.waitForTimeout(350);
       const ob = await covered(p, `.ib[data-c*="${sys}"]`); if (ob.length) bb.push(sys + ' card covers ' + ob); await p.keyboard.press('Escape');
@@ -494,6 +500,9 @@ const server = http.createServer((req, res) => {
   // 30. (step 48, fix 2) the rehearsal's card: the Brand Visibility + CJA lightning bolt opens a card tall enough to read
   // at laptop sizes, inside the window below the tabs, scrolled to its top with its close X showing, clear of its bolt
   for (const [w, h] of [[1440, 900], [1536, 864], [1280, 800]]) { const p = await fresh({width: w, height: h}); await pick(p, 'cja'); await p.fill('#rate', '150');
+    await p.click('#view-all'); await p.waitForTimeout(400);   // Nov 18 2026: CJA opens in Explore one product; Show all connections draws every bolt
+    // and they pop in over 0.6 s (.ib.enter): clicked mid-pop, the click retries and scrolls the bolt to the top of the window, so wait for the pop to end
+    await p.waitForFunction(() => [...document.querySelectorAll('.ib')].every(b => !b.getAnimations().length));
     await p.click('.ib[data-c="bv-cja"]'); await p.waitForTimeout(400);
     const r = await p.evaluate(() => { const c = document.getElementById('card'), cr = c.getBoundingClientRect(), tb = document.querySelector('.tabs').getBoundingClientRect(), x = c.querySelector('.close').getBoundingClientRect();
       const at = e => { const q = e.getBoundingClientRect(), k = document.elementFromPoint(q.left + q.width / 2, q.top + q.height / 2); return !!k && e.contains(k); };

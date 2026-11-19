@@ -1,5 +1,5 @@
 {
- "about": "ChatGPT, Claude and Microsoft Copilot as outside systems (Adam, Nov 18 2026: three boxes; a play offers them whenever a product on its canvas connects to them; lines that sell no hours are fine; no Adobe Analytics lines). The 41 connections and six services of handoff/2026-11-17/ai_hosts/proposal_data_v2.json, whose quotes were proven word for word on Adobe's pages on Nov 18 2026 (Experience League, Adobe Help, Adobe Developer, www.adobe.com, Frame.io's help site, aem.live, and the business.adobe.com post Adam pasted); the quotes are kept with each connection in connection_types.json. The lines carry no services of their own: each line's work sits on its Adobe product's service, counted once, and a line whose person adds Adobe's connector alone sells no hours. No line is typed a native integration (Adobe does not use the word for these assistants), so the lines are drawn plain. Hours are our own estimates; Adobe publishes none.",
+ "about": "ChatGPT, Claude and Microsoft Copilot as outside systems (Adam, Nov 18 2026: three boxes; a play offers them whenever a product on its canvas connects to them; lines that sell no hours are fine; no Adobe Analytics lines). The 41 connections and six services of handoff/2026-11-17/ai_hosts/proposal_data_v2.json, whose quotes were proven word for word on Adobe's pages on Nov 18 2026 (Experience League, Adobe Help, Adobe Developer, www.adobe.com, Frame.io's help site, aem.live, and the business.adobe.com post Adam pasted); the quotes are kept with each connection in connection_types.json. The lines carry no services of their own: each line's work sits on its Adobe product's service, counted once, and a line whose person adds Adobe's connector alone sells no hours. No line is typed a native integration (Adobe does not use the word for these assistants), so the lines are drawn plain. Hours are our own estimates; Adobe publishes none. Nov 18 2026 (Adam: \"go\" on the Adobe agentic AI play): each assistant connection's 'ask_it' is the question its card shows at the top, after \"Ask it:\", for the partner only, never in what the client reads; where 'adobe_words' is true it is Adobe's own example on the 'source' page, word for word, otherwise a plain question that stays 'within' what the connection does. Claude + Brand Intelligence comes from Adobe's developer guide for Validate, which names Claude Desktop as its example host. Both are from handoff/2026-11-17/ai_hosts/agentic_play_data.json, its quotes proven word for word on the saved pages.",
  "checked": "2026-11-18",
  "products": [
   {
@@ -13,13 +13,13 @@
      "base": 16,
      "high": 32,
      "default": false,
-     "scope": "Add the read-only or the full assistant permission to the product profiles of your client's pilot users in the Admin Console, help each person add Adobe's Customer Journey Analytics plugin in ChatGPT or connector in Claude and sign in with their Adobe ID, agree the data view each team uses, compare the first answers with Analysis Workspace, and write the starter questions and a one-page guide.",
+     "scope": "Add the read-only or the full assistant permission to the product profiles of your client's pilot users in the Admin Console, help each person add Adobe's Customer Journey Analytics plugin in ChatGPT or connector in Claude and sign in with their Adobe ID (in Microsoft Copilot, add Adobe's Customer Journey Analytics address as a tool in Copilot Studio and build a small agent on it), agree the data view each team uses, compare the first answers with Analysis Workspace, and write the starter questions and a one-page guide.",
      "evidence": "Other users must be added to an Adobe Admin Console product profile that includes the MCP Read-only Access or MCP Full Access permission item.",
      "source": {
       "url": "https://developer.adobe.com/analytics-mcp/docs/support/faq",
       "title": "Adobe Developer: Analytics, Frequently asked questions"
      },
-     "basis": "One assistant (ChatGPT or Claude), up to 10 pilot users, one data view and five starter questions.",
+     "basis": "One assistant (ChatGPT, Claude or Microsoft Copilot), up to 10 pilot users, one data view and five starter questions.",
      "bands": {
       "driver": "Assistants, pilot users and data views",
       "small": "1 assistant, up to 5 pilot users, 1 data view, 3 starter questions",
@@ -41,13 +41,13 @@
      "base": 24,
      "high": 40,
      "default": false,
-     "scope": "Check that your client's AEM as a Cloud Service environment is on release 26309 or later, add Adobe's traffic rule where the environment limits access by IP address, help the pilot authors add the Adobe Experience Manager plugin in ChatGPT or connector in Claude and sign in with their Adobe ID, agree with the content owner which changes, deletions and publishing may be asked for in the assistant and who reviews them, and write the starter requests and a one-page guide.",
+     "scope": "Check that your client's AEM as a Cloud Service environment is on release 26309 or later, add Adobe's traffic rule where the environment limits access by IP address, help the pilot authors add the Adobe Experience Manager plugin in ChatGPT or connector in Claude and sign in with their Adobe ID (in Microsoft Copilot, build an agent in Copilot Studio with Adobe's AEM address as its tool, following Adobe's step-by-step set-up), agree with the content owner which changes, deletions and publishing may be asked for in the assistant and who reviews them, and write the starter requests and a one-page guide.",
      "evidence": "Requests to AEM MCP tools run under the authenticated user's identity, and each tool enforces the user's existing AEM permissions.",
      "source": {
       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/using-mcp-with-aem-as-a-cloud-service",
       "title": "Experience League: Using MCP with AEM as a Cloud Service"
      },
-     "basis": "One assistant (ChatGPT or Claude), up to 10 pilot authors, one site and five starter requests.",
+     "basis": "One assistant (ChatGPT, Claude or Microsoft Copilot), up to 10 pilot authors, one site and five starter requests.",
      "bands": {
       "driver": "Assistants, pilot authors and sites",
       "small": "1 assistant, up to 5 pilot authors, 1 site, 3 starter requests",
@@ -69,13 +69,13 @@
      "base": 16,
      "high": 32,
      "default": false,
-     "scope": "Set up or reuse your client's AEM connection in ChatGPT or Claude for the asset team, add Adobe's AEM address by hand where the team needs upload, move, delete or publish, check the folder permissions behind those actions, check whether Dynamic Media with OpenAPI is on for resized and cropped versions made on request, agree with the DAM owner which asset actions may be asked for in the assistant, and write a one-page guide.",
+     "scope": "Set up or reuse your client's AEM connection in ChatGPT or Claude for the asset team (in Microsoft Copilot, the Copilot Studio agent with Adobe's AEM address as its tool), add Adobe's AEM address by hand where the team needs upload, move, delete or publish, check the folder permissions behind those actions, check whether Dynamic Media with OpenAPI is on for resized and cropped versions made on request, agree with the DAM owner which asset actions may be asked for in the assistant, and write a one-page guide.",
      "evidence": "There is also support for asset upload, download, move/copy/delete, and publish/unpublish for assets, along with editing metadata, inspecting references, and identifying unused assets.",
      "source": {
       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/using-mcp-with-aem-as-a-cloud-service",
       "title": "Experience League: Using MCP with AEM as a Cloud Service"
      },
-     "basis": "One assistant (ChatGPT or Claude), up to 10 pilot users and one asset team.",
+     "basis": "One assistant (ChatGPT, Claude or Microsoft Copilot), up to 10 pilot users and one asset team.",
      "bands": {
       "driver": "Assistants, pilot users and asset teams",
       "small": "1 assistant, up to 5 pilot users, searching and downloading only",
@@ -97,13 +97,13 @@
      "base": 24,
      "high": 40,
      "default": false,
-     "scope": "Check that your client's Workfront is on Adobe's sign-in system, have the Workfront administrator review the read switch and decide with the governance board whether to turn on the write switch, have the ChatGPT or Claude administrator enable the Adobe Workfront connector or allow adding it by web address, help the pilot team connect and sign in, check that each person sees only what their Workfront access allows (Planning records too, where the package includes Planning), and write the starter requests and a one-page guide. Where a Coworker service on the same quote already set these permissions or made the write decision, this service reuses them.",
+     "scope": "Check that your client's Workfront is on Adobe's sign-in system, have the Workfront administrator review the read switch and decide with the governance board whether to turn on the write switch, have the ChatGPT or Claude administrator enable the Adobe Workfront connector or allow adding it by web address (in Microsoft Copilot, add Adobe's Workfront address following Microsoft's steps for a custom connection), help the pilot team connect and sign in, check that each person sees only what their Workfront access allows (Planning records too, where the package includes Planning), and write the starter requests and a one-page guide. Where a Coworker service on the same quote already set these permissions or made the write decision, this service reuses them.",
      "evidence": "Your Workfront administrator controls MCP server access for your Workfront instance through two toggles in System Preferences: Read-only MCP tools (enabled by default) and Write MCP tools (disabled by default).",
      "source": {
       "url": "https://experienceleague.adobe.com/en/docs/workfront/using/basics/workfront-mcp-server/configure-workfront-mcp-server",
       "title": "Experience League: Configure the Adobe Workfront MCP server"
      },
-     "basis": "One assistant (ChatGPT or Claude), up to 10 pilot users in one team and five starter requests.",
+     "basis": "One assistant (ChatGPT, Claude or Microsoft Copilot), up to 10 pilot users in one team and five starter requests.",
      "bands": {
       "driver": "Assistants, pilot users and teams",
       "small": "1 assistant, up to 5 pilot users, reading only",
@@ -125,13 +125,13 @@
      "base": 24,
      "high": 40,
      "default": false,
-     "scope": "Check your client's ChatGPT or Claude plan allows the connection, add Adobe's GenStudio address as a custom connector (in ChatGPT on the web with developer mode on) and have each pilot user sign in with their Adobe ID and pick the Adobe organization, test questions about ad performance and a draft from a template, agree who may publish an approved ad from a conversation, and write the starter requests and a one-page guide. Where a Coworker service on the same quote already set the publishing rule, this service reuses it.",
+     "scope": "Check your client's ChatGPT, Claude or Microsoft Copilot plan allows the connection, add Adobe's GenStudio address as a custom connector (in ChatGPT on the web with developer mode on; in Microsoft Copilot, following Microsoft's steps for a custom connection) and have each pilot user sign in with their Adobe ID and pick the Adobe organization, test questions about ad performance and a draft from a template, agree who may publish an approved ad from a conversation, and write the starter requests and a one-page guide. Where a Coworker service on the same quote already set the publishing rule, this service reuses it.",
      "evidence": "Once connected, you can query ad performance, assemble creative, and publish approved ads through natural-language conversations.",
      "source": {
       "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/ai-assistants/overview",
       "title": "Experience League: GenStudio for Performance Marketing, AI Assistants"
      },
-     "basis": "One assistant (ChatGPT or Claude), up to 10 pilot users in one Adobe organization and five starter requests.",
+     "basis": "One assistant (ChatGPT, Claude or Microsoft Copilot), up to 10 pilot users in one Adobe organization and five starter requests.",
      "bands": {
       "driver": "Assistants, pilot users and Adobe organizations",
       "small": "1 assistant, up to 5 pilot users, questions and drafts only",
@@ -206,7 +206,12 @@
     }
    ],
    "no_services": true,
-   "setup": "Adobe's own, ready-made: found in the assistant's own list"
+   "setup": "Adobe's own, ready-made: found in the assistant's own list",
+   "ask_it": {
+    "ask": "Show journeys with loyalty audiences.",
+    "adobe_words": true,
+    "source": "https://experienceleague.adobe.com/en/docs/coworker/content/ai-platforms"
+   }
   },
   {
    "id": "claude-cw",
@@ -242,7 +247,12 @@
     }
    ],
    "no_services": true,
-   "setup": "Adobe's own, ready-made: found in the assistant's own list"
+   "setup": "Adobe's own, ready-made: found in the assistant's own list",
+   "ask_it": {
+    "ask": "Show journeys with loyalty audiences.",
+    "adobe_words": true,
+    "source": "https://experienceleague.adobe.com/en/docs/coworker/content/ai-platforms"
+   }
   },
   {
    "id": "chatgpt-cja",
@@ -278,7 +288,12 @@
     }
    ],
    "no_services": true,
-   "setup": "Adobe's own, ready-made: found in the assistant's own list"
+   "setup": "Adobe's own, ready-made: found in the assistant's own list",
+   "ask_it": {
+    "ask": "Using Customer Journey Analytics, show me the top 20 pages by page views for the last 7 days.",
+    "adobe_words": true,
+    "source": "https://developer.adobe.com/analytics-mcp/docs/guides/claude"
+   }
   },
   {
    "id": "claude-cja",
@@ -314,7 +329,12 @@
     }
    ],
    "no_services": true,
-   "setup": "Adobe's own, ready-made: found in the assistant's own list"
+   "setup": "Adobe's own, ready-made: found in the assistant's own list",
+   "ask_it": {
+    "ask": "Using Customer Journey Analytics, show me the top 20 pages by page views for the last 7 days.",
+    "adobe_words": true,
+    "source": "https://developer.adobe.com/analytics-mcp/docs/guides/claude"
+   }
   },
   {
    "id": "chatgpt-aemsites",
@@ -350,7 +370,12 @@
     }
    ],
    "no_services": true,
-   "setup": "Adobe's own, ready-made: found in the assistant's own list"
+   "setup": "Adobe's own, ready-made: found in the assistant's own list",
+   "ask_it": {
+    "ask": "Create a new content fragment for the spring campaign based on our hero banner model and fill in its fields from this brief.",
+    "adobe_words": true,
+    "source": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/using-mcp-with-aem-as-a-cloud-service"
+   }
   },
   {
    "id": "claude-aemsites",
@@ -395,7 +420,12 @@
     }
    ],
    "no_services": true,
-   "setup": "Adobe's own, ready-made: found in the assistant's own list"
+   "setup": "Adobe's own, ready-made: found in the assistant's own list",
+   "ask_it": {
+    "ask": "Create a new content fragment for the spring campaign based on our hero banner model and fill in its fields from this brief.",
+    "adobe_words": true,
+    "source": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/using-mcp-with-aem-as-a-cloud-service"
+   }
   },
   {
    "id": "chatgpt-aemassets",
@@ -431,7 +461,12 @@
     }
    ],
    "no_services": true,
-   "setup": "Adobe's own, ready-made, or added by web address for the full set"
+   "setup": "Adobe's own, ready-made, or added by web address for the full set",
+   "ask_it": {
+    "ask": "Find our approved spring campaign images and show me where each one is used.",
+    "adobe_words": false,
+    "within": "The AEM connection searches assets and shows where an asset is used."
+   }
   },
   {
    "id": "claude-aemassets",
@@ -467,7 +502,12 @@
     }
    ],
    "no_services": true,
-   "setup": "Adobe's own, ready-made, or added by web address for the full set"
+   "setup": "Adobe's own, ready-made, or added by web address for the full set",
+   "ask_it": {
+    "ask": "Find our approved spring campaign images and show me where each one is used.",
+    "adobe_words": false,
+    "within": "The AEM connection searches assets and shows where an asset is used."
+   }
   },
   {
    "id": "claude-workfront",
@@ -503,7 +543,12 @@
     }
    ],
    "no_services": true,
-   "setup": "Adobe's own, ready-made: found in the assistant's own list"
+   "setup": "Adobe's own, ready-made: found in the assistant's own list",
+   "ask_it": {
+    "ask": "Move task Wireframes to the Mobile App Redesign project.",
+    "adobe_words": true,
+    "source": "https://experienceleague.adobe.com/en/docs/workfront/using/basics/workfront-mcp-server/workfront-mcp-server-tools"
+   }
   },
   {
    "id": "chatgpt-workfront",
@@ -539,7 +584,12 @@
     }
    ],
    "no_services": true,
-   "setup": "Adobe's own, added by web address: Adobe hosts it, a person pastes Adobe's address"
+   "setup": "Adobe's own, added by web address: Adobe hosts it, a person pastes Adobe's address",
+   "ask_it": {
+    "ask": "Move task Wireframes to the Mobile App Redesign project.",
+    "adobe_words": true,
+    "source": "https://experienceleague.adobe.com/en/docs/workfront/using/basics/workfront-mcp-server/workfront-mcp-server-tools"
+   }
   },
   {
    "id": "chatgpt-planning",
@@ -575,7 +625,12 @@
     }
    ],
    "no_services": true,
-   "setup": "Adobe's own, added by web address: Adobe hosts it, a person pastes Adobe's address"
+   "setup": "Adobe's own, added by web address: Adobe hosts it, a person pastes Adobe's address",
+   "ask_it": {
+    "ask": "Show me the campaigns planned for next quarter.",
+    "adobe_words": false,
+    "within": "The Workfront connection searches Planning records."
+   }
   },
   {
    "id": "claude-planning",
@@ -611,7 +666,12 @@
     }
    ],
    "no_services": true,
-   "setup": "Adobe's own, ready-made: found in the assistant's own list"
+   "setup": "Adobe's own, ready-made: found in the assistant's own list",
+   "ask_it": {
+    "ask": "Show me the campaigns planned for next quarter.",
+    "adobe_words": false,
+    "within": "The Workfront connection searches Planning records."
+   }
   },
   {
    "id": "claude-gspm",
@@ -647,7 +707,12 @@
     }
    ],
    "no_services": true,
-   "setup": "Adobe's own, added by web address: Adobe hosts it, a person pastes Adobe's address"
+   "setup": "Adobe's own, added by web address: Adobe hosts it, a person pastes Adobe's address",
+   "ask_it": {
+    "ask": "How did our spring ads perform last month?",
+    "adobe_words": false,
+    "within": "The GenStudio connection answers how ads are performing."
+   }
   },
   {
    "id": "chatgpt-gspm",
@@ -683,7 +748,12 @@
     }
    ],
    "no_services": true,
-   "setup": "Adobe's own, added by web address: Adobe hosts it, a person pastes Adobe's address"
+   "setup": "Adobe's own, added by web address: Adobe hosts it, a person pastes Adobe's address",
+   "ask_it": {
+    "ask": "How did our spring ads perform last month?",
+    "adobe_words": false,
+    "within": "The GenStudio connection answers how ads are performing."
+   }
   },
   {
    "id": "claude-marketo",
@@ -719,7 +789,12 @@
     }
    ],
    "no_services": true,
-   "setup": "Adobe's own, technical set-up: keys from an administrator"
+   "setup": "Adobe's own, technical set-up: keys from an administrator",
+   "ask_it": {
+    "ask": "What smart campaigns are active right now?",
+    "adobe_words": true,
+    "source": "https://experienceleague.adobe.com/en/docs/marketo-developer/marketo/mcp-server"
+   }
   },
   {
    "id": "claude-fireflycp",
@@ -755,7 +830,12 @@
     }
    ],
    "no_services": true,
-   "setup": "Adobe's own, technical set-up: keys from an administrator"
+   "setup": "Adobe's own, technical set-up: keys from an administrator",
+   "ask_it": {
+    "ask": "Run our product-shot workflow on these five images.",
+    "adobe_words": false,
+    "within": "Claude runs published Firefly Creative Production workflows from a plain request."
+   }
   },
   {
    "id": "chatgpt-creativecloud",
@@ -791,7 +871,12 @@
     }
    ],
    "no_services": true,
-   "setup": "Adobe's own, ready-made: found in the assistant's own list"
+   "setup": "Adobe's own, ready-made: found in the assistant's own list",
+   "ask_it": {
+    "ask": "Remove the background from this product photo.",
+    "adobe_words": false,
+    "within": "Adobe's connector edits photos with Photoshop tools."
+   }
   },
   {
    "id": "chatgpt-acrobat",
@@ -827,7 +912,12 @@
     }
    ],
    "no_services": true,
-   "setup": "Adobe's own, ready-made: found in the assistant's own list"
+   "setup": "Adobe's own, ready-made: found in the assistant's own list",
+   "ask_it": {
+    "ask": "Turn these notes into a formatted PDF.",
+    "adobe_words": false,
+    "within": "Adobe's connector creates PDFs and turns content into formatted PDFs."
+   }
   },
   {
    "id": "chatgpt-express",
@@ -863,7 +953,12 @@
     }
    ],
    "no_services": true,
-   "setup": "Adobe's own, ready-made: found in the assistant's own list"
+   "setup": "Adobe's own, ready-made: found in the assistant's own list",
+   "ask_it": {
+    "ask": "Make an Instagram post from a template with our spring offer.",
+    "adobe_words": false,
+    "within": "Adobe's plugin brings Adobe Express templates into ChatGPT."
+   }
   },
   {
    "id": "chatgpt-target",
@@ -899,7 +994,12 @@
     }
    ],
    "no_services": true,
-   "setup": "Adobe's own, added by web address: Adobe hosts it, a person pastes Adobe's address"
+   "setup": "Adobe's own, added by web address: Adobe hosts it, a person pastes Adobe's address",
+   "ask_it": {
+    "ask": "Show me all active tests that have reached statistical significance — which experiences are winning?",
+    "adobe_words": true,
+    "source": "https://experienceleague.adobe.com/en/docs/target/using/mcp/target-mcp-use-cases"
+   }
   },
   {
    "id": "claude-target",
@@ -935,7 +1035,12 @@
     }
    ],
    "no_services": true,
-   "setup": "Adobe's own, added by web address: Adobe hosts it, a person pastes Adobe's address"
+   "setup": "Adobe's own, added by web address: Adobe hosts it, a person pastes Adobe's address",
+   "ask_it": {
+    "ask": "Show me all active tests that have reached statistical significance — which experiences are winning?",
+    "adobe_words": true,
+    "source": "https://experienceleague.adobe.com/en/docs/target/using/mcp/target-mcp-use-cases"
+   }
   },
   {
    "id": "chatgpt-rtcdp",
@@ -971,7 +1076,12 @@
     }
    ],
    "no_services": true,
-   "setup": "Adobe's own, added by web address: Adobe hosts it, a person pastes Adobe's address"
+   "setup": "Adobe's own, added by web address: Adobe hosts it, a person pastes Adobe's address",
+   "ask_it": {
+    "ask": "Show me flow runs from the last 24 hours and flag any failures.",
+    "adobe_words": true,
+    "source": "https://experienceleague.adobe.com/en/docs/experience-platform/rtcdp/intro/rtcdp-mcp"
+   }
   },
   {
    "id": "claude-rtcdp",
@@ -1007,7 +1117,12 @@
     }
    ],
    "no_services": true,
-   "setup": "Adobe's own, added by web address: Adobe hosts it, a person pastes Adobe's address"
+   "setup": "Adobe's own, added by web address: Adobe hosts it, a person pastes Adobe's address",
+   "ask_it": {
+    "ask": "Show me flow runs from the last 24 hours and flag any failures.",
+    "adobe_words": true,
+    "source": "https://experienceleague.adobe.com/en/docs/experience-platform/rtcdp/intro/rtcdp-mcp"
+   }
   },
   {
    "id": "claude-ajo",
@@ -1052,7 +1167,12 @@
     }
    ],
    "no_services": true,
-   "setup": "Adobe's own, ready-made: found in the assistant's own list"
+   "setup": "Adobe's own, ready-made: found in the assistant's own list",
+   "ask_it": {
+    "ask": "Which campaigns/journeys are currently live?",
+    "adobe_words": true,
+    "source": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/combine/ajo-mcp"
+   }
   },
   {
    "id": "chatgpt-frameio",
@@ -1088,7 +1208,12 @@
     }
    ],
    "no_services": true,
-   "setup": "Adobe's own, ready-made: found in the assistant's own list"
+   "setup": "Adobe's own, ready-made: found in the assistant's own list",
+   "ask_it": {
+    "ask": "Upload my asset to Frame.io, generate a share link, and request a review from the following people.",
+    "adobe_words": true,
+    "source": "https://help.frame.io/en/articles/17218043-connecting-frame-io-mcp-server-with-ai-clients-beta"
+   }
   },
   {
    "id": "claude-frameio",
@@ -1124,7 +1249,12 @@
     }
    ],
    "no_services": true,
-   "setup": "Adobe's own, ready-made: found in the assistant's own list"
+   "setup": "Adobe's own, ready-made: found in the assistant's own list",
+   "ask_it": {
+    "ask": "Upload my asset to Frame.io, generate a share link, and request a review from the following people.",
+    "adobe_words": true,
+    "source": "https://help.frame.io/en/articles/17218043-connecting-frame-io-mcp-server-with-ai-clients-beta"
+   }
   },
   {
    "id": "claude-creativecloud",
@@ -1160,7 +1290,12 @@
     }
    ],
    "no_services": true,
-   "setup": "Adobe's own, ready-made: found in the assistant's own list"
+   "setup": "Adobe's own, ready-made: found in the assistant's own list",
+   "ask_it": {
+    "ask": "Remove the background from this product photo.",
+    "adobe_words": false,
+    "within": "Adobe's connector edits photos with Photoshop tools."
+   }
   },
   {
    "id": "claude-acrobat",
@@ -1196,7 +1331,12 @@
     }
    ],
    "no_services": true,
-   "setup": "Adobe's own, ready-made: found in the assistant's own list"
+   "setup": "Adobe's own, ready-made: found in the assistant's own list",
+   "ask_it": {
+    "ask": "Turn these notes into a formatted PDF.",
+    "adobe_words": false,
+    "within": "Adobe's connector creates PDFs and turns content into formatted PDFs."
+   }
   },
   {
    "id": "copilot-cw",
@@ -1232,16 +1372,21 @@
     }
    ],
    "no_services": true,
-   "setup": "Adobe's own, ready-made: found in the assistant's own list"
+   "setup": "Adobe's own, ready-made: found in the assistant's own list",
+   "ask_it": {
+    "ask": "Show journeys with loyalty audiences.",
+    "adobe_words": true,
+    "source": "https://experienceleague.adobe.com/en/docs/coworker/content/ai-platforms"
+   }
   },
   {
    "id": "copilot-aemsites",
    "a": "copilot",
    "b": "aemsites",
-   "how": "Adobe lists Microsoft 365 Copilot among the chat applications for its AEM connection. A person adds Adobe's AEM address and signs in with their Adobe ID. In plain words they find, create, change and publish pages and content fragments on AEM as a Cloud Service, within their own AEM permissions.",
+   "how": "Your client's team builds an agent in Copilot Studio and adds Adobe's AEM address to it as a tool, following Adobe's step-by-step set-up, and each person signs in with their Adobe ID. In plain words they then find, create, change and publish pages and content fragments on AEM as a Cloud Service, within their own AEM permissions.",
    "source": {
-    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/using-mcp-with-aem-as-a-cloud-service",
-    "title": "Experience League: Using MCP with AEM as a Cloud Service"
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/enterprise-platforms/setup-microsoft-copilot-studio",
+    "title": "Experience League: Setting Up Microsoft Copilot Studio with AEM MCP"
    },
    "gain": {
     "title": "Page content by asking",
@@ -1268,13 +1413,18 @@
     }
    ],
    "no_services": true,
-   "setup": "Adobe's own, added by web address: Adobe hosts it, a person pastes Adobe's address"
+   "setup": "From Adobe's developer guide: your team sets it up",
+   "ask_it": {
+    "ask": "Create a new content fragment for the spring campaign based on our hero banner model and fill in its fields from this brief.",
+    "adobe_words": true,
+    "source": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/using-mcp-with-aem-as-a-cloud-service"
+   }
   },
   {
    "id": "copilot-aemassets",
    "a": "copilot",
    "b": "aemassets",
-   "how": "The AEM connection in Microsoft 365 Copilot also covers AEM Assets. In plain words your client's team searches, imports, uploads, downloads, moves and publishes assets, edits their details and finds unused ones.",
+   "how": "The agent your client's team builds in Copilot Studio with Adobe's AEM address also covers AEM Assets. In plain words your client's team searches, imports, uploads, downloads, moves and publishes assets, edits their details and finds unused ones.",
    "source": {
     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/mcp-support/using-mcp-with-aem-as-a-cloud-service",
     "title": "Experience League: Using MCP with AEM as a Cloud Service"
@@ -1304,7 +1454,12 @@
     }
    ],
    "no_services": true,
-   "setup": "Adobe's own, added by web address: Adobe hosts it, a person pastes Adobe's address"
+   "setup": "From Adobe's developer guide: your team sets it up",
+   "ask_it": {
+    "ask": "Find our approved spring campaign images and show me where each one is used.",
+    "adobe_words": false,
+    "within": "The AEM connection searches assets and shows where an asset is used."
+   }
   },
   {
    "id": "copilot-gspm",
@@ -1340,7 +1495,12 @@
     }
    ],
    "no_services": true,
-   "setup": "Adobe's own, added by web address: Adobe hosts it, a person pastes Adobe's address"
+   "setup": "Adobe's own, added by web address: Adobe hosts it, a person pastes Adobe's address",
+   "ask_it": {
+    "ask": "How did our spring ads perform last month?",
+    "adobe_words": false,
+    "within": "The GenStudio connection answers how ads are performing."
+   }
   },
   {
    "id": "copilot-cja",
@@ -1376,7 +1536,12 @@
     }
    ],
    "no_services": true,
-   "setup": "From Adobe's developer guide: your team sets it up"
+   "setup": "From Adobe's developer guide: your team sets it up",
+   "ask_it": {
+    "ask": "Show me what data views are available.",
+    "adobe_words": true,
+    "source": "https://developer.adobe.com/analytics-mcp/docs/guides/copilot"
+   }
   },
   {
    "id": "copilot-workfront",
@@ -1412,7 +1577,12 @@
     }
    ],
    "no_services": true,
-   "setup": "Adobe's own, added by web address: Adobe hosts it, a person pastes Adobe's address"
+   "setup": "Adobe's own, added by web address: Adobe hosts it, a person pastes Adobe's address",
+   "ask_it": {
+    "ask": "Move task Wireframes to the Mobile App Redesign project.",
+    "adobe_words": true,
+    "source": "https://experienceleague.adobe.com/en/docs/workfront/using/basics/workfront-mcp-server/workfront-mcp-server-tools"
+   }
   },
   {
    "id": "copilot-planning",
@@ -1448,7 +1618,12 @@
     }
    ],
    "no_services": true,
-   "setup": "Adobe's own, added by web address: Adobe hosts it, a person pastes Adobe's address"
+   "setup": "Adobe's own, added by web address: Adobe hosts it, a person pastes Adobe's address",
+   "ask_it": {
+    "ask": "Show me the campaigns planned for next quarter.",
+    "adobe_words": false,
+    "within": "The Workfront connection searches Planning records."
+   }
   },
   {
    "id": "copilot-creativecloud",
@@ -1484,7 +1659,12 @@
     }
    ],
    "no_services": true,
-   "setup": "Adobe's own, ready-made: found in the assistant's own list"
+   "setup": "Adobe's own, ready-made: found in the assistant's own list",
+   "ask_it": {
+    "ask": "Use Adobe to resize this photo for Instagram, YouTube, and TikTok.",
+    "adobe_words": true,
+    "source": "https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/adobe-connectors/adobe-for-copilot.html"
+   }
   },
   {
    "id": "copilot-acrobat",
@@ -1520,7 +1700,12 @@
     }
    ],
    "no_services": true,
-   "setup": "Adobe's own, ready-made: found in the assistant's own list"
+   "setup": "Adobe's own, ready-made: found in the assistant's own list",
+   "ask_it": {
+    "ask": "Turn these notes into a formatted PDF.",
+    "adobe_words": false,
+    "within": "Adobe's connector creates PDFs and turns content into formatted PDFs."
+   }
   },
   {
    "id": "aa-cstore",
@@ -1610,7 +1795,12 @@
     }
    ],
    "no_services": true,
-   "setup": "Adobe's own, added by web address: Adobe hosts it, a person pastes Adobe's address"
+   "setup": "Adobe's own, added by web address: Adobe hosts it, a person pastes Adobe's address",
+   "ask_it": {
+    "ask": "List the pages in our about section and draft a new FAQ page there.",
+    "adobe_words": false,
+    "within": "The Experience Workspace connection browses content and creates new pages."
+   }
   },
   {
    "id": "chatgpt-eds",
@@ -1646,7 +1836,53 @@
     }
    ],
    "no_services": true,
-   "setup": "Adobe's own, added by web address: Adobe hosts it, a person pastes Adobe's address"
+   "setup": "Adobe's own, added by web address: Adobe hosts it, a person pastes Adobe's address",
+   "ask_it": {
+    "ask": "List the pages in our about section and draft a new FAQ page there.",
+    "adobe_words": false,
+    "within": "The Experience Workspace connection browses content and creates new pages."
+   }
+  },
+  {
+   "id": "claude-brandintel",
+   "a": "claude",
+   "b": "brandintel",
+   "how": "Adobe's developer guide shows how to connect Brand Intelligence's brand checks (Validate) to a chat assistant, with Claude Desktop as its example. Once connected, a marketer gives Claude an image or a link and asks for a brand check; Brand Intelligence runs the check against the brand's guidelines, and Claude reports the findings as they come back.",
+   "source": {
+    "url": "https://developer.adobe.com/adobe-brand-intelligence/guides/mcp-integration/",
+    "title": "Adobe Developer: Brand Intelligence MCP integration"
+   },
+   "gain": {
+    "title": "Brand checks where the work is made",
+    "text": "Your client's marketers check a draft against the brand's guidelines by asking in Claude, before it goes to review."
+   },
+   "flows": [
+    {
+     "from": "claude",
+     "to": "brandintel",
+     "what": "The image or link to check",
+     "source": {
+      "url": "https://developer.adobe.com/adobe-brand-intelligence/guides/mcp-integration/",
+      "title": "Adobe Developer: Brand Intelligence MCP integration"
+     }
+    },
+    {
+     "from": "brandintel",
+     "to": "claude",
+     "what": "The findings, against the brand's guidelines",
+     "source": {
+      "url": "https://developer.adobe.com/adobe-brand-intelligence/guides/mcp-integration/",
+      "title": "Adobe Developer: Brand Intelligence MCP integration"
+     }
+    }
+   ],
+   "no_services": true,
+   "setup": "From Adobe's developer guide: your team sets it up",
+   "ask_it": {
+    "ask": "Check this graphic against our brand guidelines and show me what needs changing.",
+    "adobe_words": false,
+    "within": "Brand Intelligence's Validate checks an asset against the brand's guidelines and returns its findings."
+   }
   }
  ],
  "notes": [
@@ -1655,6 +1891,7 @@
   "XT05 covers Workfront Planning too, so Planning gets no service of its own.",
   "Overlap review: XT05 with Coworker rollout and write access (XB14) and Coworker access and tool permissions for Planning (XJ32); XT06 with Coworker prompts for GenStudio reporting and drafts (XG08). The canvas and the statement of work flag each pair when both are on.",
   "The lines to AEM Sites and XT03 need AEM Sites as its own product: Adobe's AEM page covers AEM as a Cloud Service and does not mention Edge Delivery Services, so they do not show while AEM Sites is the AEM authoring of an Edge Delivery site, where the Edge Delivery lines (Experience Workspace, on aem.live) go to Edge Delivery Services itself.",
-  "basis and bands are each service's sizes in the build data; like the Figma services, the statement of work treats these services as service concepts whose quantity the partner writes."
+  "basis and bands are each service's sizes in the build data; like the Figma services, the statement of work treats these services as service concepts whose quantity the partner writes.",
+  "Claude + Brand Intelligence carries no service of its own: its set-up is the kind Validate checks built into your client's tools (BN02, on Brand Intelligence) already covers."
  ]
 }

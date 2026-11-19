@@ -76,7 +76,7 @@ const PARTY = /\b(the|The) customer\b(?! (ID|journey|profile|does))|\bcustomer's
     ok(!PARTY.test(oc) && oc.includes('A system your client runs outside Adobe') && oc.includes('lightning bolt'), 'the outside system card says your client and points to the lightning bolt', oc.slice(0, 200));
     await p.context().close(); }
   { const p = await fresh(); await p.goto(BASE); await p.waitForTimeout(400); await p.click('#picker [data-play="cja"]'); await p.waitForTimeout(500); await p.fill('#rate', '150');
-    await p.click('#out-btn'); await p.waitForTimeout(200); await p.click('#out-menu [data-out="bi"]'); await p.waitForTimeout(400);
+    // Nov 18 2026: BI tools start on the CJA canvas, as every system the play offers does
     await p.click('#save'); await p.waitForURL('**/sow/index.html#scope'); await p.waitForTimeout(500);
     const c = await p.evaluate(() => { const x = state.canvas.find(l => l.id === 'CANVAS-BI2'); return x ? {name: x.name, a: x.assumptions} : null; });
     ok(c && c.name === "Executive dashboards in the Client's BI tool" && /Assumes the Client has CJA Select or higher\./.test(c.a) && !/your client|upsell/i.test(c.name + c.a),

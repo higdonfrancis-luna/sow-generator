@@ -24,9 +24,14 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     // script errors only: a font or other resource the network can't reach is not a script error (ChatGPT ran this offline)
     p.on('pageerror', e => errs.push(e.message)); p.on('console', m => { if (m.type() === 'error' && !/Failed to load resource|net::ERR_/.test(m.text())) errs.push(m.text()); }); return p; };
   const canvasTotal = async p => (await p.textContent('#t-big')).trim();
+  /* Nov 18 2026: Brand Visibility + Customer Journey Analytics starts with eleven lines, so it opens in Explore one product, where a first click shows a box's
+     lines and a second opens its card (step 47) */
+  const openBox = async (p, id) => { await p.click(`.node[data-p="${id}"]`); await p.waitForTimeout(300);
+    if (await p.evaluate(() => fv() && document.getElementById('card').hidden)) { await p.click(`.node[data-p="${id}"]`); await p.waitForTimeout(300); } };
   const toolTotal = async p => (await p.$$eval('.total-card strong', e => e.map(x => x.textContent.trim())))[2];
-  /* step 45: the CDN starts on; checks of adding and removing systems start from a play with it taken off, as a partner can */
-  const noCdn = async p => { await p.evaluate(() => { if ((st.out || []).includes('cdn')) removeOutside('cdn'); }); await p.waitForTimeout(200); };
+  /* step 45: the CDN starts on; checks of adding and removing systems start from a play with it taken off, as a partner can.
+     Nov 18 2026: a play starts with every outside system it offers, so they start from a play with all of them taken off */
+  const noCdn = async p => { await p.evaluate(() => { for (const id of (st.out || []).slice()) removeOutside(id); }); await p.waitForTimeout(200); };
   const pickNoCdn = async (p, play, rate) => { await pick(p, play, rate); await noCdn(p); };
   const pick = async (p, play, rate) => { await p.goto(BASE); await p.waitForTimeout(300); await p.click(`#picker [data-play="${play}"]`); await p.waitForTimeout(400);
     if (rate !== undefined) { await p.fill('#rate', String(rate)); await p.waitForTimeout(100); } };
@@ -115,9 +120,9 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     const p = await fresh(); await pick(p, 'abv', 150); await cont(p);
     await p.fill('[data-cover="promptCount"]', '100'); await p.waitForTimeout(200); await services(p);
     const t1 = await toolTotal(p);
-    ok(t1 === '$177,600', 'B04 setup: 100 prompts put the prompt services at Small on Services ($177,600, with the CDN on from the start)', t1);
+    ok(t1 === '$178,800', 'B04 setup: 100 prompts put the prompt services at Small on Services ($178,800, with the CDN and, since Nov 18, Search data on from the start)', t1);
     await build(p);
-    ok(await canvasTotal(p) === t1, 'B04: Build shows the same $177,600', await canvasTotal(p));
+    ok(await canvasTotal(p) === t1, 'B04: Build shows the same $178,800', await canvasTotal(p));
     await cont(p); await services(p);
     await p.selectOption('.service-card[data-line="O02"] [data-line-field="band"]', 'small'); await p.waitForTimeout(150);
     await p.fill('.service-card[data-line="O02"] [data-line-field="rate"]', '175'); await p.waitForTimeout(150);
@@ -315,18 +320,18 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
   // ---------- step 1b: Commerce's deployment pilot is an add-on; FSI's question mapping only for a live and healthy concierge ----------
   await sec(async () => {
     const p = await fresh(); await pick(p, 'commerce', 150);
-    ok(await canvasTotal(p) === '$224,400' && !(await p.evaluate(() => lineOn('L03'))), 'step 1b: Commerce starts without the deployment pilot on the canvas ($224,400)', await canvasTotal(p));
+    ok(await canvasTotal(p) === '$225,600' && !(await p.evaluate(() => lineOn('L03'))), 'step 1b: Commerce starts without the deployment pilot on the canvas ($225,600, Search data on from the start since Nov 18)', await canvasTotal(p));
     await cont(p); await services(p);
-    ok(await toolTotal(p) === '$224,400' && !(await p.evaluate(() => state.estimates.commerce.L03.on)) && await p.isVisible('#service-extensions [data-add="L03"]'), 'step 1b: and on Services, with the pilot one click away under the optional services');
+    ok(await toolTotal(p) === '$225,600' && !(await p.evaluate(() => state.estimates.commerce.L03.on)) && await p.isVisible('#service-extensions [data-add="L03"]'), 'step 1b: and on Services, with the pilot one click away under the optional services');
     await p.click('#service-extensions [data-add="L03"]'); await p.waitForTimeout(200);
     const t = await toolTotal(p); await build(p);
     ok(await canvasTotal(p) === t && await p.evaluate(() => lineOn('L03')), `step 1b: added on Services, the pilot is on the canvas too (${t})`);
     await p.context().close();
     const q = await fresh(); await pick(q, 'fsi', 150);
-    ok(await canvasTotal(q) === '$302,400' && !(await q.evaluate(() => lineOn('C04'))), 'step 1b: FSI starts without the separate question mapping ($302,400)', await canvasTotal(q));
+    ok(await canvasTotal(q) === '$305,400' && !(await q.evaluate(() => lineOn('C04'))), 'step 1b: FSI starts without the separate question mapping ($305,400, Search data and another CMS site on from the start since Nov 18)', await canvasTotal(q));
     await cont(q); await services(q);
     const n = await q.evaluate(() => ({c04: state.estimates.fsi.C04.on, f02: state.estimates.fsi.F02.on, scope: state.estimates.fsi.F02.scope}));
-    ok(await toolTotal(q) === '$302,400' && !n.c04 && n.f02 && n.scope.includes('priority discovery questions from the Brand Visibility program'), 'step 1b: a new concierge\'s build tests the Brand Visibility questions', JSON.stringify(n).slice(0, 200));
+    ok(await toolTotal(q) === '$305,400' && !n.c04 && n.f02 && n.scope.includes('priority discovery questions from the Brand Visibility program'), 'step 1b: a new concierge\'s build tests the Brand Visibility questions', JSON.stringify(n).slice(0, 200));
     for (const [answer, f02, c04] of [['healthy', false, true], ['remediate', true, false], ['new', true, false]]) {
       await q.click('[data-step="scope"]'); await q.selectOption('[data-meta="fsiState"]', answer); await q.waitForTimeout(150); await services(q);
       const r = await q.evaluate(() => [state.estimates.fsi.F02.on, state.estimates.fsi.C04.on]), t2 = await toolTotal(q);
@@ -395,7 +400,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     await p.click('#change-play'); await p.click('#confirm-yes'); await p.waitForTimeout(300); await p.click('#picker [data-play="cja"]'); await p.waitForTimeout(400);
     const t2 = await canvasTotal(p); await cont(p); await services(p);
     const own = await p.evaluate(() => state.custom.filter(c => c.plays.includes('cja')).map(c => state.estimates.cja[c.id].on));
-    ok(await toolTotal(p) === t2 && t2 === '$222,000' && own.length === 1 && own[0] === false, `R2: picking CJA again: both pages at ${t2}, the own service off (still under Add service)`, `${await toolTotal(p)} ${JSON.stringify(own)}`);
+    ok(await toolTotal(p) === t2 && t2 === '$264,000' && own.length === 1 && own[0] === false, `R2: picking CJA again: both pages at ${t2}, the own service off (still under Add service)`, `${await toolTotal(p)} ${JSON.stringify(own)}`);
     await p.context().close();
   });
   await sec(async () => {
@@ -406,7 +411,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     if (!(await p.inputValue('#rate'))) { await p.fill('#rate', '150'); await p.waitForTimeout(100); }
     const t = await canvasTotal(p), k = (await p.textContent('#t-k')).trim();
     await cont(p); await services(p);
-    ok(k.includes('12-month term') && t === '$222,000' && await toolTotal(p) === t, `R3: after Start over the term is 12 months on both pages (${t})`, `${k} ${t} ${await toolTotal(p)}`);
+    ok(k.includes('12-month term') && t === '$264,000' && await toolTotal(p) === t, `R3: after Start over the term is 12 months on both pages (${t})`, `${k} ${t} ${await toolTotal(p)}`);
     await p.context().close();
   });
   await sec(async () => {
@@ -427,7 +432,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     // 6. the browser Back button keeps canvas edits
     const p = await fresh(); await pick(p, 'cja', 150); await cont(p); await build(p);
     await p.click('#size [data-size="large"]'); await p.waitForTimeout(150); await p.fill('#rate', '200'); await p.waitForTimeout(150);
-    await p.click('.node[data-p="cja"]'); await p.waitForTimeout(300); await p.click('#card [data-t="C06"]'); await p.waitForTimeout(150); await p.click('#card [data-close]');
+    await openBox(p, 'cja'); await p.click('#card [data-t="C06"]'); await p.waitForTimeout(150); await p.click('#card [data-close]');
     const t = await canvasTotal(p);
     await p.goBack(); await p.waitForTimeout(600); await services(p);
     const s1 = await p.evaluate(() => [state.size, state.rate, state.estimates.cja.C06.on]);
@@ -554,7 +559,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     await a.click('#save'); await a.waitForURL('**/sow/index.html#scope'); await a.waitForTimeout(400); await a.click('.steps [data-build]'); await a.waitForURL(u => !/\/sow\//.test(String(u))); await a.waitForTimeout(400);
     await s2.goto(BASE + 'sow/#services'); await s2.waitForTimeout(500);
     await a.bringToFront(); await Promise.all([a.waitForNavigation({timeout: 2500}).catch(() => null), a.evaluate(() => window.dispatchEvent(new Event('focus'))).catch(() => null)]); await a.waitForTimeout(400);
-    await a.click('.node[data-p="cja"]'); await a.waitForTimeout(300); await a.click('#card [data-t="C06"]'); await a.waitForTimeout(150);
+    await openBox(a, 'cja'); await a.click('#card [data-t="C06"]'); await a.waitForTimeout(150);
     const t = await canvasTotal(a);
     await s2.bringToFront(); await Promise.all([s2.waitForNavigation({timeout: 5000}).catch(() => null), s2.evaluate(() => window.dispatchEvent(new Event('focus'))).catch(() => null)]); await s2.waitForTimeout(600);
     await s2.fill('[data-meta="customer"]', 'Acme Corp').catch(async () => { await s2.click('[data-step="scope"]'); await s2.fill('[data-meta="customer"]', 'Acme Corp'); });
@@ -578,7 +583,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     await build(p); await p.click('#change-play'); await p.click('#confirm-yes'); await p.waitForTimeout(300); await p.click('#picker [data-play="cja"]'); await p.waitForTimeout(400);
     const ct = await canvasTotal(p); await cont(p); await services(p);
     const r = await p.evaluate(() => { const e = state.estimates.cja, c = CATALOG.find(x => x.id === 'C01'); return [e.C06.hours, e.C06.hoursWhy, e.L01.rate, e.C01.scope === lineText(c, 'cja', e.C01.band, 'scope')]; });
-    ok(ct === '$222,000' && await toolTotal(p) === ct && JSON.stringify(r) === JSON.stringify([48, '', '', true]), `S22: CJA picked again: hours, reasons, line rates and texts start over on both pages (${ct})`, `${ct} ${await toolTotal(p)} ${JSON.stringify(r)}`);
+    ok(ct === '$264,000' && await toolTotal(p) === ct && JSON.stringify(r) === JSON.stringify([48, '', '', true]), `S22: CJA picked again: hours, reasons, line rates and texts start over on both pages (${ct})`, `${ct} ${await toolTotal(p)} ${JSON.stringify(r)}`);
     await p.context().close();
     const q = await fresh(); await pickCustom(q, ['bv', 'cja']); await cont(q); await services(q);
     await q.fill('.service-card[data-line="CANVAS-L01"] [data-line-field="hours"]', '99'); await q.waitForTimeout(100);
@@ -652,7 +657,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     await p.fill('[data-cover="promptCount"]', '100'); await p.waitForTimeout(200);
     await build(p); await p.click('#change-play'); await p.click('#confirm-yes'); await p.waitForTimeout(300); await p.click('#picker [data-play="abv"]'); await p.waitForTimeout(400);
     const ct = await canvasTotal(p); await cont(p); await services(p);
-    ok(ct === '$177,600' && await toolTotal(p) === ct, `S23: a play picked again keeps the prompt count's bands, on both pages (${ct})`, `${ct} ${await toolTotal(p)}`);
+    ok(ct === '$178,800' && await toolTotal(p) === ct, `S23: a play picked again keeps the prompt count's bands, on both pages (${ct}; Search data on from the start since Nov 18)`, `${ct} ${await toolTotal(p)}`);
     await build(p); await p.click('#change-play'); await p.click('#confirm-yes'); await p.waitForTimeout(300); await p.click('#picker [data-play="fsi"]'); await p.waitForTimeout(400);
     await p.click('#start-over'); await p.click('#confirm-yes'); await p.waitForTimeout(300); await p.click('#picker [data-play="fsi"]'); await p.waitForTimeout(400);
     const t2 = await canvasTotal(p);
@@ -747,7 +752,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     await build(p); await p.click('#change-play'); await p.click('#confirm-yes'); await p.waitForTimeout(300); await p.click('#picker [data-play="cja"]'); await p.waitForTimeout(400);
     await cont(p); await services(p); await addLib(p, id);
     const r = await p.evaluate(i => { const r = state.estimates.cja[i]; return [r.on, r.hours, r.rate, r.cadence, r.scope]; }, id);
-    ok(JSON.stringify(r) === JSON.stringify([true, 20, '', 'one-time', 'One workshop and an outcome document.']) && await toolTotal(p) === '$225,000', 'S24/F3: after Change play, re-adding an own service brings it back as written (20 hours once, $225,000), not the old 99 hours a month', `${JSON.stringify(r)} ${await toolTotal(p)}`);
+    ok(JSON.stringify(r) === JSON.stringify([true, 20, '', 'one-time', 'One workshop and an outcome document.']) && await toolTotal(p) === '$267,000', 'S24/F3: after Change play, re-adding an own service brings it back as written (20 hours once, $267,000 with every system CJA offers on from the start since Nov 18), not the old 99 hours a month', `${JSON.stringify(r)} ${await toolTotal(p)}`);
     await p.context().close();
   });
   await sec(async () => {
@@ -880,6 +885,9 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     for (const play of ['aem', 'cja', 'abv']) {
       await m.goto(BASE); await m.waitForTimeout(300); await m.evaluate(() => localStorage.clear()); await m.reload(); await m.waitForTimeout(400);
       await m.tap(`#picker [data-play="${play}"]`); await m.waitForTimeout(500);
+      /* Nov 18 2026: CJA starts with every system it offers and opens in Explore one product, where a first tap shows a box's lines (step 47);
+         its taps run on the canvas it started with before, the CDN its one outside system */
+      if (play === 'cja') { await m.evaluate(() => { for (const id of st.out.filter(x => x !== 'cdn')) removeOutside(id); }); await m.waitForTimeout(400); }
       for (const id of await m.$$eval('.node[data-p]', ns => ns.map(n => n.dataset.p))) {
         for (const [fx, fy] of [[0.15, 0.3], [0.5, 0.5], [0.85, 0.3], [0.85, 0.7], [0.97, 0.5]]) {
           await reset(id);
@@ -903,7 +911,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     // 3. desktop (step 42): a mouse opens a card with a click, like a tap, and hovering opens nothing
     const d = await fresh(); await pick(d, 'cja', 150); await d.hover('.node[data-p="cja"]'); await d.waitForTimeout(400);
     const quiet = await d.evaluate(() => document.getElementById('card').hidden);
-    await d.click('.node[data-p="cja"]'); await d.waitForTimeout(300); await d.mouse.move(5, 5); await d.waitForTimeout(600);
+    await openBox(d, 'cja'); await d.mouse.move(5, 5); await d.waitForTimeout(600);
     const kept = await d.evaluate(() => !document.getElementById('card').hidden && pinned);
     ok(quiet && kept, 'S26: on desktop hovering opens nothing, and a click opens a card that stays when the pointer leaves (step 42)', JSON.stringify({quiet, kept}));
     await d.context().close();
@@ -943,8 +951,9 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     // Analytics, ChatGPT and Claude beside Edge Delivery Services, the CRM beside Adobe Commerce
     const want = {cja: 'dwh,cstore,crm,ads,bi,search,chatgpt,claude,copilot', commerce: 'search,crm', aem: 'search,csrc,chatgpt,claude', fsi: 'search,cms', abv: 'search'}, seen = {};
     for (const play of Object.keys(want)) { const p = await fresh(); await pick(p, play, 150);
-      seen[play] = {btn: await p.isVisible('#out-btn'), menu: (await menuIds(p)).join(','), boxes: await outs(p), stored: (await canvasState(p)).out}; await p.context().close(); }
-    ok(Object.entries(want).every(([k, v]) => seen[k].btn && seen[k].menu === v && seen[k].boxes === 'cdn' && JSON.stringify(seen[k].stored) === '["cdn"]'),
+      seen[play] = {btn: await p.isVisible('#out-btn'), boxes: await outs(p), stored: (await canvasState(p)).out}; await noCdn(p); seen[play].menu = (await menuIds(p)).join(','); await p.context().close(); }
+    // Nov 18 2026 (Adam: "we should automatically put those outside systems in and then people can delete them"): they all start on the canvas, the CDN first
+    ok(Object.entries(want).every(([k, v]) => seen[k].btn && seen[k].menu === 'cdn,' + v && seen[k].boxes === ('cdn,' + v).split(',').sort().join() && JSON.stringify(seen[k].stored) === JSON.stringify(('cdn,' + v).split(','))),
       'S27: every Brand Visibility play has Add outside system; the CDN is on when the play starts (step 45), and the menu lists the other systems that connect to the play (search data on all five; a data warehouse, cloud storage, a CRM, ad platforms and BI tools on CJA; authoring documents on AEM; another CMS on FSI; step 96: no Adobe product on a built play; Nov 18: ChatGPT, Claude and Microsoft Copilot on CJA, ChatGPT and Claude on AEM, the CRM on Commerce)', JSON.stringify(seen));
     const nob = {};
     for (const play of ['coworker', 'custom']) { const p = await fresh(); await pick(p, play); nob[play] = await p.isVisible('#out-btn'); await p.context().close(); }
@@ -1042,7 +1051,9 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     await cont(p); await services(p); const draft = await draftOf(p), dt = await toolTotal(p); const dj = JSON.parse(draft); await p.context().close();
     const e = await fresh(); await e.goto(BASE + 'sow/'); await e.waitForTimeout(400); await openDraft(e, draft, 's27.json'); await build(e);
     const ed = {boxes: await outs(e), total: await canvasTotal(e)}; await cont(e); await services(e); ed.tool = await toolTotal(e);
-    ok(Object.entries(dj.outside || {}).every(([k, v]) => k === 'cja' || v.join() === 'cdn') && dj.outside.cja.slice().sort().join(',') === 'cdn,crm,cstore,dwh' && ed.boxes === 'cdn,crm,cstore,dwh' && ed.total === dt && ed.tool === dt,
+    // Nov 18 2026: the other plays keep the systems they start with
+    const START_OUT = {abv: 'cdn,search', commerce: 'cdn,search,crm', aem: 'cdn,search,csrc,chatgpt,claude', fsi: 'cdn,search,cms', coworker: 'chatgpt,claude,copilot'};
+    ok(Object.entries(dj.outside || {}).every(([k, v]) => k === 'cja' || v.join() === START_OUT[k]) && dj.outside.cja.slice().sort().join(',') === 'cdn,crm,cstore,dwh' && ed.boxes === 'cdn,crm,cstore,dwh' && ed.total === dt && ed.tool === dt,
       `S27: a saved draft keeps the outside systems; opened in an empty browser, Build shows them with the same total (${dt})`, JSON.stringify({saved: dj.outside, ed}));
     const none = JSON.parse(draft); delete none.outside;
     await openDraft(e, none, 's27_none.json'); await build(e);
@@ -1075,10 +1086,12 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     await c.click('#picker [data-play="abv"]'); await c.waitForTimeout(400); ch.abv = await outs(c);
     await c.click('#change-play'); await c.waitForTimeout(150); await c.click('#confirm-yes'); await c.waitForTimeout(300);
     await c.click('#picker [data-play="cja"]'); await c.waitForTimeout(400); ch.cja = await outs(c); ch.total = await canvasTotal(c);
-    await addOut(c, 'crm'); await c.click('#start-over'); await c.waitForTimeout(150); await c.click('#confirm-yes'); await c.waitForTimeout(300);
+    // Nov 18 2026: the CRM is on from the start, so the partner's change is taking it off
+    await c.evaluate(() => removeOutside('crm')); await c.waitForTimeout(200); await c.click('#start-over'); await c.waitForTimeout(150); await c.click('#confirm-yes'); await c.waitForTimeout(300);
     ch.over = await c.evaluate(() => st.out.length);
     await c.click('#picker [data-play="cja"]'); await c.waitForTimeout(400); ch.after = await outs(c);
-    ok(ch.abv === 'cdn' && ch.cja === 'cdn' && ch.total === '$222,000' && ch.over === 0 && ch.after === 'cdn', 'S27: Change play and Start over clear the outside systems the partner added (the CDN starts on again, step 45)', JSON.stringify(ch));
+    const CJA_START = 'ads,bi,cdn,chatgpt,claude,copilot,crm,cstore,dwh,search';   // Nov 18 2026: every system the play offers starts on
+    ok(ch.abv === 'cdn,search' && ch.cja === CJA_START && ch.total === '$264,000' && ch.over === 0 && ch.after === CJA_START, 'S27: Change play and Start over clear the outside systems the partner changed (the play\'s own start comes back: the CDN, step 45, and since Nov 18 every system it offers)', JSON.stringify(ch));
     await c.context().close();
     const r = await fresh(); await pickNoCdn(r, 'abv', 150); const r0 = await canvasTotal(r); await addOut(r, 'cdn');
     const r1 = await canvasTotal(r);
@@ -1108,7 +1121,9 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     // 11. a phone: tap to add, tap a box to open and pin its card
     const ctx = await b.newContext({viewport: {width: 390, height: 844}, isMobile: true, hasTouch: true}); const m = await ctx.newPage(); m.on('pageerror', x => errs.push(x.message));
     await m.goto(BASE); await m.waitForTimeout(300); await m.evaluate(() => localStorage.clear()); await m.reload(); await m.waitForTimeout(400);
-    await m.tap('#picker [data-play="cja"]'); await m.waitForTimeout(500); await m.tap('#out-btn'); await m.waitForTimeout(200);
+    await m.tap('#picker [data-play="cja"]'); await m.waitForTimeout(500);
+    await m.evaluate(() => { for (const id of st.out.filter(x => x !== 'cdn')) removeOutside(id); }); await m.waitForTimeout(300);   // Nov 18 2026: CJA starts with every system it offers; taken off but the CDN, as it started before
+    await m.tap('#out-btn'); await m.waitForTimeout(200);
     await m.tap('#out-menu [data-out="dwh"]'); await m.waitForTimeout(600);
     await m.evaluate(() => document.querySelector('.node[data-p="dwh"]').scrollIntoView({block: 'center'})); await m.waitForTimeout(200);
     const bx = await (await m.$('.node[data-p="dwh"]')).boundingBox(); await m.touchscreen.tap(bx.x + bx.width / 2, bx.y + bx.height / 2); await m.waitForTimeout(500);
@@ -1192,12 +1207,15 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
       await p.context().close(); }
 
     // 8. a 320-pixel phone keeps each name on one line; 9. a phone held sideways shows items and scrolls to the rest
-    { const p = await phone(320, 568); await p.goto(BASE); await p.waitForTimeout(300); await p.tap('#picker [data-play="cja"]'); await p.waitForTimeout(500); await p.tap('#out-btn'); await p.waitForTimeout(250);
+    { const p = await phone(320, 568); await p.goto(BASE); await p.waitForTimeout(300); await p.tap('#picker [data-play="cja"]'); await p.waitForTimeout(500);
+      await p.evaluate(() => { for (const id of st.out.filter(x => x !== 'cdn')) removeOutside(id); }); await p.waitForTimeout(300);   // Nov 18 2026: as it started before, the CDN its one outside system
+      await p.tap('#out-btn'); await p.waitForTimeout(250);
       const names = await p.$$eval('#out-menu .it2', its => its.map(i => { const n = i.querySelector('.nm'), sv = n.querySelector('svg').getBoundingClientRect(), t = n.getBoundingClientRect(); return {id: i.dataset.out, h: Math.round(t.height), iconBeside: Math.abs((sv.top + sv.bottom) / 2 - (t.top + t.bottom) / 2) < 6, right: Math.round(i.getBoundingClientRect().right)}; }));
       ok(names.length === 9 && names.every(x => x.h <= 24 && x.iconBeside && x.right <= 320) && await p.evaluate(() => document.documentElement.scrollWidth) <= 320, 'S28: on a 320-pixel phone each outside system\'s name stays on one line beside its icon, inside the screen (Nov 18: Microsoft Copilot included)', JSON.stringify(names.slice(5)));
       await p.context().close(); }
     const side = [];
-    for (const [w, h] of [[844, 390], [667, 375], [568, 320]]) { const p = await phone(w, h); await p.goto(BASE); await p.waitForTimeout(300); await p.tap('#picker [data-play="cja"]'); await p.waitForTimeout(500); await p.tap('#out-btn'); await p.waitForTimeout(250);
+    for (const [w, h] of [[844, 390], [667, 375], [568, 320]]) { const p = await phone(w, h); await p.goto(BASE); await p.waitForTimeout(300); await p.tap('#picker [data-play="cja"]'); await p.waitForTimeout(500);
+      await p.evaluate(() => { for (const id of st.out.filter(x => x !== 'cdn')) removeOutside(id); }); await p.waitForTimeout(300); await p.tap('#out-btn'); await p.waitForTimeout(250);
       side.push({w, ...await p.evaluate(() => { const m = document.getElementById('out-menu'), r = m.getBoundingClientRect(); const full = [...m.querySelectorAll('[data-out]')].filter(i => { const q = i.getBoundingClientRect(); return q.top >= r.top - 1 && q.bottom <= r.bottom + 1; }).length;
         return {full, reach: r.bottom + scrollY <= document.documentElement.scrollHeight, sw: document.documentElement.scrollWidth, vw: document.documentElement.clientWidth}; })}); await p.context().close(); }
     ok(side.every(x => x.full >= 1 && x.reach && x.sw <= x.vw), 'S28: on a phone held sideways the menu shows its first items in full, and the page scrolls to the rest', JSON.stringify(side));
@@ -1263,6 +1281,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
         e.preventDefault(); if (el) { if (document.activeElement !== el) el.focus({preventScroll: true}); } else if (document.activeElement && document.activeElement !== document.body) document.activeElement.blur(); }, true); })();`;
     { const c = await b.newContext({viewport: {width: 1440, height: 900}}); await c.addInitScript(MAC); const p = await c.newPage(); p.on('pageerror', x => errs.push(x.message));
       await p.goto(BASE); await p.waitForTimeout(300); await p.click('#picker [data-play="cja"]'); await p.waitForTimeout(400); await p.mouse.move(3, 3);
+      await p.evaluate(() => { for (const id of st.out.filter(x => x !== 'cdn')) removeOutside(id); }); await p.waitForTimeout(300);   // Nov 18 2026: CJA as it started before, the CDN its one outside system
       const r = {};
       await p.click('#out-btn'); await p.waitForTimeout(150); await p.click('#out-menu .hd p'); await p.waitForTimeout(150); r.headerKeeps = await p.isVisible('#out-menu');
       await p.click('#out-btn'); await p.waitForTimeout(250); r.oneClickCloses = await p.isHidden('#out-menu') && await p.getAttribute('#out-btn', 'aria-expanded') === 'false';
@@ -1337,7 +1356,8 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     const box = await p.$eval('.service-card[data-line="SO1"] textarea[data-line-field="assumptions"]', t => t.value);
     await p.evaluate(t => { state.terms = t; state.customer = state.customer || 'Acme Co'; state.partner = state.partner || 'Partner Co'; state.timeline = state.timeline || 'Weeks 1 to 4: setup and baseline; monthly reviews from week 5.'; save(); }, TERMS); await p.click('[data-step="document"]'); await p.waitForTimeout(300);
     const prev = await p.evaluate(() => { const el = [...document.querySelectorAll('#sow-preview .sow-preline')].find(x => x.textContent.startsWith('The Client has licensed Sites Optimizer')); return el ? {ws: getComputedStyle(el).whiteSpace, breaks: (el.textContent.match(/\n\n/g) || []).length} : null; });
-    const page = await htmlOf(p), rows = parseCsv(await csvOf(p)), head = rows[0], so1 = rows.find(r => r[2] === 'Sites Optimizer setup');
+    // Nov 18 2026: the AEM play starts with Search data and Authoring documents, whose research services are still to write up, so the CSV opens with the draft mark above its header
+    const page = await htmlOf(p), rows = parseCsv(await csvOf(p)), head = rows.find(r => r[0] === 'Client'), so1 = rows.find(r => r[2] === 'Sites Optimizer setup');
     const col = head.indexOf('Assumptions');
     ok(box.includes('sites.\n\nHow a fix is deployed') && !!prev && prev.ws === 'pre-line' && prev.breaks === 5 && page.includes('production site. Hours scale with the number of sites.\n\nHow a fix') && !!so1 && col > 0 && so1[col].split('\n\n').length === 6,
       'S32: the breaks show in the edit box on the Services step, the SOW preview (one paragraph each), the downloaded SOW and the CSV', JSON.stringify({prev, col, csvParas: so1 && so1[col].split('\n\n').length}));
@@ -1579,8 +1599,8 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     const q = await fresh(); await pick(q, 'cja', 150); await cont(q); const cjaShown = await q.isVisible('#cdn-context'); await q.click('[data-step="document"]'); await q.waitForTimeout(300);
     const dCja = await q.evaluate(() => [...document.querySelectorAll('#sow-preview li')].map(x => x.textContent).join(' | ')); await q.context().close();
     ok(shown && def === 'unknown' && /Until discovery confirms/.test(d0) && /CDN team/.test(nOwn) && /^Client CDN\./m.test(dOwn.split(' | ').find(x => x.startsWith('Client CDN')) || '') && !/CDN log forwarding is set up by/.test(dOwn)
-       && /one switch/.test(nMan) && /Adobe's managed CDN serves the site/.test(dMan) && kept === 'managed' && total === '$487,200' && !cjaShown && /CDN log forwarding is the Client's IT team's change: the partner creates the log job/.test(dCja),
-      'S38: the AEM play asks which CDN serves the site; its note and the SOW\'s dependencies follow the answer (Client CDN until confirmed), the answer is saved, the starting total is unchanged, and other plays are unchanged', JSON.stringify({shown, def, kept, total, cjaShown, d0: d0.slice(0, 200), dMan: dMan.slice(0, 160)}));
+       && /one switch/.test(nMan) && /Adobe's managed CDN serves the site/.test(dMan) && kept === 'managed' && total === '$490,800' && !cjaShown && /CDN log forwarding is the Client's IT team's change: the partner creates the log job/.test(dCja),
+      'S38: the AEM play asks which CDN serves the site; its note and the SOW\'s dependencies follow the answer (Client CDN until confirmed), the answer is saved, the starting total is unchanged ($490,800 with Search data and Authoring documents on from the start since Nov 18), and other plays are unchanged', JSON.stringify({shown, def, kept, total, cjaShown, d0: d0.slice(0, 200), dMan: dMan.slice(0, 160)}));
     const w = await fresh(); await pick(w, 'cja', 150); await cont(w);
     const txt = await w.evaluate(() => { const C = id => CATALOG.find(c => c.id === id); return {l02: C('L02').scope, ox1: C('OX1').acceptance, ox1s: C('OX1').scope, a01: C('A01').assumptions, old: PRIOR38.L02.scope[0]}; });
     const d = JSON.parse(await draftOf(w)); d.estimates.cja.L02.scope = txt.old; d.estimates.cja.L02.scopeChanged = false; await openDraft(w, d, 's38.json');

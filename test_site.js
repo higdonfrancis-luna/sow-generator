@@ -58,7 +58,7 @@ const server = http.createServer((req, res) => {
 
   // 1. the front page is the canvas
   const p = await fresh(); await p.goto(BASE); await p.waitForTimeout(400);
-  ok(await p.isVisible('#picker') && (await p.$$('#picker .pc-card')).length === 9, 'the front page opens on the play picker, nine cards');
+  ok(await p.isVisible('#picker') && (await p.$$('#picker .pc-card')).length === 12, 'the front page opens on the play picker, twelve cards (Nov 19 2026: with the three AI assistant cards)');
   ok((await p.$$eval('.tabs button', e => e.map(x => x.textContent.trim()))).join('|') === 'Build|Scope|Services|Statement of work|RFI Builder' && !(await p.textContent('.masthead')).includes('Prototype'),
     'tabs Build, Scope, Services, Statement of work and RFI Builder (step 57), and no Prototype tag');
   const om0 = await onlyMasthead(p);
@@ -81,7 +81,7 @@ const server = http.createServer((req, res) => {
   ok(await toolTotal(p) === t0, `Services totals what the canvas showed (${t0})`, await toolTotal(p));
   const aemLines = await toolLines(p);
   await p.click('.steps [data-build]'); await p.waitForURL(u => !/\/sow\//.test(String(u))); await p.waitForTimeout(500);
-  ok((await p.textContent('#play-label')).includes('Sites Optimizer') && (await p.$$('.node')).length === 4, 'Build goes back to the canvas as it was left (with the CDN, on from the start)');
+  ok((await p.textContent('#play-label')).includes('Sites Optimizer') && (await p.$$('.node')).length === 8, 'Build goes back to the canvas as it was left (with the CDN, on from the start, and since Nov 18 Search data, Authoring docs, ChatGPT and Claude)');
   await p.click('.node[data-p="eds"] .offering-title'); await p.waitForTimeout(200); await p.click('#card [data-t="A03"]'); await p.waitForTimeout(150); await p.click('#card [data-close]');
   await p.click('#size [data-size="large"]'); await p.waitForTimeout(150);
   const t1 = await canvasTotal(p);

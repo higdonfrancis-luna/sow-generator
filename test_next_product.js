@@ -124,7 +124,7 @@ function redoLine(line) { const v = s => Number(s.replace(/,/g, ''));
     const mark = await p.evaluate(() => { const e = JSON.parse(localStorage.getItem('abv-sow-build-v1')).eff.plays[state.play], on = Object.keys(e).filter(k => e[k].o), ticked = selectedLines().map(l => baseId(l));
       const waiting = state.canvas.filter(x => x.locked && x.plays.includes(state.play)).map(x => baseId(x)), est = state.estimates[state.play];
       return {on: on.length, missing: ticked.filter(id => !on.includes(id)), waiting: waiting.length, waitingOn: waiting.filter(id => on.includes(id)), other: on.filter(id => !ticked.includes(id) && !(est[id] && est[id].on && !outsideOk(catalog().find(x => x.id === id))))}; });
-    ok(mark.on > 0 && !mark.missing.length && !mark.waitingOn.length && !mark.other.length && (mark.waiting > 0) === !!(PLAY[play].outside || []).length,
+    ok(mark.on > 0 && !mark.missing.length && !mark.waitingOn.length && !mark.other.length && !mark.waiting,   // Nov 18 2026: every system a play offers starts on its canvas, so none waits
       `1. ${PLAY[play].label}: the saved canvas marks as on every service the Services step shows ticked, and beyond those only the play's own services that are on for an outside system off the canvas; no waiting service is marked`, JSON.stringify(mark));
     await ctx.close();
   }
@@ -143,7 +143,7 @@ function redoLine(line) { const v = s => Number(s.replace(/,/g, ''));
     await ctx.close();
     // and a canvas record written by hand in the oldest shape still in use: a play, a service taken out, nothing else new
     const ctx2 = await context(), q0 = await ctx2.newPage(); await q0.goto(ORIGIN + 'robots.txt');
-    const want = untouched.abv.c, off = want.lines.split(',')[0];
+    const want = {...untouched.abv.c, boxes: ['bv', 'cdn'], at: 'bv:0,0 cdn:0,1', lines: untouched.abv.c.lines.split(',').filter(l => l !== 'SD1').join()}, off = want.lines.split(',')[0];   // Nov 18 2026: saved with the CDN only, before Search data started on the canvas too
     await q0.evaluate(off => localStorage.setItem('abv-sow-build-v1', JSON.stringify({combinedDefaultsVersion: 1, selectionVersion: 1, play: 'abv', on: [], out: ['cdn'], ls: {[off]: false}, keep: {}, rate: 200, size: 'typical', months: 12, v: 2, eff: null, fresh: false, cur: 'USD', def: null})), off); await q0.close();
     const q = await page(ctx2), c2 = await canvas(q);
     ok(c2.play === 'abv' && same(c2.boxes, want.boxes) && c2.at === want.at && !c2.on.length && !c2.goal && c2.lines === want.lines.split(',').filter(l => l !== off).join(), '1. a hand-written canvas record from before this change opens the Adobe Brand Visibility play as saved, with its one service still taken out', JSON.stringify(c2).slice(0, 300));

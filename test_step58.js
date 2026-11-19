@@ -37,8 +37,11 @@ const hit = t => { const s = String(t).replace(TRIAL_OK, ''), m = TRIAL.exec(s);
   const card = async sel => { await p.click(sel); await p.waitForTimeout(300); const t = await p.textContent('#card'); await p.click('#card [data-close]'); await p.waitForTimeout(150); return t.replace(/\s+/g, ' '); };
   const play = async id => { if (await p.isVisible('#change-play')) { await p.click('#change-play'); await p.click('#confirm-yes'); await p.waitForTimeout(300); } await p.click(`#picker [data-play="${id}"]`); await p.waitForTimeout(400); };
   await play('cja');
+  // Nov 18 2026: CJA starts with every system it offers, eleven lines, so it opens in Explore one product; Show all connections draws every bolt
+  await p.click('#view-all'); await p.waitForTimeout(300);
   let t = await card('.ib[data-c="bv-cja"]');
   ok(t.includes("A Brand Visibility license (CJA's page requires it for the source)") && !trial(t) && !aaFeed(t), 'Brand Visibility + CJA: the first prerequisite is "A Brand Visibility license", with no trial wording', hit(t));
+  await p.evaluate(() => { for (const id of st.out.slice()) removeOutside(id); }); await p.waitForTimeout(300);   // taken off, the menu offers them all again
   await p.click('#out-btn'); await p.waitForTimeout(200);
   const menu = (await p.textContent('#out-menu')).replace(/\s+/g, ' ');
   ok(!trial(menu) && !aaFeed(menu) && !/nor Adobe Analytics/.test(menu), 'the Add outside system menu names no trial and no Adobe Analytics feed', hit(menu));

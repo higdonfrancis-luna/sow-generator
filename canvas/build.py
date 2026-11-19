@@ -24,12 +24,24 @@ def clean(s):
     return DASHES.sub(',', s).strip() if isinstance(s, str) else s
 
 
-def scope_runtime(html):
+def starting_lines(pl, cat):
+    # Nov 19 2026: the services researched for the canvas that a ready-made play's starting outside systems bring, on, as the canvas starts them
+    # (each starting connection's starting lines, less the play's 'off', plus its 'on'), so a new engagement on the SOW steps starts as the canvas does
+    on, out, eds = set(pl['products']) | set(pl['ostart']), set(pl['ostart']), 'eds' in pl['products']
+    return [dict(id=lid, name=cat['lines'][lid]['name'], stage='Optimize' if cat['lines'][lid]['unit'] == 'monthly' else 'Connect',
+                 unit=cat['lines'][lid]['unit'], low=cat['lines'][lid]['low'], base=cat['lines'][lid]['base'], high=cat['lines'][lid]['high'])
+            for c in cat['connections'] if {c['a'], c['b']} <= on and {c['a'], c['b']} & out and not (eds and c['id'] in cat['ownSites'])
+            for lid in c['lines'] + c['more'] if cat['lines'][lid]['origin'] == 'research' and not (eds and lid in cat['ownSites'])
+            and ((lid in c['lines'] and lid not in pl.get('off', [])) or lid in pl.get('on', []))]
+
+
+def scope_runtime(html, cat):
     marker = '<script id="canvas-scope-runtime">'
     with open(os.path.join(HERE, 'catalog_map.json'), encoding='utf-8') as source:
         cmap = json.load(source)
-    presets = {p['id']: {'products': p['products'], 'startingOutside': p.get('ostart', [])}
-               for p in cmap['plays'] if not p.get('custom')}
+    # Nov 18 2026: a ready-made play's starting outside systems are the ones the build works out for it ('ostart' in catalog.json, see main)
+    presets = {p['id']: {'products': p['products'], 'startingOutside': p['ostart'], 'startingLines': starting_lines(p, cat)}
+               for p in cat['plays'] if not p.get('custom')}
     # Nov 18 2026: a play offers every outside system that connects to a product on its canvas, and any product can be added to a play,
     # so the SOW steps keep every outside system the canvas hands over, on every play
     outside = [p['id'] for p in cmap['products'] if p.get('outside')]
@@ -45,7 +57,6 @@ def scope_runtime(html):
 
 def main():
     html = open(os.path.join(SOW, 'index.html'), encoding='utf-8').read()
-    html = scope_runtime(html)
     copy_script = '<script id="product-copy-runtime">\n' + copy_runtime() + '</script>'
     if '<script id="product-copy-runtime">' in html:
         html = re.sub(r'<script id="product-copy-runtime">.*?</script>', lambda _: copy_script, html, count=1, flags=re.S)
@@ -124,6 +135,9 @@ def main():
         # step 45: why a system is Recommended
         if p.get('rec'):
             q['rec'] = clean(p['rec'])
+        # Nov 19 2026 (Adam: "maybe there's an i we can put over it so if people click on it or hover over it, they'll understand"): a short note an i beside the name opens
+        if p.get('info'):
+            q['info'] = clean(p['info'])
         q['lines'] = [l for l in p['lines'] if add_live(l)]
         q['more'] = [l for l in p['more'] if add_live(l)]
         products.append(q)
@@ -176,6 +190,9 @@ def main():
                               for f in rc['flows']]
             if rc.get('no_services'):
                 c['no_services'] = True
+            # Nov 18 2026: the Ask it question an AI assistant's card shows the partner, kept exactly as written (its source stays in the research file)
+            if rc.get('ask_it'):
+                c['ask'] = rc['ask_it']['ask']
             for rl in rc.get('lines', []):
                 if add_research(rl):
                     (c['lines'] if TYPES.get('lines', {}).get(rl['id'], {}).get('default', rl.get('default')) else c['more']).append(rl['id'])
@@ -189,10 +206,11 @@ def main():
             continue
         assert t['kind'] in ('native', 'platform', 'extension', 'partner', 'outside'), c['id']
         c['kind'], c['label'] = t['kind'], clean(t['label'])
-        # an outside system's connection is labelled Outside system and drawn in the style of its route; one with no route style
-        # (Nov 18 2026: ChatGPT, Claude and Microsoft Copilot, which Adobe never calls a native integration) is drawn plain
-        if t['kind'] == 'outside' and 'line' in t:
-            assert t['line'] in ('native', 'platform'), c['id']
+        # an outside system's connection is labelled Outside system and drawn in the style of its route: the product's own connection ('native') or through
+        # Experience Platform ('platform'). Nov 19 2026: an AI assistant's line (ChatGPT, Claude, Microsoft Copilot), which Adobe never calls a native integration,
+        # is drawn thinner and in grey, with its own entry in the key ('assistant'); every outside line has one of the three
+        if t['kind'] == 'outside':
+            assert t.get('line') in ('native', 'platform', 'assistant'), c['id']
             c['line'] = t['line']
         c['availability'], c['prereqs'] = clean(t.get('availability', '')), [clean(x) for x in t.get('prereqs', [])]
         # step 47: the SOW version of a partner note (a condition with an owner); the card shows the note, the hand-over the SOW version
@@ -260,6 +278,17 @@ def main():
             o['lines'] = [x for x in o['lines'] if x != l]
             o['more'] = [x for x in o['more'] if x != l]
             warnings.append(f"{l} left out: it needs {' and '.join(lines[l]['needs'])}, which no play puts with {o['id']}")
+    # Nov 18 2026 (Adam: "for every single play we have and every single play we're going to build, we should automatically put those outside
+    # systems in and then people can delete them if they want"): a ready-made play starts with every outside system on its own list and every one
+    # that connects to one of its products, which is what it offers at the start (offerOf in template.html), each with its connection's starting
+    # services, the AEM Sites rule included: beside Edge Delivery Services the connections in 'own_sites' (catalog_map.json, OWN_SITES in
+    # template.html) do not count. The SOW steps start from the same list (CanvasPresets, scope_runtime)
+    own = cmap['own_sites']
+    assert set(own) <= {c['id'] for c in keep_c} | set(lines), 'own_sites names a connection or line the catalog does not have'
+    linked = lambda ids: [p['id'] for p in keep_p if p.get('outside') and any({c['a'], c['b']} == {p['id'], q} and not ('eds' in ids and c['id'] in own) for c in keep_c for q in ids)]
+    for pl in plays:
+        if not pl.get('custom'):
+            pl['ostart'] = pl.get('outside', []) + [o for o in linked(pl['products']) if o not in pl.get('outside', [])]
     for pl in plays:
         assert set(pl['pos']) == set(pl['products']), f"play {pl['id']} needs a place for each product"
         assert len({tuple(v) for v in pl['pos'].values()}) == len(pl['pos']), f"play {pl['id']} has two products in one place"
@@ -269,10 +298,24 @@ def main():
         assert all(pby[o].get('outside') for o in pl.get('outside', [])), f"play {pl['id']} lists an outside system that isn't one"
         # step 96: a built play offers outside systems only; 'kept' is an Adobe product a saved canvas keeps, never offered
         assert all(o not in pl.get('outside', []) and not pby[o].get('outside') and o in pl.get('opos', {}) and o not in pl['products'] for o in pl.get('kept', [])), f"play {pl['id']} keeps a product it can't place"
-        assert all(o in pl.get('outside', []) for o in pl.get('ostart', []) + pl.get('recommend', [])), f"play {pl['id']} starts or recommends a system it doesn't offer"
-        # a start card or a GenStudio area opens Your own play with its products placed, so each product must be one the play offers
-        for x in pl.get('starts', []) + pl.get('family', {}).get('areas', []):
+        assert all(o in pl.get('outside', []) for o in pl.get('recommend', [])), f"play {pl['id']} recommends a system it doesn't offer"
+        # a start card, a GenStudio area or a Client KBO area opens Your own play with its products placed, so each product must be one the play offers
+        agentic = pl.get('agentic', {})
+        for x in pl.get('starts', []) + pl.get('family', {}).get('areas', []) + agentic.get('areas', []) + ([agentic['all']] if agentic else []):
             assert x['products'] and set(x['products']) <= set(pl['products']), f"play {pl['id']}: {x['label']} places a product the play doesn't offer"
+        # Nov 19 2026 (Adam: "I think you would choose your platform"): a start card for an AI assistant starts with that one among the AI assistants (the outside
+        # systems whose lines are AI assistant connections), so it must be one of them and connect to one of the card's products
+        assistants = {e for c in keep_c if c.get('line') == 'assistant' for e in (c['a'], c['b']) if pby[e].get('outside')}
+        for x in pl.get('starts', []):
+            assert 'assistant' not in x or (x['assistant'] in assistants and x['assistant'] in linked(x['products'])), f"play {pl['id']}: {x['label']} is for an AI assistant its products don't connect to"
+        # the canvases the first page names (each Client KBO area, all three together, each assistant's card) take their card's name, so no two share one
+        names = [x['label'] for x in pl.get('starts', []) if x.get('named')] + [n for F in (pl.get('family', {}), agentic) if F.get('named') for n in [a['label'] for a in F['areas']] + [F['all']['name']]]
+        assert len(names) == len(set(names)), f"play {pl['id']}: two canvases the first page opens share a name"
+        # and each canvas a Client KBO area or an assistant's card opens has a place of its own for each of its products and the outside systems it starts
+        # with (an assistant's card leaves out the other AI assistants), one box to a place
+        for x in agentic.get('areas', []) + ([agentic['all']] if agentic else []) + [x for x in pl.get('starts', []) if 'places' in x]:
+            starting = set(linked(x['products'])) - (assistants - {x['assistant']} if x.get('assistant') else set())
+            assert set(x['places']) == set(x['products']) | starting and len({tuple(v) for v in x['places'].values()}) == len(x['places']), f"play {pl['id']}: {x['label']} needs one place for each of its products and starting systems"
         assert all(x.get('after', x.get('before')) in {q['id'] for q in plays} for x in pl.get('starts', [])), f"play {pl['id']} puts a start card beside a play that doesn't exist"
         assert len({tuple(v) for v in list(pl['pos'].values()) + list(pl.get('opos', {}).values())}) == len(pl['pos']) + len(pl.get('opos', {})), f"play {pl['id']} puts an outside system on a product's place"
         mine = [o for o in keep_p + keep_c if o['id'] in pl['products'] or (o.get('a') in pl['products'] and o.get('b') in pl['products'])]
@@ -283,24 +326,32 @@ def main():
         for p in pl['products']:
             if len(pl['products']) > 1 and not any(p in (c['a'], c['b']) for c in mine if 'a' in c):
                 warnings.append(f"{p} has no documented connection in play {pl['id']}")
+    # Nov 19 2026 (Adam's row order for the first page): 'rows' is the first page, top to bottom; every play sits in exactly one row, and each of the custom
+    # play's cards (GenStudio's 'family', the Client KBO plays' 'agentic') in one row of its own
+    rows, custom_play = cmap['rows'], next(pl for pl in plays if pl.get('custom'))
+    assert all(r['head'] and ('plays' in r) != ('card' in r) for r in rows), 'a row of the first page has a heading and holds plays or one card'
+    assert sorted(x for r in rows for x in r.get('plays', [])) == sorted(pl['id'] for pl in plays), 'every play sits in exactly one row of the first page'
+    cards = [r['card'] for r in rows if 'card' in r]
+    assert sorted(cards) == sorted(k for k in ('family', 'agentic') if k in custom_play), "each of Create your own play's cards sits in one row of the first page"
     used = {l: lines[l] for o in keep_p + keep_c for l in o['lines'] + o['more']}
     cat = {'checked': max([c for c in checked if c] or ['']), 'products': keep_p, 'connections': keep_c,
-           'lines': used, 'plays': plays}
+           'lines': used, 'plays': plays, 'ownSites': own, 'rows': rows}
     apply_catalog(cat)
     cat = plain(sow_view(connection_notes(public_copy(cat))))   # per-connection partner notes, the Client's SOW lines where they differ, then step 86's plain wording
     keep_p, keep_c, used = cat['products'], cat['connections'], cat['lines']
     # step 47: partners see service names, never the internal line IDs, so no shown text may cite one
     ids = re.compile(r'\b(?:' + '|'.join(sorted(map(re.escape, used), key=len, reverse=True)) + r')\b')
-    shown = [(p['id'], p.get(k)) for p in keep_p for k in ('name', 'title', 'systems', 'systems_with_bv', 'rec')]
+    shown = [(p['id'], p.get(k)) for p in keep_p for k in ('name', 'title', 'systems', 'systems_with_bv', 'rec', 'info')]
     for c in keep_c:
-        shown += [(c['id'], c.get(k)) for k in ('how', 'label', 'availability', 'sowAvailability', 'tier', 'covered')]
+        shown += [(c['id'], c.get(k)) for k in ('how', 'label', 'availability', 'sowAvailability', 'tier', 'covered', 'ask')]
         shown += [(c['id'], x) for x in c.get('prereqs', []) + c.get('sowPrereqs', []) + [f['what'] for f in c.get('flows', [])]]
         shown += [(c['id'], c['gain'][k]) for k in ('title', 'text') if c.get('gain')]
     shown += [(l, v.get(k)) for l, v in used.items() for k in ('name', 'scope', 'ext', 'tier')]
     cited = [(w, ids.search(s).group(0)) for w, s in shown if isinstance(s, str) and ids.search(s)]
     assert not cited, f'shown text cites internal line IDs: {cited}'
     blob = json.dumps(cat, ensure_ascii=False)
-    assert not DASHES.search(blob), 'an en or em dash slipped into the catalog'
+    # Nov 18 2026: an Ask it question that is Adobe's own example keeps Adobe's words exactly, its dash included; no other text has one
+    assert not DASHES.search(json.dumps({**cat, 'connections': [{k: v for k, v in c.items() if k != 'ask'} for c in cat['connections']]}, ensure_ascii=False)), 'an en or em dash slipped into the catalog'
     open(os.path.join(HERE, 'catalog.json'), 'w', encoding='utf-8').write(json.dumps(cat, ensure_ascii=False, indent=1) + '\n')
 
     # Opening an older draft directly must use the reviewed concept definitions too.
@@ -336,7 +387,7 @@ def main():
                 # This service acquired a prerequisite after some drafts were already saved.
                 concepts[lid]['activationEndpoints'] = [owner['a'], owner['b']]
     declaration = '<script id="reviewed-concepts">const REVIEW_CONCEPTS=' + json.dumps(concepts, ensure_ascii=False).replace('</', '<\\/') + ';</script>'
-    concept_html = open(os.path.join(SOW, 'index.html'), encoding='utf-8').read()
+    concept_html = scope_runtime(open(os.path.join(SOW, 'index.html'), encoding='utf-8').read(), cat)
     if '<script id="reviewed-concepts">' in concept_html:
         concept_html = re.sub(r'<script id="reviewed-concepts">.*?</script>', lambda _: declaration, concept_html, count=1, flags=re.S)
     else:
@@ -344,7 +395,7 @@ def main():
     open(os.path.join(SOW, 'index.html'), 'w', encoding='utf-8').write(concept_html)
 
     tpl = open(os.path.join(HERE, 'template.html'), encoding='utf-8').read()
-    tpl = scope_runtime(tpl)
+    tpl = scope_runtime(tpl, cat)
     if '<script id="product-copy-runtime">' in tpl:
         tpl = re.sub(r'<script id="product-copy-runtime">.*?</script>', lambda _: copy_script, tpl, count=1, flags=re.S)
     else:
@@ -431,7 +482,8 @@ def main():
     out = (render_tpl.replace('/*CATALOG*/null', blob).replace('/*PROBLEMS*/null', pblob)
               .replace('{{FONT400}}', b64(fonts.format(400))).replace('{{FONT600}}', b64(fonts.format(600))).replace('{{FONT700}}', b64(fonts.format(700)))
               .replace('{{LOGO}}', b64(os.path.join(SOW, 'adobe_logo.png')))
-              .replace('{{VIDEO_POSTER}}', b64(os.path.join(SOW, 'video_poster.jpg'))))
+              .replace('{{VIDEO_POSTER}}', b64(os.path.join(SOW, 'video_poster.jpg')))
+              .replace('{{FIRST_LOOK_POSTER}}', b64(os.path.join(SOW, 'first_look_poster.jpg'))))
     assert '{{' not in out and '/*CATALOG*/' not in out and '/*PROBLEMS*/' not in out and '/*KNOWLEDGE_EXPLORER_' not in out and '/*NEXT_PRODUCT*/' not in out
     open(os.path.join(HERE, 'index.html'), 'w', encoding='utf-8').write(out)
     for w in warnings:

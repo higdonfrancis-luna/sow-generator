@@ -29,14 +29,16 @@ const server = http.createServer((req, res) => {
   const back = async p => { await p.click('.steps [data-build]'); await p.waitForURL(u => !/\/sow\//.test(String(u))); await p.waitForTimeout(600); };
   const boxes = async p => p.$$eval('.node', ns => ns.map(n => n.dataset.p).sort().join(','));
 
-  // 1. every Brand Visibility play starts with the CDN and CDN log forwarding, and Services totals the same
+  // 1. every Brand Visibility play starts with the CDN and CDN log forwarding, and Services totals the same.
+  //    Nov 18 2026: each also starts with every other outside system it offers, after the CDN
+  const START = {cja: 'cdn,dwh,cstore,crm,ads,bi,search,chatgpt,claude,copilot', commerce: 'cdn,search,crm', aem: 'cdn,search,csrc,chatgpt,claude', fsi: 'cdn,search,cms', abv: 'cdn,search'};
   for (const play of ['cja', 'commerce', 'aem', 'fsi', 'abv']) {
     const p = await fresh(); await pick(p, play);
     const st = await p.evaluate(() => ({out: st.out, ox1: counted('OX1'), ox2: counted('OX2'), rec: !!document.querySelector('.node[data-p="cdn"] .rec')}));
     const t0 = await canvasTotal(p); await toServices(p); const t1 = await toolTotal(p);
     const lines = await p.$$eval('.service-card', e => e.map(x => x.dataset.line));
-    ok(JSON.stringify(st.out) === '["cdn"]' && st.ox1 && !st.ox2 && st.rec && t0 === t1 && lines.some(l => /OX1$/.test(l)),
-      `${play}: the CDN starts on, tagged Recommended, with CDN log forwarding on (the log export optional), and Services totals the same (${t0})`, JSON.stringify({st, t0, t1}));
+    ok(st.out.join() === START[play] && st.ox1 && !st.ox2 && st.rec && t0 === t1 && lines.some(l => /OX1$/.test(l)),
+      `${play}: the CDN starts on, tagged Recommended, with CDN log forwarding on (the log export optional), and Services totals the same (${t0}; since Nov 18 with every other system the play offers on too)`, JSON.stringify({st, t0, t1}));
     await p.context().close();
   }
 
@@ -44,14 +46,16 @@ const server = http.createServer((req, res) => {
   { const p = await fresh(); await pick(p, 'abv'); const t0 = await canvasTotal(p);
     await p.click('.node[data-p="cdn"]'); await p.waitForTimeout(400); await p.click('#card [data-rmout="cdn"]'); await p.waitForTimeout(400);
     const t1 = await canvasTotal(p); await toServices(p); const t2 = await toolTotal(p);
-    ok(t0 === '$212,400' && t1 === '$210,000' && t2 === t1, 'Brand Visibility on its own: the CDN off takes its $2,400 off, on the canvas and on Services', JSON.stringify({t0, t1, t2}));
-    await back(p); ok((await boxes(p)) === 'bv', 'and back on Build the CDN stays off');
+    ok(t0 === '$213,600' && t1 === '$211,200' && t2 === t1, 'Brand Visibility on its own: the CDN off takes its $2,400 off, on the canvas and on Services (Search data on from the start since Nov 18)', JSON.stringify({t0, t1, t2}));
+    await back(p); ok((await boxes(p)) === 'bv,search', 'and back on Build the CDN stays off');
     await p.context().close(); }
 
   // 3. the AEM play: Add outside system, Recommended on Search data. Step 96 (Adam, Nov 14): a built play offers outside systems only, so
   // AEM Assets is no longer offered; a saved draft that already has it keeps it, with its services and Remove from canvas
   { const p = await fresh(); await pick(p, 'aem');
     ok((await p.textContent('#out-btn')).trim() === 'Add outside system', 'the AEM play\'s button says Add outside system');
+    // Nov 18 2026: the play starts with every system it offers; taken off but the CDN, the menu offers them again
+    await p.evaluate(() => { for (const id of st.out.filter(x => x !== 'cdn')) removeOutside(id); }); await p.waitForTimeout(300);
     await p.click('#out-btn'); await p.waitForTimeout(250);
     const m = await p.evaluate(() => ({k: document.querySelector('#out-menu .hd .k').textContent, sub: document.querySelector('#out-menu .hd p').textContent, g: [...document.querySelectorAll('#out-menu .g')].map(x => x.textContent),
       items: [...document.querySelectorAll('#out-menu [data-out]')].map(x => x.dataset.out), rec: [...document.querySelectorAll('#out-menu [data-out] .rec')].map(x => x.closest('[data-out]').dataset.out)}));
@@ -109,6 +113,7 @@ const server = http.createServer((req, res) => {
   // 4. the CJA play: Ad platforms and BI tools, with their tags and the totals on both pages
   { const p = await fresh(); await pick(p, 'cja');
     ok((await p.textContent('#out-btn')).trim() === 'Add outside system', 'plays without an Adobe add-on keep Add outside system');
+    await p.evaluate(() => { for (const id of st.out.filter(x => x !== 'cdn')) removeOutside(id); }); await p.waitForTimeout(300);   // Nov 18 2026: as on the AEM play above
     for (const id of ['ads', 'bi', 'search']) { await p.click('#out-btn'); await p.waitForTimeout(200); await p.click(`#out-menu [data-out="${id}"]`); await p.waitForTimeout(350); }
     await p.click('.ib[data-c="cja-bi"]'); await p.waitForTimeout(400);
     const bi = await p.evaluate(() => document.querySelector('#card .tierp').textContent);

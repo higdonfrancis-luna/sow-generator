@@ -24,13 +24,16 @@ const LABELS = /\bbeta\b|early access|early adopter|limited availability|coming 
       P[id].systems_with_bv === fix(D[id].systems_on_brand_visibility_plays) && !P[id].rec && !P[id].lines.length && !P[id].more.length),
     '1. ChatGPT, Claude and Microsoft Copilot are outside systems with the build data\'s names and lines (a second line for plays with Brand Visibility), a speech bubble and no Recommended reason',
     JSON.stringify(AI.map(id => P[id])));
-  ok(CAT.products.length === 47 && CAT.products.filter(p => p.outside).length === 13 && CAT.connections.length === 203 && Object.keys(CAT.lines).length === 575,
-    '1. the catalog holds 47 products (13 outside systems), 203 connections and 575 services', [CAT.products.length, CAT.connections.length, Object.keys(CAT.lines).length].join());
+  ok(CAT.products.length === 47 && CAT.products.filter(p => p.outside).length === 13 && CAT.connections.length === 204 && Object.keys(CAT.lines).length === 575,
+    '1. the catalog holds 47 products (13 outside systems), 204 connections (Claude + Brand Intelligence joined later on Nov 18) and 575 services', [CAT.products.length, CAT.connections.length, Object.keys(CAT.lines).length].join());
   const DC = DATA.connections, same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
-  const off = DC.filter(x => { const c = CBY[x.id]; return !c || c.a !== x.a || c.b !== x.b || c.kind !== 'outside' || 'line' in c || c.label !== fix(x.label) || c.how !== fix(x.how) ||
-    c.gain.title !== fix(x.gain.title) || c.gain.text !== fix(x.gain.text) || !same(c.prereqs, x.prereqs.map(fix)) || !same(c.flows.map(f => [f.from, f.to, f.what]), x.flows.map(f => [f.from, f.to, fix(f.what)])) ||
-    c.source.url !== x.source.url || c.availability !== '' || c.lines.length || c.more.length || !c.covered || !c.sowHow || !c.sowGain; }).map(x => x.id);
-  ok(DC.length === 41 && !off.length, '1. all 41 lines are in the catalog as the build data says (how, label, what you get, flows, prerequisites, source), with no availability line, no line type (drawn plain), no services of their own, where the work sits, and a client version for the SOW steps and the RFI Builder', off.join());
+  // Nov 19 2026 (test_first_page_rows.js): an assistant's line has a line type of its own ('assistant', thinner and grey, with its own key entry) and the two
+  // lines between boxes the tool already had are typed by their own evidence ('native'); Copilot + AEM Sites follows Adobe's step-by-step Copilot Studio set-up, and Copilot + AEM Assets the same agent
+  const LINE = x => AI.includes(x.a) ? 'assistant' : 'native', MOVED = ['copilot-aemsites', 'copilot-aemassets'];
+  const off = DC.filter(x => { const c = CBY[x.id]; return !c || c.a !== x.a || c.b !== x.b || c.kind !== 'outside' || c.line !== LINE(x) || (!MOVED.includes(x.id) && (c.label !== fix(x.label) || c.how !== fix(x.how) ||
+    !same(c.prereqs, x.prereqs.map(fix)) || c.source.url !== x.source.url)) || c.gain.title !== fix(x.gain.title) || c.gain.text !== fix(x.gain.text) || !same(c.flows.map(f => [f.from, f.to, f.what]), x.flows.map(f => [f.from, f.to, fix(f.what)])) ||
+    c.availability !== '' || c.lines.length || c.more.length || !c.covered || !c.sowHow || !c.sowGain; }).map(x => x.id);
+  ok(DC.length === 41 && !off.length, '1. all 41 lines are in the catalog as the build data says (how, label, what you get, flows, prerequisites, source; Copilot + AEM Sites and AEM Assets as corrected on Nov 19), with no availability line, the assistant line type (Adobe Analytics + Cloud storage and GenStudio for Performance Marketing + Ad platforms native), no services of their own, where the work sits, and a client version for the SOW steps and the RFI Builder', off.join());
   ok(DC.filter(x => x.sowHow).length === 19 && DC.filter(x => x.sowHow).every(x => CBY[x.id].sowHow === fix(x.sowHow) && CBY[x.id].sowGain === fix(x.sowGain)),
     '1. the 19 lines whose client version the build data writes carry it word for word', DC.filter(x => x.sowHow && CBY[x.id].sowHow !== fix(x.sowHow)).map(x => x.id).join());
   const mine = DC.map(x => CBY[x.id]).filter(Boolean), urls = mine.flatMap(c => [c.source.url, ...c.flows.map(f => f.source.url), ...(c.references || []).map(r => r.url)]);
@@ -77,13 +80,17 @@ const LABELS = /\bbeta\b|early access|early adopter|limited availability|coming 
     return boxes.every((a, i) => boxes.every((c, j) => i === j || !hit(a, c))) && dots.every(d => boxes.every(x => !hit(d, x))); });
 
   // ============ 2. at the start: each play offers the systems that connect to its products ============
-  { const WANT = {abv: 'search', cja: 'dwh,cstore,crm,ads,bi,search,chatgpt,claude,copilot', commerce: 'search,crm', aem: 'search,csrc,chatgpt,claude', fsi: 'search,cms',
+  // Nov 18 2026, later (Adam: "we should automatically put those outside systems in and then people can delete them if they want"): a ready-made play now
+  // starts with every system it offers on its canvas, so the menu lists each one again once the partner removes it
+  { const WANT = {abv: 'cdn,search', cja: 'cdn,dwh,cstore,crm,ads,bi,search,chatgpt,claude,copilot', commerce: 'cdn,search,crm', aem: 'cdn,search,csrc,chatgpt,claude', fsi: 'cdn,search,cms',
       coworker: 'chatgpt,claude,copilot', custom: 'cdn,dwh,cstore,crm,ads,bi,search,csrc,cms,figma,chatgpt,claude,copilot'}, seen = {};
-    for (const play of Object.keys(WANT)) { const p = await open(); await pick(p, play); const items = await outMenu(p), s = await state(p);
+    for (const play of Object.keys(WANT)) { const p = await open(); await pick(p, play); const s = await state(p);
+      for (const id of s.out) await p.evaluate(id => removeOutside(id), id);
+      const items = await outMenu(p);
       seen[play] = {menu: (items || []).map(x => x.id).join(), ai: (items || []).filter(x => AI.includes(x.id)), out: s.out}; await p.context().close(); }
-    ok(Object.entries(WANT).every(([k, v]) => seen[k].menu === v), '2. at the start the Add outside system menu offers ChatGPT, Claude and Microsoft Copilot on Brand Visibility + Customer Journey Analytics and on Adobe Coworker, ChatGPT and Claude on Brand Visibility + Sites Optimizer and Edge Delivery Services, all three on Create your own play, and none on Adobe Brand Visibility, Brand Visibility + Adobe Commerce (which also offers the CRM, as Adobe Commerce connects to it) or Brand Visibility + Brand Concierge',
-      JSON.stringify(Object.fromEntries(Object.entries(seen).map(([k, v]) => [k, v.menu]))));
-    ok(Object.values(seen).every(v => !v.out.some(id => AI.includes(id)) && v.ai.every(x => !x.rec && x.icon)), '2. offered means optional: no assistant is on any canvas when its play starts, and none carries a Recommended tag');
+    ok(Object.entries(WANT).every(([k, v]) => seen[k].menu === v && seen[k].out.join() === (k === 'custom' ? '' : v)), '2. each play offers ChatGPT, Claude and Microsoft Copilot where a product on it connects to them (Brand Visibility + Customer Journey Analytics, Adobe Coworker; ChatGPT and Claude on Brand Visibility + Sites Optimizer and Edge Delivery Services; all three on Create your own play) and none on Adobe Brand Visibility, Brand Visibility + Adobe Commerce (which also offers the CRM, as Adobe Commerce connects to it) or Brand Visibility + Brand Concierge; a ready-made play starts with all it offers on its canvas, and the menu offers each again once removed',
+      JSON.stringify(Object.fromEntries(Object.entries(seen).map(([k, v]) => [k, v.menu + ' | ' + v.out.join()]))));
+    ok(Object.values(seen).every(v => v.ai.every(x => !x.rec && x.icon)), '2. no assistant carries a Recommended tag, and each shows its speech bubble');
     const line = (play, id) => (seen[play].ai.find(x => x.id === id) || {}).sys;
     ok(line('cja', 'chatgpt') === P.chatgpt.systems_with_bv && line('cja', 'claude') === P.claude.systems_with_bv && line('cja', 'copilot') === P.copilot.systems_with_bv &&
         line('aem', 'chatgpt') === "Your client's staff use Adobe products from inside ChatGPT. Not how Brand Visibility measures ChatGPT answers." && line('coworker', 'claude') === P.claude.systems,
@@ -102,9 +109,9 @@ const LABELS = /\bbeta\b|early access|early adopter|limited availability|coming 
       '3. Adobe Brand Visibility offers no assistant; Target added brings ChatGPT and Claude to the menu (Adobe lists no Copilot for Target); ChatGPT added draws its line to Target; Target removed takes the offer away, and ChatGPT goes with the last product it connects to',
       JSON.stringify({s0: s0.offer, s1: s1.offer, s2: s2.lines, s3: s3.offer, out: s3.out}));
     await p.context().close(); }
-  { const p = await open(); await pick(p, 'coworker'); await add(p, 'workfront'); await addOut(p, 'claude'); const s1 = await state(p);
+  { const p = await open(); await pick(p, 'coworker'); await add(p, 'workfront'); const s1 = await state(p);   // Claude is on Adobe Coworker from the start
     await p.evaluate(() => removeProduct('workfront')); await p.waitForTimeout(350); const s2 = await state(p);
-    ok(s1.lines.includes('claude-cw') && s1.lines.includes('claude-workfront') && s2.boxes.includes('claude') && s2.lines.join() === 'claude-cw',
+    ok(s1.lines.includes('claude-cw') && s1.lines.includes('claude-workfront') && s2.boxes.includes('claude') && s2.lines.includes('claude-cw') && !s2.lines.some(id => /workfront/.test(id)),
       '3. an assistant on the canvas stays while a product it connects to is there: Claude on Adobe Coworker with Workfront keeps its line to Coworker when Workfront is removed', JSON.stringify([s1.lines, s2.lines]));
     await p.context().close(); }
 
@@ -128,17 +135,18 @@ const LABELS = /\bbeta\b|early access|early adopter|limited availability|coming 
     await p.context().close(); }
 
   // ============ 5. Adobe Coworker with all three, and the Microsoft Copilot + Coworker card ============
-  { const p = await open(); await pick(p, 'coworker'); const s0 = await state(p);
-    for (const id of AI) await addOut(p, id);
-    const s1 = await state(p), places = await p.evaluate(ids => ids.map(id => id + ':' + pos(id).join()), AI);
-    ok(AI.every(id => s1.boxes.includes(id)) && s1.lines.sort().join() === 'chatgpt-cw,claude-cw,copilot-cw' && s1.yr === s0.yr && s1.n === s0.n && places.join() === 'chatgpt:1,0,claude:-1,0,copilot:0,1' && await layoutClean(p),
-      '5. Adobe Coworker with ChatGPT, Claude and Microsoft Copilot: three boxes around Coworker (Claude left, ChatGPT right, Microsoft Copilot below), three lines, the total unchanged, no box on another', JSON.stringify({lines: s1.lines, places, totals: [s0.yr, s1.yr]}));
+  { const p = await open(); await pick(p, 'coworker');   // Nov 18 2026, later: the three start on the canvas
+    const s1 = await state(p), places = await p.evaluate(ids => ids.map(id => id + ':' + pos(id).join()), AI), clean = await layoutClean(p);
+    for (const id of AI) await p.evaluate(id => removeOutside(id), id); const s0 = await state(p);
+    ok(AI.every(id => s1.boxes.includes(id)) && s1.lines.sort().join() === 'chatgpt-cw,claude-cw,copilot-cw' && s1.yr === s0.yr && s1.n === s0.n && places.join() === 'chatgpt:1,0,claude:-1,0,copilot:0,1' && clean,
+      '5. Adobe Coworker with ChatGPT, Claude and Microsoft Copilot: three boxes around Coworker (Claude left, ChatGPT right, Microsoft Copilot below), three lines, the same total as without them, no box on another', JSON.stringify({lines: s1.lines, places, totals: [s0.yr, s1.yr]}));
+    for (const id of AI) await p.evaluate(id => addOutside(id), id); await p.waitForTimeout(300); const sR = await state(p);
     const card = await p.evaluate(() => { showCard('c', 'copilot-cw'); const c = document.getElementById('card'); return {text: c.innerText, links: [...c.querySelectorAll('a')].map(a => a.href), rows: [...c.querySelectorAll('.ln')].map(r => r.dataset.l)}; });
     await p.click('#card [data-t="CW08"]'); await p.waitForTimeout(300);
     const s2 = await state(p), onCw = await p.evaluate(() => { showCard('p', 'cw'); const r = document.querySelector('#card .ln[data-l="CW08"]'); return !!r && !r.classList.contains('off'); });
     ok(/Microsoft Copilot \+ Coworker/.test(card.text) && /Outside system/i.test(card.text) && /Before it works/i.test(card.text) && /What you get together/i.test(card.text) && /How it connects/i.test(card.text) &&
-        card.text.includes(CBY['copilot-cw'].covered) && card.rows.join() === 'CW08' && s2.n === s1.n + 1 && s2.yr > s1.yr && onCw && card.links.length && card.links.every(u => ALLOWED.test(u)) && !LABELS.test(card.text),
-      '5. the Microsoft Copilot + Coworker card says how they connect, what comes first and what you get, links only to Adobe\'s pages, and lists the Coworker set up in an AI platform service with its hours and tick: ticked there it is on for Coworker and counted once', JSON.stringify({rows: card.rows, n: [s1.n, s2.n], text: card.text.slice(0, 200)}));
+        card.text.includes(CBY['copilot-cw'].covered) && card.rows.join() === 'CW08' && s2.n === sR.n + 1 && s2.yr > sR.yr && onCw && card.links.length && card.links.every(u => ALLOWED.test(u)) && !LABELS.test(card.text),
+      '5. the Microsoft Copilot + Coworker card says how they connect, what comes first and what you get, links only to Adobe\'s pages, and lists the Coworker set up in an AI platform service with its hours and tick: ticked there it is on for Coworker and counted once', JSON.stringify({rows: card.rows, n: [sR.n, s2.n], text: card.text.slice(0, 200)}));
     const box = await p.evaluate(() => { showCard('p', 'chatgpt'); return document.getElementById('card').innerText; });
     ok(box.includes("A system your client runs outside Adobe. Your client's staff use Adobe products from inside ChatGPT.") && box.includes('It connects to Coworker.'),
       '5. the ChatGPT box\'s card says what it is in one plain sentence and what it connects to on this canvas', box.slice(0, 300));
@@ -161,7 +169,7 @@ const LABELS = /\bbeta\b|early access|early adopter|limited availability|coming 
       '6. six canvases saved before the change (Create your own play with all six products, Edge Delivery authored in AEM, Adobe Coworker, Brand Visibility + Customer Journey Analytics, + Sites Optimizer and Edge Delivery Services, + Adobe Commerce) reopen with the same number of services and the same total, and no new service is on', JSON.stringify(got)); }
 
   // ============ 7. AEM Sites: the assistants' AEM lines need AEM Sites as its own product ============
-  { const p = await open(); await pick(p, 'aem'); await addOut(p, 'chatgpt'); await addOut(p, 'claude'); const s1 = await state(p);
+  { const p = await open(); await pick(p, 'aem'); const s1 = await state(p);   // ChatGPT and Claude are on from the start
     await p.evaluate(() => { st.decisions = {...st.decisions, authoring: 'universal'}; render(); }); await p.waitForTimeout(300);
     const s2 = await p.evaluate(() => ({has: has('aemsites'), lines: conns().map(c => c.id), shown: displayConnections().map(c => c.members.map(m => m.id).join('+')), xt03: all(P.aemsites).includes('XT03'), card: cardHTML('p', 'aemsites').includes('data-t="XT03"')}));
     ok(s1.lines.includes('chatgpt-eds') && s1.lines.includes('claude-eds') && !s1.lines.some(id => /-aemsites$/.test(id) && AI.some(a => id.startsWith(a))) &&
@@ -183,7 +191,7 @@ const LABELS = /\bbeta\b|early access|early adopter|limited availability|coming 
     const row = await p.evaluate(() => { showCard('p', 'workfront'); const r = document.querySelector('#card [data-t="XT05"]'); return r ? r.closest('.ln').innerText : ''; });
     ok(/Overlaps with Coworker rollout and write access, which is on\. The SOW asks how they differ\./.test(row), '8. Workfront in ChatGPT, Claude or Microsoft Copilot beside Coworker rollout and write access, both on: the service says they overlap and the SOW asks how they differ, so the partner charges only for distinct work', row.slice(0, 300));
     await p.context().close(); }
-  { const p = await open(); await pick(p, 'coworker'); await add(p, 'bv'); await addOut(p, 'cdn'); await addOut(p, 'chatgpt'); const c = await state(p);
+  { const p = await open(); await pick(p, 'coworker'); await add(p, 'bv'); await addOut(p, 'cdn'); const c = await state(p);   // ChatGPT is on from the start
     await Promise.all([p.waitForURL(/\/sow\/index\.html/), p.click('.tabs [data-tab="services"]')]); await p.waitForTimeout(900);
     const s = await p.evaluate(() => ({outside: (state.outside || {}).coworker || [], n: selectedLines().length, ox1: selectedLines().some(l => l.id.replace(/^CANVAS-/, '') === 'OX1')}));
     const [draft] = await Promise.all([p.waitForEvent('download'), p.click('#save-draft')]);
@@ -233,7 +241,7 @@ const LABELS = /\bbeta\b|early access|early adopter|limited availability|coming 
     const all = await h.text(L.map((x, i) => `${i + 1}. Describe how our team would work with ${P[x.b].name} inside ${P[x.a].name}.`).join('\n')), mm = await drawn();
     const off = L.filter((x, i) => { const d = all.questions[i].draft, w = mm[i]; if (!d || !w) return true; const ids = d.lines.map(l => l.id), first = x.c.covered_by && /ChatGPT|Claude|Copilot/.test(CAT.lines[x.c.covered_by].name) && P[x.b].more.includes(x.c.covered_by);
       return w.lead !== x.c.id || !/Our approach/.test(d.plain) || !says(d.plain, x.c) || !d.sources.some(s => s.url === x.c.source.url) || !ids.length || !ids.every(id => ofAnswer(id, w.products)) || (first && ids[0] !== x.c.covered_by); }).map(x => x.c.id);
-    ok(L.length === 39 && !off.length, '10. each of the 39 lines from ChatGPT, Claude and Microsoft Copilot, asked about once, drafts an answer that the line leads: its client version in the approach, its Adobe page among the sources, and services that are all the products\' own, the one for the work inside the assistant first where the product has one', off.join()); }
+    ok(L.length === 40 && !off.length, '10. each of the 40 lines from ChatGPT, Claude and Microsoft Copilot (Claude + Brand Intelligence included), asked about once, drafts an answer that the line leads: its client version in the approach, its Adobe page among the sources, and services that are all the products\' own, the one for the work inside the assistant first where the product has one', off.join()); }
   { // the questions a review found drafting nothing: each keeps every service the product drew before Nov 18 (from the build of the commit before this change)
     const BEFORE = [['Describe how Coworker will be made available to our employees in Microsoft 365 Copilot and Teams.', 'copilot-cw', 'CW03,CW01,CW02,CW07'],
       ['Explain how our creative team would use Frame.io reviews from within Claude.', 'claude-frameio', 'FR03,FR02,FR07,FR01'],

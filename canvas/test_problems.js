@@ -2,6 +2,7 @@
 //   node sow/canvas/test_problems.js
 // Every problem chip and every refine chip is clicked like a partner would, and Build this must put exactly the products
 // the answer named on the canvas, with the same total the answer quoted. Typed questions, no match, no rate and a phone too.
+// Nov 18 2026: the canvas also starts with the outside systems the rule puts on, and the quoted total counts their services.
 const {chromium} = require('playwright');
 const path = require('path'), fs = require('fs');
 const HERE = __dirname;
@@ -29,6 +30,12 @@ async function build(page) {
   return r;
 }
 const names = ids => ids.map(id => P[id].name);
+// Nov 18 2026: a canvas opened with products starts with every outside system that connects to one of them, and a ready-made play with its
+// starting list (ostart in catalog.json); beside Edge Delivery Services the assistants' AEM Sites lines do not count (the AEM Sites rule)
+const OWN_SITES = ['chatgpt-aemsites', 'claude-aemsites', 'copilot-aemsites', 'XT03'], BY_NAME = Object.fromEntries(CAT.products.map(p => [p.name, p.id]));
+const starting = (play, prods) => !PL[play].custom ? PL[play].ostart || [] : CAT.products.filter(o => o.outside && CAT.connections.some(c => !(prods.includes('eds') && OWN_SITES.includes(c.id))
+  && ((c.a === o.id && prods.includes(c.b)) || (c.b === o.id && prods.includes(c.a))))).map(o => o.id);
+const withStart = (play, ids) => [...new Set([...ids, ...starting(play, ids.filter(id => !P[id].outside))])];
 
 (async () => {
   const b = await chromium.launch();
@@ -65,7 +72,7 @@ const names = ids => ids.map(id => P[id].name);
     ok(same(a.boxes, want), `#${i + 1} names its products`, a.boxes.join(', '));
     ok(a.heard.startsWith('Heard: your client') || a.heard.startsWith('Heard: visitors'), `#${i + 1} says what it heard, about your client`, a.heard);
     const r = await build(page);
-    ok(r.picker && r.play === p.play && same(r.nodes, p.products), `#${i + 1} Build this puts the same play and products on the canvas`, r.play + ' ' + r.nodes.join(','));
+    ok(r.picker && r.play === p.play && same(r.nodes, withStart(p.play, p.products)), `#${i + 1} Build this puts the same play and products on the canvas, with the outside systems it starts with`, r.play + ' ' + r.nodes.join(','));
     ok(a.total && a.total === r.total, `#${i + 1} the answer's total matches the canvas (${r.total})`, a.total + ' vs ' + r.total);
 
     // each refine chip offered on the first answer, one at a time
@@ -77,7 +84,8 @@ const names = ids => ids.map(id => P[id].name);
       ok(a2.heard.startsWith('Updated: '), `#${i + 1} refine "${p.refine[k].chip}" updates the answer`, a2.heard);
       ok(!a2.refine.includes(p.refine[k].chip), `#${i + 1} refine "${p.refine[k].chip}" is not offered twice`);
       const r2 = await build(page);
-      ok(same(names(r2.nodes), a2.boxes) && a2.total === r2.total, `#${i + 1} refine "${p.refine[k].chip}" builds what it shows (${r2.total})`, a2.boxes.join(',') + ' vs ' + names(r2.nodes).join(',') + ' / ' + a2.total + ' vs ' + r2.total);
+      const shown = names(withStart(r2.play, a2.boxes.map(n => BY_NAME[n])));
+      ok(same(names(r2.nodes), shown) && a2.total === r2.total, `#${i + 1} refine "${p.refine[k].chip}" builds what it shows, with the outside systems it starts with (${r2.total})`, shown.join(',') + ' vs ' + names(r2.nodes).join(',') + ' / ' + a2.total + ' vs ' + r2.total);
     }
   }
 

@@ -53,7 +53,10 @@ const same = (a, b) => [...a].sort().join() === [...b].sort().join();
     ok(same(a.boxes, names) && a.cx === a.want && a.cx >= 1 && a.text.includes(p.why.slice(0, 50)) && a.refine === p.refine.length, p.chip + ': the answer names ' + names.join(', ') + ', how they connect and ' + p.refine.length + ' ways to refine', JSON.stringify(a).slice(0, 500));
     await page.click('[data-bpa="build"]'); await page.waitForTimeout(250);
     const built = await page.evaluate(() => ({nodes: [...document.querySelectorAll('#stage .node')].map(x => x.dataset.p), play: JSON.parse(localStorage.getItem('abv-sow-build-v1')).play}));
-    ok(built.play === 'custom' && same(built.nodes, p.products), 'Build this puts exactly those on Create your own play', JSON.stringify(built));
+    // Nov 18 2026: the canvas also starts with every outside system that connects to one of its products (Claude and the CRM to Marketo Engage, the CRM to
+    // Marketo Qualifier, another CMS site to Brand Concierge, ad platforms to Marketo Optimizer)
+    const EXTRA = {'reps-email-by-hand': ['claude'], 'chats-never-reach-sales': ['crm', 'cms'], 'same-nurture-path': ['crm', 'ads', 'claude'], 'ad-audiences-stale': ['crm', 'claude']};
+    ok(built.play === 'custom' && same(built.nodes, [...p.products, ...EXTRA[id]]), 'Build this puts exactly those on Create your own play, and the outside systems that connect to them (Nov 18 2026)', JSON.stringify(built));
     await page.click('#change-play'); await page.click('#confirm-yes'); await page.waitForTimeout(150);
   }
 

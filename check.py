@@ -13,9 +13,9 @@ from playwright.async_api import async_playwright
 PATH = os.path.abspath(sys.argv[1])
 SHOTS = sys.argv[2] if len(sys.argv) > 2 else None
 EXPECTED_ORDER = ['cja', 'commerce', 'aem', 'fsi', 'abv', 'coworker']
-EXPECTED_ONE_TIME_HOURS = {'cja': 232, 'commerce': 248, 'aem': 1808, 'fsi': 768, 'abv': 168, 'coworker': 156}  # step 18: Commerce without L03, FSI without C04; step 45: CDN log forwarding (OX1, 16 h) on every Brand Visibility play
+EXPECTED_ONE_TIME_HOURS = {'cja': 512, 'commerce': 256, 'aem': 1832, 'fsi': 788, 'abv': 176, 'coworker': 156}  # step 18: Commerce without L03, FSI without C04; step 45: CDN log forwarding (OX1, 16 h) on every Brand Visibility play; Nov 19 2026: a new engagement starts with the services of the outside systems its play starts with on the canvas
 EXPECTED_MONTHLY_HOURS = {'cja': 104, 'commerce': 104, 'aem': 120, 'fsi': 104, 'abv': 104, 'coworker': 32}
-EXPECTED_STARTERS = {'cja': ['L01', 'L02', 'C01', 'C06', 'OX1', 'O01', 'O02'], 'commerce': ['L01', 'L02', 'C02', 'C07', 'OX1', 'O01', 'O02'], 'aem': ['L01', 'L02', 'A04', 'A01', 'A02', 'A03', 'A05', 'SO1', 'C03', 'OX1', 'O01', 'SO2', 'O02'], 'fsi': ['L01', 'L02', 'F02', 'OX1', 'O01', 'O02'], 'abv': ['L01', 'L02', 'C05', 'OX1', 'O01', 'O02'], 'coworker': ['CW01', 'CW02', 'CW03', 'CW07', 'CW05', 'CW06']}
+EXPECTED_STARTERS = {'cja': ['L01', 'L02', 'C01', 'C06', 'OX1', 'OX3', 'OX4', 'OX5', 'CANVAS-AD1', 'CANVAS-AD2', 'CANVAS-BI1', 'CANVAS-BI2', 'CANVAS-SD1', 'O01', 'O02'], 'commerce': ['L01', 'L02', 'C02', 'C07', 'OX1', 'CANVAS-SD1', 'O01', 'O02'], 'aem': ['L01', 'L02', 'A04', 'A01', 'A02', 'A03', 'A05', 'SO1', 'C03', 'OX1', 'CANVAS-SD1', 'CANVAS-CS1', 'O01', 'SO2', 'O02'], 'fsi': ['L01', 'L02', 'F02', 'OX1', 'CANVAS-SD1', 'CANVAS-CM1', 'CANVAS-CM2', 'O01', 'O02'], 'abv': ['L01', 'L02', 'C05', 'OX1', 'CANVAS-SD1', 'O01', 'O02'], 'coworker': ['CW01', 'CW02', 'CW03', 'CW07', 'CW05', 'CW06']}
 EXPECTED_OPTIONAL = {'cja': 5, 'commerce': 6, 'aem': 5, 'fsi': 6, 'abv': 5, 'coworker': 6}  # Nov 17: Coworker offers CW04, CW08, CW09, CW10, CW11 and X01
 
 results = []
@@ -29,6 +29,9 @@ def check(name, ok, detail=''):
 async def main():
     html = open(PATH, encoding='utf-8').read()
     stage = {x['id']: x['stage'] for x in json.loads(re.search(r'<script>const CATALOG=(\[.*?\]);</script>', html, re.S).group(1))}
+    # Nov 19 2026: and the services researched for the canvas that a play's starting outside systems bring (CanvasPresets startingLines)
+    seeded = {'CANVAS-' + l['id']: l for p in json.loads(re.search(r'const CanvasPresets = (\{.*?\});\n', html).group(1)).values() for l in p['startingLines']}
+    stage.update({k: l['stage'] for k, l in seeded.items()})
     check('no em or en dashes in the file', '—' not in html and '–' not in html)
     check('no Adobe Consulting Services mention', 'consulting services' not in html.lower())
     check('no software pricing in the file, and no partner rate range (audit, Oct 31: no provenance)', not re.search(r'\$\s?\d', html) and 'RATE_RANGE' not in html and 'rates run about' not in html)
@@ -115,7 +118,7 @@ async def main():
         sections = await page.locator('#sow-preview .sow-section').count()
         check('SOW document renders its nine sections', sections == 9, str(sections))
         # ---- customer size switch
-        catalog = {s['id']: s for s in json.loads(re.search(r'<script>const CATALOG=(\[.*?\]);</script>', html, re.S).group(1))}
+        catalog = {**{s['id']: s for s in json.loads(re.search(r'<script>const CATALOG=(\[.*?\]);</script>', html, re.S).group(1))}, **seeded}
         await page.evaluate("p=>{state.play=p;go('scope');}", 'aem')
         await page.click('[data-step="services"]')
         pressed = await page.get_attribute('#size-switch button[data-size="typical"]', 'aria-pressed')
@@ -196,8 +199,8 @@ async def main():
         await fresh.wait_for_timeout(150)
         strongs = await fresh.eval_on_selector_all('.total-card strong', 'els=>els.map(e=>e.textContent)')
         smalls = await fresh.eval_on_selector_all('.total-card small', 'els=>els.map(e=>e.textContent)')
-        check('rate entered: the hours become fees', strongs == ['$271,200', '$18,000 a month', '$487,200'], ' | '.join(strongs))
-        check('rate entered: the hours move under the fees', smalls[0] == '1,808 hours' and smalls[1] == '120 hours a month, for 12 months', ' | '.join(smalls))
+        check('rate entered: the hours become fees', strongs == ['$274,800', '$18,000 a month', '$490,800'], ' | '.join(strongs))
+        check('rate entered: the hours move under the fees', smalls[0] == '1,832 hours' and smalls[1] == '120 hours a month, for 12 months', ' | '.join(smalls))
         first_fee = await fresh.text_content('[data-line="L01"] .line-fee strong')
         check('a line shows its fee once a rate is set', first_fee == '$9,600', first_fee)
         cap = await fresh.text_content('#earn-caption')
@@ -288,7 +291,8 @@ async def main():
         n_open = await fresh.locator('#readiness li').count()
         body = open(await dl.path(), encoding='utf-8').read()
         check('with readiness items open, Download gives the SOW marked as a draft, not ready to issue, with the count, in a -DRAFT file (step 48)', dl.suggested_filename.endswith('-DRAFT.html') and f'Draft, not ready to issue: {n_open} open item' in body and 'Before you issue' in (await fresh.text_content('#toast')), dl.suggested_filename)
-        await fresh.evaluate("p=>{state.play=p;go('services');}", 'abv')
+        # Nov 19 2026: Search data's service concept, which the play starts with, taken off, so these checks run on the services they always had
+        await fresh.evaluate("p=>{state.play=p;state.estimates.abv['CANVAS-SD1'].on=false;go('services');}", 'abv')
         await fresh.fill('[data-line="O02"] [data-line-field="hours"]', '64')
         await fresh.locator('[data-line="O02"] [data-line-field="hours"]').blur()
         await fresh.wait_for_timeout(100)

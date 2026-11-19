@@ -25,9 +25,13 @@ LIBS = ['pdf.min.mjs', 'pdf.worker.min.mjs', 'mammoth.browser.min.js', 'xlsx.min
 os.makedirs(os.path.join(SITE, 'sow', 'lib'), exist_ok=True)
 for lib in LIBS:
     shutil.copyfile(os.path.join(SOW, 'lib', lib), os.path.join(SITE, 'sow', 'lib', lib))
+# Nov 19 2026 (Adam: "next to it the SOW generator and RFI builder video"): the 1:12 first look plays from the site itself, so it ships in the Proto zip.
+# The repository keeps one copy beside this script; the site gets the same bytes, which git stores once
+FIRST_LOOK = 'sow-generator-and-rfi-builder-first-look.mp4'
+shutil.copyfile(os.path.join(SOW, FIRST_LOOK), os.path.join(SITE, FIRST_LOOK))
 headers = open(os.path.join(SITE, '_headers'), encoding='utf-8').read()
 if '/sow/index.html' not in headers:
     headers = headers.rstrip('\n') + '\n/sow/index.html\n  Cache-Control: no-cache\n/sow/\n  Cache-Control: no-cache\n'
     open(os.path.join(SITE, '_headers'), 'w', encoding='utf-8').write(headers)
-for f in ['index.html', 'sow/index.html', '_headers', 'robots.txt'] + ['sow/lib/' + lib for lib in LIBS]:
+for f in ['index.html', 'sow/index.html', '_headers', 'robots.txt', FIRST_LOOK] + ['sow/lib/' + lib for lib in LIBS]:
     print(f, os.path.getsize(os.path.join(SITE, f)), 'bytes')
