@@ -24,7 +24,7 @@ const server = http.createServer((req, res) => {
       await p.evaluate(({products, outside, authoring}) => {
         hideCard(true); openAdd(false); openOut(false);
         st = {...st, play: 'custom', on: products, out: outside, ls: {}, keep: {}, rate: 0, eff: null, decisions: {authoring}, fresh: true, pubSig: null};
-        fsel = null; showAllEdges = false; moreOpen = {}; render();
+        moreOpen = {}; render();
       }, {products, outside, authoring});
       await p.waitForTimeout(400);
     };
@@ -33,15 +33,28 @@ const server = http.createServer((req, res) => {
     await seed(products, ['crm', 'bi', 'dwh']);
     await p.fill('#rate', '150');
     const before = await snapshot();
-    ok(await p.locator('#edges path.edge').count() === 0 && await p.getAttribute('#view-one', 'aria-pressed') === 'true', 'a crowded canvas starts in the one-product view');
-    await p.focus('#view-all'); await p.keyboard.press('Enter');
-    const all = await p.evaluate(() => ({edges: [...document.querySelectorAll('#edges path.edge')].map(e => e.dataset.c).sort(), expected: conns().map(c => c.id).sort()}));
-    ok(all.edges.length === 32 && JSON.stringify(all.edges) === JSON.stringify(all.expected), 'Show all draws exactly the catalog connections among selected products');
-    ok(await snapshot() === before, 'showing all connections changes no products, service choices or priced totals');
-    await p.click('.node[data-p="cja"]');
-    ok(await p.evaluate(() => fcur() === 'cja' && !showAllEdges && document.querySelectorAll('#edges path.edge').length === linksOf('cja').length), 'clicking a product from the full map focuses its connections');
-    await p.focus('#view-one'); await p.keyboard.press('Space');
-    ok(await p.locator('#edges path.edge').count() === 0 && await snapshot() === before, 'keyboard selection returns to Explore without changing scope or fees');
+    const routes = () => p.evaluate(() => ({
+      edges: [...document.querySelectorAll('#edges path.edge')].map(e => e.dataset.c).sort(),
+      bolts: [...document.querySelectorAll('#stage .ib')].map(e => e.dataset.c).sort(),
+      expected: displayConnections().map(c => c.id).sort()
+    }));
+    const all = await routes();
+    const full = state => state.expected.length > 0 && [state.edges, state.bolts].every(ids => JSON.stringify(ids) === JSON.stringify(state.expected));
+    ok(full(all) && all.edges.length >= 10, 'a crowded canvas opens with one line and one bolt for every relationship');
+    ok(!await p.locator('#view-one,#view-all').count() && await p.isVisible('#canvas-product-help'), 'the canvas shows product instructions in place of the view controls');
+    const cja = p.locator('.node[data-p="cja"]');
+    await cja.click();
+    ok(await p.isHidden('#card') && full(await routes()), 'one mouse click keeps all connections visible');
+    await cja.dblclick();
+    ok(await p.isVisible('#card [data-rm="cja"]') && full(await routes()), 'double-clicking opens the services and removal control with the full canvas visible');
+    await p.keyboard.press('Escape'); await cja.focus(); await p.keyboard.press('Space');
+    ok(await p.isVisible('#card') && await snapshot() === before, 'keyboard access and opening product details preserve services and fees');
+    await p.keyboard.press('Escape');
+    await p.click('#canvas-product-help a');
+    await p.locator('#knowledge-model-root .wke-node[data-id="commerce"]').click();
+    ok((await p.innerText('#knowledge-model-root .wke-inspector h3')).includes('Commerce') && full(await routes()) && await snapshot() === before, 'one click on the lower map explains Commerce without editing the upper canvas or the quote');
+    await cja.dblclick(); await p.click('#card [data-rm="cja"]');
+    ok(!await cja.count() && full(await routes()) && (await routes()).edges.length < all.edges.length, 'explicit removal updates the visible lines and bolts together');
 
     await seed(['commerce', 'eds']);
     ok(await p.locator('#map-info button').count() === 0 && (await p.textContent('#t-legend')).startsWith('What the lines on the map mean:'),
@@ -115,40 +128,42 @@ const server = http.createServer((req, res) => {
     await p.click('#card [data-t="EDC01"]');
     ok(await p.evaluate(() => counted('EDC01') && !has('aemsites')), 'a partner can select Edge Delivery measurement without a separate AEM Sites work package');
 
-    await seed(['commerce']);
-    await p.click('.node[data-p="commerce"]');
-    const commerce = await p.evaluate(() => ({open: document.querySelector('#card details.more').open, rows: [...document.querySelectorAll('#card .ln')].map(e => ({id: e.dataset.l, status: e.querySelector('.fee')?.textContent, add: e.querySelector('[data-t]')?.getAttribute('aria-label')})), footer: document.querySelector('#card .ft').textContent, total: totals()}));
+    await p.click('#change-play'); await p.click('#confirm-yes');
+    await p.click('#picker [data-play="commerce"]');
+    const beforeCommerce = await p.evaluate(() => totals().n);
+    await p.dblclick('.node[data-p="commerce"] .offering-title');
+    const commerce = await p.evaluate(() => ({open: document.querySelector('#card details.more').open, rows: [...document.querySelectorAll('#card .ln')].map(e => ({id: e.dataset.l, status: e.querySelector('.fee')?.textContent, add: e.querySelector('[data-t]')?.getAttribute('aria-label'), locked: e.classList.contains('lock')})), footer: document.querySelector('#card .ft').textContent, total: totals()}));
     ok(commerce.open && commerce.rows.length === 16 && commerce.rows.every(r => /^CE(?:0[1-9]|1[0-6])$/.test(r.id)), 'Commerce exposes all its available product services by default (seven, and nine more since Nov 19 2026)');
-    ok(commerce.rows.every(r => r.status === 'Not selected' && r.add.startsWith('Add ') && !r.add.startsWith('Add back ')) && commerce.footer.includes('No product services selected'), 'unselected services are clearly labelled even before a rate is entered');
-    ok(commerce.total.n === 0 && commerce.total.one === 0 && commerce.total.mon === 0, 'viewing available Commerce services does not select or charge for them');
+    ok(commerce.rows.filter(r => !r.locked).every(r => r.status === 'Not selected' && r.add?.startsWith('Add ') && !r.add.startsWith('Add back ')) && commerce.footer.includes('No product services selected'), 'unselected services are clearly labelled even before a rate is entered');
+    ok(commerce.total.n === beforeCommerce && await p.evaluate(() => ownerTotal(P.commerce).n === 0), 'viewing available Commerce services does not select or charge for them');
     await p.click('#card details.more summary'); await p.waitForTimeout(30);
     await p.fill('#rate', '150');
     ok(await p.$eval('#card details.more', d => !d.open), 'a manually collapsed available-services list stays collapsed after refresh');
     await p.click('#card details.more summary'); await p.waitForTimeout(30);
+    const beforeFee = await p.evaluate(() => totals().one);
     await p.click('#card [data-t="CE01"]');
     const added = await p.evaluate(() => ({n: ownerTotal(P.commerce).n, fee: totals().one, expected: fee('CE01'), copies: document.querySelectorAll('#card [data-l="CE01"]').length, open: document.querySelector('#card details.more').open, selected: all(P.commerce).filter(counted)}));
-    ok(added.n === 1 && added.fee === added.expected && added.copies === 1 && added.selected.join() === 'CE01', 'adding one available service selects and prices exactly that service once');
+    ok(added.n === 1 && added.fee === beforeFee + added.expected && added.copies === 1 && added.selected.join() === 'CE01', 'adding one available service selects and prices exactly that service once');
     ok(added.open && await p.$eval('#card details.more summary', e => e.textContent.includes('Available services (15)')), 'the remaining available services stay visible after one is added');
     await p.click('#card [data-t="CE01"]');
-    ok(await p.evaluate(() => ownerTotal(P.commerce).n === 0 && totals().one === 0 && document.querySelector('#card [data-l="CE01"] .fee').textContent === 'Not selected'), 'removing the service returns it to Not selected with no product fee');
+    ok(await p.evaluate(beforeFee => ownerTotal(P.commerce).n === 0 && totals().one === beforeFee && document.querySelector('#card [data-l="CE01"] .fee').textContent === 'Not selected', beforeFee), 'removing the service returns it to Not selected with no product fee');
 
     await seed(['cja']);
-    await p.click('.node[data-p="cja"]');
+    await p.dblclick('.node[data-p="cja"]');
     const defaultLine = await p.evaluate(() => P.cja.lines.find(l => defOf(l) && met(l)));
     await p.click('#card [data-t="' + defaultLine + '"]');
     ok(await p.$eval('#card [data-l="' + defaultLine + '"]', e => e.querySelector('.fee').textContent === 'Not selected' && !e.querySelector('[data-t]').getAttribute('aria-label').includes('Add back') && getComputedStyle(e.querySelector('.nm')).textDecorationLine === 'none'), 'an off starting service has the same clear status and readable name');
 
     await seed(products, ['crm', 'bi', 'dwh']);
-    await p.click('.node[data-p="commerce"]'); await p.click('#fb-svc');
+    await p.dblclick('.node[data-p="commerce"] .offering-title');
     ok((await p.textContent('#card .connection-note')).includes('shown separately'), 'product cards distinguish their own services from connection services');
     await p.setViewportSize({width: 390, height: 844});
     await p.evaluate(() => hideCard(true)); await p.waitForTimeout(400);
-    await p.click('#view-all'); await p.waitForTimeout(400);
-    const mobile = await p.evaluate(() => ({overflow: document.documentElement.scrollWidth > innerWidth + 1, buttons: ['view-one', 'view-all'].map(id => { const r = document.getElementById(id).getBoundingClientRect(); return r.left >= 0 && r.right <= innerWidth && r.height >= 44; }), edges: document.querySelectorAll('#edges path.edge').length, expected: conns().length}));
-    ok(!mobile.overflow && mobile.buttons.every(Boolean) && mobile.edges === mobile.expected, 'mobile controls remain visible and tappable without page overflow; the full map scrolls inside the canvas');
-    await p.click('#view-one');
-    await p.evaluate(() => { fsel = 'commerce'; refocus(); pinned = true; showCard('p', 'commerce'); });
-    await p.waitForTimeout(400);
+    const mobile = await p.evaluate(() => ({overflow: document.documentElement.scrollWidth > innerWidth + 1,
+      hint: document.getElementById('canvas-product-help').innerText, guide: document.getElementById('fbar').getBoundingClientRect().right}));
+    ok(!mobile.overflow && mobile.guide <= 391 && full(await routes()), 'the phone shows every connection without sideways page overflow');
+    await p.locator('.node[data-p="commerce"] .offering-title').tap();
+    ok(mobile.hint.startsWith('Tap a product') && await p.isVisible('#card'), 'the phone gives a tap instruction and one tap opens the card');
     const mobileCard = await p.$eval('#card', e => { const r = e.getBoundingClientRect(); return r.left >= -1 && r.right <= innerWidth + 1 && e.scrollWidth <= e.clientWidth + 1; });
     ok(mobileCard, 'the expanded Commerce card fits the phone width');
 
@@ -156,9 +171,7 @@ const server = http.createServer((req, res) => {
     ok(await p.locator('.node[data-p="aemsites"]').count() === 0 && await p.inputValue('.node[data-p="eds"] select[data-choice="authoring"]') === 'universal',
       'the crowded mobile canvas keeps the selected AEM authoring method on one Sites offering');
     const beforeOpening = await snapshot();
-    ok(await p.locator('.ib[data-c]:visible').count() === 0, 'the initial crowded focus view has no visible lightning buttons');
-    await p.evaluate(() => { fsel = 'commerce'; refocus(); });
-    await p.waitForTimeout(400);
+    ok(full(await routes()), 'the crowded phone canvas immediately exposes every connection button');
     await p.locator('.ib[data-c="commerce-eds"]').tap();
     ok(await p.isVisible('#card') && await p.evaluate(() => document.querySelector('#card').contains(document.activeElement)), 'a touch-opened connection card takes keyboard focus');
     await p.locator('#card [data-tip="XA18"]').tap();

@@ -82,7 +82,7 @@ const server = http.createServer((req, res) => {
   const aemLines = await toolLines(p);
   await p.click('.steps [data-build]'); await p.waitForURL(u => !/\/sow\//.test(String(u))); await p.waitForTimeout(500);
   ok((await p.textContent('#play-label')).includes('Sites Optimizer') && (await p.$$('.node')).length === 8, 'Build goes back to the canvas as it was left (with the CDN, on from the start, and since Nov 18 Search data, Authoring docs, ChatGPT and Claude)');
-  await p.click('.node[data-p="eds"] .offering-title'); await p.waitForTimeout(200); await p.click('#card [data-t="A03"]'); await p.waitForTimeout(150); await p.click('#card [data-close]');
+  await p.dblclick('.node[data-p="eds"] .offering-title'); await p.waitForTimeout(200); await p.click('#card [data-t="A03"]'); await p.waitForTimeout(150); await p.click('#card [data-close]');
   await p.click('#size [data-size="large"]'); await p.waitForTimeout(150);
   const t1 = await canvasTotal(p);
   await p.click('.tabs [data-tab="services"]'); await p.waitForURL('**/sow/index.html#services'); await p.waitForTimeout(500);

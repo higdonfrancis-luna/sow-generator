@@ -14,6 +14,8 @@ const build = page => page.follow('.steps [data-build]', 'index.html');
 
 async function start(page, play = 'aem') {
   await click(page, '#picker-list [data-play="' + play + '"]');
+  // These authoring scenarios scope Cloud Manager and other AEM as a Cloud Service work.
+  await page.evaluate("st.decisions.sitesDeployment = 'cloud'");
   await page.evaluate("document.getElementById('rate').value = '185'; document.getElementById('rate').dispatchEvent(new Event('input', {bubbles:true}));");
   await click(page, '#size [data-size="large"]');
 }
@@ -290,7 +292,7 @@ async function runAuthoringChecks(newSession) {
 
   const retained = ['L01', 'L02', 'O01', 'O02', 'SO2', 'OX1'];
   const cardActions = [
-    {label:'Switch to traditional AEM Publish', ids:[...retained, 'SI01','SI02','SI04','SI05','SI06','AXC01','AXC05'], one:261220, monthly:44400, total:794020},
+    {label:'Switch to traditional AEM Publish', ids:[...retained, 'SI01','SI02','SI04','SI05','SI06','AXC01','AXC05','XT03'], one:268620, monthly:44400, total:801420},
     {label:'Remove AEM Sites from canvas', ids:retained, one:45880, monthly:37000, total:489880},
   ];
   for (const startWithPublish of [false, true]) {
@@ -299,7 +301,6 @@ async function runAuthoringChecks(newSession) {
         await customAemPlay(page, startWithPublish);
         const title = '.node[data-p="eds"] .offering-title';
         await click(page, title);
-        if (!await page.evaluate("card?.id === 'eds'")) await click(page, title);
         const controls = await read(page, "Array.from(document.querySelectorAll('#card button.rm'), b=>b.textContent.trim())");
         assert.deepEqual(controls.sort(), cardActions.map(a=>a.label).sort());
         await page.evaluate("Array.from(document.querySelectorAll('#card button.rm')).find(b=>b.textContent.trim()===" + JSON.stringify(action.label) + ").click()");
@@ -395,7 +396,7 @@ async function runAuthoringChecks(newSession) {
     await click(page, '#size [data-size="typical"]');
     await addCustomProduct(page, 'aemsites');
     const before = await buildQuote(page);
-    assert.deepEqual([before.ids, before.total], [['SI01', 'SI02', 'SI04', 'SI05', 'SI06'], 156880]);
+    assert.deepEqual([before.ids, before.total], [['SI01', 'SI02', 'SI04', 'SI05', 'SI06', 'XT03'], 161320]);
     await services(page);
     await click(page, '.steps [data-step="rfp"]');
     await click(page, '#rfp-paste-btn');
@@ -408,7 +409,7 @@ async function runAuthoringChecks(newSession) {
     await click(page, '#rfp-handoff-go');
     const after = await servicesQuote(page);
     assert.deepEqual(after.ids, [...before.ids, 'XA22'].sort(), 'the hand-off adds the requested service and removes none');
-    assert.equal(after.total, 165760);
+    assert.equal(after.total, 170200);
     await build(page);
     assert.deepEqual(await roundTrip(page), after);
   });

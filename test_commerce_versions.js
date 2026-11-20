@@ -75,7 +75,6 @@ const inPaste = q => { let at = 0; const t = norm(PASTE); return q.split('...').
 
   // ============ 2. the Workfront picker ============
   { const p = await page(); await pick(p, 'custom'); for (const id of ['workfront', 'gspm', 'express']) await add(p, id);
-    if (await p.isVisible('#view-all')) await p.click('#view-all');
     const first = await state(p), opts = await options(p, 'workfrontVersion'), inBox = await p.evaluate(() => { const s = document.querySelector('select[data-choice="workfrontVersion"]'), n = s && s.closest('.node');
       const a = n && n.getBoundingClientRect(), c = s && s.getBoundingClientRect(); return !!n && n.dataset.p === 'workfront' && c.left >= a.left && c.right <= a.right && c.top >= a.top && c.bottom <= a.bottom; });
     ok(same(opts, ['Bought before March 12, 2026', 'Bought after March 12, 2026']) && first.dec.workfrontVersion === 'after' && inBox && same(first.gone.sort(), ['express-workfront', 'workfront-gspm']),
@@ -116,7 +115,7 @@ const inPaste = q => { let at = 0; const t = norm(PASTE); return q.split('...').
     const g0 = await lines();
     ok(g0.CE05 && g0.CE06 && g0.CE07 && g0.XA15 && !g0.CE14 && !g0.CE15 && g0.CE16 && /Adobe upgrades it automatically/.test(g0.CE07),
       '3. Cloud Service: Live Search setup and B2B setup give way to their smaller Cloud Service services, monthly maintenance and upgrades is not needed (Adobe upgrades it), and Audience Activation and on-premises hosting are out', JSON.stringify(g0));
-    await p.click('.version-offering[data-p="commerce"] .offering-title'); await p.waitForTimeout(500);
+    await p.dblclick('.version-offering[data-p="commerce"] .offering-title'); await p.waitForTimeout(500);
     const card = await p.evaluate(() => ({text: document.getElementById('card').innerText, gone: [...document.querySelectorAll('#card .ln.gone')].map(r => r.dataset.l)}));
     ok(/Commerce version: Cloud Service/.test(card.text) && same(card.gone.sort(), ['CE05', 'CE06', 'CE07', 'CE08', 'CE09', 'CE10', 'CE11', 'CE12', 'CE16']) && /Adobe upgrades it automatically/.test(card.text),
       '3. the Commerce card names the version and shows the services it leaves out faded, each with its reason', JSON.stringify(card.gone)); await p.keyboard.press('Escape');
@@ -193,7 +192,7 @@ const inPaste = q => { let at = 0; const t = norm(PASTE); return q.split('...').
     await p.click('.ib[data-c="cintel-commerce"]'); await p.waitForTimeout(400);
     const why2 = await p.evaluate(() => (document.querySelector('#card .gone-why') || {}).textContent || ''); await p.keyboard.press('Escape');
     ok(/Commerce on Cloud or on-premises/.test(why) && /Commerce on Cloud and on-premises/.test(why2), '5. each of their cards says why at the top', JSON.stringify([why, why2]));
-    await p.click('.node[data-p="aco"]'); await p.waitForTimeout(400);
+    await p.dblclick('.node[data-p="aco"]'); await p.waitForTimeout(400);
     const card = await p.evaluate(() => document.getElementById('card').innerText);
     ok(/Search, recommendations and merchandising in Commerce Optimizer/.test(card) && !LABELS.test(card), '5. the Commerce Optimizer card lists its services, with no caveat', card.slice(0, 400));
     await p.keyboard.press('Escape');

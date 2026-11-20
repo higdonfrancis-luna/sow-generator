@@ -558,36 +558,16 @@ details.mgrp[open] summary svg{transform:rotate(180deg)}
 .modal .primary{background:var(--red);color:#fff;border:0;border-radius:4px;font-weight:700;padding:9px 16px}
 @media (max-width:900px){.masthead,.tabs,.toolbar{padding-left:16px;padding-right:16px}.masthead{flex-wrap:wrap;gap:10px}.masthead .div{display:none}.masthead .t{font-size:16px}.tabs{gap:22px;flex-wrap:wrap;row-gap:0}.total{margin-left:0;min-width:0;width:100%;max-width:none}.card{width:min(460px,calc(100vw - 32px))}}
 
-/* ---------- focus view: a busy canvas draws one product's connections at a time ---------- */
-.fbar{position:absolute;left:0;right:0;top:0;z-index:4;height:auto;min-height:78px;background:#fff;border-bottom:1px solid var(--line);padding:14px 30px 12px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 24px}
-.fbar[hidden]{display:none}
-.fbar .fi{flex:none;display:flex}
-.fbar .fl{flex:none;width:190px;display:flex;flex-direction:column;line-height:1.2}
-.fbar .fl .k{font-size:12.5px;font-weight:700;letter-spacing:1.4px;color:var(--dred);text-transform:uppercase}
-.fbar .fl b{font-size:18px;line-height:22px}
-.fbar .fm{flex:1 1 100%;min-width:0;display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin-left:242px;font-size:14px;line-height:20px;color:var(--ink)}
-.view-options{display:flex;flex:1;min-width:0;gap:12px}
-.view-options button{display:flex;flex-direction:column;align-items:flex-start;gap:2px;flex:1;min-width:220px;text-align:left;background:#fff;color:var(--ink);border:1.5px solid var(--ink2);border-radius:12px;padding:10px 16px;font:inherit;cursor:pointer}
-.view-options button[aria-pressed="true"]{border:2px solid var(--red);padding:9.5px 15.5px}
-.view-options button:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
-.view-options .option-label{font-size:11px;font-weight:700;letter-spacing:1.3px;color:var(--dred)}
-.view-options b{font-size:19px;line-height:24px}
-.view-options span:last-child{font-size:14px;line-height:20px}
+/* A short guide above the full canvas. The product connection explorer sits below it. */
+.fbar{flex:none;display:flex;align-items:center;gap:12px;background:#fff;border-bottom:1px solid var(--line);padding:10px 30px;color:var(--ink)}
+.fbar[hidden]{display:none}.fbar .fi{flex:none;display:flex}.fbar .fl{flex:none;display:flex;flex-direction:column;line-height:1.2}
+.fbar .fl .k{font-size:12px;font-weight:700;letter-spacing:1.2px;color:var(--dred);text-transform:uppercase}.fbar .fl b{font-size:18px}
+.fbar p{margin:0 0 0 12px;font-size:15px;line-height:1.4}.fbar a{color:#2757ae;text-underline-offset:3px}.touch-verb{display:none}
+@media (pointer:coarse){.pointer-verb{display:none}.touch-verb{display:inline}}
+@media(max-width:700px){.fbar{padding:8px 16px;flex-wrap:wrap;gap:4px 9px}.fbar .fi svg{width:21px}.fbar .fl{flex-direction:row;align-items:baseline;gap:8px}.fbar .fl b{font-size:16px}.fbar p{flex-basis:100%;margin:0;font-size:14px}}
+.node.with-count{flex-direction:column;gap:3px}.node.out.with-count{gap:2px}.node.out.with-count .cn{line-height:16px}
+.node .nn{display:flex;align-items:center;justify-content:center;gap:8px}.node .cn{font-size:16px;line-height:21px;font-weight:600;color:var(--ink2);padding:0 7px}
 .card .connection-note{margin-top:9px}
-.fbar .chip{font-size:14.5px;font-weight:700;border:1.5px solid var(--ink);border-radius:3px;padding:0 8px;line-height:23px;background:#fff;color:var(--ink);white-space:nowrap}
-.fbar .chip:hover{border-color:var(--red);color:var(--red)}
-.fbar .btn{flex:none}
-@media (max-width:900px){.fbar{padding:10px 16px;gap:8px 12px}.fbar .fl{width:auto}.view-options{flex-basis:100%;order:2}.view-options button{min-width:0;padding:8px 10px}.view-options button[aria-pressed="true"]{padding:7.5px 9.5px}.view-options b{font-size:16px;line-height:20px}.view-options span:last-child{font-size:13px;line-height:17px}.fbar .fm{order:3;margin-left:0}}
-.node.fv{flex-direction:column;gap:3px}
-/* a two-line outside system name (Warehouse management) clears the OUTSIDE ADOBE label in a focus-view box */
-.node.out.fv{gap:2px}.node.out.fv .cn{line-height:16px}
-.node .nn{display:flex;align-items:center;justify-content:center;gap:8px}
-.node .cn{font-size:16px;line-height:21px;font-weight:600;color:var(--ink2);border-radius:3px;padding:0 7px}
-.node.lk{border-color:var(--red)}
-.node.fx{border-color:var(--red);border-width:3px;border-top-width:6px}
-.node.fx .cn{background:var(--red);color:#fff}
-.edge.cx{stroke:var(--red);stroke-width:4}
-.ib.cx{background:var(--red);color:#fff}
 /* phones: a line's name and notes take the full row; the hours, the fee and the X (or the Add buttons) sit beneath; the X takes taps a little around it */
 @media (max-width:600px){.ln{grid-template-columns:auto 1fr 30px;row-gap:3px}.ln .nm{grid-column:1/-1}.ln .hr{text-align:left}.ln.lock{grid-template-columns:auto 1fr}.ln .tg{position:relative}.ln .tg::after{content:'';position:absolute;inset:-6px}}
 /* outside systems: a dashed box with a dark top bar and the OUTSIDE ADOBE tag; icons beside the names */
@@ -601,20 +581,18 @@ details.mgrp[open] summary svg{transform:rotate(180deg)}
 @media (max-width:899px){.ib::before{content:'';position:absolute;left:50%;top:50%;width:calc(44px / var(--s,1));height:calc(44px / var(--s,1));transform:translate(-50%,-50%);border-radius:50%}}
 /* phones: a shorter canvas, and the fee box shows its one-line total (with the rate prompt while there is no rate) */
 @media (max-width:599px){.canvas{min-height:300px}.total{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:10px;padding:3px 14px 5px}.total .k,.total #t-note,.total .lgd{display:none}.total .big{font-size:26px;line-height:32px}.total:not(.blank) #t-sub{display:none}}
-/* phones: the focus bar keeps to a few rows: its names scroll sideways in one row, and its buttons are smaller */
-@media (max-width:599px){.fbar .fl{flex:1;min-width:0}.fbar .btn{padding:5px 10px}.fbar .fm{flex-wrap:nowrap;overflow-x:auto;padding-bottom:3px}.fbar .fm>span:first-child{flex:0 1 auto}}
 /* step 47: a card with no clean spot docks across the canvas */
 .card.dock{width:auto}
 /* step 47: rounder corners (Adam, Nov 5: "That rounding is so much better") */
 .node,.card,.total,.pc-card,.bp,.bp-box,.addmenu,.modal .box{border-radius:16px}
 .btn,.add,.rate input,.seg,.rm,.addp,.save,.modal .primary,.bp-go,.bp-build,.bp-alt,.toast{border-radius:12px}
-.card .kind b,.ln .cpt,.flow .pc,.pc-card .chips span,.ctag,.fbar .chip,.node .cn,.bp-p,.rec,.tier{border-radius:999px}
+.card .kind b,.ln .cpt,.flow .pc,.pc-card .chips span,.ctag,.node .cn,.bp-p,.rec,.tier{border-radius:999px}
 
 .capability-references{font-size:12px;line-height:1.45;margin:5px 0;overflow-wrap:anywhere}.capability-references summary{cursor:pointer;color:#565656}.capability-references ul{margin:6px 0;padding-left:18px}.capability-references li{margin:4px 0}.sow-detail ul{overflow-wrap:anywhere}
 /* step 94 (Nov 13 2026, Adam: "i want to add this to our sow generator ... maybe under the canvas"): the knowledge explorer from
    ChatGPT's handoff, below the canvas. The canvas keeps the first screen; the explorer sits under it, closed until opened. */
 .sow-canvas-screen{display:flex;flex-direction:column;flex:0 0 auto;height:100vh;min-height:100vh;height:100dvh;min-height:100dvh}
-@media (max-width:599px){.sow-canvas-screen{height:auto}}   /* Nov 19 2026: a phone's canvas in focus view grows by the focus bar (fit), and the screen with it */
+@media (max-width:599px){.sow-canvas-screen{height:auto}}
 .knowledge-model-section{flex:0 0 auto;padding:32px clamp(16px,3vw,40px) 48px;background:#f7f7f7;border-top:1px solid #e4e4e4}
 .knowledge-model-section[hidden]{display:none}
 .km-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:20px;padding:24px 26px;background:#fff;border:1px solid #e4e4e4;border-radius:16px}
@@ -735,9 +713,9 @@ button.rk-add:focus-visible,.rk-how:focus-visible,.rk-link:focus-visible,.rk-opt
 <aside id="map-info" aria-label="Connection key" hidden>
   <div id="t-legend"></div>
 </aside>
+<div class="fbar" id="fbar" hidden><span class="fi"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="#EB1000" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><rect x="9.5" y="10.5" width="9" height="7" rx="1.5"/><circle cx="4" cy="4.5" r="2.4"/><circle cx="24" cy="4.5" r="2.4"/><circle cx="4" cy="23.5" r="2.4"/><circle cx="24" cy="23.5" r="2.4"/><path d="M5.8 6.3l3.7 4.2M22.2 6.3l-3.7 4.2M5.8 21.7l3.7-4.2M22.2 21.7l-3.7-4.2"/></svg></span><div class="fl"><span class="k">On this canvas</span><b id="fb-b"></b></div><p id="canvas-product-help"><span class="pointer-verb">Double-click</span><span class="touch-verb">Tap</span> a product to see its services and removal options. Select a product on the <a href="#knowledge-model-section">map below</a> to see its connections.</p></div>
 <main class="canvas" id="canvas">
   <div class="empty" id="empty" hidden><h2>Add your first product</h2><p>Products connect where Adobe documents a connection or a partner workflow; each connection says which.</p><button class="add" id="empty-add"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M4 12h16" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>Add product</button></div>
-  <div class="fbar" id="fbar" hidden><span class="fi"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="#EB1000" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><rect x="9.5" y="10.5" width="9" height="7" rx="1.5"/><circle cx="4" cy="4.5" r="2.4"/><circle cx="24" cy="4.5" r="2.4"/><circle cx="4" cy="23.5" r="2.4"/><circle cx="24" cy="23.5" r="2.4"/><path d="M5.8 6.3l3.7 4.2M22.2 6.3l-3.7 4.2M5.8 21.7l3.7-4.2M22.2 21.7l-3.7-4.2"/></svg></span><div class="fl"><span class="k" id="fb-k"></span><b id="fb-b"></b></div><div class="view-options" role="group" aria-label="Connection view"><button id="view-one" type="button" aria-pressed="true"><span class="option-label">OPTION A</span><b>Explore one product</b><span>Click a product to see its connections.</span></button><button id="view-all" type="button" aria-pressed="false"><span class="option-label">OPTION B</span><b>Show all connections</b><span>See the full map for this canvas.</span></button></div><div class="fm" id="fb-m"></div><button class="btn" id="fb-svc" hidden>Services</button><button class="btn" id="fb-clear" aria-label="Clear the selected product" hidden><svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"/></svg>Clear</button></div>
   <div class="scroller" id="scroller"><div class="sizer" id="sizer"></div><div class="stage" id="stage"><svg id="edges" width="1710" height="640" aria-hidden="true"></svg></div></div>
   <section class="picker" id="picker"><div class="in"><div class="vids"><div class="vid-card" id="vid-card"><div class="vid-box" id="vid-box"><button type="button" class="vid-poster" id="vid-play" aria-label="Play the video: the four Brand Visibility partner plays"><img src="data:image/jpeg;base64,{{VIDEO_POSTER}}" alt="" width="1120" height="630"></button></div><div class="vid-copy"><p class="vid-eye">Start here</p><h2 class="vid-t">Watch the four Brand Visibility partner plays</h2><p class="vid-s">Five minutes on what each play sells, who it is for and the services partners deliver. Then pick a play below and build its statement of work.</p><button type="button" class="vid-btn" id="vid-watch">Watch the video</button><p class="vid-fail" id="vid-fail" hidden>The video could not play here. <a href="https://abvfirefly.netlify.app/" target="_blank" rel="noopener">Open the video page</a></p></div></div><div class="vid-card" id="look-card"><div class="vid-box" id="look-box"><button type="button" class="vid-poster" id="look-play" aria-label="Play the video: a first look at the Statement of Work Generator and RFI Builder"><img src="data:image/jpeg;base64,{{FIRST_LOOK_POSTER}}" alt="" width="1120" height="630"></button></div><div class="vid-copy"><p class="vid-eye">A first look</p><h2 class="vid-t">See the services, the hours and the fees behind every Adobe product</h2><p class="vid-s">A 72-second overview: pick a play, see the services on every connection, enter your own rate, and turn it into a statement of work. Have an RFI? Drop it in for drafted answers with Adobe's sources.</p><button type="button" class="vid-btn" id="look-watch">Watch the video</button><p class="vid-fail" id="look-fail" hidden>The video could not play here. <a href="sow-generator-and-rfi-builder-first-look.mp4" target="_blank" rel="noopener">Open the video</a></p></div></div></div><div class="bp" id="bp"><h2 class="bp-t"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#EB1000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5"/></svg>Not sure which play? Start from your client's problem</h2><p class="bp-s">Describe what your client is trying to fix. You get the products, how they connect and the services you can offer, from Adobe's documentation.</p><form class="bp-box" id="bp-form"><input id="bp-q" maxlength="300" autocomplete="off" aria-label="Describe your client's problem" placeholder="e.g. My client doesn't show up when people ask ChatGPT about their category"><button class="bp-go" type="submit" aria-label="Ask"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></form><div id="bp-body" aria-live="polite"></div></div><div class="bp rfi-door" id="rfi-door"><div class="rfi-door-text"><h2 class="bp-t"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#EB1000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/><path d="M8 13h8M8 17h5"/></svg>Have an RFI? Start from it</h2><p class="bp-s">Drop your client's RFI (Word, Excel, PDF or text) and get drafted answers about Adobe products, with Adobe's sources. Answering an RFP? Start here for its questions, then add the services to your statement of work to scope and price it.</p></div><a class="rfi-door-go" href="sow/index.html#rfi">Open the RFI Builder</a></div><h2>Choose a play to start</h2><p class="lead">The play puts its products and starting services on the canvas; each connection says whether Adobe documents it or a partner designs it.</p><div id="picker-list"></div>
     <p class="one"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#EB1000" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M12 7v6.5M12 16.8v.2"/></svg>One play per statement of work. To quote a second play, start a second SOW.</p><div class="picker-map" id="picker-map"><h2 class="sh">See how every product connects</h2><p class="picker-map-s">Choose an Adobe product to see its direct connections.</p></div></div></section>
@@ -745,7 +723,7 @@ button.rk-add:focus-visible,.rk-how:focus-visible,.rk-link:focus-visible,.rk-opt
   <div class="card" id="card" role="dialog" aria-labelledby="card-heading" hidden></div>
 </main>
 </div>
-<section id="knowledge-model-section" class="knowledge-model-section" aria-label="Your play in the product catalog" hidden>
+<section id="knowledge-model-section" tabindex="-1" class="knowledge-model-section" aria-label="Your play in the product catalog" hidden>
   <div id="knowledge-model-root"></div>
   <div class="km-stats" aria-label="The method knowledge base">{{KM_STATS}}</div>
   <p class="km-note">Method coverage is structural coverage. It does not certify the completeness or accuracy of every method.</p>
@@ -757,9 +735,8 @@ button.rk-add:focus-visible,.rk-how:focus-visible,.rk-link:focus-visible,.rk-opt
 <script>
 const CAT=/*CATALOG*/null;
 let COLW=370,ROWH=150,NW=230,NH=66,TOP=80;const RAD=14;
-/* focus view: with FOCUS_AT or more connections on the canvas, only the connections of the product
-   you hover or click are drawn; every box says how many it has, and the total still counts them all */
-const FOCUS_AT=10;
+// More crowded layouts use compact boxes with connection counts.
+const COMPACT_AT=10;
 const P=Object.fromEntries(CAT.products.map(p=>[p.id,p]));
 const KIND={native:'Native integration',platform:'Shared-platform data path',extension:'Supported extension',partner:'Partner-designed workflow',outside:'Outside system'};
 /* statuses worth showing on the card itself; anything else waits under Before it works */
@@ -895,9 +872,7 @@ const setNote=id=>{const e=effOf(id);if(!e)return '';const band=!!SZ[e.b]&&e.b!=
 const viaEds=id=>OWN_SITES.includes(id)&&has('eds');
 const prods=()=>CAT.products.filter(p=>has(p.id));
 const conns=()=>C.filter(c=>has(c.a)&&has(c.b)&&!viaEds(c.id));
-let fsel=null,showAllEdges=false;
-const fv=()=>!!play()&&displayConnections().length>=FOCUS_AT;
-const fcur=()=>fv()&&!showAllEdges&&fsel&&has(fsel)?fsel:null;
+const compactCanvas=()=>displayConnections().length>=COMPACT_AT;
 // The estimate retains separate catalog owners. The graph groups their work by the offering on the canvas.
 const offeringId=id=>has('eds')&&(id==='aemsites'||(id==='csrc'&&!actualHas('csrc')))?'eds':id;
 const displayKey=()=>[st.play,st.on.join(','),(st.out||[]).join(','),st.decisions.authoring].join('|');
@@ -926,10 +901,9 @@ function displayConnections(){
 }
 const graphRoute=id=>displayConnections().find(c=>c.members.some(member=>member.id===id));
 const linksOf=id=>displayConnections().filter(c=>c.a===id||c.b===id);
-const otherEnd=(c,id)=>c.a===id?c.b:c.a;
 const count=(n,w)=>(n?n:'No')+' '+w+(n===1?'':'s');
 /* Crowded-canvas boxes carry the connection count in either view; switching views keeps their places. */
-function setLayout(){const f=fv();NH=f?86:76;ROWH=f?130:150;COLW=has('eds')?420:370;}
+function setLayout(){const f=compactCanvas();NH=f?86:76;ROWH=f?130:150;COLW=has('eds')?420:370;}
 const nodeWidth=id=>id==='eds'?290:NW;
 const nodeHeight=id=>id==='eds'?104:NH;
 const all=o=>[...o.lines,...o.more].filter(l=>!viaEds(l));
@@ -1047,44 +1021,6 @@ function rounded(pts,r=RAD){let d=`M${pts[0].x},${pts[0].y}`;
   const z=pts[pts.length-1];return d+` L${z.x},${z.y}`;}
 
 
-/* ---------- focus view routing ----------
-   every line leaves the focused product: a neighbor in the same row or column gets a straight line;
-   anything else runs through the gap beside the product (left or right), then along the gap between rows,
-   and the lanes and ports are ordered so that no two of the product's lines cross */
-function starGeometry(fid){
-  const [cf,rf]=pos(fid),o=at(P[fid]),ps=displayProducts(),LANE=10,OFF=12,midY=o.y+nodeHeight(fid)/2,routes=[];
-  const lastRow=Math.max(...ps.map(p=>pos(p.id)[1])),lastCol=Math.max(...ps.map(p=>pos(p.id)[0]));
-  for(const c of linksOf(fid)){const t=otherEnd(c,fid),[ct,rt]=pos(t),T=at(P[t]),g={c,t,ct,rt,T};
-    if(rt===rf&&Math.abs(ct-cf)===1){g.k='h1';g.side=ct>cf?'R':'L';}
-    else if(ct===cf&&Math.abs(rt-rf)===1)g.k='v1';
-    else{g.side=ct>cf?'R':ct<cf?'L':(cf===lastCol&&cf>0?'L':'R');
-      if(ct===cf){g.k='in';g.ey=T.y+nodeHeight(t)/2;}
-      else if(Math.abs(ct-cf)===1){g.k='out';g.ey=T.y+nodeHeight(t)/2;}
-      else{g.k='ch';g.ch=rt>rf?rt:rt<rf?rt+1:(rf===lastRow&&rf>0?rf:rf+1);g.rise=g.ch===rt+1;g.dist=Math.abs(ct-cf);}}
-    routes.push(g);}
-  /* in a gap between rows: lines that rise into a box sit above lines that drop into one */
-  const chans={};for(const g of routes)if(g.k==='ch')(chans[g.side+g.ch]=chans[g.side+g.ch]||[]).push(g);
-  for(const arr of Object.values(chans)){arr.sort((a,b)=>a.rise!==b.rise?(a.rise?-1:1):a.rise?a.dist-b.dist:b.dist-a.dist);
-    arr.forEach((g,i)=>{g.ey=rowChan(g.ch)+(i-(arr.length-1)/2)*LANE;});}
-  for(const side of ['R','L']){const s=side==='R'?1:-1,x0=colChan(side==='R'?cf+1:cf),edge=side==='R'?o.x+nodeWidth(fid):o.x;
-    const S=routes.filter(g=>g.side===side),h1=S.find(g=>g.k==='h1'),tr=S.filter(g=>g.k!=='h1');
-    const order=grp=>[...grp.filter(g=>g.k==='in').sort((a,b)=>Math.abs(a.ey-midY)-Math.abs(b.ey-midY)),
-                      ...grp.filter(g=>g.k!=='in').sort((a,b)=>Math.abs(b.ey-midY)-Math.abs(a.ey-midY))];
-    const up=order(tr.filter(g=>g.ey<midY)),dn=order(tr.filter(g=>g.ey>=midY));
-    /* step 66: with more than 14 lines on one side the lanes close up, so the innermost stays clear of the box */
-    for(const grp of [up,dn]){const lane=(grp.length-1)/2*LANE<(COLW-NW)/2-4?LANE:(COLW-NW-8)/(grp.length-1);grp.forEach((g,i)=>{g.lx=x0+s*(i-(grp.length-1)/2)*lane;});}
-    /* ports top to bottom: rising lines (innermost lane highest), the straight neighbor, falling lines (innermost lowest) */
-    const portOrder=[...up,...(h1?[h1]:[]),...[...dn].reverse()];
-    portOrder.forEach((g,i)=>{g.py=o.y+nodeHeight(fid)*(.2+.6*(i+1)/(portOrder.length+1));g.px=edge;});}
-  return routes.map(g=>{let pts;
-    if(g.k==='v1'){const x=o.x+nodeWidth(fid)/2;pts=g.rt>rf?[{x,y:o.y+nodeHeight(fid)},{x,y:g.T.y}]:[{x,y:o.y},{x,y:g.T.y+nodeHeight(g.t)}];}
-    else if(g.k==='h1')pts=[{x:g.px,y:g.py},{x:g.side==='R'?g.T.x:g.T.x+nodeWidth(g.t),y:g.py}];
-    else{pts=[{x:g.px,y:g.py},{x:g.lx,y:g.py},{x:g.lx,y:g.ey}];
-      if(g.k==='out')pts.push({x:g.side==='R'?g.T.x:g.T.x+nodeWidth(g.t),y:g.ey});
-      else if(g.k==='in')pts.push({x:g.side==='R'?g.T.x+nodeWidth(g.t):g.T.x,y:g.ey});
-      else{const ex=g.T.x+nodeWidth(g.t)/2+(g.rise?-OFF:OFF);pts.push({x:ex,y:g.ey},{x:ex,y:g.rise?g.T.y+nodeHeight(g.t):g.T.y});}}
-    return{c:g.c,r:g.k,d:pts.length===2?`M${pts[0].x},${pts[0].y} L${pts[1].x},${pts[1].y}`:rounded(pts,8),se:[fid,g.t]};});
-}
 /* step 44: each bolt sits in the middle of its line; when the middle is on a box, another bolt or another line, it moves the least it can
    toward either end. A 12 px grid of the lines' sampled points finds the nearest other line quickly */
 function placeDots(paths){const ps=displayProducts(),near=(q,m)=>ps.some(p=>{const o=at(p);return q.x>o.x-m&&q.x<o.x+nodeWidth(p.id)+m&&q.y>o.y-m&&q.y<o.y+nodeHeight(p.id)+(recd(p.id)?14:0)+m;});
@@ -1132,12 +1068,11 @@ $('card').addEventListener('change',changeScopeChoice);
 /* ---------- render ---------- */
 let shown=new Set(),shownC=new Set(),card=null,pinned=false,moreOpen={};
 function render(){
-  if(fsel)fsel=has(fsel)?offeringId(fsel):null;
   document.body.classList.toggle('picking',!play());
   setLayout();
-  const stage=$('stage'),ps=displayProducts(),F=fv();
+  const stage=$('stage'),ps=displayProducts(),F=compactCanvas();
   stage.querySelectorAll('.node').forEach(e=>e.remove());
-  for(const p of ps){const o=at(p),n=document.createElement('div'),k=F?linksOf(p.id).length:0;n.className='node'+(F?' fv':'')+(shown.has(p.id)?'':' enter')+(p.outside?' out':'');n.dataset.p=p.id;n.tabIndex=0;n.setAttribute('role','button');
+  for(const p of ps){const o=at(p),n=document.createElement('div'),k=F?linksOf(p.id).length:0;n.className='node'+(F?' with-count':'')+(shown.has(p.id)?'':' enter')+(p.outside?' out':'');n.dataset.p=p.id;n.tabIndex=0;n.setAttribute('role','button');
     n.setAttribute('aria-label',p.name+(p.outside?', outside Adobe':'')+(recd(p.id)?', recommended':'')+(F?', '+count(k,'connection'):'')+(p.outside?': see how it connects':': see its services'));n.style.left=o.x+'px';n.style.top=o.y+'px';n.style.height=nodeHeight(p.id)+'px';n.style.width=nodeWidth(p.id)+'px';
     n.innerHTML=(F?`<span class="nn">${p.icon&&I[p.icon]?I[p.icon]:''}<span>${esc(p.name)}${infoI(p.id)}</span></span><span class="cn">${count(k,'connection')}</span>`:(p.icon&&I[p.icon]?I[p.icon]:'')+(p.outside?'<span>'+esc(p.name)+infoI(p.id)+'</span>':'<span class="nm2"><span>'+esc(p.name)+infoI(p.id)+'</span><span class="cnt"></span></span>'))+(recd(p.id)?'<span class="rec">Recommended</span>':'');
     if(p.id==='eds'){
@@ -1145,31 +1080,32 @@ function render(){
       n.setAttribute('aria-label',p.name);
       n.innerHTML='<button class="offering-title" type="button">'+esc(p.name)+'</button>'+authoringControl();
       const heading=n.querySelector('.offering-title');heading.setAttribute('aria-label',p.name+', see services');
-      hook(heading,'p',p.id);
-      n.addEventListener('click',e=>{if(e.target===n){e.stopPropagation();heading.click();}});
+      heading.setAttribute('aria-describedby','canvas-product-help');
     }else if(VBOX[p.id]){
       n.classList.add('sites-offering','version-offering');n.setAttribute('role','group');n.removeAttribute('tabindex');n.setAttribute('aria-label',p.name);
       n.innerHTML='<button class="offering-title" type="button"><span>'+esc(p.name)+'</span>'+(F?'<span class="cn">'+count(k,'connection')+'</span>':'')+'</button>'+versionControl(VBOX[p.id],F);
       const heading=n.querySelector('.offering-title');heading.setAttribute('aria-label',p.name+', see services');
-      hook(heading,'p',p.id);
-      n.addEventListener('click',e=>{if(!e.target.closest('select,.offering-title')){e.stopPropagation();e.preventDefault();heading.click();}});
-    }else hook(n,'p',p.id);
+      heading.setAttribute('aria-describedby','canvas-product-help');
+    }else n.setAttribute('aria-describedby','canvas-product-help');
+    hook(n,'p',p.id);
     stage.appendChild(n);}
   shown=new Set(ps.map(p=>p.id));
   const pl=play(),own=!!pl&&!!pl.custom,nP=ps.filter(p=>!p.outside).length;$('picker').hidden=!!pl;$('save').hidden=own?!nP:!ps.length;$('playname').hidden=!pl;$('change-play').hidden=!pl;
   $('addwrap').hidden=!pl;$('outwrap').hidden=!pl||!outsideOffer().length;if($('outwrap').hidden)openOut(false);else if(!$('out-menu').hidden){$('out-menu').innerHTML=outMenuHTML();placeAdd();}$('empty').hidden=!(own&&!nP);if(!pl)openAdd(false);else if(!$('add-menu').hidden)drawAdd();
   $('play-label').textContent=pl?((pl.custom&&st.area)||pl.title||pl.label):'';
-  drawEdges();markNodes();barUI();
+  drawEdges();
+  $('fbar').hidden=!pl||!ps.length;
+  $('fb-b').textContent=count(displayConnections().length,'connection');
   totalsUI();legendUI();fit();
   if(card&&!(card.k==='p'?has(card.id):has(CBY[card.id].a)&&has(CBY[card.id].b)))hideCard(true);else if(card){applyHot();setTimeout(placeCard,380);}
   save();
   syncKnowledgeExplorer();   // step 94: the explorer below the canvas follows it
 }
-/* Draw every catalog connection on this canvas, or only the selected product's connections. */
+/* Draw all relationships between the products and systems on this canvas. */
 function drawEdges(){
-  const stage=$('stage'),svg=$('edges'),fid=fcur(),first=stage.querySelector('.node');
+  const stage=$('stage'),svg=$('edges'),first=stage.querySelector('.node');
   stage.querySelectorAll('.ib').forEach(e=>e.remove());svg.innerHTML='<defs><marker id="arr" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#EB1000"/></marker></defs>';
-  const F=fv(),geo=F&&!showAllEdges?(fid?starGeometry(fid):[]):geometry(),nowC=new Set(geo.map(g=>g.c.id));
+  const geo=geometry(),nowC=new Set(geo.map(g=>g.c.id));
   const gone=g=>g.c.members.every(m=>gateOf(m.id));
   const paths=geo.map(g=>{const path=document.createElementNS('http://www.w3.org/2000/svg','path');path.setAttribute('d',g.d);path.setAttribute('class','edge'+(EDGE[g.c.line||g.c.kind]||'')+(gone(g)?' gone':''));path.dataset.c=g.c.id;path.dataset.s=g.se[0];path.dataset.e=g.se[1];svg.appendChild(path);return path;});
   const mids=placeDots(paths);
@@ -1182,48 +1118,28 @@ function drawEdges(){
   });
   shownC=nowC;
 }
-/* focus view: the focused product and its connections are marked; the bar names them */
-function markNodes(){const id=fcur(),lk=new Set(id?linksOf(id).map(c=>otherEnd(c,id)):[]);
-  document.querySelectorAll('.node').forEach(n=>{const p=n.dataset.p;n.classList.toggle('fx',p===id);n.classList.toggle('lk',lk.has(p));});}
-function barUI(){$('view-one').setAttribute('aria-pressed',String(!showAllEdges));$('view-all').setAttribute('aria-pressed',String(showAllEdges));const F=fv();$('fbar').hidden=!F;if(!F)return;
-  const id=fcur(),n=displayConnections().length;
-  if(!id){$('fb-k').textContent='On this canvas';$('fb-b').textContent=count(n,'connection');
-    $('fb-m').innerHTML=`<span>${showAllEdges?'Showing all '+n+' catalog connections. Click a product to focus on it.':'Focus view hides the lines until you select a product. Choose Show all connections for the full map.'} Changing the view keeps your selected services and fees the same.</span>`;}
-  else{const L=linksOf(id).map(c=>[c,otherEnd(c,id)]).sort((x,y)=>pos(x[1])[0]-pos(y[1])[0]||pos(x[1])[1]-pos(y[1])[1]);
-    $('fb-k').textContent=count(L.length,'connection');$('fb-b').textContent=P[id].name;
-    $('fb-m').innerHTML=L.length?'<span>connects to</span>'+L.map(([c,o])=>`<span class="chip" data-c="${c.id}">${esc(P[o].name)}</span>`).join(''):'<span>No documented connection with the other products on this canvas.</span>';}
-  $('fb-clear').hidden=!fsel;$('fb-svc').hidden=!id;if(id)$('fb-svc').textContent=P[id].outside?'How it connects':'Services';}
-function refocus(){drawEdges();markNodes();barUI();legendUI();if(($('fbar').hidden?0:$('fbar').offsetHeight)!==barH)fit();
-  if($('canvas').classList.contains('pan')&&fcur()){const n=document.querySelector(`.node[data-p="${fcur()}"]`),sc=$('scroller');if(n){const r=n.getBoundingClientRect(),c=sc.getBoundingClientRect();sc.scrollLeft+=r.left+r.width/2-(c.left+c.width/2);}}
-  if(card&&card.k==='c'&&graphRoute(card.id)&&!shownC.has(graphRoute(card.id).id))hideCard(true);else if(card){applyHot();placeCard();}}
-let barH=0,panKey='';const MIN_S=.7;
+let panKey='';const MIN_S=.7;
 function fit(){
-  barH=$('fbar').hidden?0:$('fbar').offsetHeight;
-  /* step 95: from 900 px up, Continue sits at the top right (under the focus bar when it shows) and the room kept for it is at the top;
-     phones and tablets, where the focus bar takes most of a short canvas, keep it at the bottom right */
-  const cTop=document.documentElement.clientWidth>=900,sv=$('save').style;sv.top=cTop?(barH?barH+12:18)+'px':'auto';sv.bottom=cTop?'auto':'18px';
+  const cTop=document.documentElement.clientWidth>=900,sv=$('save').style;
+  sv.top=cTop?'18px':'auto';sv.bottom=cTop?'auto':'18px';
   $('empty').style.left=menuRoom()+'px';
-  const cv=$('canvas'),ps=displayProducts(),F=fv();
-  /* Nov 19 2026: on a phone the focus bar would cover most of the 300 px canvas, so in focus view the canvas grows by the bar's height */
-  cv.style.minHeight='';if(F&&document.documentElement.clientWidth<600)cv.style.minHeight=parseFloat(getComputedStyle(cv).minHeight)+barH+'px';
+  const cv=$('canvas'),ps=displayProducts();
   if(!ps.length){cv.classList.remove('pan');panKey='';return;}
   const xs=ps.map(p=>at(p).x),ys=ps.map(p=>at(p).y);
   let minX=Math.min(...xs),maxX=Math.max(...ps.map(p=>at(p).x+nodeWidth(p.id))),minY=Math.min(...ys),maxY=Math.max(...ps.map(p=>at(p).y+nodeHeight(p.id)));
-  /* focus view sizes the stage for every product's lines, so it never jumps as the focus moves */
-  const bb=F&&!showAllEdges?focusBox():$('edges').querySelectorAll('path.edge').length?$('edges').getBBox():null;
+  const bb=$('edges').querySelector('path.edge')?$('edges').getBBox():null;
   if(bb){minX=Math.min(minX,bb.x-16);maxX=Math.max(maxX,bb.x+bb.width+16);minY=Math.min(minY,bb.y-16);maxY=Math.max(maxY,bb.y+bb.height+16);}
   let mw=menuRoom();const W=maxX-minX,H=maxY-minY;if(mw&&(cv.clientWidth-mw-80)/W<.75)mw=0;const cw=cv.clientWidth-mw;let s,ty;
-  if(F){/* focus view: below the bar, and clear of Continue */const top0=$('fbar').offsetHeight+(cTop?72:12),avail=cv.clientHeight-top0-(cTop?24:84);
-    s=Math.min(1,(cw-80)/W,avail/H);ty=top0+(avail-H*s)/2-minY*s;}
-  else{const ch=cv.clientHeight-64;s=Math.min(1,(cw-80)/W,(ch-50)/H);ty=(ch-H*s)/2-minY*s+(cTop?56:8);}
+  const topPad=cTop?68:12,bottomPad=cTop?24:78,availableHeight=cv.clientHeight-topPad-bottomPad;
+  s=Math.min(1,(cw-80)/W,availableHeight/H);ty=topPad+(availableHeight-H*s)/2-minY*s;
   let tx=mw+(cw-W*s)/2-minX*s;
   /* step 47: phones and tablets: under 900 px the stage never shrinks below MIN_S, so names stay readable and bolts tappable;
      what doesn't fit scrolls inside the canvas, starting centered on the play's own products */
   const pan=document.documentElement.clientWidth<900&&s<MIN_S;cv.classList.toggle('pan',pan);
-  if(pan){s=MIN_S;const top0=F?$('fbar').offsetHeight+12:8,bot=F?84:72,ah=cv.clientHeight-top0-bot;
+  if(pan){s=MIN_S;const top0=12,bot=78,ah=cv.clientHeight-top0-bot;
     tx=W*s+80<=cw?(cw-W*s)/2-minX*s:40-minX*s;ty=H*s<=ah?top0+(ah-H*s)/2-minY*s:top0-minY*s;
     $('sizer').style.width=Math.ceil(tx+maxX*s+40)+'px';$('sizer').style.height=Math.ceil(ty+maxY*s+bot)+'px';
-    const k=st.play+'|'+ps.map(p=>p.id).join()+'|'+cv.clientWidth+'|'+F;
+    const k=st.play+'|'+ps.map(p=>p.id).join()+'|'+cv.clientWidth;
     if(k!==panKey){panKey=k;const own=ps.filter(p=>!p.outside),xs2=(own.length?own:ps).map(p=>at(p).x),mid=tx+s*(Math.min(...xs2)+Math.max(...xs2)+NW)/2;
       $('scroller').scrollLeft=Math.max(0,mid-cw/2);$('scroller').scrollTop=0;}}
   else{panKey='';$('sizer').style.width=$('sizer').style.height='0';$('scroller').scrollLeft=$('scroller').scrollTop=0;}
@@ -1231,14 +1147,9 @@ function fit(){
 }
 /* while the Add product menu is open on a wide screen, the products sit to its right */
 function menuRoom(){const m=$('add-menu'),cv=$('canvas');if(m.hidden||cv.clientWidth<=900)return 0;
-  const mr=m.getBoundingClientRect(),cr=cv.getBoundingClientRect();if(mr.bottom<=cr.top+(fv()?$('fbar').offsetHeight:0))return 0;return Math.max(0,mr.right-cr.left+20);}
+  const mr=m.getBoundingClientRect(),cr=cv.getBoundingClientRect();if(mr.bottom<=cr.top)return 0;return Math.max(0,mr.right-cr.left+20);}
 /* keep the Add product and Add outside system menus on screen: shift each left when it would run past the right edge */
 function placeAdd(){for(const m of [$('add-menu'),$('out-menu')]){if(m.hidden)continue;m.style.left='';const r=m.getBoundingClientRect(),over=r.right-(document.documentElement.clientWidth-16);if(over>0)m.style.left=-Math.min(over,r.left-16)+'px';}}
-function focusBox(){const svg=$('edges'),tmp=[];
-  for(const p of displayProducts())for(const g of starGeometry(p.id)){const e=document.createElementNS('http://www.w3.org/2000/svg','path');e.setAttribute('d',g.d);svg.appendChild(e);tmp.push(e);}
-  if(!tmp.length)return null;let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;
-  for(const e of tmp){const b=e.getBBox();x0=Math.min(x0,b.x);y0=Math.min(y0,b.y);x1=Math.max(x1,b.x+b.width);y1=Math.max(y1,b.y+b.height);e.remove();}
-  return{x:x0,y:y0,width:x1-x0,height:y1-y0};}
 /* fees, with the term's monthly fees, of the lines from Adobe documentation research (service concepts) */
 const conceptShare=()=>{let s=0;for(const o of [...prods(),...conns()])for(const l of all(o))if(counted(l)&&LN[l].origin==='research'&&!(effOf(l)&&effOf(l).w))s+=fee(l)*(unitOf(l)==='monthly'?st.months:1);return s;};
 const termText=()=>st.months+(st.months===1?' month':' months');
@@ -1259,7 +1170,6 @@ function legendUI(){
   $('t-legend').innerHTML=key;
 }
 function openRoute(c){
-  if(fv()&&!showAllEdges){fsel=offeringId(P[c.a].outside?c.b:c.a);refocus();}
   openAdd(false);openOut(false);
   pinned=true;showCard('c',c.id);
 }
@@ -1314,14 +1224,32 @@ $('picker-list').innerHTML=CAT.rows.map(r=>`<div class="sh">${esc(r.head)}</div>
 $('picker-list').addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('.fam-area')){e.preventDefault();e.target.click();}});
 
 /* ---------- cards ---------- */
-/* step 42: a click (or a tap) opens a card and pins it; hovering opens nothing. It stays until its X, a click elsewhere
-   or Escape, and a click on another box or pill swaps to its card. In focus view a click on a product shows its lines */
+/* Product cards use a desktop double-click. Touch, keyboard and connection bolts each need one activation. */
 function hook(el,k,id){
-  el.addEventListener('click',e=>{e.stopPropagation();if(!$('out-menu').hidden)openOut(false);if(!$('add-menu').hidden)openAdd(false);
-    if(fv()&&k==='p'){if(fcur()!==id){showAllEdges=false;fsel=id;hideCard(true);refocus();fit();return;}
-      if(card&&card.k==='p'&&card.id===id){hideCard(true);return;}pinned=true;showCard(k,id);return;}
-    if(pinned&&card&&card.k===k&&card.id===id){hideCard(true);return;}pinned=true;showCard(k,id);});
-  el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click();}});
+  const product=k==='p';
+  const nestedControl=e=>product&&e.target.closest('select,label,.info-i');
+  function activate(){
+    if(!$('out-menu').hidden)openOut(false);
+    if(!$('add-menu').hidden)openAdd(false);
+    if(pinned&&card&&card.k===k&&card.id===id){hideCard(true);return;}
+    pinned=true;showCard(k,id);
+  }
+  let lastPointer='';
+  if(product)el.addEventListener('pointerdown',e=>{lastPointer=e.pointerType;});
+  el.addEventListener('click',e=>{
+    if(nestedControl(e))return;
+    e.stopPropagation();
+    const pointer=e.pointerType||lastPointer;
+    if(!product||!e.detail||pointer==='touch'||pointer==='pen'||(!pointer&&matchMedia('(pointer:coarse)').matches))activate();
+  });
+  if(product)el.addEventListener('dblclick',e=>{
+    if(nestedControl(e)||lastPointer==='touch'||lastPointer==='pen')return;
+    e.preventDefault();e.stopPropagation();activate();
+  });
+  el.addEventListener('keydown',e=>{
+    if(nestedControl(e)||(e.key!=='Enter'&&e.key!==' '))return;
+    e.preventDefault();e.stopPropagation();if(!e.repeat)activate();
+  });
 }
 function anchorEl(){
   if(!card)return null;
@@ -1341,35 +1269,33 @@ function showCard(k,id,origin){
   box.innerHTML=cardHTML(k,id);box.hidden=false;box.scrollTop=0;applyHot();placeCard();
   box.querySelector('[data-close]')?.focus({preventScroll:true});
 }
-/* step 47: a card always fits inside the canvas and the window, under the focus bar; taller than the room, it scrolls inside
-   itself. It never covers the box or lightning bolt it describes, or a bolt of the selected product (in focus view every bolt
-   drawn is one), and it prefers a spot that covers no box at all: any overlap of a box counts. It looks over the whole visible
+/* step 47: a card always fits inside the canvas and the window; taller than the room, it scrolls inside
+   itself. It never covers the box or lightning bolt it describes, or a bolt of the selected product, and it prefers a spot that covers no box at all: any overlap of a box counts. It looks over the whole visible
    canvas, beside, above and below its anchor first, then nearest it, off the lines, the other bolts and Continue. With no spot
    that clears its anchor and those bolts it docks full width on the anchor's roomier side; a scrolling canvas first scrolls
    the anchor up so the dock has room. Step 48: a card is at least min(600 px, its own height) tall; where the canvas room is
    shorter, or holds no such spot clear of its anchor and bolts, the room is the window below the tabs, over the toolbar */
 function placeCard(noScroll){const el=anchorEl(),box=$('card');if(!el||box.hidden)return;
-  const cvE=$('canvas'),F=fv(),sc=$('scroller'),pan=cvE.classList.contains('pan');
+  const cvE=$('canvas'),sc=$('scroller'),pan=cvE.classList.contains('pan');
   box.classList.remove('dock');box.style.width='';box.style.maxHeight='none';cvE.classList.remove('tall');let tall=false;
   const R=e=>{const r=e.getBoundingClientRect();return{left:r.left,right:r.right,top:r.top,bottom:r.bottom};},grow=(r,m)=>({left:r.left-m,right:r.right+m,top:r.top-m,bottom:r.bottom+m});
   const drawn=e=>{const r=e.getBoundingClientRect();return r.width>0&&r.height>0;};
-  /* the room, in canvas coordinates: the canvas inside the window, under the focus bar */
+  /* the room, in canvas coordinates: the canvas inside the window */
   let cv=cvE.getBoundingClientRect();
-  const room=()=>{cv=cvE.getBoundingClientRect();const t=tall?Math.max(document.querySelector('.tabs').getBoundingClientRect().bottom,0)+10:Math.max(cv.top,0)+(F?$('fbar').offsetHeight:0)+10;
+  const room=()=>{cv=cvE.getBoundingClientRect();const t=tall?Math.max(document.querySelector('.tabs').getBoundingClientRect().bottom,0)+10:Math.max(cv.top,0)+10;
     return{l:Math.max(cv.left,0)+10-cv.left,r:Math.min(cv.right,innerWidth)-10-cv.left,t:t-cv.top,b:Math.min(cv.bottom,innerHeight)-10-cv.top};};
   let V=room();
   const w=Math.min(box.offsetWidth,V.r-V.l);box.style.width=w<box.offsetWidth?w+'px':'';
   const nat=box.offsetHeight;if(V.b-V.t<Math.min(nat,600)){tall=true;cvE.classList.add('tall');V=room();}
   let H=Math.min(nat,V.b-V.t);const tallHs=()=>[H,Math.min(H,600)],shortHs=()=>[Math.min(H,320),Math.min(H,220)];
-  const sel=F?fcur():card.k==='p'?card.id:null;
+  const sel=card.k==='p'?offeringId(card.id):null;
   const seen=r=>r.right>cv.left+V.l&&r.left<cv.left+V.r&&r.bottom>cv.top+V.t&&r.top<cv.top+V.b;
-  const mine=b=>F||(sel&&[CBY[b.dataset.c].a,CBY[b.dataset.c].b].map(offeringId).includes(sel));
+  const mine=b=>(sel&&[CBY[b.dataset.c].a,CBY[b.dataset.c].b].map(offeringId).includes(sel));
   const ends=card.k==='c'?[...new Set([CBY[card.id].a,CBY[card.id].b].map(offeringId))]:[];
   /* what is on screen now: the anchor, the bolts to keep clickable (hard), the boxes, the other bolts, Continue and the lines */
   const scan=()=>{const a=R(el),bolts=[...document.querySelectorAll('.ib')].filter(b=>b!==el&&drawn(b)&&seen(R(b)));
     const hard=[grow(a,4),...bolts.filter(mine).map(b=>grow(R(b),4))];
-    if(F&&sel&&card.k==='c'){const n=document.querySelector(`.node[data-p="${sel}"]`);if(n)hard.push(grow(R(n),4));}
-    const boxes=[...document.querySelectorAll('#stage .node')].filter(n=>n!==el&&drawn(n)&&seen(R(n))).map(n=>[grow(R(n),4),ends.includes(n.dataset.p)||n.classList.contains('lk')?2:1]);
+    const boxes=[...document.querySelectorAll('#stage .node')].filter(n=>n!==el&&drawn(n)&&seen(R(n))).map(n=>[grow(R(n),4),ends.includes(n.dataset.p)?2:1]);
     const others=bolts.filter(b=>!mine(b)).map(R),sv=$('save'),keep=sv.hidden||!drawn(sv)?[]:[grow(R(sv),6)];
     /* the lines, counted on a 16 px grid with running sums, so any spot reads the points it covers at once */
     const G=16,gx=Math.ceil(cv.width/G)+1,gy=Math.ceil(cv.height/G)+1,S=new Float64Array((gx+1)*(gy+1));
@@ -1405,15 +1331,13 @@ function placeCard(noScroll){const el=anchorEl(),box=$('card');if(!el||box.hidde
     if(!best||best[0][0])return false;if(best[3]<nat)box.style.maxHeight=best[3]+'px';box.style.left=best[1]+'px';box.style.top=best[2]+'px';return true;};
   if(search(tallHs()))return;
   if(!tall){tall=true;cvE.classList.add('tall');V=room();H=Math.min(nat,V.b-V.t);O=scan();if(search(tallHs()))return;}
-  /* Nov 18 2026: Show all connections draws every bolt with no product selected (Brand Visibility + Customer Journey Analytics now opens in Explore one
-     product, so its rehearsal card is opened there too): where no spot that tall keeps every bolt clear, the card keeps its own bolt clear and still opens
-     tall, the other bolts weighed as on a canvas that shows all its lines, rather than short */
-  if(F&&showAllEdges&&O.hard.length>1){const all=O;O={...O,hard:O.hard.slice(0,1),others:O.hard.slice(1)};if(search(tallHs()))return;O=all;}
+  /* When a busy canvas has no room for a tall card clear of every bolt, prioritize its own anchor. */
+  if(compactCanvas()&&O.hard.length>1){const all=O;O={...O,hard:O.hard.slice(0,1),others:[...O.others,...O.hard.slice(1)]};if(search(tallHs()))return;O=all;}
   if(search(shortHs()))return;
   /* no clean spot: a scrolling canvas grows by the card's height (until the card closes, so a scroll never snaps back), so every
      bolt can be scrolled clear of it, scrolls the anchor up and looks again; then the card docks across the room on the anchor's roomier side */
   if(pan){$('sizer').style.paddingBottom=(H+10)+'px';
-    if(!noScroll){const need=O.a.top-(Math.max(cv.top,0)+(F?$('fbar').offsetHeight:0)+10)-10,can=sc.scrollHeight-sc.clientHeight-sc.scrollTop;if(need>0&&can>0){sc.scrollTop+=Math.min(need,can);V=room();O=scan();if(search(tallHs())||search(shortHs()))return;}}}
+    if(!noScroll){const need=O.a.top-(Math.max(cv.top,0)+10)-10,can=sc.scrollHeight-sc.clientHeight-sc.scrollTop;if(need>0&&can>0){sc.scrollTop+=Math.min(need,can);V=room();O=scan();if(search(tallHs())||search(shortHs()))return;}}}
   box.classList.add('dock');box.style.left=V.l+'px';box.style.width=(V.r-V.l)+'px';const dn=box.offsetHeight;
   const up=O.a.top-6-(cv.top+V.t),down=cv.top+V.b-(O.a.bottom+6),min=Math.min(dn,140);
   const side=[[V.t,Math.min(dn,up)],[V.b-Math.min(dn,down),Math.min(dn,down)]].filter(s=>s[1]>=min).map(s=>[rate(V.l,s[0],V.r-V.l,s[1],0),s]).sort((x,y)=>less(x[0],y[0])?-1:less(y[0],x[0])?1:y[1][1]-x[1][1]);
@@ -1569,10 +1493,10 @@ $('card').addEventListener('click',e=>{e.stopPropagation();
   const rm=e.target.closest('[data-rm]');if(rm){removeProduct(rm.dataset.rm);return;}
   if(e.target.closest('[data-focus-authoring]')){hideCard(true);$('stage').querySelector('select[data-choice="authoring"]')?.focus();return;}
   const ap=e.target.closest('[data-addp]');if(ap){const id=ap.dataset.addp;if(P[id]?.outside)addOutside(id);else addProduct(id);if(card)pinned=true;refreshCard();return;}
-  const sm=e.target.closest('summary');if(sm){const d=sm.parentElement,box=$('card'),y=box.scrollTop;setTimeout(()=>{moreOpen[d.dataset.more]=d.open;const L0=box.style.left;placeCard();if(fv())box.style.left=L0;
+  const sm=e.target.closest('summary');if(sm){const d=sm.parentElement,box=$('card'),y=box.scrollTop;setTimeout(()=>{moreOpen[d.dataset.more]=d.open;const L0=box.style.left;placeCard();if(compactCanvas())box.style.left=L0;
     /* Get your team ready: the card stays where it was, then scrolls just far enough to show the opened box without losing its heading */
     if(d.classList.contains('ready')){box.scrollTop=y;const c=box.getBoundingClientRect(),r=d.getBoundingClientRect();if(d.open&&r.bottom>c.bottom)box.scrollTop+=Math.min(r.top-c.top-8,r.bottom-c.bottom+8);}},0);pinned=true;}});
-function pick(e){e.stopPropagation();const b=e.target.closest('[data-play],[data-start]');if(!b)return;st.play=b.dataset.play||CUSTOM.id;st.on=b.dataset.start?b.dataset.start.split(','):[];st.out=startOut(PLAYS[st.play],st.on,b.dataset.assistant);if(b.dataset.name)st.area=b.dataset.name;else delete st.area;st.decisions=CanvasScope.newDecisions();st.serviceDefaults=true;st.ls={};st.keep={};st.fresh=true;st.pubSig=null;moreOpen={};fsel=null;showAllEdges=false;render();if(play().custom&&!st.on.length&&document.documentElement.clientWidth>900)openAdd(true);}
+function pick(e){e.stopPropagation();const b=e.target.closest('[data-play],[data-start]');if(!b)return;st.play=b.dataset.play||CUSTOM.id;st.on=b.dataset.start?b.dataset.start.split(','):[];st.out=startOut(PLAYS[st.play],st.on,b.dataset.assistant);if(b.dataset.name)st.area=b.dataset.name;else delete st.area;st.decisions=CanvasScope.newDecisions();st.serviceDefaults=true;st.ls={};st.keep={};st.fresh=true;st.pubSig=null;moreOpen={};render();if(play().custom&&!st.on.length&&document.documentElement.clientWidth>900)openAdd(true);}
 /* ---------- The Add product menu (every play; Create your own play starts with it) ---------- */
 /* step 63: the menu's groups, under the headings of Adobe's own product menu and in its order; a product not listed falls under More products */
 const GROUPS=[['AI & agents',['bv','bc','cw','brandintel']],['Content & workflows',['aemsites','aemassets','eds','so','aemforms','commerce','aco','workfront','gspm','frameio','planning']],['Creativity & design',['creativecloud','express','fireflycp','fireflycm']],['Data & analytics',['rtcdp','cja','aa','ca','mmm','collab','cintel']],['Campaign management',['ajo','ajob2b','xa','marketo','moptimizer','mqualifier','mmeasure','target']],['Document productivity',['acrobat','acrobatsign']]];
@@ -1606,7 +1530,7 @@ function outMenuHTML(){const pl=play();if(!pl)return '';const rest=outsideOffer(
   return h+`<div class="g">${pl.custom?'Connects to your products':'Connects to this play'}</div>`+rest.map(item).join('');}
 function openOut(on){const m=$('out-menu'),b=$('out-btn');if(on){openAdd(false);hideCard(true);m.innerHTML=outMenuHTML();}m.hidden=!on;b.setAttribute('aria-expanded',on?'true':'false');if(on)placeAdd();}
 function addOutside(id){const pl=play();if(!pl||!outsideOffer().includes(id))return;if(!(st.out||[]).includes(id))st.out=[...(st.out||[]),id];openOut(false);render();$('out-btn').focus({preventScroll:true});}
-function removeOutside(id){st.out=(st.out||[]).filter(x=>x!==id);if(fsel===id)fsel=null;hideCard(true);render();$('out-btn').focus({preventScroll:true});}
+function removeOutside(id){st.out=(st.out||[]).filter(x=>x!==id);hideCard(true);render();$('out-btn').focus({preventScroll:true});}
 /* Nov 18 2026: in the card's lists a product whose own name holds "and" (Acrobat and Acrobat Services) goes by its short label, so the list reads clearly */
 function outCardHTML(id){const o=P[id],pl=play(),nm=q=>P[q].name.includes(' and ')?short(q):P[q].name,every=pl.products.filter(q=>joined(id,q)),sys=systemsOf(id),
     on=CAT.products.filter(q=>!q.outside&&joined(id,q.id)&&has(q.id)).map(q=>q.id),later=pl.custom?every.filter(q=>!has(q)):[];
@@ -1666,8 +1590,7 @@ function addProduct(id){if(!play()||actualHas(id)||!CUSTOM.products.includes(id)
   if((id==='eds'&&actualHas('aemsites'))||(id==='aemsites'&&actualHas('eds')))st.decisions={...st.decisions,authoring:'universal'};
   else if(id==='eds')st.decisions={...st.decisions,authoring:actualHas('csrc')?'documents':''};
   st.on=[...st.on,id];findQ='';
-  /* from a connection card in focus view, keep one end of that connection selected so the card and its line stay */
-  const oc=card&&card.k==='c'?CBY[card.id]:null;fsel=fv()&&oc?(fsel===oc.a||fsel===oc.b?fsel:oc.a):null;render();}
+  render();}
 function removeProduct(id){
   /* what is on the canvas before anything changes (a box drawn through a choice, such as AEM Sites behind Edge Delivery Services authored in AEM, counts) */
   const was=new Set(CAT.products.filter(p=>has(p.id)).map(p=>p.id));
@@ -1679,7 +1602,7 @@ function removeProduct(id){
   /* on a ready-made play, the services the Services step still has ticked for everything that left the canvas stop counting at once
      (the mark is read only for services the canvas does not show, so a service another box still shows is not touched) */
   {const e=!play().custom&&st.eff&&st.eff.plays&&st.eff.plays[st.play];if(e)for(const o of [...CAT.products,...C]){const gone='a' in o?was.has(o.a)&&was.has(o.b)&&!(has(o.a)&&has(o.b)):was.has(o.id)&&!has(o.id);if(gone)for(const l of all(o))if(e[l])delete e[l].o;}}
-  if(fsel===id||(fsel&&!has(fsel)))fsel=null;hideCard(true);render();}
+  hideCard(true);render();}
 /* ---------- Next best product (Nov 18): the goal, asked once for each canvas, and the Add product list ranked for it ----------
    Adam: "My boss wants to know with the ready-made plays [the] next best product opportunities, same thing with building your own play ... so both places."
    The goal is one of the problems in problems.json. It sets the order: the products that solve it, that build on it, that connect to it, then the rest.
@@ -2040,27 +1963,15 @@ $('bp').addEventListener('click',e=>{const pc=e.target.closest('[data-bpp]');if(
   if(k==='all'||k==='fewer'){bp.view=k==='all'?'all':'start';bpRender();return;}
   if(k==='again'){clearTimeout(bpT);bp.view='start';bpRender();$('bp-q').value='';$('bp-q').focus();return;}
   if(k==='another'){bp.i=(bp.i+1)%bp.hits.length;bp.steps=[];bp.setup=bpBase(PROBS[bp.hits[bp.i]]);bpShow(500);return;}
-  if(k==='build'){const s=bp.setup;clearTimeout(bpT);st.goal=PROBS[bp.hits[bp.i]].id;delete st.area;st.play=s.play;st.decisions=setupDecisions(s);st.serviceDefaults=true;st.on=PLAYS[s.play].custom?s.prods.slice():[];st.out=bpStart(s);st.ls=Object.fromEntries((s.off||[]).map(l=>[l,false]));st.keep={};st.fresh=true;st.pubSig=null;moreOpen={};fsel=null;
-    bp.view='start';showAllEdges=false;$('bp-q').value='';bpRender();render();}});
+  if(k==='build'){const s=bp.setup;clearTimeout(bpT);st.goal=PROBS[bp.hits[bp.i]].id;delete st.area;st.play=s.play;st.decisions=setupDecisions(s);st.serviceDefaults=true;st.on=PLAYS[s.play].custom?s.prods.slice():[];st.out=bpStart(s);st.ls=Object.fromEntries((s.off||[]).map(l=>[l,false]));st.keep={};st.fresh=true;st.pubSig=null;moreOpen={};
+    bp.view='start';$('bp-q').value='';bpRender();render();}});
 $('confirm-yes').addEventListener('click',()=>setTimeout(()=>{if(!play()&&bp.view==='answer')bpRender();},0));
 bpRender();
 $('picker').addEventListener('click',pick);
 document.addEventListener('click',()=>{openAdd(false);openOut(false);if(pinned)hideCard(true);});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){const outOpen=!$('out-menu').hidden;openAdd(false);openOut(false);if(outOpen)$('out-btn').focus({preventScroll:true});const had=!!card;hideCard(true,true);if(!had&&fsel){fsel=null;refocus();}$('confirm').hidden=true;}});
-/* focus view: a click on the empty canvas clears the selected product (a pinned card closes first) */
-$('canvas').addEventListener('click',e=>{if(!fv()||pinned||e.target.closest('.node,.ib,.card,.fbar,.picker,.save'))return;hideCard(true);if(fsel){fsel=null;refocus();}});
-$('fbar').addEventListener('click',e=>e.stopPropagation());
-/* Connection view changes presentation only: product and service choices stay in st. */
-$('view-one').addEventListener('click',()=>{showAllEdges=false;fsel=null;hideCard(true);refocus();fit();});
-$('view-all').addEventListener('click',()=>{showAllEdges=true;fsel=null;hideCard(true);refocus();fit();});
-$('fbar').addEventListener('mouseleave',()=>chipHot(null));
-$('fb-clear').addEventListener('click',e=>{e.stopPropagation();fsel=null;hideCard(true);refocus();});
-$('fb-svc').addEventListener('click',e=>{e.stopPropagation();const id=fcur();if(!id)return;if(card&&card.k==='p'&&card.id===id){hideCard(true);return;}pinned=true;showCard('p',id,'#fb-svc');});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){const outOpen=!$('out-menu').hidden;openAdd(false);openOut(false);if(outOpen)$('out-btn').focus({preventScroll:true});hideCard(true,true);$('confirm').hidden=true;}});
 /* a card follows its anchor while the canvas scrolls on a phone or tablet */
 $('scroller').addEventListener('scroll',()=>{if(card)placeCard(true);},{passive:true});
-/* hovering a name in the bar lights up its line and lightning bolt */
-function chipHot(cid){document.querySelectorAll('.cx').forEach(x=>x.classList.remove('cx'));if(cid)document.querySelectorAll(`.edge[data-c="${cid}"],.ib[data-c="${cid}"]`).forEach(x=>x.classList.add('cx'));}
-$('fb-m').addEventListener('mouseover',e=>{const c=e.target.closest('.chip');chipHot(c?c.dataset.c:null);});
 $('rate').addEventListener('input',e=>{let v=e.target.value.replace(/[^0-9.]/g,'');const i=v.indexOf('.');if(i>=0)v=v.slice(0,i+1)+v.slice(i+1).replace(/[.]/g,'').slice(0,2);v=v.slice(0,7);e.target.value=v;const n=parseFloat(v);st.rate=Number.isFinite(n)&&n>0?n:0;save();totalsUI();refreshCard();});
 $('size').addEventListener('click',e=>{const b=e.target.closest('[data-size]');if(!b)return;st.size=b.dataset.size;save();totalsUI();refreshCard();});
 /* Start over and Change play both clear the play, the goal and every service choice; rate and size stay */
@@ -2083,7 +1994,7 @@ try{const m=sessionStorage.getItem('abv-sow-draft-msg');if(m){sessionStorage.rem
 $('change-play').addEventListener('click',e=>{e.stopPropagation();ask('change');});
 $('confirm-no').addEventListener('click',()=>{$('confirm').hidden=true;});
 $('confirm').addEventListener('click',e=>{if(e.target===e.currentTarget)$('confirm').hidden=true;});
-$('confirm-yes').addEventListener('click',()=>{$('confirm').hidden=true;hideCard(true);openAdd(false);if(ask.k==='over'){try{localStorage.removeItem(TOOL_KEY);localStorage.removeItem('partner-services-focused-v2');localStorage.removeItem(HANDOFF);}catch(e){}st.eff=null;st.cur='USD';st.def=null;st.months=12;}st.pubSig=null;st.play=null;st.on=[];delete st.goal;delete st.area;st.out=[];st.ls={};st.keep={};moreOpen={};fsel=null;showAllEdges=false;render();});
+$('confirm-yes').addEventListener('click',()=>{$('confirm').hidden=true;hideCard(true);openAdd(false);if(ask.k==='over'){try{localStorage.removeItem(TOOL_KEY);localStorage.removeItem('partner-services-focused-v2');localStorage.removeItem(HANDOFF);}catch(e){}st.eff=null;st.cur='USD';st.def=null;st.months=12;}st.pubSig=null;st.play=null;st.on=[];delete st.goal;delete st.area;st.out=[];st.ls={};st.keep={};moreOpen={};render();});
 let toastT=0;function toast(m){const t=$('toast');t.textContent=m;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>{t.hidden=true;},4200);}
 /* the next steps: hand the play, size, rate and every service line on the canvas to the Scope, Services and Statement of work steps at sow/ */
 /* the hand-over: the play, size, rate and every line (on, or waiting for a product with the partner's choice kept); a ready-made play also names the products added to it (the boxes, in the order added), when there are any, and a canvas with a goal names it */
@@ -2121,6 +2032,7 @@ else if(scopeKey==='rtcdp'){
 }
 /* step 48: Change play on the SOW steps comes back with ?change=play and opens this page's own Change the play? confirm */
 if(/[?&]change=play\b/.test(location.search)){try{history.replaceState(null,'',location.pathname+location.hash);}catch(e){}if(!reloading&&play())ask('change');}
-document.fonts&&document.fonts.ready.then(()=>{window.READY=true;});
+// The guide and toolbar can change height once the fonts load, including when a saved canvas reopens.
+document.fonts.ready.then(()=>{fit();if(card)placeCard();window.READY=true;});
 </script>
 </body></html>

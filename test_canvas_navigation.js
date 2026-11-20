@@ -20,6 +20,8 @@ async function addProduct(page, id) {
 
 async function start(page, ids) {
   await click(page, '#picker-list [data-play="custom"]');
+  // These authoring scenarios scope Cloud Manager and other AEM as a Cloud Service work.
+  await page.evaluate("st.decisions.sitesDeployment = 'cloud'");
   for (const id of ids) {
     if (id === 'cdn') {
       await click(page, '#out-btn');
@@ -34,10 +36,6 @@ async function start(page, ids) {
 
 async function openCard(page, id) {
   await click(page, '.node[data-p="' + id + '"]');
-  // A crowded map's first click focuses the product; the next opens its card.
-  if (!(await page.evaluate(`card?.id===${JSON.stringify(id)}`))) {
-    await click(page, '.node[data-p="' + id + '"]');
-  }
 }
 async function toggleBuildLine(page, id) {
   await click(page, '#card [data-t="' + id + '"]');

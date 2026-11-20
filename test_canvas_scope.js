@@ -110,6 +110,7 @@ function verify() {
   assert.equal(has('cdn'), true);
 
   seed(['bv', 'eds', 'so', 'aemsites', 'cdn']);
+  st.decisions.sitesDeployment = 'cloud';  // This estimate includes the cloud authoring setup.
   assert.equal(counted('A01'), true);
   assert.equal(counted('AXC01'), false);
   assert.equal(totals().yr, 1170680);

@@ -242,24 +242,27 @@ const server = http.createServer((req, res) => {
     await q.context().close(); await p.context().close(); }
 
   // ---------- the canvas pass (items 2, 3, 8, 21, 22, 23, 25, 26, 27, 28, 38, 39, 43) ----------
-  // step 94 put the explorer below the canvas, so the page scrolls; Playwright's element click scrolls it first and then finds the focus bar or
+  // step 94 put the explorer below the canvas, so the page scrolls; Playwright's element click scrolls it first and then finds the canvas guide or
   // Continue over the box. A person clicks the box where it is: at the top of the page, a mouse click at its middle (Playwright's click
-  // and, on a phone or tablet, after swiping the canvas so the box sits in the middle of the room under the focus bar)
-  const tapAt = async (pg, sel) => { await pg.evaluate(sel => { scrollTo(0, 0); const n = document.querySelector(sel), sc = document.getElementById('scroller'), fb = document.getElementById('fbar');
+  // and, on a phone or tablet, after swiping the canvas so the box sits in the middle of the room under the canvas guide)
+  const tapAt = async (pg, sel, clickCount = 1) => { await pg.evaluate(sel => { scrollTo(0, 0); const n = document.querySelector(sel), sc = document.getElementById('scroller'), fb = document.getElementById('fbar');
       if (!document.getElementById('canvas').classList.contains('pan')) return; const r = n.getBoundingClientRect(), s = sc.getBoundingClientRect(), top = fb.hidden ? s.top : Math.max(s.top, fb.getBoundingClientRect().bottom), bottom = Math.min(s.bottom, innerHeight);
       if (r.left >= s.left && r.right <= s.right && r.top >= top && r.bottom <= bottom) return;
       sc.scrollLeft += r.left + r.width / 2 - (s.left + s.width / 2); sc.scrollTop += r.top + r.height / 2 - (top + bottom) / 2; }, sel); await pg.waitForTimeout(100);
-    const bx = await (await pg.$(sel)).boundingBox(); await pg.mouse.click(bx.x + bx.width / 2, bx.y + bx.height / 2); };
-  const tapNode = (pg, id) => tapAt(pg, `.node[data-p="${id}"]`);
+    const bx = await (await pg.$(sel)).boundingBox(); await pg.mouse.click(bx.x + bx.width / 2, bx.y + bx.height / 2, {clickCount}); };
+  const tapNode = async (pg, id, clickCount = 2) => {
+    const node = `.node[data-p="${id}"]`, title = node + ' .offering-title';
+    await tapAt(pg, await pg.locator(title).count() ? title : node, clickCount);
+  };
   const all14 = async p => { await p.evaluate(() => { for (const id of CAT.plays.find(x => x.custom).products) addProduct(id); openAdd(false); }); await p.keyboard.press('Escape'); await p.waitForTimeout(500); };
   const covered = (p, sel) => p.evaluate(sel => [...document.querySelectorAll(sel)].filter(e => { const r = e.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2, cv = document.getElementById('canvas').getBoundingClientRect();
     if (x < cv.left || x > cv.right || y < cv.top || y > cv.bottom) return false; const h = document.elementFromPoint(x, y); return !h || !e.contains(h); }).map(e => e.dataset.c || e.dataset.p), sel);
-  // 15. (item 2) removing an outside system selected in focus view: no error, the total follows, the removal is saved
+  // 15. (item 2) removing an outside system from a full canvas: no error, the total follows, the removal is saved
   { const p = await fresh(); await pick(p, 'custom'); await p.fill('#rate', '150'); await all14(p); await addOut(p, 'dwh');
-    const e0 = errs.length; await tapNode(p, 'dwh'); await p.waitForTimeout(300); await p.click('#fb-svc'); await p.waitForTimeout(300);
+    const e0 = errs.length; await tapNode(p, 'dwh'); await p.waitForTimeout(300);
     await p.click('#card [data-rmout="dwh"]'); await p.waitForTimeout(500); await tapNode(p, 'cja'); await p.waitForTimeout(300);
     const r = await p.evaluate(() => ({big: document.getElementById('t-big').textContent, want: money(totals().yr), out: JSON.parse(localStorage.getItem('abv-sow-build-v1')).out, node: !!document.querySelector('.node[data-p="dwh"]')}));
-    ok(errs.length === e0 && r.big === r.want && !r.out.includes('dwh') && !r.node, 'item 2: removing the Data warehouse selected in focus view throws nothing, the total follows and the removal is saved', JSON.stringify(r));
+    ok(errs.length === e0 && r.big === r.want && !r.out.includes('dwh') && !r.node, 'item 2: removing the Data warehouse from a full canvas throws nothing, the total follows and the removal is saved', JSON.stringify(r));
     await p.reload(); await p.waitForTimeout(600); ok(!(await p.$('.node[data-p="dwh"]')), 'item 2: and it stays off after a reload');
     await p.context().close(); }
   // 16. (item 3) phones and tablets: a readable stage that scrolls, products on the first screen, bolts tapped from 18 px off center;
@@ -267,16 +270,13 @@ const server = http.createServer((req, res) => {
   for (const [w, h] of [[390, 844], [768, 1024]]) for (const play of ['cja', 'custom']) {
     const p = await fresh({width: w, height: h}); await pick(p, play); await p.fill('#rate', '150');
     if (play === 'custom') await all14(p);
-    // Nov 19 2026: CJA now opens in Explore one product; on a phone its canvas grows by the focus bar, so the map sits below the bar: scrolled into view, as a partner does
+    // Nov 19 2026: CJA now opens in Explore one product; on a phone its canvas grows by the canvas guide, so the map sits below the bar: scrolled into view, as a partner does
     if (play === 'cja' && w < 600) { await p.evaluate(() => document.getElementById('scroller').scrollIntoView({block: 'end'})); await p.waitForTimeout(300); }
     const r = await p.evaluate(() => { const s = Number((/scale\(([0-9.]+)\)/.exec(document.getElementById('stage').style.transform) || [])[1]), own = [...document.querySelectorAll('.node')].filter(n => !n.classList.contains('out'));
       const first = own.filter(n => { const b = n.getBoundingClientRect(); return b.top >= 0 && b.bottom <= innerHeight && b.right > 0 && b.left < innerWidth; }).map(n => n.dataset.p);
       return {s, first, n: own.length, page: document.documentElement.scrollWidth <= innerWidth, pan: document.getElementById('canvas').classList.contains('pan')}; });
     const okFirst = play === 'cja' ? r.first.length === 2 : r.first.length >= 2;
     ok(r.s >= 0.7 - 1e-9 && okFirst && r.page, `item 3: ${play} at ${w} px: the stage keeps scale ${r.s} (0.7 or more), ${r.first.length} of the play's products are on the first screen, no sideways page scroll`, JSON.stringify(r));
-    // Nov 19 2026: on the phone the map sits below the focus bar, under the first screen, so the box is tapped where it is with the map scrolled into view
-    if (play === 'cja' && w < 600) { const bx = await (await p.$('.node[data-p="cja"]')).boundingBox(); await p.mouse.click(bx.x + bx.width / 2, bx.y + bx.height / 2); await p.waitForTimeout(400); }
-    else if (play === 'custom' || await p.evaluate(() => fv())) { await tapNode(p, 'cja'); await p.waitForTimeout(400); }   // Nov 18 2026: CJA opens in Explore one product too
     // the bolts pop in over 0.6 s (.ib.enter); measured mid-pop, a tap 18 px off centre can miss, on any build: wait for the pop to end
     await p.waitForFunction(() => [...document.querySelectorAll('.ib')].every(b => !b.getAnimations().length));
     const bolt = await p.evaluate(() => { const cv = document.getElementById('canvas').getBoundingClientRect(), fb = document.getElementById('fbar'), top = fb.hidden ? cv.top : fb.getBoundingClientRect().bottom, sv = document.getElementById('save').getBoundingClientRect();
@@ -336,16 +336,17 @@ const server = http.createServer((req, res) => {
   // 23. (item 26) an open card covers neither its anchor nor the selected product's bolts, at 1440, 1600 and 768
   for (const [w, h] of [[1440, 900], [1600, 950], [768, 1024]]) { const p = await fresh({width: w, height: h}); await pick(p, 'custom'); await p.fill('#rate', '150'); await all14(p);
     const bad = [];
-    for (const id of ['rtcdp', 'ajo', 'cja', 'bc']) { await tapNode(p, id); await p.waitForTimeout(300); const first = await p.isHidden('#card');
+    for (const id of ['rtcdp', 'ajo', 'cja', 'bc']) { await tapNode(p, id, 1); await p.waitForTimeout(300); const first = await p.isHidden('#card');
       await tapNode(p, id); await p.waitForTimeout(500); const dock = await p.$eval('#card', c => c.classList.contains('dock'));
       // as in step 71 (23b below): a bolt that sits under the Continue button is covered by Continue, not by the card, so it is not the card's
       // to keep clear (at 768 wide the Real-Time CDP + AEM Forms and Coworker + CJA bolts land there; the canvas pans to reach them)
       const underSave = await p.evaluate(() => { const sv = document.getElementById('save').getBoundingClientRect(); return [...document.querySelectorAll('.ib')].filter(b => { const r = b.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2; return x > sv.left && x < sv.right && y > sv.top && y < sv.bottom; }).map(b => b.dataset.c); });
-      const cov = [...await covered(p, `.node[data-p="${id}"]`), ...(dock ? [] : (await covered(p, '.ib')).filter(c => !underSave.includes(c)))]; if (!first || cov.length) bad.push(`${id}: first ${first}, covered ${cov}`);
-      const b = await p.$$eval('.ib', es => es.map(e => e.dataset.c)); for (const c of b.slice(0, 3)) { if (!(await covered(p, `.ib[data-c="${c}"]`)).length) { await tapAt(p, `.ib[data-c="${c}"]`); await p.waitForTimeout(350);
+      const incident = await p.evaluate(id => linksOf(id).map(c => c.id), id);
+      const cov = [...await covered(p, `.node[data-p="${id}"]`), ...(dock ? [] : (await covered(p, '.ib')).filter(c => incident.includes(c) && !underSave.includes(c)))]; if (!first || cov.length) bad.push(`${id}: first ${first}, covered ${cov}`);
+      const b = await p.evaluate(id => linksOf(id).map(c => c.id), id); for (const c of b.slice(0, 3)) { if (!(await covered(p, `.ib[data-c="${c}"]`)).length) { await tapAt(p, `.ib[data-c="${c}"]`); await p.waitForTimeout(350);
         const cc = await covered(p, `.ib[data-c="${c}"]`); if (cc.length) bad.push(`${c} card covers its bolt`); } }
-      await p.keyboard.press('Escape'); await p.click('#fb-clear'); await p.waitForTimeout(200); }
-    ok(!bad.length, `item 26: at ${w} px in focus view, the first click draws a product's lines, the second opens its card clear of its box and bolts, and a connection card never covers its bolt`, bad.join(' | '));
+      await p.keyboard.press('Escape'); await p.waitForTimeout(200); }
+    ok(!bad.length, `item 26: at ${w} px the first click keeps the overview, a double-click opens its card clear of its box and bolts, and a connection card never covers its bolt`, bad.join(' | '));
     await p.evaluate(() => localStorage.clear());
     // Nov 18 2026: each play as it started before, the CDN its one outside system, with the warehouse or Search data added from the menu
     for (const play of ['cja', 'aem']) { await pick(p, play); await p.evaluate(() => { for (const id of st.out.filter(x => x !== 'cdn')) removeOutside(id); }); await addOut(p, play === 'cja' ? 'dwh' : 'search'); const bb = [];
@@ -362,21 +363,17 @@ const server = http.createServer((req, res) => {
   // that isn't docked is at least min(600 px, its own height, the room) tall wherever a spot that tall clears its anchor and the
   // selected product's bolts, opens at its top and shows its close X; while the canvas is marked tall the room is the window
   // below the tabs
-  { const judge = () => { const c = document.getElementById('card'), cr = c.getBoundingClientRect(), cv = document.getElementById('canvas').getBoundingClientRect(), F = fv();
+  { const judge = () => { const c = document.getElementById('card'), cr = c.getBoundingClientRect(), cv = document.getElementById('canvas').getBoundingClientRect();
       const tall = document.getElementById('canvas').classList.contains('tall');
-      const V = {l: Math.max(cv.left, 0), r: Math.min(cv.right, innerWidth), t: tall ? Math.max(document.querySelector('.tabs').getBoundingClientRect().bottom, 0) : Math.max(cv.top, 0) + (F ? document.getElementById('fbar').offsetHeight : 0), b: Math.min(cv.bottom, innerHeight)};
+      const V = {l: Math.max(cv.left, 0), r: Math.min(cv.right, innerWidth), t: tall ? Math.max(document.querySelector('.tabs').getBoundingClientRect().bottom, 0) : Math.max(cv.top, 0), b: Math.min(cv.bottom, innerHeight)};
       const hit = (r, k, m = 0) => r.left < k.right + m && k.left - m < r.right && r.top < k.bottom + m && k.top - m < r.bottom;
       const at = e => { const r = e.getBoundingClientRect(), h = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2); return !!h && e.contains(h); };
       const inV = e => { const r = e.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2; return r.width > 0 && x > V.l && x < V.r && y > V.t && y < V.b; };
-      const a = document.querySelector(card.k === 'p' ? `.node[data-p="${card.id}"]` : `.ib[data-c="${card.id}"]`), ar = a.getBoundingClientRect(), sel = F ? fcur() : card.k === 'p' ? card.id : null;
+      const a = document.querySelector(card.k === 'p' ? `.node[data-p="${card.id}"]` : `.ib[data-c="${card.id}"]`), ar = a.getBoundingClientRect(), sel = card.k === 'p' ? card.id : null;
       const sv = document.getElementById('save').getBoundingClientRect(), underSave = b => { const r = b.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2; return x > sv.left && x < sv.right && y > sv.top && y < sv.bottom; };
       // step 71: a bolt that sits under the Continue button is not the card's to keep clear (Coworker's eleventh line puts one there at 768 wide; the canvas pans)
-      // Nov 19 2026: likewise a bolt under the focus bar. With every product on at 768 wide, Real-Time CDP's focus bar runs to five rows of
-      // "connects to" chips and covers the top of the map (the canvas pans to reach what is under it); the bar hides those bolts, not the card, so they are not
-      // counted as blocked by it (the card still keeps clear of them when it finds its spot)
-      const fbr = F && !document.getElementById('fbar').hidden ? document.getElementById('fbar').getBoundingClientRect() : null, underBar = b => { if (!fbr) return false; const r = b.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2; return x > fbr.left && x < fbr.right && y > fbr.top && y < fbr.bottom; };
-      const mine = [...document.querySelectorAll('.ib')].filter(b => b !== a && inV(b) && !underSave(b) && (F || (sel && [CBY[b.dataset.c].a, CBY[b.dataset.c].b].includes(sel))));
-      const hard = [ar, ...mine.map(b => b.getBoundingClientRect())]; if (F && sel && card.k === 'c') hard.push(document.querySelector(`.node[data-p="${sel}"]`).getBoundingClientRect());
+      const mine = [...document.querySelectorAll('.ib')].filter(b => b !== a && inV(b) && !underSave(b) && sel && [CBY[b.dataset.c].a, CBY[b.dataset.c].b].map(offeringId).includes(sel));
+      const hard = [ar, ...mine.map(b => b.getBoundingClientRect())];
       const boxes = [...document.querySelectorAll('#stage .node')].filter(n => n !== a && inV(n)).map(n => n.getBoundingClientRect());
       const w = cr.width, h = Math.min(cr.height, 600); let cH = false, cB = false;
       for (let x = V.l + 10; x <= V.r - 10 - w && !cB; x += 6) for (let y = V.t + 10; y <= V.b - 10 - h; y += 6) { const r = {left: x, top: y, right: x + w, bottom: y + h};
@@ -387,7 +384,7 @@ const server = http.createServer((req, res) => {
       // and a bolt cut by the window's edge (half of it below the window, its middle on the last pixel row) is cut off by the window, not
       // the card: with every product on at 768x1024 the Coworker + Content Analytics bolt rests there while the card sits far above it
       const cut = b => { const r = b.getBoundingClientRect(); return r.top < 0 || r.left < 0 || r.bottom > innerHeight || r.right > innerWidth; };
-      const blocked = mine.filter(b => !at(b) && !underBar(b) && !cut(b)).map(b => b.dataset.c); if (cH && blocked.length) bad.push('blocks ' + blocked);
+      const blocked = mine.filter(b => !at(b) && !cut(b)).map(b => b.dataset.c); if (cH && blocked.length) bad.push('blocks ' + blocked);
       if (cB && boxes.some(k => hit(cr, k))) bad.push('covers a box with a clear spot free');
       const fl = Math.min(c.scrollHeight + 8, 600, V.b - V.t - 20); let cT = false;
       for (let x = V.l + 10; x <= V.r - 10 - w && !cT; x += 6) for (let y = V.t + 10; y <= V.b - 10 - fl; y += 6) if (!hard.some(k => hit({left: x, top: y, right: x + w, bottom: y + fl}, k, 4))) { cT = true; break; }
@@ -398,19 +395,18 @@ const server = http.createServer((req, res) => {
     for (const [w, h] of [[1440, 900], [1536, 864], [1280, 800], [1600, 950], [1920, 1080], [768, 1024]]) { const bad = []; let n = 0;
       for (const play of ['custom', 'cja', 'commerce', 'aem', 'fsi', 'abv', 'coworker']) { const p = await fresh({width: w, height: h}); await pick(p, play); await p.fill('#rate', '150');
         if (play === 'custom') await all14(p); if (play === 'cja' || play === 'aem') await addOut(p, play === 'cja' ? 'dwh' : 'search');
-        const F = await p.evaluate(() => fv()), ids = await p.$$eval('#stage .node', ns => ns.map(n => n.dataset.p));
-        for (const id of ids) { await p.evaluate(() => { hideCard(true); if (fv()) { fsel = null; refocus(); } }); await p.waitForTimeout(F ? 350 : 30);
+        const ids = await p.$$eval('#stage .node', ns => ns.map(n => n.dataset.p));
+        for (const id of ids) { await p.evaluate(() => hideCard(true)); await p.waitForTimeout(30);
           // step 66 (Nov 10 2026): the box is brought to the middle before the click. Brought only as far as the edge, a box in the
           // bottom row could rest under the Continue button on a 768 px screen, and the forced click pressed Continue
           // (step 94: the page scrolls to the explorer below the canvas, so it goes back to the top, as a person's would, before the click)
           // Nov 19 2026: a box with a picker inside (AEM Sites with Edge Delivery Services, Workfront, Adobe Commerce) opens its card from its name; its middle
-          // can be the picker, which opens the list of choices instead (with every product on in focus view at 1280 wide, or on a phone)
+          // can be the picker, which opens the list of choices instead (with every product on the canvas at 1280 wide, or on a phone)
           const s = `.node[data-p="${id}"]`, t = async () => (await p.$(s + ' .offering-title')) ? s + ' .offering-title' : s;
-          await p.$eval(s, e => { e.scrollIntoView({block: 'center', inline: 'center'}); scrollTo(0, 0); }); await p.click(await t(), {force: true}); await p.waitForTimeout(F ? 450 : 250);
-          if (F) { await p.click(await t(), {force: true}); await p.waitForTimeout(150); }
+          await p.$eval(s, e => { e.scrollIntoView({block: 'center', inline: 'center'}); scrollTo(0, 0); }); await p.dblclick(await t(), {force: true}); await p.waitForTimeout(250);
           if (await p.isHidden('#card')) { bad.push(`${play} ${id}: no card`); continue; } n++; const r = await p.evaluate(judge); if (r) bad.push(`${play} ${r}`);
           // AEM Sites is now part of the one "AEM Sites with Edge Delivery Services" box (eds), which carries its connections, so that box's bolts are swept
-          if (!F && id !== ids[0] || F && !['rtcdp', 'ajo', 'workfront', 'cw', 'eds'].includes(id)) continue;
+          if (id !== ids[0]) continue;  // The full set of bolts is present for every product.
           for (const c of await p.$$eval('.ib', bs => bs.filter(b => b.getBoundingClientRect().width > 0).map(b => b.dataset.c))) {
             await p.evaluate(() => hideCard(true)); const bs = `.ib[data-c="${c}"]`; await p.$eval(bs, e => e.scrollIntoView({block: 'nearest', inline: 'nearest'}));
             try { await p.click(bs, {timeout: 1500}); } catch (e) { bad.push(`${play} ${id}: bolt ${c} can't be clicked`); continue; }
@@ -424,7 +420,7 @@ const server = http.createServer((req, res) => {
       return [...document.querySelectorAll('.node.out')].map(n => { const nr = n.getBoundingClientRect(), nm = (n.querySelector('.nn > span:last-child') || n.querySelector(':scope > span:last-of-type')).getBoundingClientRect();
         return {id: n.dataset.p, top: (nm.top - nr.top) / s, one: nm.height / s < 30, fit: nm.bottom <= nr.bottom - 2}; }); });
     ok(r.length === 4 && r.every(x => x.top >= 22 && x.one && x.fit), `item 28: at ${w} px every outside box's name sits below OUTSIDE ADOBE on one line`, JSON.stringify(r));
-    await tapNode(p, 'csrc'); await p.waitForTimeout(300); await p.click('#fb-svc'); await p.waitForTimeout(300);
+    await tapNode(p, 'csrc'); await p.waitForTimeout(300);
     ok((await p.textContent('#card h4')).trim() === 'Authoring documents' && (await p.textContent('.node[data-p="csrc"]')).includes('Authoring docs'), 'item 28: the box says Authoring docs and its card keeps Authoring documents');
     await p.context().close(); }
   // 25. (item 38) a product whose services were all removed says No services
@@ -433,20 +429,19 @@ const server = http.createServer((req, res) => {
     const c = (await p.textContent('.node[data-p="cw"] .cnt')).trim();
     ok(c === 'No services', 'item 38: Coworker on its own with every service removed says No services, not Services on its connections', c);
     await p.context().close(); }
-  // 26. (item 39; step 95 took the bolt hint out, Adam Nov 14) focus view: Continue sits just under the focus bar, before and after a
+  // 26. (item 39; step 95 took the bolt hint out, Adam Nov 14) Continue sits just under the canvas guide, before and after a
   // product is selected, and covers no box or bolt
   { const p = await fresh(); await pick(p, 'custom'); await all14(p);
     const clear = () => p.evaluate(() => { const s = document.getElementById('save').getBoundingClientRect(), b = document.getElementById('fbar').getBoundingClientRect(), hit = r => r.width && r.left < s.right && s.left < r.right && r.top < s.bottom && s.top < r.bottom;
-      return !document.getElementById('fbar').hidden && s.top >= b.bottom && s.top - b.bottom <= 14 && ![...document.querySelectorAll('.node,.ib')].some(e => hit(e.getBoundingClientRect())); });
-    const c0 = await clear(); await tapNode(p, 'cja'); await p.waitForTimeout(300); const c1 = await clear();
-    await p.click('#fb-clear'); await p.waitForTimeout(200); const c2 = await clear();
-    ok(!(await p.$('#hint')) && c0 && c1 && c2, 'item 39, step 95: in focus view Continue sits just under the focus bar, clear of every box and bolt, with or without a product selected', JSON.stringify([c0, c1, c2]));
+      return !document.getElementById('fbar').hidden && s.top >= b.bottom && s.top - b.bottom <= 19 && ![...document.querySelectorAll('.node,.ib')].some(e => hit(e.getBoundingClientRect())); });
+    const c0 = await clear(); await tapNode(p, 'cja', 1); await p.waitForTimeout(300); const c1 = await clear();
+    await p.evaluate(() => fit()); const c2 = await clear();
+    ok(!(await p.$('#hint')) && c0 && c1 && c2, 'item 39, step 95: Continue sits below the canvas guide and clear of the boxes and bolts before and after a click or resize', JSON.stringify([c0, c1, c2]));
     await p.context().close(); }
   // 27. (item 43) no bolt sits under a Recommended tag
   for (const w of [1440, 1280, 768]) { const p = await fresh({width: w, height: 900}); const bad = [];
     for (const set of [['bv', 'cja', 'eds', 'commerce', 'so'], ['bv', 'cja', 'rtcdp', 'ajo', 'target', 'eds', 'commerce', 'so', 'aemsites']]) { await pick(p, 'custom');
       await p.evaluate(s => { for (const id of s) addProduct(id); openAdd(false); addOutside('cdn'); addOutside('search'); }, set); await p.keyboard.press('Escape'); await p.waitForTimeout(500);
-      if (await p.isVisible('#fbar')) { await tapNode(p, 'bv'); await p.waitForTimeout(400); }
       bad.push(...await p.evaluate(() => { const recs = [...document.querySelectorAll('.node .rec')].map(e => e.getBoundingClientRect());
         return [...document.querySelectorAll('.ib')].filter(b => { const r = b.getBoundingClientRect(); return recs.some(k => r.left < k.right && k.left < r.right && r.top < k.bottom && k.top < r.bottom); }).map(b => b.dataset.c); }));
       await p.evaluate(() => localStorage.clear()); }
@@ -513,7 +508,6 @@ const server = http.createServer((req, res) => {
   // 30. (step 48, fix 2) the rehearsal's card: the Brand Visibility + CJA lightning bolt opens a card tall enough to read
   // at laptop sizes, inside the window below the tabs, scrolled to its top with its close X showing, clear of its bolt
   for (const [w, h] of [[1440, 900], [1536, 864], [1280, 800]]) { const p = await fresh({width: w, height: h}); await pick(p, 'cja'); await p.fill('#rate', '150');
-    await p.click('#view-all'); await p.waitForTimeout(400);   // Nov 18 2026: CJA opens in Explore one product; Show all connections draws every bolt
     // and they pop in over 0.6 s (.ib.enter): clicked mid-pop, the click retries and scrolls the bolt to the top of the window, so wait for the pop to end
     await p.waitForFunction(() => [...document.querySelectorAll('.ib')].every(b => !b.getAnimations().length));
     await p.click('.ib[data-c="bv-cja"]'); await p.waitForTimeout(400);

@@ -1,6 +1,6 @@
 // Click test for the Build canvas prototype. Run from the repo root:  node sow/canvas/test_canvas.js
 // Compares the six plays with the live SOW tool (sow/index.html), then exercises the play picker, the fixed plays and
-// Create your own play (Add product, Remove from canvas, the busy-canvas focus view) like a partner would.
+// Create your own play (Add product, Remove from canvas, the full connection map) like a partner would.
 const {chromium} = require('playwright');
 const path = require('path');
 const fs = require('fs');
@@ -91,12 +91,10 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
     const onLine = dots.filter(d => paths.some(pa => pa.id !== d.id && pa.pts.some(([x, y]) => Math.hypot(x - d.x, y - d.y) < 4))).map(d => d.id);
     return {covered, onLine, n: dots.length};
   });
-  // every part of the focus bar sits inside the bar and on screen, and no product box sits under the bar
+  // every part of the canvas guide sits inside the bar and on screen, and no product box sits under the bar
   const barInside = async (p, w) => p.evaluate(w => {
     const bar = document.getElementById('fbar').getBoundingClientRect(), out = [];
-    // step 47: on a phone the names scroll sideways in one row, so the row itself must sit inside the bar
-    const fm = document.getElementById('fb-m'), rolls = getComputedStyle(fm).overflowX === 'auto' && fm.scrollWidth > fm.clientWidth;
-    const parts = [document.querySelector('#fbar .fi'), document.querySelector('#fbar .fl'), ...(rolls ? [fm] : document.querySelectorAll('#fb-m > *')), document.getElementById('fb-svc'), document.getElementById('fb-clear')].filter(e => e && !e.hidden);
+    const parts = [...document.querySelector('#fbar').children];
     for (const e of parts) { const r = e.getBoundingClientRect(); if (r.left < bar.left - 1 || r.right > bar.right + 1 || r.top < bar.top - 1 || r.bottom > bar.bottom + 1 || r.left < 0 || r.right > w) out.push((e.className || e.id || e.textContent).toString().slice(0, 24)); }
     const under = [...document.querySelectorAll('.node')].filter(n => { const r = n.getBoundingClientRect(); return r.top < bar.bottom && r.bottom > bar.top; }).map(n => n.dataset.p);
     return {out, under, h: Math.round(bar.height)};
@@ -180,7 +178,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
     'the toolbar shows the play name, Change play and Add product, with its menu closed (Nov 18: a product can be added to a ready-made play)');
   ok((await Promise.all(['build', 'scope', 'services', 'sow'].map(k => p.isVisible(`.tabs [data-tab="${k}"]`)))).every(Boolean) && await p.isVisible('#rate') && await p.isVisible('#size') && await p.isVisible('#t-big') && await p.isVisible('#start-over'),
     'with a play picked, the steps, Your rate, Delivery size, the total and Start over show');
-  ok(await p.isHidden('#fbar'), 'a small play draws every line, with no focus bar');
+  ok(await p.isVisible('#canvas-product-help'), 'a small play includes the product gesture and the link to the map below');
   let t = await read(p), e = expected('aem');
   ok(t.big === money(e.yr), 'the total adds every product and connection in the play', `${t.big} vs ${money(e.yr)}`);
   // step 42: each box shows its name and how many of its services are on, no money
@@ -194,7 +192,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   // 4. click a product (hovering opens nothing), X a line, check it back
   await p.hover('.node[data-p="eds"]'); await p.waitForTimeout(400);
   ok(await p.isHidden('#card'), 'S42: hovering a product opens nothing');
-  await p.click('.node[data-p="eds"] .offering-title'); await p.waitForTimeout(250);
+  await p.dblclick('.node[data-p="eds"] .offering-title'); await p.waitForTimeout(250);
   ok(await p.isVisible('#card') && (await p.textContent('#card h4')).includes('Edge Delivery Services'), 'clicking a product opens its services card');
   const rows = await p.$$eval('#card .ln', r => r.map(x => x.dataset.l));
   ok(JSON.stringify(rows) === JSON.stringify(P.eds.lines), 'the card lists the product\'s services', rows.join(','));
@@ -230,7 +228,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   ok(flowSrc.length >= 1 && flowSrc.every(Boolean), 'every data flow has its source');
   ok(await p.$eval('.edge[data-c="bv-eds"]', x => x.classList.contains('hot')), 'the open connection lights up red');
   ok(await p.$eval('.edge[data-c="bv-eds"]', x => x.getAttribute('marker-end') || x.getAttribute('marker-start')) !== null, 'an arrow on the line shows which way the data goes');
-  await p.click('.node[data-p="so"]'); await p.waitForTimeout(250);
+  await p.dblclick('.node[data-p="so"]'); await p.waitForTimeout(250);
   ok((await p.textContent('#card h4')).includes('Sites Optimizer'), 'S42: a click on another box swaps to its card');
   await p.keyboard.press('Escape'); await p.waitForTimeout(200);
   ok(await p.isHidden('#card'), 'S42: Escape closes the card');
@@ -239,7 +237,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
       'step 95 (Adam, Nov 14): no line at the foot of the canvas, and Continue sits at the canvas\'s top right', JSON.stringify(at)); }
 
   // 6. optional services
-  await p.click('.node[data-p="bv"]'); await p.waitForTimeout(200);
+  await p.dblclick('.node[data-p="bv"]'); await p.waitForTimeout(200);
   await p.click('#card details.more summary'); await p.waitForTimeout(150);
   ok((await p.textContent('#card details.more .ln[data-l="O04"] .fee')).trim() === 'Not selected', 'optional lines say Not selected, with an Add button, and are not counted yet');
   await p.click('#card [data-t="O04"]'); await p.waitForTimeout(150);
@@ -281,7 +279,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
 
   // 8b. a line a play turns on can be taken out (Brand Visibility on its own starts with C05)
   await p.click('#change-play'); await p.click('#confirm-yes'); await p.waitForTimeout(300); await choose(p, 'abv');
-  await p.click('.node[data-p="bv"]'); await p.waitForTimeout(200);
+  await p.dblclick('.node[data-p="bv"]'); await p.waitForTimeout(200);
   await p.click('#card [data-t="C05"]'); await p.waitForTimeout(150);
   t = await read(p); e = expected('abv', 'base', 150, {C05: false});
   ok(t.big === money(e.yr) && (await p.textContent('#card .ln[data-l="C05"] .fee')).trim() === 'Not selected', 'Brand Visibility on its own: X on its prompt strategy line takes it out and keeps it out', t.big);
@@ -292,7 +290,6 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   // 9. every fixed play: its products, its connections, and a clean layout
   for (const pl of FIXED) {
     const q = await fresh(); await q.goto(CANVAS); await choose(q, pl.id);
-    if (await q.evaluate(() => fv())) { await q.click('#view-all'); await q.waitForTimeout(500); }   // Nov 18 2026: Brand Visibility + Customer Journey Analytics opens in Explore one product
     const start = [...pl.products, ...(pl.ostart || [])], want = CAT.connections.filter(c => start.includes(c.a) && start.includes(c.b)).map(c => c.id).sort();   // step 45: the CDN starts on
     const tq = await read(q), eq = expected(pl.id);
     ok(JSON.stringify(await nodes(q)) === JSON.stringify([...start].sort()) && JSON.stringify(await edges(q)) === JSON.stringify(want) && tq.big === money(eq.yr) && await layoutClean(q),
@@ -362,14 +359,14 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
     for (const id of set) await addP(q, id);
     await outside(q); await away(q);
     const td = await tidy(q), clean = await layoutClean(q), names = set.map(id => P[id].short || P[id].name).join(', ');
-    ok(await q.isHidden('#fbar') && clean && td.covered.length === 0 && td.onLine.length === 0,
+    ok(await q.isVisible('#canvas-product-help') && clean && td.covered.length === 0 && td.onLine.length === 0,
       `${names}: every line drawn, ${td.n} i dot${td.n === 1 ? '' : 's'}, none covered or sitting on another line, a clean layout`, JSON.stringify(td));
     if (set.length === 2) ok(JSON.stringify(await q.evaluate(() => [pos('bv'), pos('bc')])) === '[[0,1],[1,0]]', 'two products far apart on the grid are packed side by side');
     await q.context().close();
   }
 
   // 11. Remove from canvas keeps the choices underneath
-  await p.click('.node[data-p="cja"]'); await p.waitForTimeout(250);
+  await p.dblclick('.node[data-p="cja"]'); await p.waitForTimeout(250);
   await p.click('#card [data-t="C06"]'); await p.waitForTimeout(150);
   ok((await p.$$('#card [data-rm="cja"]')).length === 1, 'a product card on your own play has Remove from canvas');
   await p.click('#card [data-rm="cja"]'); await p.waitForTimeout(400);
@@ -394,19 +391,20 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   ok(t.big === money(e.yr), 'the total adds Real-Time CDP, its connections and the unlocked line', t.big);
   await p.click('#card [data-close]'); await p.waitForTimeout(150);
 
-  // a click at the box's centre, as a person makes it (Playwright's own click first scrolls the box under the focus view's taller bar)
-  const tap = async (pg, id) => {
-    const node = pg.locator(`.node[data-p="${id}"]`);
-    const box = await (id === 'eds' ? node.locator('.offering-title') : node).boundingBox();
-    await pg.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+  // Product titles and plain boxes use the same mouse gesture, even when the node also has a version picker.
+  const tap = async (pg, id, twice = false) => {
+    const node = pg.locator(`.node[data-p="${id}"]`), title = node.locator('.offering-title');
+    const control = await title.count() ? title : node;
+    if (twice) await control.dblclick();
+    else await control.click();
   };
-  // 13. a busy canvas switches to focus view
+  // 13. Even the busiest canvas opens with every connection.
   for (const id of OFFERINGS) if (!(await nodes(p)).includes(id)) await addP(p, id);
   await outside(p); await away(p);
   await p.selectOption('.node[data-p="eds"] select[data-choice="authoring"]', 'universal');
   const all = OFFERINGS, nAll = OFFERINGS.reduce((sum, id) => sum + neighbors(id).length, 0) / 2;
-  ok((await nodes(p)).length === N && await p.isVisible('#fbar') && (await edges(p)).length === 0, `all ${N} on: the canvas goes calm, no lines at rest (${nAll} connections)`);
-  ok((await p.textContent('#fbar')).includes(`${nAll} connections`) && (await p.textContent('#fbar')).includes('Changing the view keeps your selected services and fees the same'), 'the bar says how many connections there are and that changing the view keeps the services and fees');
+  ok((await nodes(p)).length === N && await p.isVisible('#fbar') && (await edges(p)).length === nAll, `all ${N} offerings open with all ${nAll} connections`);
+  ok((await p.textContent('#fbar')).includes(`${nAll} connections`) && await p.locator('#canvas-product-help a').getAttribute('href') === '#knowledge-model-section', 'the guide gives the count and links to the lower map');
   const counts = await p.$$eval('.node:not([data-p="eds"])', ns => ns.map(n => [n.dataset.p, n.querySelector('.cn').textContent]));
   ok(counts.length === N - 1 && counts.every(([id, c]) => c === `${neighbors(id).length} connection${neighbors(id).length === 1 ? '' : 's'}`),
     'other product cards count distinct connected offerings while the AEM card shows the authoring method');
@@ -414,49 +412,39 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   const expectedTerm = selected.reduce((sum, id) => sum + CAT.lines[id].base * 150 * (CAT.lines[id].unit === 'monthly' ? 12 : 1), 0);
   t = await read(p);
   ok(new Set(selected).size === selected.length && t.big === money(expectedTerm), 'the total prices every selected service once, including shared AEM connections', `${t.big} vs ${money(expectedTerm)}`);
+  const drawn = await edges(p);
   await tap(p, 'cja'); await away(p);
-  const drawnCja = (await edges(p)).map(id => offeringRoutes.find(c => c.id === id));
-  const cjaNeighbors = drawnCja.map(c => c.a === 'cja' ? c.b : c.a).sort();
-  ok(drawnCja.every(c => c.a === 'cja' || c.b === 'cja') && JSON.stringify(cjaNeighbors) === JSON.stringify(neighbors('cja')) &&
-    (await p.$$('.ib')).length === cjaNeighbors.length, `clicking CJA draws one line and one control per connected offering`);
-  ok((await p.textContent('#fbar')).includes('connects to') && await p.isVisible('#fb-clear'), 'the bar names what CJA connects to, with Clear');
-  await p.click('#fb-clear'); await away(p);
-  ok((await edges(p)).length === 0 && await p.isHidden('#fb-clear'), 'Clear goes back to the calm canvas');
-  let clean = true, bad = [];
-  for (const id of all) { await tap(p, id); await away(p);
-    const n = (await edges(p)).length, want = neighbors(id).length;
-    if (n !== want || !(await layoutClean(p))) { clean = false; bad.push(id); }
-    await p.click('#fb-clear'); await p.waitForTimeout(100); }
-  ok(clean, 'every product\'s lines draw in full, with no i on a box, the i dots apart and everything on screen', bad.join(','));
+  ok(await p.isHidden('#card') && JSON.stringify(await edges(p)) === JSON.stringify(drawn), 'one click keeps all connections on the canvas');
+  const rendered = await p.$$eval('#edges path.edge', es => es.map(e => [e.dataset.s, e.dataset.e]));
+  ok(all.every(id => {
+    const linked = rendered.filter(pair => pair.includes(id)).map(([a,b]) => a === id ? b : a).sort();
+    return JSON.stringify(linked) === JSON.stringify(neighbors(id));
+  }) && (await p.$$('.ib')).length === drawn.length, 'each product has its complete set of direct connections and every line has one bolt');
   const nsv = CAT.connections.filter(c => c.no_services && all.includes(c.a) && all.includes(c.b));
   ok(nsv.length > 0 && nsv.every(c => !c.lines.length && !c.more.length && c.how && c.source && c.source.url), `${nsv.length} connection(s) Adobe documents without services keep a source and no lines`);
-  await tap(p, nsv[0].a); await away(p);
   await p.click(`.ib[data-c="${nsv[0].id}"]`); await p.waitForTimeout(300);
   ok((await p.textContent('#card')).includes('does not explicitly list any services for this connection. You can add your own services on the Services tab'), `the i on ${P[nsv[0].a].name} + ${P[nsv[0].b].name} points to the Services tab`);
-  await p.click('#card [data-close]'); await p.click('#fb-clear'); await p.waitForTimeout(150);
+  await p.click('#card [data-close]'); await p.waitForTimeout(150);
 
-  // 13b. in focus view the first click on a product draws its lines; the second opens its card, which covers neither the box nor its
-  // lightning bolts, and stays while the pointer travels to it (step 47)
+  // 13b. A single mouse click preserves the overview. A double-click opens services.
   { const q = await fresh(); await q.goto(CANVAS); await choose(q, 'custom');
     for (const id of OFFERINGS) await q.evaluate(i => addProduct(i), id);
     await q.selectOption('.node[data-p="eds"] select[data-choice="authoring"]', 'universal');
     await q.keyboard.press('Escape'); await away(q);
     for (const id of ['rtcdp', 'bc', 'workfront']) {
-      // step 94: the page scrolls now (the explorer sits below the canvas), and Playwright's element click scrolls it to a box it
-      // thinks is covered; a person's click at the box does not, so the clicks here are a person's (as in section 13)
-      await tap(q, id); await q.waitForTimeout(500); const first = await q.isHidden('#card');
-      await tap(q, id); await q.waitForTimeout(500);
+      await tap(q, id); const first = await q.isHidden('#card');
+      await tap(q, id, true); await q.waitForTimeout(500);
       const cover = await q.evaluate(id => { const c = document.getElementById('card').getBoundingClientRect(), hit = r => r.left < c.right && c.left < r.right && r.top < c.bottom && c.top < r.bottom;
-        return [document.querySelector(`.node[data-p="${id}"]`), ...document.querySelectorAll('.ib')].filter(e => hit(e.getBoundingClientRect())).length; }, id);
+        return hit(document.querySelector(`.node[data-p="${id}"]`).getBoundingClientRect()) ? 1 : 0; }, id);
       const rm = await q.$eval('#card [data-rm]', b => { b.scrollIntoView({block: 'nearest'}); const r = b.getBoundingClientRect(); return {x: r.left + r.width / 2, y: r.top + r.height / 2}; });
       await q.mouse.move(rm.x, rm.y, {steps: 30}); await q.waitForTimeout(400);
       ok(first && cover === 0 && await q.isVisible('#card') && (await q.textContent('#card h4')).includes(P[id].title || P[id].name),
-        `${P[id].name}: in focus view the first click draws its lines, the second opens its card clear of the box and its bolts, and it stays open on the way to it`, `first ${first}, covers ${cover}`);
-      await q.click('#card [data-close]'); await q.waitForTimeout(150); await q.click('#fb-clear'); await q.waitForTimeout(150);
+        `${P[id].name}: a double-click opens the card clear of its box and it stays open on the way to Remove`, `first ${first}, covers ${cover}`);
+      await q.click('#card [data-close]'); await q.waitForTimeout(150);
     }
-    await q.click('.node[data-p="rtcdp"]'); await q.waitForTimeout(300); await q.click('.node[data-p="rtcdp"]'); await q.waitForTimeout(500);
+    await tap(q, 'rtcdp', true); await q.waitForTimeout(500);
     await q.click('#card [data-rm="rtcdp"]'); await q.waitForTimeout(500);
-    ok(!(await nodes(q)).includes('rtcdp') && (await nodes(q)).length === N - 1, 'Remove from canvas works in focus view');
+    ok(!(await nodes(q)).includes('rtcdp') && (await nodes(q)).length === N - 1, 'removing a product updates the full canvas');
     await q.context().close(); }
   { const q = await fresh(); await q.goto(CANVAS); await choose(q, 'custom');
     // audit fix: CJA audiences reach Target through Real-Time CDP or Journey Optimizer, so with Journey Optimizer on the canvas the line is open
@@ -474,10 +462,10 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
     await q.click('.ib[data-c="target-cja"]'); await q.waitForTimeout(300);
     await q.click('#card [data-addp="rtcdp"]'); await q.waitForTimeout(800);
     ok(before < 10 && await q.isVisible('#fbar') && await q.isVisible('#card') && (await q.textContent('#card h4')).includes('Target') && (await edges(q)).includes('target-cja'),
-      `adding Real-Time CDP from a card tips the canvas into focus view (${before} connections before) and keeps the card and its line`);
+      `adding Real-Time CDP from a card shows its additional connections (${before} connections before) and keeps the card and its line`);
     await q.click('#card [data-close]'); await q.waitForTimeout(200); await away(q);
-    await tap(q, 'cja'); await q.waitForTimeout(400); await tap(q, 'cja'); await q.waitForTimeout(700);
-    ok(await q.isVisible('#card') && (await q.textContent('#card h4')).includes('Customer Journey Analytics'), 'and product cards still open afterwards (a second click, step 47)');
+    await tap(q, 'cja', true); await q.waitForTimeout(700);
+    ok(await q.isVisible('#card') && (await q.textContent('#card h4')).includes('Customer Journey Analytics'), 'and product cards still open with a double-click afterwards');
     await q.context().close(); }
 
   // 14. your own play is kept on reload, and Change play clears it
@@ -553,7 +541,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
     await tap(q, 'cja'); await q.waitForTimeout(600);
     const bi = await barInside(q, w);
     ok(bi.out.length === 0 && bi.under.length === 0 && await q.evaluate(() => document.documentElement.scrollWidth) <= w,
-      `at ${w} wide, with all ${N} on and CJA picked, every part of the focus bar sits inside it (${bi.h} px tall) and no box sits under it`, JSON.stringify(bi));
+      `at ${w} wide, with all ${N} on and CJA picked, the canvas guide fits (${bi.h} px tall) and no box sits under it`, JSON.stringify(bi));
   }
 
   // 16. audit fix (Oct 31): every connection says what it is; partner workflows draw dashed; specialized Skills replace generic ones
@@ -595,13 +583,13 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
     await q.click('#card [data-close]'); await q.waitForTimeout(150);
     let t = await read(q), e = expected('custom', 'base', 150, {}, ['rtcdp', 'bc', 'cw', 'cja']);
     ok(t.big === money(e.yr), `with Coworker Skills for CJA on the canvas, the generic Skills package is not counted (${t.big})`, `${t.big} vs ${money(e.yr)}`);
-    await q.click('.node[data-p="cw"]'); await q.waitForTimeout(300);
+    await q.dblclick('.node[data-p="cw"]'); await q.waitForTimeout(300);
     ok(await q.$eval('#card .ln[data-l="CW03"]', r => r.classList.contains('rp') && r.textContent.includes('Replaced by the specialized Skills')), 'its line says Replaced by the specialized Skills');
     await q.click('#card [data-keep="CW03"]'); await q.waitForTimeout(200);
     t = await read(q); e = expected('custom', 'base', 150, {}, ['rtcdp', 'bc', 'cw', 'cja'], {CW03: true});
     ok(t.big === money(e.yr) && !(await q.$eval('#card .ln[data-l="CW03"]', r => r.classList.contains('rp'))), 'one click keeps it for distinct Skills, and the total adds it', t.big);
     await q.click('#card [data-close]'); await q.waitForTimeout(150);
-    await q.click('.node[data-p="rtcdp"]'); await q.waitForTimeout(300);
+    await q.dblclick('.node[data-p="rtcdp"]'); await q.waitForTimeout(300);
     const cpt = await q.$$eval('#card .ln .cpt', x => x.length), lines = await q.$$eval('#card .ln', x => x.length);
     ok(cpt > 0 && cpt === lines - await q.$$eval('#card .ln.lock', x => x.length), `lines from Adobe documentation research carry a Concept tag (${cpt})`);
     // completeness critic (Oct 31): links say Capability reference; the term entered in the SOW steps sets the canvas total; on a phone the legend shows under the total
@@ -724,7 +712,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
         `Nov 17: with ${T} on the canvas, ${H} sits once under "Not suggested", right after "Connects to your canvas", and in no other group`, m.heads.join(' | ') + ' ' + JSON.stringify(r));
       ok(r.length === 1 && r[0].name === H && r[0].tag === 'Add anyway' && r[0].why === why && r[0].seen, `Nov 17: its tag reads "Add anyway", and the line under its name, shown without pointing at the row, reads "${why}"`, JSON.stringify(r));
       // take the newer product off: the older one is an ordinary row again
-      await outside(q); await q.click(`.node[data-p="${trigger}"]`); await q.waitForTimeout(300); await q.click(`#card [data-rm="${trigger}"]`); await q.waitForTimeout(400);
+      await outside(q); await q.dblclick(`.node[data-p="${trigger}"]`); await q.waitForTimeout(300); await q.click(`#card [data-rm="${trigger}"]`); await q.waitForTimeout(400);
       m = await menu(q); r = m.rows.filter(x => x.id === held);
       ok(!m.heads.includes('Not suggested') && r.length === 1 && r[0].under === 'Connects to your canvas' && r[0].tag === 'Connects to 1 on your canvas' && r[0].why === 'Lines to Real-Time CDP' && !r[0].seen,
         `Nov 17: with ${T} removed, ${H} is back in its normal place under "Connects to your canvas" and "Not suggested" is gone`, m.heads.join(' | ') + ' ' + JSON.stringify(r));

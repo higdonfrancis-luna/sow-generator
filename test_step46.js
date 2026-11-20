@@ -71,7 +71,7 @@ const PARTY = /\b(the|The) customer\b(?! (ID|journey|profile|does))|\bcustomer's
     const card = await p.$eval('#card', e => e.textContent);
     ok(!PARTY.test(card) && /your client/i.test(card), 'the CDN card says your client (step 45 flagged it)', (card.match(/.{50}customer.{50}/) || [''])[0]);
     await p.click('#card [data-close]'); await p.waitForTimeout(200);
-    await p.click('.node[data-p="cdn"]'); await p.waitForTimeout(400);
+    await p.dblclick('.node[data-p="cdn"]'); await p.waitForTimeout(400);
     const oc = await p.$eval('#card', e => e.textContent);
     ok(!PARTY.test(oc) && oc.includes('A system your client runs outside Adobe') && oc.includes('lightning bolt'), 'the outside system card says your client and points to the lightning bolt', oc.slice(0, 200));
     await p.context().close(); }

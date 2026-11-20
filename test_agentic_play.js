@@ -114,7 +114,7 @@ const fix = s => s.replace(/’/g, "'");
   const page = async (w, h) => { const p = watch(await (await context(w, h)).newPage()); await p.goto(ORIGIN + 'index.html'); await p.waitForFunction('window.READY===true'); return p; };
   const home = async p => { await p.evaluate(() => localStorage.clear()); await p.goto(ORIGIN + 'index.html'); await p.waitForFunction('window.READY===true'); };
   const state = p => p.evaluate(() => ({play: st.play, on: st.on.slice(), out: (st.out || []).slice(), area: st.area || null, label: document.getElementById('play-label').textContent,
-    n: totals().n, yr: totals().yr, view: fv(), ids: [...prods(), ...conns()].flatMap(o => all(o)).filter(counted)}));
+    n: totals().n, yr: totals().yr, full: document.querySelectorAll('#edges path.edge').length === displayConnections().length, ids: [...prods(), ...conns()].flatMap(o => all(o)).filter(counted)}));
   // each starting system's connections to the canvas's products count exactly their starting services (the canvas's own default for each)
   const ticked = p => p.evaluate(() => st.out.every(x => conns().filter(c => c.a === x || c.b === x).every(c => all(c).every(l => counted(l) === defOf(l)))));
   const famClick = (p, k, i) => p.evaluate(([k, i]) => { const f = document.querySelectorAll('#picker-list .pc-fam')[k]; (i < 0 ? f.querySelector('.fam-all') : f.querySelectorAll('.fam-area')[i]).click(); }, [k, i]).then(() => p.waitForTimeout(400));
@@ -153,8 +153,7 @@ const fix = s => s.replace(/’/g, "'");
     for (const id of Object.keys(START)) { await home(p); await p.click(`#picker [data-play="${id}"]`); await p.waitForTimeout(400); seen[id] = {...await state(p), ticked: await ticked(p)}; }
     ok(Object.entries(START).every(([id, want]) => same(seen[id].out, want) && seen[id].ticked && !seen[id].area),
       '3. each ready-made play opened from the first page starts with exactly its outside systems, each with its connection\'s starting services ticked and its optional ones off', JSON.stringify(Object.fromEntries(Object.entries(seen).map(([k, v]) => [k, [v.out, v.ticked]]))));
-    ok(Object.entries(seen).every(([id, v]) => v.view === (id === 'cja')), '3. Brand Visibility + Customer Journey Analytics, with 11 lines, opens in Explore one product, as any canvas with ten or more lines does; the other five open with all their lines',
-      JSON.stringify(Object.fromEntries(Object.entries(seen).map(([k, v]) => [k, v.view]))));
+    ok(Object.values(seen).every(v => v.full), 'each ready-made play opens with its full set of lines');
     // through Change play, and from the problem finder (Build this)
     await home(p); await p.click('#picker [data-play="abv"]'); await p.waitForTimeout(300); await p.click('#change-play'); await p.click('#confirm-yes'); await p.waitForTimeout(300);
     await p.click('#picker [data-play="aem"]'); await p.waitForTimeout(400); const changed = await state(p);
@@ -176,9 +175,9 @@ const fix = s => s.replace(/’/g, "'");
     const ag = [];
     for (let i = 0; i < 4; i++) { await home(p); await famClick(p, AG, i < 3 ? i : -1); ag.push({...await state(p), ticked: await ticked(p)}); }
     const want = [...AGENTIC.areas.map(a => [a[0], a[2], a[3]]), [AGENTIC.all[0], AGENTIC.all[2], AGENTIC.all[3]]];
-    ok(ag.every((s, i) => s.play === 'custom' && same(s.on, want[i][1]) && same(s.out, want[i][2]) && s.ticked && s.area === want[i][0] && s.label === want[i][0] && s.view),
-      '3. each Client KBO area and all three together open Your own play with its products placed, every outside system they connect to on with its starting services, and the canvas named for it ("Find new customers", Nov 19 2026; before, "Adobe agentic AI: Find new customers"); each opens in Explore one product',
-      JSON.stringify(ag.map(s => [s.label, s.on, s.out, s.view])));
+    ok(ag.every((s, i) => s.play === 'custom' && same(s.on, want[i][1]) && same(s.out, want[i][2]) && s.ticked && s.area === want[i][0] && s.label === want[i][0] && s.full),
+      '3. each Client KBO area and all three together open Your own play with its products placed, every outside system they connect to on with its starting services, and the canvas named for it ("Find new customers", Nov 19 2026; before, "Adobe agentic AI: Find new customers"); each opens with all of its connections',
+      JSON.stringify(ag.map(s => [s.label, s.on, s.out, s.full])));
     await home(p); await p.click('#picker [data-play="custom"]'); await p.waitForTimeout(300);
     ok(same((await state(p)).out, []), '3. Create your own play opened empty starts with no outside system, as before');
     // removing a system takes its services with it
@@ -204,7 +203,7 @@ const fix = s => s.replace(/’/g, "'");
 
   // every canvas the first page opens, with all connections shown: no line runs into a box, measured in the stage's own units so its scale hides nothing
   { const p = await page(), bad = {};
-    const look = async name => { await p.waitForTimeout(400); if (await p.evaluate(() => fv())) { await p.click('#view-all'); await p.waitForTimeout(400); }
+    const look = async name => { await p.waitForTimeout(400);
       const r = await p.evaluate(() => { const nodes = [...document.querySelectorAll('#stage .node')].map(n => ({id: n.dataset.p, l: n.offsetLeft, t: n.offsetTop, r: n.offsetLeft + n.offsetWidth, b: n.offsetTop + n.offsetHeight})), out = new Set();
         for (const q of document.querySelectorAll('#edges path.edge')) { const L = q.getTotalLength();
           for (let d = 0; d <= L; d += 2) { const pt = q.getPointAtLength(d);

@@ -24,10 +24,11 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     // script errors only: a font or other resource the network can't reach is not a script error (ChatGPT ran this offline)
     p.on('pageerror', e => errs.push(e.message)); p.on('console', m => { if (m.type() === 'error' && !/Failed to load resource|net::ERR_/.test(m.text())) errs.push(m.text()); }); return p; };
   const canvasTotal = async p => (await p.textContent('#t-big')).trim();
-  /* Nov 18 2026: Brand Visibility + Customer Journey Analytics starts with eleven lines, so it opens in Explore one product, where a first click shows a box's
-     lines and a second opens its card (step 47) */
-  const openBox = async (p, id) => { await p.click(`.node[data-p="${id}"]`); await p.waitForTimeout(300);
-    if (await p.evaluate(() => fv() && document.getElementById('card').hidden)) { await p.click(`.node[data-p="${id}"]`); await p.waitForTimeout(300); } };
+  const openBox = async (p, id) => {
+    const box = p.locator(`.node[data-p="${id}"]`), title = box.locator('.offering-title');
+    await (await title.count() ? title : box).dblclick();
+    await p.waitForTimeout(300);
+  };
   const toolTotal = async p => (await p.$$eval('.total-card strong', e => e.map(x => x.textContent.trim())))[2];
   /* step 45: the CDN starts on; checks of adding and removing systems start from a play with it taken off, as a partner can.
      Nov 18 2026: a play starts with every outside system it offers, so they start from a play with all of them taken off */
@@ -380,7 +381,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     await build(p); await addProd(p, 'rtcdp'); await closeMenu(p);
     const withRt = await canvasTotal(p); await cont(p); await services(p);
     ok(await p.evaluate(() => state.estimates.custom['CANVAS-TC04'].on) && await toolTotal(p) === withRt, `R1: with Real-Time CDP added, the line is in, on both pages (${withRt})`, await toolTotal(p));
-    await build(p); await p.click('.node[data-p="rtcdp"]'); await p.waitForTimeout(300); await p.click('#card [data-rm="rtcdp"]'); await p.waitForTimeout(300);
+    await build(p); await openBox(p, 'rtcdp'); await p.waitForTimeout(300); await p.click('#card [data-rm="rtcdp"]'); await p.waitForTimeout(300);
     const without = await canvasTotal(p); await cont(p); await services(p);
     ok(await toolTotal(p) === without, `R1: without Real-Time CDP both pages leave the waiting line out (${without})`, await toolTotal(p));
     await build(p); await addProd(p, 'rtcdp'); await closeMenu(p);
@@ -469,7 +470,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
   // ---------- the last verification pass (step 21) ----------
   const pickCustom = async (p, ids, rate = 150) => { await p.goto(BASE); await p.waitForTimeout(300); await p.click('#picker [data-play="custom"]'); await p.waitForTimeout(400);
     for (const id of ids) await addProd(p, id); await closeMenu(p); if (rate !== null) { await p.fill('#rate', String(rate)); await p.waitForTimeout(100); } };
-  const removeProd = async (p, id) => { await p.click(`.node[data-p="${id}"]`); await p.waitForTimeout(300); await p.click(`#card [data-rm="${id}"]`); await p.waitForTimeout(300); };
+  const removeProd = async (p, id) => { await openBox(p, id); await p.waitForTimeout(300); await p.click(`#card [data-rm="${id}"]`); await p.waitForTimeout(300); };
   await sec(async () => {
     // a product taken off and added back keeps the Services edits on its lines
     const p = await fresh(); await pickCustom(p, ['bv', 'cja']); await cont(p); await services(p);
@@ -607,7 +608,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
   await sec(async () => {
     // the generic Coworker Skills kept beside the CJA Skills stay kept while CJA is off the canvas
     const p = await fresh(); await pickCustom(p, ['cw', 'cja']);
-    await p.click('.node[data-p="cw"]'); await p.waitForTimeout(300); await p.click('#card [data-keep="CW03"]'); await p.waitForTimeout(150); await p.click('#card [data-close]');
+    await openBox(p, 'cw'); await p.waitForTimeout(300); await p.click('#card [data-keep="CW03"]'); await p.waitForTimeout(150); await p.click('#card [data-close]');
     const kept = await canvasTotal(p); await cont(p); await build(p); await removeProd(p, 'cja'); await cont(p); await build(p);
     await addProd(p, 'cja'); await closeMenu(p);
     const back = await canvasTotal(p); await cont(p); await services(p);

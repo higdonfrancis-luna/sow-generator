@@ -44,7 +44,7 @@ const server = http.createServer((req, res) => {
 
   // 2. taking the CDN off takes CDN log forwarding off on both pages
   { const p = await fresh(); await pick(p, 'abv'); const t0 = await canvasTotal(p);
-    await p.click('.node[data-p="cdn"]'); await p.waitForTimeout(400); await p.click('#card [data-rmout="cdn"]'); await p.waitForTimeout(400);
+    await p.dblclick('.node[data-p="cdn"]'); await p.waitForTimeout(400); await p.click('#card [data-rmout="cdn"]'); await p.waitForTimeout(400);
     const t1 = await canvasTotal(p); await toServices(p); const t2 = await toolTotal(p);
     ok(t0 === '$213,600' && t1 === '$211,200' && t2 === t1, 'Brand Visibility on its own: the CDN off takes its $2,400 off, on the canvas and on Services (Search data on from the start since Nov 18)', JSON.stringify({t0, t1, t2}));
     await back(p); ok((await boxes(p)) === 'bv,search', 'and back on Build the CDN stays off');
@@ -92,7 +92,7 @@ const server = http.createServer((req, res) => {
     ok(card.tier === "Needs Sites Optimizer UltimateCheck what your client owns. If they don't have it, it's an upsell for Adobe." && card.row === 'Needs Sites Optimizer Ultimate',
       'the write-back card and its service say Needs Sites Optimizer Ultimate, with the check and the upsell', JSON.stringify(card));
     await p.click('#card [data-close]'); await p.waitForTimeout(200);
-    await p.click('.node[data-p="aemassets"]'); await p.waitForTimeout(400);
+    await p.dblclick('.node[data-p="aemassets"] .offering-title'); await p.waitForTimeout(400);
     ok(!!(await p.$('#card [data-rmout="aemassets"]')), 'the saved AEM Assets\' card has Remove from canvas');
     await p.click('#card [data-close]'); await p.waitForTimeout(200);
     const t0 = await canvasTotal(p); await toServices(p); const t1 = await toolTotal(p);
@@ -104,7 +104,7 @@ const server = http.createServer((req, res) => {
     ok((await boxes(p)) === 'aemassets,bv,cdn,csrc,eds,so' && await canvasTotal(p) === t0, 'and back on Build both are still there, at the same total', await boxes(p));
     await p.reload(); await p.waitForTimeout(700);
     ok((await boxes(p)) === 'aemassets,bv,cdn,csrc,eds,so', 'a reload keeps AEM Assets on the canvas', await boxes(p));
-    await p.click('.node[data-p="aemassets"]'); await p.waitForTimeout(400); await p.click('#card [data-rmout="aemassets"]'); await p.waitForTimeout(400);
+    await p.dblclick('.node[data-p="aemassets"] .offering-title'); await p.waitForTimeout(400); await p.click('#card [data-rmout="aemassets"]'); await p.waitForTimeout(400);
     ok((await boxes(p)) === 'bv,cdn,csrc,eds,so' && !(await p.evaluate(() => [...prods(), ...conns()].some(o => all(o).includes('AXD05')))) && await canvasTotal(p) !== t0, 'Remove from canvas takes AEM Assets and its services off the canvas and the total');
     await p.click('#out-btn'); await p.waitForTimeout(250);
     ok(!(await p.$('#out-menu [data-out="aemassets"]')), 'and once removed, it is not offered again');

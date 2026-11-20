@@ -68,7 +68,7 @@ const site=path.join(__dirname,'site');
   assert(fs.readFileSync(xfile,'utf8').includes('Coworker Skills for CJA reporting')&&!fs.readFileSync(xfile,'utf8').includes(SUPPORT)&&xdoc.includes('Appendix: Adobe capability references')&&!xdoc.includes(SUPPORT),'what the canvas hands over keeps it out of the CSV and the appendix');
   const w=await browser.newPage({acceptDownloads:true});w.on('pageerror',e=>errors.push(e.message));
   await w.goto(base+'/');await w.click('#picker [data-play="coworker"]');await w.waitForTimeout(300);
-  await w.click('.node[data-p="cw"]');await w.waitForTimeout(400);
+  await w.dblclick('.node[data-p="cw"]');await w.waitForTimeout(400);
   const onCanvas=await w.$$eval('#card .ln',(rows,u)=>rows.filter(r=>[...r.querySelectorAll('a')].some(a=>a.href===u)).map(r=>r.dataset.l),SUPPORT);
   assert.deepEqual(onCanvas.slice().sort(),['CW01','CW02','CW03','CW04','CW05','CW06','CW07','CW08','CW09','CW10','CW11'],'the Coworker card on the canvas cites it under each of its eleven services (CW09 to CW11 since Nov 17): '+onCanvas.join());
   await w.keyboard.press('Escape');await w.waitForTimeout(200);await w.click('#save');await w.waitForURL('**/sow/index.html#scope');

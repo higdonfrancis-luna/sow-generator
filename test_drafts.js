@@ -26,7 +26,7 @@ function serve(proto) {
     await p.click('#picker [data-play="aem"]'); await p.waitForTimeout(400);
     ok(await p.isVisible('#save-draft') && await p.isVisible('#open-draft') && await p.isVisible('#saved-note') && (await p.textContent('#saved-note')).includes('Saved in this browser'), 'with a play, Save draft, Open draft and "Saved in this browser as you go" show' + tag);
     await p.fill('#rate', '175'); await p.click('#size [data-size="large"]'); await p.waitForTimeout(150);
-    await p.click('.node[data-p="eds"]'); await p.waitForTimeout(250); await p.click('#card [data-t="A03"]'); await p.waitForTimeout(150); await p.keyboard.press('Escape');
+    await p.dblclick('.node[data-p="eds"] .offering-title'); await p.waitForTimeout(250); await p.click('#card [data-t="A03"]'); await p.waitForTimeout(150); await p.keyboard.press('Escape');
     const total = await p.textContent('#t-big');
     const [dl] = await Promise.all([p.waitForEvent('download', {timeout: 15000}), p.click('#save-draft')]);
     const file = path.join(tmp, (proto ? 'p-' : 'n-') + dl.suggestedFilename()); await dl.saveAs(file);

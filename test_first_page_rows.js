@@ -110,7 +110,7 @@ const COPILOT_STUDIO = 'https://experienceleague.adobe.com/en/docs/experience-ma
   const page = async (w, h, o) => { const p = watch(await (await context(w, h, o)).newPage()); await p.goto(ORIGIN + 'index.html'); await p.waitForFunction('window.READY===true'); return p; };
   const home = async p => { await p.evaluate(() => localStorage.clear()); await p.goto(ORIGIN + 'index.html'); await p.waitForFunction('window.READY===true'); };
   const state = p => p.evaluate(() => ({play: st.play, on: st.on.slice(), out: (st.out || []).slice(), area: st.area || null, label: document.getElementById('play-label').textContent,
-    n: totals().n, yr: totals().yr, view: fv(), menu: outsideOffer().filter(id => !has(id))}));
+    n: totals().n, yr: totals().yr, menu: outsideOffer().filter(id => !has(id))}));
   const clickIn = (p, sel) => p.evaluate(sel => document.querySelector(sel).click(), sel).then(() => p.waitForTimeout(450));
   // no box on another, no bolt on a box, every box inside the canvas (with every line drawn), and nothing scrolls sideways
   const clean = p => p.evaluate(() => { const boxes = [...document.querySelectorAll('#stage .node')].map(e => e.getBoundingClientRect()), dots = [...document.querySelectorAll('.ib')].map(e => e.getBoundingClientRect());
@@ -168,7 +168,7 @@ const COPILOT_STUDIO = 'https://experienceleague.adobe.com/en/docs/experience-ma
   // ============ 4. one start card per AI assistant: its assistant alone, its products, its name, its places ============
   { const p = await page(1440, 900), seen = {};
     for (const ai of AI) { await home(p); await clickIn(p, `#picker-list .pc-card[data-assistant="${ai}"]`); await p.keyboard.press('Escape');
-      const s = await state(p); await p.evaluate(() => { showAllEdges = true; fsel = null; render(); }); await p.waitForTimeout(700); seen[ai] = {...s, lay: await clean(p), places: await p.evaluate(() => !!areaPlaces())}; }
+      const s = await state(p); await p.waitForTimeout(700); seen[ai] = {...s, lay: await clean(p), places: await p.evaluate(() => !!areaPlaces())}; }
     ok(AI.every(ai => { const s = seen[ai], [label, , products, out] = CARDS[ai]; return s.play === 'custom' && same(s.on, products) && same(s.out, out) && s.label === label && s.area === label; }),
       '4. each assistant card opens Your own play with its products placed, its own assistant alone among ChatGPT, Claude and Microsoft Copilot, the other outside systems the rule puts on, and the canvas named like the card',
       JSON.stringify(Object.fromEntries(AI.map(ai => [ai, [seen[ai].label, seen[ai].on, seen[ai].out]]))));
@@ -250,7 +250,7 @@ const COPILOT_STUDIO = 'https://experienceleague.adobe.com/en/docs/experience-ma
     await clickIn(p, '#picker-list .pc-card[data-assistant="claude"]'); await p.keyboard.press('Escape');
     // The five active assistant lines include the AEM as a Cloud Service connection.
     await p.locator('#stage select[data-choice="sitesDeployment"]').selectOption('cloud');
-    await p.evaluate(() => { showAllEdges = true; fsel = null; render(); }); await p.waitForTimeout(900);
+    await p.waitForTimeout(900);
     const look = await p.evaluate(() => { const st_ = e => { const s = getComputedStyle(e); return [s.stroke, s.strokeWidth]; };
       const es = [...document.querySelectorAll('path.edge')], ai = es.filter(e => /^claude-/.test(e.dataset.c)), other = es.filter(e => !/^claude-/.test(e.dataset.c) && !e.classList.contains('pf') && !e.classList.contains('pw') && !e.classList.contains('ex'));
       const key = document.querySelector('#t-legend .key-item.assistant');
@@ -310,7 +310,7 @@ const COPILOT_STUDIO = 'https://experienceleague.adobe.com/en/docs/experience-ma
     const box = '#stage .node[data-p="creativecloud"] .info-i';
     await c.click(box); await c.waitForTimeout(200); const b1 = await c.evaluate(() => [document.getElementById('info-tip').hidden ? null : document.getElementById('info-tip').textContent, document.getElementById('card').hidden]);
     await c.keyboard.press('Escape'); await c.waitForTimeout(150); const b2 = await c.evaluate(() => document.getElementById('info-tip').hidden);
-    await c.click('#stage .node[data-p="creativecloud"]', {position: {x: 30, y: 50}}); await c.waitForTimeout(400); const b3 = await c.evaluate(() => !document.getElementById('card').hidden && document.getElementById('card-heading').textContent);
+    await c.dblclick('#stage .node[data-p="creativecloud"] .cnt'); await c.waitForTimeout(400); const b3 = await c.evaluate(() => !document.getElementById('card').hidden && document.getElementById('card-heading').textContent);
     ok(b1[0] === CC_NOTE && b1[1] === true && b2 && b3 === 'Creative Cloud for enterprise', '8. on the canvas the Creative Cloud box has the same i: it opens the note without opening the box\'s card, Escape closes it, and the box itself still opens its card', JSON.stringify({b1, b2, b3}));
     await c.keyboard.press('Escape'); await c.waitForTimeout(300); await c.focus('#stage .node[data-p="creativecloud"]'); await c.keyboard.press('Tab'); await c.waitForTimeout(150);
     const ctip = () => c.evaluate(() => [document.getElementById('info-tip').hidden ? null : document.getElementById('info-tip').textContent, document.activeElement.dataset.info || null, document.getElementById('card').hidden]);

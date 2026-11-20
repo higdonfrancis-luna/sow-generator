@@ -13,7 +13,7 @@ const choose = (p,id) => p.locator('#picker [data-play="'+id+'"]').click();
 const add = (p,id) => p.evaluate(id=>addProduct(id),id);
 const remove = (p,id) => p.evaluate(id=>removeProduct(id),id);
 const snapshot = p => p.evaluate(()=>JSON.stringify({
-  st,products:prods().map(p=>p.id),edges:conns().map(c=>c.id),totals:totals(),focus:fsel,allEdges:showAllEdges,
+  st,products:prods().map(p=>p.id),edges:conns().map(c=>c.id),totals:totals(),
   card,pinned,cardHidden:document.getElementById('card').hidden,storage:{...localStorage}
 }));
 const edgeIds = (p,selector='.wke-edge') => p.locator(root+' '+selector).evaluateAll(ls=>ls.map(l=>l.dataset.edge).sort());
@@ -96,7 +96,7 @@ async function verifyPlay(p) {
 
     for(const id of ['cja','rtcdp','ajo','target','marketo','bv']) await add(p,id);
     await p.evaluate(()=>{addOutside('crm');addOutside('cdn');});
-    await p.fill('#rate','150'); await p.locator('.node[data-p="bv"]').click(); await p.locator('#fb-svc').click();
+    await p.fill('#rate','150'); await p.locator('.node[data-p="bv"]').dblclick();
     await p.waitForFunction(()=>!document.getElementById('card').hidden);
     const before=await snapshot(p);
     await node(p,'cja').focus(); await p.keyboard.press('Space');

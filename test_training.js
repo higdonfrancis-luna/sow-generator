@@ -99,7 +99,7 @@ function expected(id) {
       await p.evaluate(({products, outside}) => {
         hideCard(true); openAdd(false); openOut(false);
         st = {...st, play: 'custom', on: products, out: outside, ls: {}, keep: {}, rate: 185, eff: null, decisions: {authoring: 'universal'}, fresh: true, pubSig: null};
-        fsel = null; showAllEdges = false; moreOpen = {}; render();
+        moreOpen = {}; render();
       }, {products, outside});
       await p.waitForTimeout(250);
     };
@@ -156,24 +156,24 @@ function expected(id) {
 
     // 3. particular cases a partner would notice
     await seed(['eds']);
-    await p.click('.node[data-p="eds"] .offering-title');
+    await p.dblclick('.node[data-p="eds"] .offering-title');
     const offering = await read();
     ok(offering && offering.status.startsWith(DATA.products.aemsites.exams.length + ' certifications'), 'the AEM Sites with Edge Delivery Services card carries the AEM Sites certifications as its own', offering && offering.status);
     await p.evaluate(() => { pinned = true; showCard('p', 'aemsites'); });
     ok(await read() === null, 'the Cloud Manager and author training card inside that offering does not repeat the box');
     await seed(['bv', 'cja']);
-    await p.click('.node[data-p="bv"]');
+    await p.dblclick('.node[data-p="bv"]');
     await p.click('#card details.ready > summary');
     ok((await read()).lead === 'No certification yetAdobe has not released one for this product.', 'a product with no certification says so plainly', (await read()).lead);
     await p.click('#card [data-t="L01"]');
     ok((await read()).open, 'the box stays open while the partner removes a service on the same card');
     await p.keyboard.press('Escape');
-    await p.click('.node[data-p="bv"]');
+    await p.dblclick('.node[data-p="bv"]');
     ok((await read()).open, 'and is still open when the same card is opened again, like the other expanding lists');
-    await p.click('.node[data-p="cja"]');
+    await p.dblclick('.node[data-p="cja"]');
     const other = await read();
     ok(other && !other.open, 'opening the box on one product leaves it closed on the others');
-    await p.click('.node[data-p="bv"]');
+    await p.dblclick('.node[data-p="bv"]');
     let reached = false;
     for (let i = 0; i < 60 && !reached; i++) { await p.keyboard.press('Tab'); reached = await p.evaluate(() => document.activeElement.matches('#card details.ready > summary')); }
     const ring = reached && await p.evaluate(() => (s => s.outlineStyle + ' ' + s.outlineWidth + ' ' + s.outlineColor)(getComputedStyle(document.activeElement)));
@@ -191,7 +191,7 @@ function expected(id) {
     // 4. a fixed play and a phone
     await p.evaluate(() => { hideCard(true); st = {...st, play: 'aem', on: [], out: ['cdn'], ls: {}, keep: {}, fresh: true, pubSig: null, decisions: {authoring: ''}}; render(); });
     await p.waitForTimeout(250);
-    await p.click('.node[data-p="so"]');
+    await p.dblclick('.node[data-p="so"]');
     const fixed = await read();
     ok(fixed && !fixed.open && fixed.note && fixed.foot && fixed.status === expected('so').status, 'the box is on product cards in the fixed plays too, closed, and at the foot of the card under the note about connection services', JSON.stringify(fixed && [fixed.open, fixed.note, fixed.foot, fixed.status]));
     await p.setViewportSize({width: 390, height: 844});
