@@ -1,0 +1,45 @@
+name: Verify November 20 GenStudio Proto package
+on:
+  push:
+    branches:
+      - codex/verify-genstudio-questions-nov20
+permissions:
+  contents: read
+jobs:
+  proto:
+    runs-on: ubuntu-latest
+    timeout-minutes: 28
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Build the Proto site twice
+        run: |
+          python3 canvas/build.py
+          python3 build_site.py
+          python3 canvas/build.py
+          python3 build_site.py
+          git diff --exit-code --stat
+          git archive --format=zip -o "$RUNNER_TEMP/sow-generator-proto-nov20.zip" HEAD:site
+          unzip -tq "$RUNNER_TEMP/sow-generator-proto-nov20.zip"
+      - name: Package Adobe Proto with index.html at the root
+        uses: actions/upload-artifact@v4
+        with:
+          name: sow-generator-proto-nov20
+          path: site/
+          if-no-files-found: error
+          include-hidden-files: true
+          retention-days: 14
+      - name: Install Chromium for the repository checks
+        run: |
+          npm install --prefix "$RUNNER_TEMP/sow-browser" --no-audit --no-fund playwright@1.56.1
+          "$RUNNER_TEMP/sow-browser/node_modules/.bin/playwright" install --with-deps chromium
+          echo "NODE_PATH=$RUNNER_TEMP/sow-browser/node_modules" >> "$GITHUB_ENV"
+      - name: Check question navigation at desktop and phone sizes
+        run: node test_question_navigation.js
+      - name: Check every focused product and the full opening map
+        run: node test_map_first_page.js
+      - name: Check first-page plays and restored drafts
+        run: |
+          node test_first_page_rows.js
+          node test_drafts.js
