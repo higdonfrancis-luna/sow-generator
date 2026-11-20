@@ -19,6 +19,8 @@ const server = http.createServer((req, res) => {
 const CAT = JSON.parse(fs.readFileSync(path.join(__dirname, 'canvas', 'catalog.json'), 'utf8'));
 const FOUND = JSON.parse(fs.readFileSync(path.join(__dirname, 'canvas', 'research', 'commerce_2026-11-12', 'commerce_services.json'), 'utf8'));
 const OWN = ['CE01', 'CE02', 'CE03', 'CE04', 'CE05', 'CE06', 'CE07'], ALL = [...OWN, 'XR01'];
+// Nov 19 2026 (the Commerce round, test_commerce_versions.js): nine more optional services on Adobe Commerce, and the version picker in its box, Cloud Service to start
+const LATER = ['CE08', 'CE09', 'CE10', 'CE11', 'CE12', 'CE13', 'CE14', 'CE15', 'CE16'];
 const CAVEATS = /limited availability|coming soon|\bbeta\b|\blabs\b|early access|early adopter|generally available|not stated by Adobe|confirm (?:\w+ ){0,5}with Adobe|\basks? Adobe\b(?!['’]s| data\b| (?:Analytics|Commerce|Express)\b)|Consulting Services/i;
 const LABELS = new RegExp(CAVEATS.source + '|\\$\\d', 'i');   // the catalog text carries no price either; the statement of work shows the partner's own fees
 (async () => {
@@ -45,11 +47,11 @@ const LABELS = new RegExp(CAVEATS.source + '|\\$\\d', 'i');   // the catalog tex
   // Coworker + Adobe Analytics connection (cw-aa) with one of them: 158 connections and 563 services
   // Nov 17 2026: Figma connects to AEM Assets, GenStudio for Performance Marketing, Adobe Express and Firefly Custom Models (canvas/research/wave6_figma.json), four connections with six optional services, XF01 to XF06
   // Nov 18 2026: ChatGPT, Claude and Microsoft Copilot as outside systems (canvas/research/wave7_ai_assistants.json), 41 connections and six optional services on their products, XT01 and XT03 to XT07
-  ok(adobe === 34 && CAT.products.length - adobe === 13 && CAT.connections.length === 204 && Object.keys(L).length === 575 &&
+  ok(adobe === 36 && CAT.products.length - adobe === 18 && CAT.connections.length === 217 && Object.keys(L).length === 608 &&
     !!edc && edc.a === 'eds' && edc.b === 'cja' && edc.lines.join() === '' && edc.more.join() === 'EDC01' && !!L.EDC01 && L.EDC01.name === 'Measure Edge Delivery page and block interactions',
-    'the catalog holds 34 Adobe products, 13 outside systems, 204 connections and 575 services (ChatGPT, Claude and Microsoft Copilot joined as outside systems with 40 connections, Claude + Brand Intelligence the last, two more connections joined boxes the tool already had, and six optional services sit on their products; Figma connects to AEM Assets, GenStudio for Performance Marketing, Adobe Express and Firefly Custom Models, with six optional services; Coworker added 26 optional services, three of its own and 23 on its connections, and Coworker + Adobe Analytics with one of them; Brand Intelligence added Creative Cloud and Coworker, with no services of their own; Coworker added two optional services, Coworker set up in an AI platform and Workfront Fusion scenarios with Coworker; Brand Intelligence added Frame.io, Firefly Creative Production and Figma, each with one optional service; step 91 added six; the reviewed canvas added Edge Delivery Services + Customer Journey Analytics with one optional service, EDC01)',
+    'the catalog holds 36 Adobe products, 18 outside systems, 217 connections and 608 services (Adobe Commerce Optimizer and Adobe Commerce Intelligence joined with five outside systems (ERP, PIM, order management, warehouse management, other commerce platform), 13 connections and 33 optional services on Nov 19 2026; ChatGPT, Claude and Microsoft Copilot joined as outside systems with 40 connections, Claude + Brand Intelligence the last, two more connections joined boxes the tool already had, and six optional services sit on their products; Figma connects to AEM Assets, GenStudio for Performance Marketing, Adobe Express and Firefly Custom Models, with six optional services; Coworker added 26 optional services, three of its own and 23 on its connections, and Coworker + Adobe Analytics with one of them; Brand Intelligence added Creative Cloud and Coworker, with no services of their own; Coworker added two optional services, Coworker set up in an AI platform and Workfront Fusion scenarios with Coworker; Brand Intelligence added Frame.io, Firefly Creative Production and Figma, each with one optional service; step 91 added six; the reviewed canvas added Edge Delivery Services + Customer Journey Analytics with one optional service, EDC01)',
     [adobe, CAT.products.length - adobe, CAT.connections.length, Object.keys(L).length, edc ? [edc.a, edc.b, edc.lines.join('+'), edc.more.join('+')].join('/') : 'no eds-cja', (L.EDC01 || {}).name || 'no EDC01'].join());
-  ok(P.commerce.lines.length === 0 && P.commerce.more.join() === OWN.join(), 'Adobe Commerce has seven services of its own, none ticked to start', P.commerce.lines.concat(P.commerce.more).join());
+  ok(P.commerce.lines.length === 0 && P.commerce.more.join() === [...OWN, ...LATER].join(), 'Adobe Commerce has seven services of its own, and nine more since Nov 19 2026, none ticked to start', P.commerce.lines.concat(P.commerce.more).join());
   ok(ALL.every(i => L[i] && L[i].origin === 'research' && L[i].scope && L[i].evidence && /^https:\/\/(experienceleague|developer)\.adobe\.com\//.test(L[i].url) && L[i].low < L[i].base && L[i].base < L[i].high),
     'each of the eight says what the partner does, rests on a quote from a public Adobe page, and has small, typical and large hours', ALL.filter(i => !(L[i] && L[i].scope && L[i].evidence)).join());
   ok(ALL.every(i => L[i].name === FOUND.services[i].name && L[i].scope === FOUND.services[i].scope && L[i].evidence === FOUND.services[i].evidence && L[i].base === FOUND.services[i].base),
@@ -72,9 +74,10 @@ const LABELS = new RegExp(CAVEATS.source + '|\\$\\d', 'i');   // the catalog tex
   await p.$eval('#add-menu [data-add="commerce"]', e => { const d = e.closest('details'); if (d) d.open = true; });
   await p.click('#add-menu [data-add="commerce"]'); await p.waitForTimeout(300);
   await p.keyboard.press('Escape'); await p.click('#out-btn'); await p.waitForTimeout(250); await p.click('#out-menu [data-out="crm"]'); await p.waitForTimeout(300);
-  await openCard(p, '.node[data-p="commerce"]');
+  await p.selectOption('select[data-choice="commerceVersion"]', 'paas'); await p.waitForTimeout(400);   // On Cloud: the seven are all offered
+  await openCard(p, '.node[data-p="commerce"] .offering-title');
   let card = await readCard(p);
-  ok(card.rows.map(r => r.id).join() === OWN.join() && card.rows.every(r => r.more) && OWN.every(i => card.text.includes(L[i].name)), 'the Adobe Commerce card lists the seven under More services', card.rows.map(r => r.id).join());
+  ok(card.rows.map(r => r.id).join() === [...OWN, ...LATER].join() && card.rows.every(r => r.more) && OWN.every(i => card.text.includes(L[i].name)), 'the Adobe Commerce card lists the seven under More services (with the nine of Nov 19 2026)', card.rows.map(r => r.id).join());
   ok(/Needs the Adobe Commerce B2B extension/.test(card.text) && card.links.length >= 7 && card.links.every(h => /adobe\.com/.test(h)), 'with the B2B tag and a link to each Adobe page');
   await openCard(p, 'button.ib[data-c="commerce-crm"]');
   card = await readCard(p);
@@ -99,7 +102,7 @@ const LABELS = new RegExp(CAVEATS.source + '|\\$\\d', 'i');   // the catalog tex
   // 4. the Commerce play still starts as it did
   p = await fresh(); await p.goto(BASE); await p.waitForTimeout(400); await p.click('#picker [data-play="commerce"]'); await p.waitForTimeout(500);
   const play = await p.evaluate(() => ({ticked: [...new Set([...prods(), ...conns()].flatMap(o => all(o)).filter(l => counted(l)))], offered: (P.commerce.more || []).length}));
-  ok(!ALL.some(i => play.ticked.includes(i)) && play.offered === 7, 'on the Commerce play the seven are offered on the Adobe Commerce card and none is counted until ticked', play.ticked.join());
+  ok(!ALL.some(i => play.ticked.includes(i)) && play.offered === 16, 'on the Commerce play the seven (and the nine of Nov 19 2026) are offered on the Adobe Commerce card and none is counted until ticked', play.ticked.join());
   await p.context().close();
 
   // 5. the RFI Builder answers Commerce questions from them

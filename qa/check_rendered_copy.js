@@ -27,6 +27,8 @@ const CLIENT = /not currently (?:offered|available)|not offered to health care|s
 // Nov 17 (Adam: "2, yes"): Adobe's own note on the industries Coworker is not offered to, word for word, is on the partner's
 // Workfront + Coworker card (the end of its how text) and on no other view; the Client never reads it
 const ADOBE_NOTE = 'Adobe\'s Workfront help says: "CX Enterprise Coworker is not currently available to organizations in health care, finance, or some other industries with sensitive data. AI Assistant is available to these organizations."';
+// Nov 19 (Adam approved the Workfront version picker): the day a client bought Workfront is a client date, not a release date
+const BOUGHT = /Bought (?:before|after) March 12, 2026/g;
 const WF_CARD = /^canvas [^:]+: connection card workfront-cw(?: \(expanded\))?$|^canvas template: connection workfront-cw$/;
 
 const server = http.createServer((req, res) => {
@@ -239,8 +241,8 @@ const HARVEST = `(() => { document.querySelectorAll('details').forEach(d => d.op
   for (const [where, text] of seen) {
     let m; const re = new RegExp(FORBIDDEN.source, 'gi');
     while ((m = re.exec(text))) hits.push([where, m[0], text.slice(Math.max(0, m.index - 90), m.index + m[0].length + 90)]);
-    const dre = new RegExp(DATE.source, 'g');
-    while ((m = dre.exec(text))) { const before = text.slice(Math.max(0, m.index - 80), m.index); if (RELEASE_WORDS.test(before)) dates.push([where, m[0], text.slice(Math.max(0, m.index - 100), m.index + m[0].length + 40)]); }
+    const dre = new RegExp(DATE.source, 'g'), dtext = text.replace(BOUGHT, 'Bought');
+    while ((m = dre.exec(dtext))) { const before = dtext.slice(Math.max(0, m.index - 80), m.index); if (RELEASE_WORDS.test(before)) dates.push([where, m[0], dtext.slice(Math.max(0, m.index - 100), m.index + m[0].length + 40)]); }
     const wre = new RegExp(WATCH.source, 'gi'), wtext = WF_CARD.test(where) ? text.replace(ADOBE_NOTE, '') : text;
     while ((m = wre.exec(wtext))) { const k = m[0].toLowerCase(); if (!watch.has(k)) watch.set(k, [0, where, wtext.slice(Math.max(0, m.index - 80), m.index + m[0].length + 80)]); watch.get(k)[0]++; }
   }

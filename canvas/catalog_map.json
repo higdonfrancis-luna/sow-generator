@@ -65,6 +65,22 @@
    "short": "Commerce"
   },
   {
+   "id": "aco",
+   "name": "Commerce Optimizer",
+   "title": "Adobe Commerce Optimizer",
+   "short": "Commerce Optimizer",
+   "info": "Adobe Commerce Optimizer comes in two packages: Optimizer, with Adobe's Commerce storefront on Edge Delivery Services, and Optimizer Headless, without that storefront, for a front end your client builds. Cart, checkout, accounts and orders stay on the commerce platform behind it.",
+   "lines": [],
+   "more": []
+  },
+  {
+   "id": "cintel",
+   "name": "Commerce Intelligence",
+   "title": "Adobe Commerce Intelligence (formerly Magento Business Intelligence)",
+   "lines": [],
+   "more": []
+  },
+  {
    "id": "eds",
    "name": "AEM Sites with Edge Delivery Services",
    "title": "AEM Sites with Edge Delivery Services",
@@ -302,6 +318,56 @@
    "icon": "chat",
    "systems": "Your client's staff use Adobe products from inside Microsoft Copilot (Microsoft 365 Copilot, Copilot Studio or Copilot Cowork)",
    "systems_with_bv": "Your client's staff use Adobe products from inside Microsoft Copilot.",
+   "lines": [],
+   "more": []
+  },
+  {
+   "id": "erp",
+   "name": "ERP",
+   "title": "ERP (enterprise resource planning)",
+   "outside": true,
+   "icon": "erp",
+   "systems": "SAP S/4HANA, Microsoft Dynamics 365 ERP or another ERP; prebuilt connectors on Adobe Exchange",
+   "lines": [],
+   "more": []
+  },
+  {
+   "id": "pim",
+   "name": "PIM",
+   "title": "PIM (product information management)",
+   "outside": true,
+   "icon": "tag",
+   "systems": "Your client's product information management system",
+   "lines": [],
+   "more": []
+  },
+  {
+   "id": "oms",
+   "name": "Order management",
+   "title": "Order management system (OMS)",
+   "outside": true,
+   "icon": "order",
+   "systems": "IBM Sterling Order Management or another order management system; prebuilt connectors on Adobe Exchange",
+   "lines": [],
+   "more": []
+  },
+  {
+   "id": "wms",
+   "name": "Warehouse management",
+   "title": "Warehouse management system (WMS)",
+   "outside": true,
+   "icon": "warehouse",
+   "systems": "Your client's warehouse management system",
+   "lines": [],
+   "more": []
+  },
+  {
+   "id": "ocp",
+   "name": "Other commerce platform",
+   "title": "Other commerce platform",
+   "outside": true,
+   "icon": "cart",
+   "systems": "Salesforce Commerce Cloud or another commerce platform that keeps cart, checkout and orders",
    "lines": [],
    "more": []
   },
@@ -1089,6 +1155,22 @@
     "crm": [
      1,
      1
+    ],
+    "erp": [
+     2,
+     0
+    ],
+    "oms": [
+     2,
+     1
+    ],
+    "pim": [
+     1,
+     -1
+    ],
+    "wms": [
+     2,
+     -1
     ]
    },
    "recommend": [
@@ -1922,6 +2004,14 @@
     "moptimizer": [
      6,
      0
+    ],
+    "aco": [
+     4,
+     -1
+    ],
+    "cintel": [
+     3,
+     -1
     ]
    },
    "products": [
@@ -1958,7 +2048,9 @@
     "acrobat",
     "acrobatsign",
     "mqualifier",
-    "moptimizer"
+    "moptimizer",
+    "aco",
+    "cintel"
    ],
    "off": [
     "C04"
@@ -1976,7 +2068,12 @@
     "figma",
     "chatgpt",
     "claude",
-    "copilot"
+    "copilot",
+    "erp",
+    "pim",
+    "oms",
+    "wms",
+    "ocp"
    ],
    "opos": {
     "cdn": [
@@ -2030,6 +2127,26 @@
     "copilot": [
      8,
      2
+    ],
+    "erp": [
+     2,
+     -2
+    ],
+    "oms": [
+     3,
+     -2
+    ],
+    "pim": [
+     4,
+     -2
+    ],
+    "wms": [
+     5,
+     -2
+    ],
+    "ocp": [
+     5,
+     -1
     ]
    },
    "recommend": [
@@ -2069,5 +2186,162 @@
     "custom"
    ]
   }
- ]
+ ],
+ "versions_note": "Nov 19 2026 (Adam approved the pickers): a version picker inside the Workfront and Adobe Commerce boxes. Each gate makes the connections or services in 'ids' unavailable while the picker reads one of 'when' (or while the product in 'with' is on the canvas), unless the product in 'unless' is on the canvas; the canvas fades them, leaves their services out of the estimate and shows the reason.",
+ "versions": {
+  "workfrontVersion": {
+   "product": "workfront",
+   "gates": [
+    {
+     "ids": [
+      "workfront-gspm",
+      "express-workfront"
+     ],
+     "when": [
+      "after"
+     ],
+     "reason": "Not with this Workfront: it reviews work in the Frame.io viewer, and Workfront Proof, which this connection runs on, is not part of it."
+    },
+    {
+     "ids": [
+      "XB02"
+     ],
+     "when": [
+      "after"
+     ],
+     "reason": "Not with this Workfront: it reviews work in the Frame.io viewer, and Workfront Proof, which this service runs on, is not part of it."
+    }
+   ]
+  },
+  "commerceVersion": {
+   "product": "commerce",
+   "gates": [
+    {
+     "ids": [
+      "commerce-eds"
+     ],
+     "when": [
+      "onprem",
+      "paas"
+     ],
+     "unless": "aco",
+     "reason": "Needs Commerce as a Cloud Service or Commerce Optimizer: Adobe's ready-made storefront parts are licensed only with those. Pick Cloud Service, or add Commerce Optimizer."
+    },
+    {
+     "ids": [
+      "XA15"
+     ],
+     "when": [
+      "saas"
+     ],
+     "reason": "Audience Activation works on Commerce on Cloud and on-premises only."
+    },
+    {
+     "ids": [
+      "CE05"
+     ],
+     "when": [
+      "saas"
+     ],
+     "reason": "On Cloud Service, Adobe installs and connects search: Search and merchandising configuration on Cloud Service takes its place."
+    },
+    {
+     "ids": [
+      "CE06"
+     ],
+     "when": [
+      "saas"
+     ],
+     "reason": "On Cloud Service, the core B2B features come installed: B2B setup on Cloud Service takes its place."
+    },
+    {
+     "ids": [
+      "CE07"
+     ],
+     "when": [
+      "saas"
+     ],
+     "reason": "Not needed on Cloud Service: Adobe upgrades it automatically."
+    },
+    {
+     "ids": [
+      "CE14",
+      "CE15"
+     ],
+     "when": [
+      "onprem",
+      "paas"
+     ],
+     "reason": "For Cloud Service only. On this version the full setup above applies."
+    },
+    {
+     "ids": [
+      "CE16"
+     ],
+     "when": [
+      "paas",
+      "saas"
+     ],
+     "reason": "On-premises only: Adobe hosts Commerce on Cloud and Cloud Service."
+    },
+    {
+     "ids": [
+      "aco-commerce"
+     ],
+     "when": [
+      "saas"
+     ],
+     "reason": "The connector is for Commerce on Cloud or on-premises. On Cloud Service, Commerce uses the same catalog model as Commerce Optimizer."
+    },
+    {
+     "ids": [
+      "CE08",
+      "CE09",
+      "CE10",
+      "CE11",
+      "CE12"
+     ],
+     "when": [
+      "saas"
+     ],
+     "reason": "Already on Cloud Service: the move applies to Commerce on Cloud or on-premises. Pick the version your client runs today."
+    },
+    {
+     "ids": [
+      "cintel-commerce"
+     ],
+     "when": [
+      "saas"
+     ],
+     "reason": "Adobe offers Commerce Intelligence with Commerce on Cloud and on-premises, where it connects to the Commerce database."
+    },
+    {
+     "ids": [
+      "CE08",
+      "CE09",
+      "CE10",
+      "CE11",
+      "CE12",
+      "CE14",
+      "CE15",
+      "CE16",
+      "aco-commerce",
+      "cintel-commerce"
+     ],
+     "when": [
+      ""
+     ],
+     "reason": "Pick the Commerce version on the box first."
+    },
+    {
+     "ids": [
+      "CE05",
+      "CE14"
+     ],
+     "with": "aco",
+     "reason": "With Commerce Optimizer, search and recommendations run in Optimizer: its services on this canvas cover them."
+    }
+   ]
+  }
+ }
 }

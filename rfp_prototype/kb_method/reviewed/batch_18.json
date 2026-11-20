@@ -1,0 +1,693 @@
+[
+ {
+  "id": "CE08",
+  "steps": [
+   "Run Adobe's Migration Assessment on your Commerce on Cloud or on-premises project and review its complexity rating with your team.",
+   "List the custom code, extensions, data in custom tables and integrations that move, and what each becomes on Commerce as a Cloud Service.",
+   "Agree the phases, the order of work and who does what between Adobe, your engineering team and us, and write the move plan."
+  ],
+  "deliverables": [
+   "Migration Assessment review",
+   "Inventory of code, extensions, data and integrations to move",
+   "Phased move plan with owners"
+  ],
+  "asks": [
+   "Access to your Commerce project for the assessment",
+   "Your engineering lead and platform owner for the planning sessions"
+  ],
+  "risk": "A plan that misses custom work: we list every extension, custom table and integration from the assessment before the phases are agreed.",
+  "outcome": "You know what moves to Commerce as a Cloud Service, in what order, who does each part and how big the move is.",
+  "kind": "task",
+  "phase": "discovery"
+ },
+ {
+  "id": "CE09",
+  "steps": [
+   "Sort your customizations and extensions into those Commerce as a Cloud Service already covers and those to rebuild.",
+   "Rebuild each remaining customization as an App Builder app on Commerce APIs, events and webhooks, starting from the Commerce Developer Agent where it helps.",
+   "Review all generated code before it goes near production, and test each app against the agreed behavior.",
+   "Deploy the apps to each environment and hand over how each one is built and run."
+  ],
+  "deliverables": [
+   "Customization sort list",
+   "App Builder apps for each rebuilt customization",
+   "Code review and test record",
+   "Hand-over notes for each app"
+  ],
+  "asks": [
+   "The current behavior of each customization, with an owner who can confirm it",
+   "Access to your App Builder organization and Commerce environments"
+  ],
+  "risk": "Behavior lost in the rebuild: we test each app against the behavior your owners agreed before the old code is retired.",
+  "outcome": "Your customizations run as App Builder apps that keep working as Adobe upgrades Commerce as a Cloud Service.",
+  "kind": "workstream",
+  "phase": "build"
+ },
+ {
+  "id": "CE10",
+  "steps": [
+   "Set up your store settings and system configuration on the new instance before any data moves.",
+   "Move products, customers and orders with Adobe's bulk data migration tool, which Adobe provides through its Commerce Deployed Engineering engagement.",
+   "Build an App Builder job for data that third-party extensions hold in custom tables.",
+   "Reconcile record counts and spot-check records with your team, then repeat the run for cutover."
+  ],
+  "deliverables": [
+   "Store settings set on the new instance",
+   "Migrated products, customers and orders",
+   "Job for custom-table data",
+   "Reconciliation record"
+  ],
+  "asks": [
+   "Read access to your current Commerce database",
+   "Your data owners to check the spot samples"
+  ],
+  "risk": "Missing or mismatched records after the move: we reconcile counts and spot-check records before each run is signed off.",
+  "outcome": "Your products, customers and orders are on Commerce as a Cloud Service, checked against the old platform.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "CE11",
+  "steps": [
+   "List every back-office integration and storefront connection that changes with the move.",
+   "Re-establish each integration on the new instance through Commerce APIs, events and App Builder.",
+   "Point the storefront at the new instance and test every data flow end to end with your system owners."
+  ],
+  "deliverables": [
+   "Integration change list",
+   "Integrations rebuilt on the new instance",
+   "End-to-end data flow test record"
+  ],
+  "asks": [
+   "Owners and test accounts for each connected system"
+  ],
+  "risk": "An integration that breaks at cutover: we test every data flow end to end before the switch.",
+  "outcome": "Your back-office systems and storefront work with Commerce as a Cloud Service the way they worked before.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "CE12",
+  "steps": [
+   "Plan and rehearse the cutover with your team, with a go and no-go list.",
+   "Run the final data sync, switch traffic to Commerce as a Cloud Service and check orders, payments and search on the live store.",
+   "Retire the old platform and hand over to ongoing operation."
+  ],
+  "deliverables": [
+   "Cutover plan and rehearsal record",
+   "Go and no-go checklist",
+   "Live store checks",
+   "Retirement and hand-over notes"
+  ],
+  "asks": [
+   "A cutover window agreed with your business",
+   "People on call from each connected system on cutover day"
+  ],
+  "risk": "Orders lost during the switch: we rehearse the cutover and check live orders and payments straight after it.",
+  "outcome": "Your store runs on Commerce as a Cloud Service and the old platform is retired.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "CE13",
+  "steps": [
+   "Agree each brand, store or region to add, with its domain, languages, currencies, tax rules, stock and payment and shipping options.",
+   "Add each website, store and store view on the same Admin, with a store view for each language and the allowed currencies and rates.",
+   "Set the tax rules, inventory sources and stock, and the local payment and shipping options for each one.",
+   "Place a test order in each store and fix what the tests find."
+  ],
+  "deliverables": [
+   "Multi-store plan",
+   "Websites, stores and store views set up",
+   "Currencies, tax, stock and local options for each",
+   "Test order record"
+  ],
+  "asks": [
+   "Your list of brands, regions and languages, with their rules",
+   "Your tax and finance owner for each region"
+  ],
+  "risk": "A region that charges the wrong tax or currency: we place a test order in each store before launch.",
+  "outcome": "Each brand, store and region runs from one Commerce Admin with its own languages, currencies, tax and stock.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "CE14",
+  "steps": [
+   "Agree the search facets, synonyms and merchandising rules with your merchandisers.",
+   "Set the catalog views, policies, facets, synonyms and rules on Commerce as a Cloud Service.",
+   "Test search, category browse and filters on the storefront with your team."
+  ],
+  "deliverables": [
+   "Agreed search and merchandising settings",
+   "Settings configured",
+   "Storefront search test record"
+  ],
+  "asks": [
+   "Your merchandisers for the search and rules sessions"
+  ],
+  "risk": "Search results shoppers do not expect: we test the agreed searches on the storefront with your merchandisers.",
+  "outcome": "Search, filters and merchandising on your Commerce as a Cloud Service storefront follow the rules your merchandisers agreed.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "CE15",
+  "steps": [
+   "Turn on company accounts, shared catalogs, quotes and purchase orders on Commerce as a Cloud Service.",
+   "Create the first company accounts with credit limits and custom pricing.",
+   "Test company roles, quotes and approvals with your sales team."
+  ],
+  "deliverables": [
+   "B2B features turned on",
+   "First company accounts with pricing",
+   "B2B test record"
+  ],
+  "asks": [
+   "Your first buyer companies, with their pricing and credit limits"
+  ],
+  "risk": "Buyers who see the wrong prices: we test each first company account against its agreed pricing.",
+  "outcome": "Your business buyers order from company accounts with their own catalogs, prices, quotes and approvals.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "CE16",
+  "steps": [
+   "Each month, check capacity and scale the servers for the traffic ahead.",
+   "Run backups and a disaster recovery test, and watch the monitoring and alerts.",
+   "Apply security patches for the operating system, PHP, database and middleware, and report what changed."
+  ],
+  "deliverables": [
+   "Monthly hosting report",
+   "Backup and recovery test record",
+   "Patch record"
+  ],
+  "asks": [
+   "Access to your servers and hosting provider"
+  ],
+  "risk": "A slow or unsafe store from servers nobody watches: we check capacity, backups and patches every month.",
+  "outcome": "Your on-premises Commerce servers stay fast, backed up and patched.",
+  "kind": "workstream",
+  "phase": "after launch"
+ },
+ {
+  "id": "ACO01",
+  "steps": [
+   "Set up your sandbox and production Commerce Optimizer instances and match each to the commerce and storefront environments of the same kind.",
+   "Add your users in the Adobe Admin Console with the roles each team needs.",
+   "Record the instance IDs and endpoints for the build team."
+  ],
+  "deliverables": [
+   "Sandbox and production instances",
+   "Users and roles set up",
+   "Instance and endpoint record"
+  ],
+  "asks": [
+   "Your Adobe Admin Console administrator"
+  ],
+  "risk": "Test data showing on the live store: we connect sandbox instances only to test environments and production to production.",
+  "outcome": "Your teams sign in to Commerce Optimizer with the right roles, on instances matched to each environment.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "ACO02",
+  "steps": [
+   "Agree the catalog views your brands, markets, languages or sales channels need, with your merchandisers.",
+   "Set the policies that filter what each view shows and the price books each view uses.",
+   "Check each view returns the agreed products and prices."
+  ],
+  "deliverables": [
+   "Catalog view design",
+   "Policies and price books set up",
+   "Catalog view check record"
+  ],
+  "asks": [
+   "Your merchandisers and pricing owner"
+  ],
+  "risk": "A channel that shows the wrong assortment or prices: we check each view against the agreed products and prices.",
+  "outcome": "Each brand, market or channel gets its own catalog view with the right products and prices.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "ACO03",
+  "steps": [
+   "Agree the search facets, synonyms, merchandising rules and recommendations for each page type with your merchandisers.",
+   "Set them in Commerce Optimizer and check that storefront events arrive.",
+   "Train your merchandisers to run them."
+  ],
+  "deliverables": [
+   "Agreed search and recommendation settings",
+   "Settings configured",
+   "Merchandiser training"
+  ],
+  "asks": [
+   "Your merchandisers for the setup and training sessions"
+  ],
+  "risk": "Recommendations that show nothing: we check storefront events arrive before the recommendations go live.",
+  "outcome": "Your merchandisers run search, recommendations and merchandising rules themselves in Commerce Optimizer.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "MBI02",
+  "steps": [
+   "Agree with your report owners which measures their reports need.",
+   "Set the tables and columns to sync in the Data Warehouse Manager.",
+   "Build the calculated columns for the agreed measures and check them against Commerce."
+  ],
+  "deliverables": [
+   "Measure list",
+   "Tables and columns syncing",
+   "Calculated columns checked"
+  ],
+  "asks": [
+   "Your report owners for the measure sessions"
+  ],
+  "risk": "Numbers that do not match the store: we check each calculated column against Commerce before reports use it.",
+  "outcome": "Your data warehouse holds the tables and measures your reports need, checked against the store.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "MBI03",
+  "steps": [
+   "Agree the dashboards your teams need, such as sales, customers, products and acquisition sources.",
+   "Build the dashboards and reports in Commerce Intelligence.",
+   "Check each number against Commerce and walk your teams through reading and filtering them."
+  ],
+  "deliverables": [
+   "Dashboard plan",
+   "Dashboards and reports built",
+   "Number check record",
+   "Walkthrough for your teams"
+  ],
+  "asks": [
+   "Your report owners and the people who will use the dashboards"
+  ],
+  "risk": "Dashboards nobody trusts: we check each number against Commerce before the walkthrough.",
+  "outcome": "Your teams see the store's performance and sales activity at a glance.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "MBI04",
+  "steps": [
+   "Agree who gets which dashboard by email, and how often.",
+   "Set up the scheduled emails from Commerce Intelligence.",
+   "Show your teams how to export chart data to a CSV or Excel file."
+  ],
+  "deliverables": [
+   "Email schedule",
+   "Scheduled emails set up",
+   "Export walkthrough"
+  ],
+  "asks": [
+   "The list of people for each scheduled email"
+  ],
+  "risk": "Emails that go to the wrong people: we agree each list before the schedules start.",
+  "outcome": "Your teams get their reports by email on schedule and export chart data when they need it.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "MBI05",
+  "steps": [
+   "Agree the other data your reports need and where it comes from.",
+   "Set up scheduled CSV uploads, or scripts that send data through the Adobe API.",
+   "Join the data to the Commerce tables and check the reports that use it."
+  ],
+  "deliverables": [
+   "Data source list",
+   "Uploads or API scripts set up",
+   "Joined data checked in reports"
+  ],
+  "asks": [
+   "Owners of the other data and its files or API access"
+  ],
+  "risk": "Data that stops arriving: we schedule the uploads and check the first runs with the data owners.",
+  "outcome": "Your reports join store data with the other data your teams track.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XR02",
+  "steps": [
+   "Map order, customer, product and stock fields between Adobe Commerce and your ERP, and agree which system owns each.",
+   "Deploy the starter kit's actions for each in App Builder and subscribe to the Commerce events, or configure a prebuilt connector from Adobe Exchange where one fits your ERP.",
+   "Connect the actions to your ERP's APIs and set retries for failed calls.",
+   "Test each data flow end to end with your ERP team."
+  ],
+  "deliverables": [
+   "Field map with an owner for each field",
+   "Integration deployed in App Builder",
+   "Retry setup",
+   "End-to-end test record"
+  ],
+  "asks": [
+   "API access and credentials for your ERP",
+   "Your ERP team for the field map and tests"
+  ],
+  "risk": "Orders that never reach the ERP: we set retries and test every flow end to end before launch.",
+  "outcome": "Orders placed in Commerce reach your ERP without re-entry, and your ERP's stock, prices and order status reach Commerce.",
+  "kind": "workstream",
+  "phase": "build"
+ },
+ {
+  "id": "XR03",
+  "steps": [
+   "Agree the checkout steps where Commerce needs an answer from your ERP at once, such as taxes or order totals.",
+   "Set up the Commerce webhooks that call your ERP and write the answer back into Commerce.",
+   "Set timeouts and what happens when the ERP does not answer, and test them under load."
+  ],
+  "deliverables": [
+   "Webhook list",
+   "Webhooks set up",
+   "Load test record"
+  ],
+  "asks": [
+   "Your ERP team for the endpoints and load tests"
+  ],
+  "risk": "A checkout that hangs when the ERP is slow: we set timeouts and a fallback and test them under load.",
+  "outcome": "Checkout shows your ERP's taxes, totals and payment answers as the shopper buys.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XR04",
+  "steps": [
+   "Agree what your team needs to see and do for the back-office sync.",
+   "Add the pages to your Commerce Admin with the Admin UI SDK.",
+   "Test them with your team: see what was sent, what failed, and send a record again."
+  ],
+  "deliverables": [
+   "Admin page design",
+   "Admin pages built",
+   "Test record"
+  ],
+  "asks": [
+   "The people who will watch the sync"
+  ],
+  "risk": "Failed records nobody sees: we show each failure on an Admin page with a way to send it again.",
+  "outcome": "Your team sets up and watches the back-office sync from the Commerce Admin.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XR05",
+  "steps": [
+   "Map your PIM product attributes, categories and media to Commerce.",
+   "Build the starter kit's product actions in App Builder that write each create, update and delete to Commerce.",
+   "Run the first full load and check it with your product team.",
+   "Test that a change in the PIM reaches the storefront."
+  ],
+  "deliverables": [
+   "Attribute map",
+   "Product actions in App Builder",
+   "First full load",
+   "Change test record"
+  ],
+  "asks": [
+   "API access to your PIM",
+   "Your product data owner for the attribute map"
+  ],
+  "risk": "Product data overwritten in the wrong system: we agree which attributes the PIM owns before the first load.",
+  "outcome": "Your product team keeps product data in the PIM, and Commerce shows it without a second round of entry.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XR06",
+  "steps": [
+   "Agree with your order management team which system owns order status, stock and shipments.",
+   "Build the integration on the starter kit in App Builder, or configure a prebuilt connector from Adobe Exchange such as IBM Sterling Order Management.",
+   "Send each order and bring back order status and shipments with tracking numbers.",
+   "Test returns and cancellations end to end."
+  ],
+  "deliverables": [
+   "Ownership agreement",
+   "Integration or connector set up",
+   "Order and shipment flows",
+   "Returns and cancellations test record"
+  ],
+  "asks": [
+   "API access to your order management system",
+   "Your order management team for the tests"
+  ],
+  "risk": "Shoppers who see the wrong order status: we test every status change, return and cancellation end to end.",
+  "outcome": "Your orders reach your order management system as they are placed, and shoppers see the status and tracking it sends back.",
+  "kind": "workstream",
+  "phase": "build"
+ },
+ {
+  "id": "XR07",
+  "steps": [
+   "Agree when the store asks your order management system for stock, such as add to cart and checkout.",
+   "Set up the Commerce webhook that asks for the stock status and writes the answer back.",
+   "Set what happens when the system does not answer, and test it under load."
+  ],
+  "deliverables": [
+   "Stock check points agreed",
+   "Webhook set up",
+   "Load test record"
+  ],
+  "asks": [
+   "Your order management team for the endpoint and tests"
+  ],
+  "risk": "Overselling when stock runs low: we check stock live at the agreed points and test the fallback.",
+  "outcome": "Shoppers only buy what your order management system says is in stock.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XR08",
+  "steps": [
+   "Map your warehouse locations to Commerce inventory sources.",
+   "Build the starter kit's stock and shipment actions in App Builder so stock and shipments with tracking numbers reach Commerce.",
+   "Send orders to the warehouse system.",
+   "Test a full order from purchase to shipment."
+  ],
+  "deliverables": [
+   "Warehouse to source map",
+   "Stock and shipment actions",
+   "Order feed to the warehouse",
+   "Full order test record"
+  ],
+  "asks": [
+   "API access to your warehouse management system",
+   "Your warehouse team for the tests"
+  ],
+  "risk": "Stock on the store that does not match the warehouse: we test stock updates for each source before launch.",
+  "outcome": "The stock your shoppers see follows your warehouse, and shipments reach orders without re-entry.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "ACO04",
+  "steps": [
+   "Take Live Search, Product Recommendations and Catalog Service off your Adobe Commerce.",
+   "Install the Commerce Optimizer Connector with Composer and choose the websites, customer groups and store views to sync.",
+   "Turn on the integration, run the first sync and check the data in Commerce Optimizer."
+  ],
+  "deliverables": [
+   "Extensions removed",
+   "Connector installed and scoped",
+   "First sync checked"
+  ],
+  "asks": [
+   "Access to your Commerce environments for the install"
+  ],
+  "risk": "Search going dark between the old and new setup: we plan the switch and check the sync before the storefront moves.",
+  "outcome": "Your Adobe Commerce catalog feeds Commerce Optimizer, while Commerce keeps orders and accounts.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "ACO05",
+  "steps": [
+   "Install Adobe's Commerce Optimizer Connector for B2B on your Commerce.",
+   "Sync the shared catalogs and check each one shows as a private catalog view.",
+   "Test what each company account sees."
+  ],
+  "deliverables": [
+   "B2B connector installed",
+   "Shared catalogs synced",
+   "Company account test record"
+  ],
+  "asks": [
+   "A list of your shared catalogs and the companies on each"
+  ],
+  "risk": "A buyer who sees another company's catalog: we test what each company account sees.",
+  "outcome": "Each of your business buyers sees its own catalog through Commerce Optimizer.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "ACO06",
+  "steps": [
+   "Define the product attribute metadata your catalog needs in Commerce Optimizer.",
+   "Map your PIM's products, categories and prices to the Data Ingestion API.",
+   "Build the job that sends creates, updates and deletes.",
+   "Run the first full load and check the Data Sync page."
+  ],
+  "deliverables": [
+   "Attribute metadata",
+   "Field map to the Data Ingestion API",
+   "Ingestion job",
+   "First full load checked"
+  ],
+  "asks": [
+   "API access to your PIM, or exports from it"
+  ],
+  "risk": "Products that cannot be found: we define the attribute metadata before any product is sent.",
+  "outcome": "Your catalog in Commerce Optimizer comes straight from your PIM.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "ACO07",
+  "steps": [
+   "Set up Adobe's Commerce Salesforce Connector in App Builder for your Salesforce Commerce Cloud B2C, or a sync job for another platform.",
+   "Schedule the syncs and run the first full load.",
+   "Check catalog and prices in Commerce Optimizer with your merchandisers."
+  ],
+  "deliverables": [
+   "Connector or sync job set up",
+   "Sync schedule",
+   "Catalog and price check"
+  ],
+  "asks": [
+   "Access to your commerce platform's catalog and price APIs"
+  ],
+  "risk": "Prices that differ between the storefront and checkout: we check prices in Optimizer against your platform.",
+  "outcome": "Your catalog and prices reach Commerce Optimizer from your commerce platform on schedule.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "ACO08",
+  "steps": [
+   "Agree how shoppers move from the new storefront to your platform's accounts, cart and checkout.",
+   "Build the integration with API Mesh, App Builder or your platform's APIs, adapting Adobe's checkout starter kit for Salesforce Commerce Cloud where it applies.",
+   "Test sign-in, cart, checkout and a full order with your team.",
+   "Hand over how the integration is built and run."
+  ],
+  "deliverables": [
+   "Hand-off design",
+   "Cart and checkout integration",
+   "Full order test record",
+   "Hand-over notes"
+  ],
+  "asks": [
+   "API access to your platform's shopper, cart and checkout services",
+   "Your platform team for the tests"
+  ],
+  "risk": "Lost carts between the storefront and checkout: we test sign-in, cart and a full order end to end.",
+  "outcome": "Your shoppers browse on the new storefront and buy through your platform's cart and checkout.",
+  "kind": "workstream",
+  "phase": "build"
+ },
+ {
+  "id": "ACO09",
+  "steps": [
+   "Create your storefront project on Edge Delivery Services with Adobe's Site Creator and point it at your Commerce Optimizer instance.",
+   "Build the product detail, search and category pages from Adobe's ready-made storefront parts.",
+   "Brand the pages and test them against the agreed designs."
+  ],
+  "deliverables": [
+   "Storefront project",
+   "Product, search and category pages",
+   "Branded and tested storefront"
+  ],
+  "asks": [
+   "Your approved designs and brand assets",
+   "A GitHub repository for the storefront code"
+  ],
+  "risk": "A storefront that does not match the brand: we test each page against the agreed designs.",
+  "outcome": "Your shoppers browse a fast storefront on Edge Delivery Services, fed by Commerce Optimizer.",
+  "kind": "workstream",
+  "phase": "build"
+ },
+ {
+  "id": "ACO10",
+  "steps": [
+   "Agree with your DAM owner how product images carry their SKU and are approved.",
+   "Configure AEM Assets for Commerce Optimizer to turn on Product Visuals.",
+   "Check that approved images show on the storefront."
+  ],
+  "deliverables": [
+   "Image naming and approval rules",
+   "Product Visuals turned on",
+   "Storefront image check"
+  ],
+  "asks": [
+   "Your DAM owner to agree the image rules"
+  ],
+  "risk": "Images on the wrong product: we agree how each image carries its SKU before Product Visuals is turned on.",
+  "outcome": "Your product images are approved in AEM Assets and reach the storefront without re-uploads.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "MBI01",
+  "steps": [
+   "Set up a read-only database user and the SSH tunnel from your Commerce database.",
+   "Connect the database to Commerce Intelligence and check the host key.",
+   "Choose the first tables to sync and check the first sync."
+  ],
+  "deliverables": [
+   "Database connection through an SSH tunnel",
+   "First tables synced",
+   "Connection record"
+  ],
+  "asks": [
+   "Your database administrator for the user and the tunnel"
+  ],
+  "risk": "An unsafe database connection: we use an SSH tunnel and a read-only user, the way Adobe recommends.",
+  "outcome": "Commerce Intelligence reads your Commerce data safely, ready for reports.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "MBI06",
+  "steps": [
+   "Set up a Salesforce user that can read the agreed objects.",
+   "Connect Salesforce to Commerce Intelligence and choose the tables to sync.",
+   "Join them to the Commerce data for the agreed reports."
+  ],
+  "deliverables": [
+   "Salesforce connection",
+   "Synced Salesforce tables",
+   "Joined report"
+  ],
+  "asks": [
+   "Your Salesforce administrator for the read-only user"
+  ],
+  "risk": "A report that mixes up customers: we agree how Salesforce and Commerce records match before joining them.",
+  "outcome": "Your reports put Salesforce leads and opportunities next to Commerce orders.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "MBI07",
+  "steps": [
+   "Connect your Google Ads account to Commerce Intelligence.",
+   "Check that campaign tracking on the storefront ties orders to campaigns.",
+   "Build the report of campaign cost against the lifetime value of the customers each campaign brought."
+  ],
+  "deliverables": [
+   "Google Ads connection",
+   "Campaign tracking check",
+   "Campaign return report"
+  ],
+  "asks": [
+   "Access to your Google Ads account"
+  ],
+  "risk": "Orders that cannot be tied to campaigns: we check campaign tracking before the report is built.",
+  "outcome": "You see which Google Ads campaigns bring customers worth more than they cost.",
+  "kind": "task",
+  "phase": "build"
+ }
+]

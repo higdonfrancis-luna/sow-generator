@@ -403,8 +403,11 @@ const server = http.createServer((req, res) => {
           // step 66 (Nov 10 2026): the box is brought to the middle before the click. Brought only as far as the edge, a box in the
           // bottom row could rest under the Continue button on a 768 px screen, and the forced click pressed Continue
           // (step 94: the page scrolls to the explorer below the canvas, so it goes back to the top, as a person's would, before the click)
-          const s = `.node[data-p="${id}"]`; await p.$eval(s, e => { e.scrollIntoView({block: 'center', inline: 'center'}); scrollTo(0, 0); }); await p.click(s, {force: true}); await p.waitForTimeout(F ? 450 : 250);
-          if (F) { await p.click(s, {force: true}); await p.waitForTimeout(150); }
+          // Nov 19 2026: a box with a picker inside (AEM Sites with Edge Delivery Services, Workfront, Adobe Commerce) opens its card from its name; its middle
+          // can be the picker, which opens the list of choices instead (with every product on in focus view at 1280 wide, or on a phone)
+          const s = `.node[data-p="${id}"]`, t = async () => (await p.$(s + ' .offering-title')) ? s + ' .offering-title' : s;
+          await p.$eval(s, e => { e.scrollIntoView({block: 'center', inline: 'center'}); scrollTo(0, 0); }); await p.click(await t(), {force: true}); await p.waitForTimeout(F ? 450 : 250);
+          if (F) { await p.click(await t(), {force: true}); await p.waitForTimeout(150); }
           if (await p.isHidden('#card')) { bad.push(`${play} ${id}: no card`); continue; } n++; const r = await p.evaluate(judge); if (r) bad.push(`${play} ${r}`);
           // AEM Sites is now part of the one "AEM Sites with Edge Delivery Services" box (eds), which carries its connections, so that box's bolts are swept
           if (!F && id !== ids[0] || F && !['rtcdp', 'ajo', 'workfront', 'cw', 'eds'].includes(id)) continue;

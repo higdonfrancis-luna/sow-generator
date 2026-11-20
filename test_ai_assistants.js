@@ -24,8 +24,8 @@ const LABELS = /\bbeta\b|early access|early adopter|limited availability|coming 
       P[id].systems_with_bv === fix(D[id].systems_on_brand_visibility_plays) && !P[id].rec && !P[id].lines.length && !P[id].more.length),
     '1. ChatGPT, Claude and Microsoft Copilot are outside systems with the build data\'s names and lines (a second line for plays with Brand Visibility), a speech bubble and no Recommended reason',
     JSON.stringify(AI.map(id => P[id])));
-  ok(CAT.products.length === 47 && CAT.products.filter(p => p.outside).length === 13 && CAT.connections.length === 204 && Object.keys(CAT.lines).length === 575,
-    '1. the catalog holds 47 products (13 outside systems), 204 connections (Claude + Brand Intelligence joined later on Nov 18) and 575 services', [CAT.products.length, CAT.connections.length, Object.keys(CAT.lines).length].join());
+  ok(CAT.products.length === 54 && CAT.products.filter(p => p.outside).length === 18 && CAT.connections.length === 217 && Object.keys(CAT.lines).length === 608,
+    '1. the catalog holds 54 products (18 outside systems), 217 connections (Claude + Brand Intelligence joined later on Nov 18; the Commerce round\'s 13 on Nov 19) and 608 services', [CAT.products.length, CAT.connections.length, Object.keys(CAT.lines).length].join());
   const DC = DATA.connections, same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
   // Nov 19 2026 (test_first_page_rows.js): an assistant's line has a line type of its own ('assistant', thinner and grey, with its own key entry) and the two
   // lines between boxes the tool already had are typed by their own evidence ('native'); Copilot + AEM Sites follows Adobe's step-by-step Copilot Studio set-up, and Copilot + AEM Assets the same agent
@@ -82,8 +82,8 @@ const LABELS = /\bbeta\b|early access|early adopter|limited availability|coming 
   // ============ 2. at the start: each play offers the systems that connect to its products ============
   // Nov 18 2026, later (Adam: "we should automatically put those outside systems in and then people can delete them if they want"): a ready-made play now
   // starts with every system it offers on its canvas, so the menu lists each one again once the partner removes it
-  { const WANT = {abv: 'cdn,search', cja: 'cdn,dwh,cstore,crm,ads,bi,search,chatgpt,claude,copilot', commerce: 'cdn,search,crm', aem: 'cdn,search,csrc,chatgpt,claude', fsi: 'cdn,search,cms',
-      coworker: 'chatgpt,claude,copilot', custom: 'cdn,dwh,cstore,crm,ads,bi,search,csrc,cms,figma,chatgpt,claude,copilot'}, seen = {};
+  { const WANT = {abv: 'cdn,search', cja: 'cdn,dwh,cstore,crm,ads,bi,search,chatgpt,claude,copilot', commerce: 'cdn,search,crm,erp,pim,oms,wms', aem: 'cdn,search,csrc,chatgpt,claude', fsi: 'cdn,search,cms',
+      coworker: 'chatgpt,claude,copilot', custom: 'cdn,dwh,cstore,crm,ads,bi,search,csrc,cms,figma,chatgpt,claude,copilot,erp,pim,oms,wms,ocp'}, seen = {};
     for (const play of Object.keys(WANT)) { const p = await open(); await pick(p, play); const s = await state(p);
       for (const id of s.out) await p.evaluate(id => removeOutside(id), id);
       const items = await outMenu(p);

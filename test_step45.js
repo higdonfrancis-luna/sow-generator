@@ -31,7 +31,7 @@ const server = http.createServer((req, res) => {
 
   // 1. every Brand Visibility play starts with the CDN and CDN log forwarding, and Services totals the same.
   //    Nov 18 2026: each also starts with every other outside system it offers, after the CDN
-  const START = {cja: 'cdn,dwh,cstore,crm,ads,bi,search,chatgpt,claude,copilot', commerce: 'cdn,search,crm', aem: 'cdn,search,csrc,chatgpt,claude', fsi: 'cdn,search,cms', abv: 'cdn,search'};
+  const START = {cja: 'cdn,dwh,cstore,crm,ads,bi,search,chatgpt,claude,copilot', commerce: 'cdn,search,crm,erp,pim,oms,wms', aem: 'cdn,search,csrc,chatgpt,claude', fsi: 'cdn,search,cms', abv: 'cdn,search'};
   for (const play of ['cja', 'commerce', 'aem', 'fsi', 'abv']) {
     const p = await fresh(); await pick(p, play);
     const st = await p.evaluate(() => ({out: st.out, ox1: counted('OX1'), ox2: counted('OX2'), rec: !!document.querySelector('.node[data-p="cdn"] .rec')}));

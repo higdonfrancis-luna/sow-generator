@@ -50,6 +50,8 @@ const NAMES={
  eds:['edge delivery services','edge delivery','eds','franklin','aem live'],
  so:['sites optimizer','aem sites optimizer'],
  commerce:['adobe commerce','magento','commerce cloud'],
+ aco:['commerce optimizer','adobe commerce optimizer'],
+ cintel:['commerce intelligence','adobe commerce intelligence','magento business intelligence'],
  bc:['brand concierge','concierge'],
  cw:['coworker','adobe coworker','cx enterprise coworker'],
  rtcdp:['real-time cdp','real time cdp','realtime cdp','rtcdp','rt-cdp','experience platform','adobe experience platform','aep'],

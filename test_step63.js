@@ -16,7 +16,7 @@ const server = http.createServer((req, res) => {
   res.writeHead(200, {'Content-Type': T[path.extname(f)] || 'text/plain'}); fs.createReadStream(f).pipe(res);
 });
 // step 64 (Nov 10 2026): wave 2 adds Brand Intelligence, Frame.io and Workfront Planning to two headings, and the heading Creativity & design
-const GROUPS = [['AI & agents', ['Brand Visibility', 'Brand Concierge', 'Coworker', 'Brand Intelligence']], ['Content & workflows', 10], ['Creativity & design', 4], ['Data & analytics', 6], ['Campaign management', 8], ['Document productivity', 2]];   // step 66 adds the sixth heading; step 71 adds two products to Campaign management
+const GROUPS = [['AI & agents', ['Brand Visibility', 'Brand Concierge', 'Coworker', 'Brand Intelligence']], ['Content & workflows', 11], ['Creativity & design', 4], ['Data & analytics', 7], ['Campaign management', 8], ['Document productivity', 2]];   // step 66 adds the sixth heading; step 71 adds two products to Campaign management; Nov 19 2026 adds Commerce Optimizer to Content & workflows and Commerce Intelligence to Data & analytics
 (async () => {
   await new Promise(r => server.listen(0, r));
   const BASE = `http://localhost:${server.address().port}/`;
@@ -40,14 +40,14 @@ const GROUPS = [['AI & agents', ['Brand Visibility', 'Brand Concierge', 'Coworke
   let p = await fresh(); await openMenu(p);
   let g = await groups(p);
   ok(g.map(x => x.name).join('|') === GROUPS.map(x => x[0]).join('|'), 'the menu has the six headings in the order of Adobe\'s product menu', g.map(x => x.name).join('|'));
-  ok(g.every((x, i) => x.items.length === (Array.isArray(GROUPS[i][1]) ? GROUPS[i][1].length : GROUPS[i][1])), 'the headings hold 4, 10, 4, 6, 8 and 2 products', g.map(x => x.items.length).join(','));
-  ok(g.reduce((s, x) => s + x.items.length, 0) === 34 && new Set(g.flatMap(x => x.items)).size === 34, 'all 34 products are in the menu, each once');
+  ok(g.every((x, i) => x.items.length === (Array.isArray(GROUPS[i][1]) ? GROUPS[i][1].length : GROUPS[i][1])), 'the headings hold 4, 11, 4, 7, 8 and 2 products', g.map(x => x.items.length).join(','));
+  ok(g.reduce((s, x) => s + x.items.length, 0) === 36 && new Set(g.flatMap(x => x.items)).size === 36, 'all 36 products are in the menu, each once');
   // Nov 15 2026 (19b0363): a heading counts its entries, as the front page's "33 products to choose from" does. Content & workflows
   // says 9 products: its 8 other products and the one AEM Sites entry, which holds the two ways to add it (10 things a click adds).
   let se = await sitesEntry(p);
-  ok(g.every(x => x.cnt === x.entries + ' product' + (x.entries === 1 ? '' : 's')) && g.map(x => x.entries).join() === '4,9,4,6,8,2' && g.every((x, i) => x.items.length === x.entries + (i === 1 ? 1 : 0))
+  ok(g.every(x => x.cnt === x.entries + ' product' + (x.entries === 1 ? '' : 's')) && g.map(x => x.entries).join() === '4,10,4,7,8,2' && g.every((x, i) => x.items.length === x.entries + (i === 1 ? 1 : 0))
       && se.length === 1 && se[0].at === 'Content & workflows' && se[0].head === 'AEM Sites' && /^Connects to \d+ products$/.test(se[0].tag) && se[0].adds === 'eds:With Edge Delivery Services|aemsites:With traditional AEM Publish',
-    'each heading says how many products it holds (4, 9, 4, 6, 8 and 2: AEM Sites is one entry under Content & workflows, with Edge Delivery Services or with traditional AEM Publish)',
+    'each heading says how many products it holds (4, 10, 4, 7, 8 and 2: AEM Sites is one entry under Content & workflows, with Edge Delivery Services or with traditional AEM Publish)',
     g.map(x => x.cnt + ' for ' + x.entries + ' entries').join('|') + ' / ' + JSON.stringify(se));
   ok(g[0].open && g.slice(1).every(x => !x.open), 'the first heading is open and the others are closed');
   ok(g[0].items.join('|') === GROUPS[0][1].join('|'), 'AI & agents starts with Brand Visibility', g[0].items.join('|'));
@@ -89,16 +89,16 @@ const GROUPS = [['AI & agents', ['Brand Visibility', 'Brand Concierge', 'Coworke
   ok(heads.join('|') === 'connects to your canvas|not connected to your canvas yet', 'the two parts are named', heads.join('|'));
   g = await groups(p);
   // Nov 15 2026 (19b0363): AEM Sites connects to Brand Visibility, so its one entry (the two ways to add it inside) sits in the first
-  // list, not straight under #add-list as a [data-add]. The 33 products left are 32 entries: the first list's, AEM Sites among
+  // list, not straight under #add-list as a [data-add]. The 35 products left are 34 entries: the first list's, AEM Sites among
   // them, and the ones under the headings.
   se = await sitesEntry(p);
   const left = await p.evaluate(() => ({offered: [...document.querySelectorAll('#add-menu [data-add]')].map(e => e.dataset.add), all: CAT.plays.find(x => x.custom).products,
     first: [...document.querySelectorAll('#add-list > [data-add], #add-list > [data-sites-offering]')].length}));
-  ok(g.length > 0 && g.every(x => !x.open || x.name === 'Data & analytics') && lead.length + 2 + g.reduce((s, x) => s + x.items.length, 0) === 33
-      && left.offered.length === 33 && left.offered.slice().sort().join() === left.all.filter(id => id !== 'bv').sort().join()
-      && left.first === lead.length + 1 && g.every(x => x.entries === x.items.length) && left.first + g.reduce((s, x) => s + x.entries, 0) === 32
+  ok(g.length > 0 && g.every(x => !x.open || x.name === 'Data & analytics') && lead.length + 2 + g.reduce((s, x) => s + x.items.length, 0) === 35
+      && left.offered.length === 35 && left.offered.slice().sort().join() === left.all.filter(id => id !== 'bv').sort().join()
+      && left.first === lead.length + 1 && g.every(x => x.entries === x.items.length) && left.first + g.reduce((s, x) => s + x.entries, 0) === 34
       && se.length === 1 && se[0].at === 'add-list' && se[0].head === 'AEM Sites' && se[0].tag === 'Connects to 1 on your canvas' && se[0].adds === 'eds:With Edge Delivery Services|aemsites:With traditional AEM Publish',
-    'the rest wait under their headings, and the 33 products left are all there (32 entries: AEM Sites is one, in the first list, with its two ways to add it)',
+    'the rest wait under their headings, and the 35 products left are all there (34 entries: AEM Sites is one, in the first list, with its two ways to add it)',
     lead.length + '+1(' + JSON.stringify(se) + ')+' + g.map(x => x.items.length).join(',') + ' / offered ' + left.offered.length + ' / first list ' + left.first);
   ok(!g.flatMap(x => x.items).some(nm => lead.some(x => x.name === nm)) && !(await p.$('#add-menu [data-add="bv"]')), 'no product is listed twice, and the one on the canvas is not offered');
   await type(p, 'analytics'); hits = await shown(p);

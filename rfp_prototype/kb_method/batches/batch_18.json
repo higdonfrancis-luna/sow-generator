@@ -1,0 +1,923 @@
+{
+ "batch": "18",
+ "services": [
+  {
+   "id": "CE08",
+   "name": "Assessment and plan for the move to Commerce as a Cloud Service",
+   "owner": [
+    "Adobe Commerce"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 40,
+    "high": 80
+   },
+   "scope": "Run Adobe's Migration Assessment on your client's Commerce on Cloud or on-premises project, review its complexity rating with your client, list the custom code, extensions, data in custom tables and integrations to move, and agree the phases, the order of work and who does what between Adobe, your client and you.",
+   "adobe_quote": "Every Adobe Commerce as a Cloud Service migration begins with an assessment.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Migrate to Adobe Commerce as a Cloud Service",
+    "url": "https://experienceleague.adobe.com/en/docs/commerce/cloud-service/migration/overview"
+   },
+   "connection_how": [],
+   "product_facts": [
+    "Implementation decisions and architecture validation remain collaborative activities between Adobe, partners, and customer engineering teams.",
+    "Data held in custom tables by third-party extensions is identified during assessment, but it is not handled by the standard data migration and requires an App Builder customization."
+   ]
+  },
+  {
+   "id": "CE09",
+   "name": "Custom code rebuilt as App Builder apps for Cloud Service",
+   "owner": [
+    "Adobe Commerce"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 120,
+    "base": 240,
+    "high": 480
+   },
+   "scope": "Rebuild each of your client's Commerce customizations and extensions that has no Cloud Service equivalent as an App Builder app using Commerce APIs, events and webhooks, start from the Commerce Developer Agent where it helps, review all generated code before production, and test each app against the agreed behavior.",
+   "adobe_quote": "Modernizing a store's customizations for this architecture is typically the most significant engineering effort in an Adobe Commerce as a Cloud Service migration.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Migrate to Adobe Commerce as a Cloud Service",
+    "url": "https://experienceleague.adobe.com/en/docs/commerce/cloud-service/migration/overview"
+   },
+   "connection_how": [],
+   "product_facts": [
+    "Implementation decisions and architecture validation remain collaborative activities between Adobe, partners, and customer engineering teams.",
+    "Data held in custom tables by third-party extensions is identified during assessment, but it is not handled by the standard data migration and requires an App Builder customization."
+   ]
+  },
+  {
+   "id": "CE10",
+   "name": "Data migration to Commerce as a Cloud Service",
+   "owner": [
+    "Adobe Commerce"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 40,
+    "base": 80,
+    "high": 160
+   },
+   "scope": "Set up your client's store settings and system configuration on the new instance first, move products, customers and orders with Adobe's bulk data migration tool, which Adobe provides through its Commerce Deployed Engineering engagement, build an App Builder job for data held in custom tables by third-party extensions, and reconcile record counts.",
+   "adobe_quote": "Configuration settings (store settings, system configuration) are not migrated automatically and must be set up on the target instance independently prior to migration.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Bulk data migration tool",
+    "url": "https://experienceleague.adobe.com/en/docs/commerce/cloud-service/migration/migration-tools/bulk-data/migration-tool"
+   },
+   "connection_how": [],
+   "product_facts": [
+    "The bulk data migration tool is a Docker-based CLI that system integrators run on their own migration machine."
+   ]
+  },
+  {
+   "id": "CE11",
+   "name": "Integrations and storefront rebuilt for Cloud Service",
+   "owner": [
+    "Adobe Commerce"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 60,
+    "base": 120,
+    "high": 240
+   },
+   "scope": "Re-establish each of your client's back-office integrations on the new instance through APIs, events and App Builder, point the storefront at it and test every data flow end to end. The storefront build itself on Edge Delivery Services is the service Build the Commerce storefront on Edge.",
+   "adobe_quote": "Customizations are modernized into App Builder applications, storefronts are rebuilt on Edge Delivery Services (EDS), data is migrated into the new Adobe Commerce as a Cloud Service tenant, and integrations are re-established using SaaS patterns.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Migrate to Adobe Commerce as a Cloud Service",
+    "url": "https://experienceleague.adobe.com/en/docs/commerce/cloud-service/migration/overview"
+   },
+   "connection_how": [],
+   "product_facts": [
+    "Implementation decisions and architecture validation remain collaborative activities between Adobe, partners, and customer engineering teams.",
+    "Data held in custom tables by third-party extensions is identified during assessment, but it is not handled by the standard data migration and requires an App Builder customization."
+   ]
+  },
+  {
+   "id": "CE12",
+   "name": "Cutover to Commerce as a Cloud Service",
+   "owner": [
+    "Adobe Commerce"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 40,
+    "high": 80
+   },
+   "scope": "Plan and rehearse the cutover with your client, run the final data sync, switch traffic to Commerce as a Cloud Service, check orders, payments and search on the live store, retire the old platform and hand over to ongoing operation.",
+   "adobe_quote": "Cut over and operate - Switch traffic to Adobe Commerce as a Cloud Service, decommission legacy systems, and transition into ongoing operation.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Migrate to Adobe Commerce as a Cloud Service",
+    "url": "https://experienceleague.adobe.com/en/docs/commerce/cloud-service/migration/overview"
+   },
+   "connection_how": [],
+   "product_facts": [
+    "Implementation decisions and architecture validation remain collaborative activities between Adobe, partners, and customer engineering teams.",
+    "Data held in custom tables by third-party extensions is identified during assessment, but it is not handled by the standard data migration and requires an App Builder customization."
+   ]
+  },
+  {
+   "id": "CE13",
+   "name": "Multi-store, multi-brand and multi-region setup",
+   "owner": [
+    "Adobe Commerce"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 48,
+    "high": 96
+   },
+   "scope": "For each brand, store or region beyond the first, add its website, store and store views on the same Admin, a store view for each language, its allowed currencies and rates, its tax rules, the inventory sources and stock that serve it, and its local payment and shipping options, then test an order in each.",
+   "adobe_quote": "Within each website, you can have multiple stores, and within each store, separate store views.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Store and site structure",
+    "url": "https://experienceleague.adobe.com/en/docs/commerce-admin/stores-sales/site-store/stores"
+   },
+   "connection_how": [],
+   "product_facts": [
+    "Many installations have one website and one store, but with multiple store views to support different languages."
+   ]
+  },
+  {
+   "id": "CE14",
+   "name": "Search and merchandising configuration on Cloud Service",
+   "owner": [
+    "Adobe Commerce"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 8,
+    "base": 16,
+    "high": 32
+   },
+   "scope": "On Commerce as a Cloud Service, where Adobe installs and connects the search and catalog services, set your client's catalog views and policies, search facets, synonyms and merchandising rules, then test search, category browse and filters on the storefront.",
+   "adobe_quote": "Configure catalog views and policies to define storefront product assortments. Apply merchandising rules across all catalog views or tailor them to a specific view. Configure product recommendations, search facets, and synonyms.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Merchandising Services powered by catalog views and policies",
+    "url": "https://experienceleague.adobe.com/en/docs/commerce-admin/merchandising-with-ccdm/overview"
+   },
+   "connection_how": [],
+   "product_facts": []
+  },
+  {
+   "id": "CE15",
+   "name": "B2B setup on Cloud Service",
+   "owner": [
+    "Adobe Commerce"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 24,
+    "high": 48
+   },
+   "scope": "On Commerce as a Cloud Service, where the core B2B features come installed, turn on company accounts, shared catalogs, quotes and purchase orders for your client, create the first company accounts with credit limits and custom pricing, and test company roles, quotes and approvals.",
+   "adobe_quote": "Full B2B capabilities available after installation Pre-installed with core B2B features",
+   "license": "",
+   "source": {
+    "title": "Experience League: Adobe Commerce feature comparison",
+    "url": "https://experienceleague.adobe.com/en/docs/commerce/cloud-service/feature-comparison"
+   },
+   "connection_how": [],
+   "product_facts": [
+    "Full B2B capabilities available after installation Pre-installed with core B2B features",
+    "Requires manual upgrade and patching. Six patch releases and one minor release per year. Automatically upgraded by Adobe through a versionless SaaS model",
+    "The on-premises model shares similar capabilities with the PaaS model"
+   ]
+  },
+  {
+   "id": "CE16",
+   "name": "Monthly on-premises hosting operations",
+   "owner": [
+    "Adobe Commerce"
+   ],
+   "unit": "monthly",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 64
+   },
+   "scope": "Each month, run your client's on-premises Commerce servers: capacity planning and scaling, backups and disaster recovery tests, monitoring and alerts, and security patches for the operating system, PHP, database and middleware.",
+   "adobe_quote": "Capacity planning, auto scaling, clustering, backups, disaster recovery",
+   "license": "",
+   "source": {
+    "title": "Experience League: Adobe Commerce on-premises installation overview",
+    "url": "https://experienceleague.adobe.com/en/docs/commerce-operations/installation-guide/overview"
+   },
+   "connection_how": [],
+   "product_facts": [
+    "you are responsible for ensuring the infrastructure's performance, security, and scalability."
+   ]
+  },
+  {
+   "id": "ACO01",
+   "name": "Commerce Optimizer instance and user setup",
+   "owner": [
+    "Commerce Optimizer"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 8,
+    "base": 16,
+    "high": 32
+   },
+   "scope": "Set up your client's sandbox and production Commerce Optimizer instances, match each to the commerce and storefront environments of the same kind, add users in the Adobe Admin Console with the roles each team needs, and record the instance IDs and endpoints.",
+   "adobe_quote": "Connect sandbox Optimizer instances to non-production commerce and storefront environments. Connect production Optimizer instances to production commerce and storefront environments.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Get started with Adobe Commerce Optimizer",
+    "url": "https://experienceleague.adobe.com/en/docs/commerce/optimizer/get-started"
+   },
+   "connection_how": [],
+   "product_facts": [
+    "Adobe Commerce Optimizer comes in two packages: Optimizer, with Adobe's Commerce storefront on Edge Delivery Services, and Optimizer Headless, without that storefront, for a front end your client builds. Cart, checkout, accounts and orders stay on the commerce platform behind it."
+   ]
+  },
+  {
+   "id": "ACO02",
+   "name": "Catalog views, policies and price books in Commerce Optimizer",
+   "owner": [
+    "Commerce Optimizer"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 64
+   },
+   "scope": "Design your client's catalog views for each brand, market, language or sales channel, the policies that filter what each view shows, and the price books each view uses, then check each view returns the agreed products and prices.",
+   "adobe_quote": "Within Adobe Commerce Optimizer, you can manage your catalog by creating catalog views and policies that best define your business goals.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Adobe Commerce Optimizer overview",
+    "url": "https://experienceleague.adobe.com/en/docs/commerce/optimizer/overview"
+   },
+   "connection_how": [],
+   "product_facts": [
+    "Adobe Commerce Optimizer comes in two packages: Optimizer, with Adobe's Commerce storefront on Edge Delivery Services, and Optimizer Headless, without that storefront, for a front end your client builds. Cart, checkout, accounts and orders stay on the commerce platform behind it."
+   ]
+  },
+  {
+   "id": "ACO03",
+   "name": "Search, recommendations and merchandising in Commerce Optimizer",
+   "owner": [
+    "Commerce Optimizer"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 64
+   },
+   "scope": "Set your client's search facets, synonyms and merchandising rules, add the product recommendations agreed for each page type, check storefront events arrive, and train the merchandisers to run them.",
+   "adobe_quote": "In addition, the merchandiser can provide personalized experiences to drive traffic and engagement using product discovery, recommendations​, and intelligent merchandising.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Adobe Commerce Optimizer overview",
+    "url": "https://experienceleague.adobe.com/en/docs/commerce/optimizer/overview"
+   },
+   "connection_how": [],
+   "product_facts": [
+    "Adobe Commerce Optimizer comes in two packages: Optimizer, with Adobe's Commerce storefront on Edge Delivery Services, and Optimizer Headless, without that storefront, for a front end your client builds. Cart, checkout, accounts and orders stay on the commerce platform behind it."
+   ]
+  },
+  {
+   "id": "MBI02",
+   "name": "Data warehouse tables and calculated columns in Commerce Intelligence",
+   "owner": [
+    "Commerce Intelligence"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 64
+   },
+   "scope": "Choose the tables and columns your client's reports need, set them to sync in the Data Warehouse Manager, and build the calculated columns for the agreed measures, such as customer lifetime value and repeat orders.",
+   "adobe_quote": "Using the Data Warehouse Manager, you can manage table and column sync settings, drill down into a table's schema, and create calculated columns to use in reports.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Data Warehouse Manager",
+    "url": "https://experienceleague.adobe.com/en/docs/commerce-business-intelligence/mbi/analyze/warehouse-manager/tour-dwm"
+   },
+   "connection_how": [],
+   "product_facts": []
+  },
+  {
+   "id": "MBI03",
+   "name": "Commerce Intelligence dashboards and reports",
+   "owner": [
+    "Commerce Intelligence"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 40,
+    "high": 80
+   },
+   "scope": "Build the dashboards and reports your client's teams agreed, such as sales, customers, products and acquisition sources, check each number against Commerce, and walk the teams through reading and filtering them.",
+   "adobe_quote": "Adobe Commerce Intelligence Dashboards give you a quick view of your store's performance and sales activity at a glance.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Commerce Intelligence dashboards",
+    "url": "https://experienceleague.adobe.com/en/docs/commerce-business-intelligence/mbi/build/dashboards/ess-dashboards"
+   },
+   "connection_how": [],
+   "product_facts": [
+    "Adobe Commerce Intelligence Dashboards give you a quick view of your store's performance and sales activity at a glance."
+   ]
+  },
+  {
+   "id": "MBI04",
+   "name": "Scheduled report emails and exports from Commerce Intelligence",
+   "owner": [
+    "Commerce Intelligence"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 8,
+    "base": 16,
+    "high": 24
+   },
+   "scope": "Set up the scheduled emails your client's teams want from Commerce Intelligence dashboards, and show them how to export chart data to a CSV or Excel file.",
+   "adobe_quote": "learn how to export and share data from a chart to a .csv or Excel file.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Share data from a chart",
+    "url": "https://experienceleague.adobe.com/en/docs/commerce-business-intelligence/mbi/build/share/share-data"
+   },
+   "connection_how": [],
+   "product_facts": []
+  },
+  {
+   "id": "MBI05",
+   "name": "Other data into Commerce Intelligence by file or API",
+   "owner": [
+    "Commerce Intelligence"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 64
+   },
+   "scope": "Bring in the other data your client's reports need: upload agreed CSV files on a schedule, or write scripts that send data through the Adobe API, then join it to the Commerce tables in the data warehouse.",
+   "adobe_quote": "There are four ways to get your data into Commerce Intelligence: connect a database, connect a SaaS integration, upload a .csv file, or use the Adobe API.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Connecting data (Commerce Intelligence)",
+    "url": "https://experienceleague.adobe.com/en/docs/commerce-business-intelligence/mbi/analyze/connecting/connecting-data"
+   },
+   "connection_how": [],
+   "product_facts": []
+  },
+  {
+   "id": "XR02",
+   "name": "Commerce to ERP integration",
+   "owner": [
+    "Adobe Commerce + ERP"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 60,
+    "base": 120,
+    "high": 240
+   },
+   "scope": "Build the integration between Adobe Commerce and your client's ERP on Adobe's Commerce integration starter kit in App Builder: map order, customer, product and stock fields, deploy the actions for each, subscribe to the Commerce events, connect the actions to the ERP's APIs, set retries and test. Where a prebuilt connector on Adobe Exchange fits the ERP, install and configure it instead.",
+   "adobe_quote": "Integrating Adobe Commerce with your enterprise resource planning (ERP), order management system (OMS), or customer relationship management (CRM) is now easier with Adobe Commerce integration starter kit.",
+   "license": "Adobe Developer App Builder access",
+   "source": {
+    "title": "Adobe Developer: Install Adobe Commerce integration starter kit",
+    "url": "https://developer.adobe.com/commerce/extensibility/starter-kit/integration/create-integration"
+   },
+   "connection_how": [
+    "We will connect Adobe Commerce and your ERP on Adobe's Commerce integration starter kit, which runs in Adobe Developer App Builder, or with a prebuilt connector from Adobe Exchange where one fits your ERP. Commerce will send order, customer and product events to the integration, which will call your ERP's APIs, and stock, price and order status changes from your ERP will be written back to Commerce. Where Commerce needs an answer at once, such as taxes or order totals, a webhook will ask your ERP before checkout goes on."
+   ],
+   "product_facts": [
+    "The partner builds this on Adobe's Commerce integration starter kit, which runs in Adobe Developer App Builder, or installs a prebuilt connector from Adobe Exchange where one fits the ERP. Commerce sends order, customer and product events through Adobe I/O Events to App Builder actions that call the ERP's APIs, and the ERP's stock, price and order status changes come back to Commerce through its APIs. Webhooks let Commerce ask the ERP for an answer at once, such as taxes or order totals, before it goes on.",
+    "Orders placed in Commerce reach your client's ERP without re-entry, and the ERP's stock, prices and order status reach Commerce.",
+    "Integrating Adobe Commerce with your enterprise resource planning (ERP), order management system (OMS), or customer relationship management (CRM) is now easier with Adobe Commerce integration starter kit.",
+    "The starter kit supports the following data flows: Customers Orders Products Shipment Stock",
+    "This kit simplifies data synchronization for key objects like orders, customers, inventory, products, and shipping status between Adobe and third-party systems.",
+    "Imagine that you want to build an extension that notifies a third-party Enterprise Resource Planning (ERP) system every time a shopper places an order.",
+    "Synchronous calls are required when Commerce needs to compute or validate something immediately (order totals, taxes, payments) using a 3rd-party endpoint and write the result back into Adobe Commerce.",
+    "prebuilt connectors are available through ... to further accelerate integration with solutions, such as IBM Sterling Order Management, Microsoft Dynamics 365 ERP, SAP S4/HANA ERP, and more."
+   ]
+  },
+  {
+   "id": "XR03",
+   "name": "Live ERP answers at checkout with webhooks",
+   "owner": [
+    "Adobe Commerce + ERP"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 48,
+    "high": 96
+   },
+   "scope": "Set up Commerce webhooks that call your client's ERP when Commerce needs an answer at once, such as order totals, taxes or payments, write the answer back into Commerce, set timeouts and what happens when the ERP does not answer, and test them under load.",
+   "adobe_quote": "Synchronous calls are required when Commerce needs to compute or validate something immediately (order totals, taxes, payments) using a 3rd-party endpoint and write the result back into Adobe Commerce.",
+   "license": "",
+   "source": {
+    "title": "Adobe Developer: Adobe Commerce Webhooks overview",
+    "url": "https://developer.adobe.com/commerce/extensibility/webhooks/"
+   },
+   "connection_how": [
+    "We will connect Adobe Commerce and your ERP on Adobe's Commerce integration starter kit, which runs in Adobe Developer App Builder, or with a prebuilt connector from Adobe Exchange where one fits your ERP. Commerce will send order, customer and product events to the integration, which will call your ERP's APIs, and stock, price and order status changes from your ERP will be written back to Commerce. Where Commerce needs an answer at once, such as taxes or order totals, a webhook will ask your ERP before checkout goes on."
+   ],
+   "product_facts": [
+    "The partner builds this on Adobe's Commerce integration starter kit, which runs in Adobe Developer App Builder, or installs a prebuilt connector from Adobe Exchange where one fits the ERP. Commerce sends order, customer and product events through Adobe I/O Events to App Builder actions that call the ERP's APIs, and the ERP's stock, price and order status changes come back to Commerce through its APIs. Webhooks let Commerce ask the ERP for an answer at once, such as taxes or order totals, before it goes on.",
+    "Orders placed in Commerce reach your client's ERP without re-entry, and the ERP's stock, prices and order status reach Commerce.",
+    "Integrating Adobe Commerce with your enterprise resource planning (ERP), order management system (OMS), or customer relationship management (CRM) is now easier with Adobe Commerce integration starter kit.",
+    "The starter kit supports the following data flows: Customers Orders Products Shipment Stock",
+    "This kit simplifies data synchronization for key objects like orders, customers, inventory, products, and shipping status between Adobe and third-party systems.",
+    "Imagine that you want to build an extension that notifies a third-party Enterprise Resource Planning (ERP) system every time a shopper places an order.",
+    "Synchronous calls are required when Commerce needs to compute or validate something immediately (order totals, taxes, payments) using a 3rd-party endpoint and write the result back into Adobe Commerce.",
+    "prebuilt connectors are available through ... to further accelerate integration with solutions, such as IBM Sterling Order Management, Microsoft Dynamics 365 ERP, SAP S4/HANA ERP, and more."
+   ]
+  },
+  {
+   "id": "XR04",
+   "name": "Admin screens to run the back-office sync",
+   "owner": [
+    "Adobe Commerce + ERP"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 64
+   },
+   "scope": "Add pages to your client's Commerce Admin with the Admin UI SDK where the team sets up the back-office sync, sees what was sent and what failed, and sends a record again.",
+   "adobe_quote": "Integrate third-party systems - Connect to ERP, CRM, or warehouse management systems for data sync and operations management.",
+   "license": "",
+   "source": {
+    "title": "Adobe Developer: Adobe Commerce Admin UI SDK overview",
+    "url": "https://developer.adobe.com/commerce/extensibility/admin-ui-sdk/"
+   },
+   "connection_how": [
+    "We will connect Adobe Commerce and your ERP on Adobe's Commerce integration starter kit, which runs in Adobe Developer App Builder, or with a prebuilt connector from Adobe Exchange where one fits your ERP. Commerce will send order, customer and product events to the integration, which will call your ERP's APIs, and stock, price and order status changes from your ERP will be written back to Commerce. Where Commerce needs an answer at once, such as taxes or order totals, a webhook will ask your ERP before checkout goes on."
+   ],
+   "product_facts": [
+    "The partner builds this on Adobe's Commerce integration starter kit, which runs in Adobe Developer App Builder, or installs a prebuilt connector from Adobe Exchange where one fits the ERP. Commerce sends order, customer and product events through Adobe I/O Events to App Builder actions that call the ERP's APIs, and the ERP's stock, price and order status changes come back to Commerce through its APIs. Webhooks let Commerce ask the ERP for an answer at once, such as taxes or order totals, before it goes on.",
+    "Orders placed in Commerce reach your client's ERP without re-entry, and the ERP's stock, prices and order status reach Commerce.",
+    "Integrating Adobe Commerce with your enterprise resource planning (ERP), order management system (OMS), or customer relationship management (CRM) is now easier with Adobe Commerce integration starter kit.",
+    "The starter kit supports the following data flows: Customers Orders Products Shipment Stock",
+    "This kit simplifies data synchronization for key objects like orders, customers, inventory, products, and shipping status between Adobe and third-party systems.",
+    "Imagine that you want to build an extension that notifies a third-party Enterprise Resource Planning (ERP) system every time a shopper places an order.",
+    "Synchronous calls are required when Commerce needs to compute or validate something immediately (order totals, taxes, payments) using a 3rd-party endpoint and write the result back into Adobe Commerce.",
+    "prebuilt connectors are available through ... to further accelerate integration with solutions, such as IBM Sterling Order Management, Microsoft Dynamics 365 ERP, SAP S4/HANA ERP, and more."
+   ]
+  },
+  {
+   "id": "XR05",
+   "name": "Product data from the PIM into Commerce",
+   "owner": [
+    "Adobe Commerce + PIM"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 40,
+    "base": 80,
+    "high": 160
+   },
+   "scope": "Map your client's PIM product attributes, categories and media to Commerce, build the starter kit's product actions in App Builder that write each create, update and delete to Commerce, run the first full load, and test that changes in the PIM reach the storefront.",
+   "adobe_quote": "This runtime action is responsible for notifying Adobe Commerce when an <object> is created, updated, or deleted in the external backoffice application.",
+   "license": "Adobe Developer App Builder access",
+   "source": {
+    "title": "Adobe Developer: Enrich the shopping experience",
+    "url": "https://developer.adobe.com/commerce/extensibility/starter-kit/integration/receive-data"
+   },
+   "connection_how": [
+    "We will connect your PIM to Adobe Commerce on Adobe's Commerce integration starter kit, which runs in Adobe Developer App Builder. When a product is created, updated or deleted in your PIM, the integration will write the change to Commerce through its APIs."
+   ],
+   "product_facts": [
+    "The partner builds this on Adobe's Commerce integration starter kit in App Builder: when the PIM creates, updates or deletes a product, an App Builder action writes the change to Commerce through its APIs, so Commerce takes its product data from the PIM.",
+    "Your client's product team keeps names, descriptions and attributes in the PIM, and Commerce shows them without a second round of entry.",
+    "The starter kit supports the following data flows: Customers Orders Products Shipment Stock",
+    "This runtime action is responsible for notifying Adobe Commerce when an <object> is created, updated, or deleted in the external backoffice application.",
+    "Adobe Commerce seamlessly connects with any back-office system, including enterprise resource planning (ERP), customer relationship management (CRM), product information management (PIM), warehouse management systems (WMS), and order management systems (OMS)",
+    "This kit simplifies data synchronization for key objects like orders, customers, inventory, products, and shipping status between Adobe and third-party systems."
+   ]
+  },
+  {
+   "id": "XR06",
+   "name": "Commerce to order management integration",
+   "owner": [
+    "Adobe Commerce + Order management"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 60,
+    "base": 120,
+    "high": 240
+   },
+   "scope": "Build the integration between Adobe Commerce and your client's order management system on Adobe's Commerce integration starter kit in App Builder, or configure a prebuilt connector from Adobe Exchange where one fits: send each order, bring back order status and shipments with tracking numbers, set retries and test returns and cancellations.",
+   "adobe_quote": "Integrating Adobe Commerce with your enterprise resource planning (ERP), order management system (OMS), or customer relationship management (CRM) is now easier with Adobe Commerce integration starter kit.",
+   "license": "Adobe Developer App Builder access",
+   "source": {
+    "title": "Adobe Developer: Install Adobe Commerce integration starter kit",
+    "url": "https://developer.adobe.com/commerce/extensibility/starter-kit/integration/create-integration"
+   },
+   "connection_how": [
+    "We will connect Adobe Commerce and your order management system on Adobe's Commerce integration starter kit, which runs in Adobe Developer App Builder, or with a prebuilt connector from Adobe Exchange, such as IBM Sterling Order Management. Each order will go to your order management system, and order status and shipments will come back to Commerce. A webhook can ask your order management system for a product's stock status before a shopper buys."
+   ],
+   "product_facts": [
+    "The partner builds this on Adobe's Commerce integration starter kit in App Builder, or installs a prebuilt connector from Adobe Exchange, such as IBM Sterling Order Management. Commerce sends each order through Adobe I/O Events to the order management system, which sends order status and shipments back to Commerce through its APIs. Webhooks let Commerce ask the order management system for a product's stock status before the shopper buys.",
+    "Your client's orders go to the order management system as they are placed, and shoppers see the status and tracking it sends back.",
+    "Integrating Adobe Commerce with your enterprise resource planning (ERP), order management system (OMS), or customer relationship management (CRM) is now easier with Adobe Commerce integration starter kit.",
+    "The starter kit supports the following data flows: Customers Orders Products Shipment Stock",
+    "This kit simplifies data synchronization for key objects like orders, customers, inventory, products, and shipping status between Adobe and third-party systems.",
+    "The event triggers a real-time call from Commerce to a URL endpoint, such as an Order Management System.",
+    "As an example, the call requests a product's stock status to make sure it is available to be purchased.",
+    "such as IBM Sterling Order Management, Microsoft Dynamics 365 ERP"
+   ]
+  },
+  {
+   "id": "XR07",
+   "name": "Live stock checks from the order management system",
+   "owner": [
+    "Adobe Commerce + Order management"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 48,
+    "high": 96
+   },
+   "scope": "Set up a Commerce webhook that asks your client's order management system for a product's stock status when a shopper adds it to the cart or checks out, write the answer back into Commerce, set what happens when the system does not answer, and test it under load.",
+   "adobe_quote": "As an example, the call requests a product's stock status to make sure it is available to be purchased.",
+   "license": "",
+   "source": {
+    "title": "Adobe Developer: Adobe Commerce Webhooks overview",
+    "url": "https://developer.adobe.com/commerce/extensibility/webhooks/"
+   },
+   "connection_how": [
+    "We will connect Adobe Commerce and your order management system on Adobe's Commerce integration starter kit, which runs in Adobe Developer App Builder, or with a prebuilt connector from Adobe Exchange, such as IBM Sterling Order Management. Each order will go to your order management system, and order status and shipments will come back to Commerce. A webhook can ask your order management system for a product's stock status before a shopper buys."
+   ],
+   "product_facts": [
+    "The partner builds this on Adobe's Commerce integration starter kit in App Builder, or installs a prebuilt connector from Adobe Exchange, such as IBM Sterling Order Management. Commerce sends each order through Adobe I/O Events to the order management system, which sends order status and shipments back to Commerce through its APIs. Webhooks let Commerce ask the order management system for a product's stock status before the shopper buys.",
+    "Your client's orders go to the order management system as they are placed, and shoppers see the status and tracking it sends back.",
+    "Integrating Adobe Commerce with your enterprise resource planning (ERP), order management system (OMS), or customer relationship management (CRM) is now easier with Adobe Commerce integration starter kit.",
+    "The starter kit supports the following data flows: Customers Orders Products Shipment Stock",
+    "This kit simplifies data synchronization for key objects like orders, customers, inventory, products, and shipping status between Adobe and third-party systems.",
+    "The event triggers a real-time call from Commerce to a URL endpoint, such as an Order Management System.",
+    "As an example, the call requests a product's stock status to make sure it is available to be purchased.",
+    "such as IBM Sterling Order Management, Microsoft Dynamics 365 ERP"
+   ]
+  },
+  {
+   "id": "XR08",
+   "name": "Stock and shipment sync with the warehouse system",
+   "owner": [
+    "Adobe Commerce + Warehouse management"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 40,
+    "base": 80,
+    "high": 160
+   },
+   "scope": "Map your client's warehouse locations to Commerce inventory sources, build the starter kit's stock and shipment actions in App Builder so stock quantities and shipments with tracking numbers reach Commerce, send orders to the warehouse system, and test a full order from purchase to shipment.",
+   "adobe_quote": "The starter kit supports the following data flows: Customers Orders Products Shipment Stock",
+   "license": "Adobe Developer App Builder access",
+   "source": {
+    "title": "Adobe Developer: Starter kit data flows",
+    "url": "https://developer.adobe.com/commerce/extensibility/starter-kit/integration/data-flows"
+   },
+   "connection_how": [
+    "We will connect Adobe Commerce and your warehouse management system on Adobe's Commerce integration starter kit, which runs in Adobe Developer App Builder. Orders will go to your warehouse system, and stock quantities for each source and shipments with tracking numbers will come back to Commerce."
+   ],
+   "product_facts": [
+    "The partner builds this on Adobe's Commerce integration starter kit in App Builder: Commerce sends orders through Adobe I/O Events to the warehouse management system, which sends stock quantities for each source and shipments with tracking numbers back to Commerce through its APIs.",
+    "The stock shoppers see in Commerce follows the warehouse, and shipments and tracking numbers reach orders without re-entry.",
+    "The starter kit supports the following data flows: Customers Orders Products Shipment Stock",
+    "Integrate third-party systems - Connect to ERP, CRM, or warehouse management systems for data sync and operations management.",
+    "Adobe Commerce seamlessly connects with any back-office system, including enterprise resource planning (ERP), customer relationship management (CRM), product information management (PIM), warehouse management systems (WMS), and order management systems (OMS)",
+    "This kit simplifies data synchronization for key objects like orders, customers, inventory, products, and shipping status between Adobe and third-party systems."
+   ]
+  },
+  {
+   "id": "ACO04",
+   "name": "Commerce Optimizer Connector on Adobe Commerce",
+   "owner": [
+    "Commerce Optimizer + Adobe Commerce"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 64
+   },
+   "scope": "Uninstall Live Search, Product Recommendations and Catalog Service from your client's Commerce, install the Commerce Optimizer Connector with Composer, choose the websites, customer groups and store views to sync, turn on the integration, run the first sync and check the data in Optimizer.",
+   "adobe_quote": "Install the Adobe Commerce Optimizer Connector package using Composer to connect your Adobe Commerce instance to Commerce Optimizer.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Get started with the Adobe Commerce Optimizer Connector",
+    "url": "https://experienceleague.adobe.com/en/docs/commerce/aco-optimizer-connector/get-started/get-started"
+   },
+   "connection_how": [
+    "We will install Adobe's Commerce Optimizer Connector on your Adobe Commerce with Composer, after taking Live Search, Product Recommendations and Catalog Service off it. The connector will sync your products, prices and catalog structure to Commerce Optimizer, where search, recommendations and merchandising will run, while Commerce keeps cart, checkout, orders and customer accounts."
+   ],
+   "product_facts": [
+    "Adobe's Commerce Optimizer Connector, installed with Composer on Adobe Commerce 2.4.7 or later on Cloud or on-premises, syncs products, prices and catalog structure to Commerce Optimizer, where search, recommendations and merchandising then run. Commerce stays the system of record and keeps cart, checkout, orders and customer accounts. Live Search, Product Recommendations and Catalog Service come off Commerce first. A separate connector carries B2B shared catalogs.",
+    "Your client keeps Adobe Commerce for orders and accounts, and gets catalog views, search and recommendations from Commerce Optimizer, with no new platform.",
+    "The Adobe Commerce Optimizer Connector is a native, first-party integration between Adobe Commerce (cloud or on-premises) and Adobe Commerce Optimizer.",
+    "Adobe Commerce remains your system of record for products, prices, and catalog structure.",
+    "Keep cart, checkout, order management, and customer accounts on Adobe Commerce or a connected third-party platform.",
+    "Adobe Commerce 2.4.7+.",
+    "If you have any of the following extensions installed, uninstall them before installing",
+    "The separate Adobe Commerce Optimizer Connector for B2B extends the base connector to synchronize shared catalog configuration and automatically project custom shared catalogs as private catalog views."
+   ]
+  },
+  {
+   "id": "ACO05",
+   "name": "B2B shared catalogs into Commerce Optimizer",
+   "owner": [
+    "Commerce Optimizer + Adobe Commerce"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 8,
+    "base": 16,
+    "high": 32
+   },
+   "scope": "Install Adobe's Commerce Optimizer Connector for B2B on your client's Commerce, sync its shared catalogs, check each one shows as a private catalog view in Optimizer, and test what each company account sees.",
+   "adobe_quote": "The separate Adobe Commerce Optimizer Connector for B2B extends the base connector to synchronize shared catalog configuration and automatically project custom shared catalogs as private catalog views.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Adobe Commerce Optimizer Connector overview",
+    "url": "https://experienceleague.adobe.com/en/docs/commerce/aco-optimizer-connector/overview"
+   },
+   "connection_how": [
+    "We will install Adobe's Commerce Optimizer Connector on your Adobe Commerce with Composer, after taking Live Search, Product Recommendations and Catalog Service off it. The connector will sync your products, prices and catalog structure to Commerce Optimizer, where search, recommendations and merchandising will run, while Commerce keeps cart, checkout, orders and customer accounts."
+   ],
+   "product_facts": [
+    "Adobe's Commerce Optimizer Connector, installed with Composer on Adobe Commerce 2.4.7 or later on Cloud or on-premises, syncs products, prices and catalog structure to Commerce Optimizer, where search, recommendations and merchandising then run. Commerce stays the system of record and keeps cart, checkout, orders and customer accounts. Live Search, Product Recommendations and Catalog Service come off Commerce first. A separate connector carries B2B shared catalogs.",
+    "Your client keeps Adobe Commerce for orders and accounts, and gets catalog views, search and recommendations from Commerce Optimizer, with no new platform.",
+    "The Adobe Commerce Optimizer Connector is a native, first-party integration between Adobe Commerce (cloud or on-premises) and Adobe Commerce Optimizer.",
+    "Adobe Commerce remains your system of record for products, prices, and catalog structure.",
+    "Keep cart, checkout, order management, and customer accounts on Adobe Commerce or a connected third-party platform.",
+    "Adobe Commerce 2.4.7+.",
+    "If you have any of the following extensions installed, uninstall them before installing",
+    "The separate Adobe Commerce Optimizer Connector for B2B extends the base connector to synchronize shared catalog configuration and automatically project custom shared catalogs as private catalog views."
+   ]
+  },
+  {
+   "id": "ACO06",
+   "name": "Product data from the PIM into Commerce Optimizer",
+   "owner": [
+    "Commerce Optimizer + PIM"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 40,
+    "base": 80,
+    "high": 160
+   },
+   "scope": "Define the product attribute metadata Optimizer needs for your client's catalog, map the PIM's products, categories and prices to the Data Ingestion API, build the job that sends creates, updates and deletes, run the first full load and check the Data Sync page.",
+   "adobe_quote": "The Data Ingestion API is designed to be used by backend applications to manage product data.",
+   "license": "",
+   "source": {
+    "title": "Adobe Developer: Data Ingestion API (Commerce Optimizer)",
+    "url": "https://developer.adobe.com/commerce/services/optimizer/data-ingestion/"
+   },
+   "connection_how": [
+    "We will send your products, categories and prices from your PIM to Commerce Optimizer through Adobe's Data Ingestion API, a REST API built for backend systems, and check each sync on Optimizer's Data Sync page."
+   ],
+   "product_facts": [
+    "The PIM sends products, categories and prices to Commerce Optimizer through Adobe's Data Ingestion API, a REST API that backend systems use to manage product data. Optimizer's Data Sync page shows how each sync went.",
+    "Your client's catalog in Commerce Optimizer comes from the PIM, so storefronts show the product data the product team keeps.",
+    "Third-party catalog ingestion - Ingest catalog data from any third-party source (your existing Commerce catalog, PIM, ERP, and so on).",
+    "REST API endpoint you use to ingest products and prices into Adobe Commerce Optimizer from your commerce or PIM system.",
+    "The Data Ingestion API is designed to be used by backend applications to manage product data.",
+    "Product metadata is required to index product data for discovery. Consequently, it must be created before creating products."
+   ]
+  },
+  {
+   "id": "ACO07",
+   "name": "Catalog sync from the other commerce platform",
+   "owner": [
+    "Commerce Optimizer + Other commerce platform"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 48,
+    "high": 96
+   },
+   "scope": "Set up Adobe's Commerce Salesforce Connector in App Builder for your client's Salesforce Commerce Cloud B2C, or a sync job on the Data Ingestion API for another platform, schedule the syncs, run the first full load and check catalog and prices in Optimizer.",
+   "adobe_quote": "The Commerce Salesforce Connector (built on Adobe App Builder) syncs catalog and price data from Salesforce Commerce Cloud B2C into Adobe Commerce Optimizer so you can use Adobe storefront and merchandising capabilities without replatforming your Salesforce commerce backend.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Adobe Commerce Optimizer integrations",
+    "url": "https://experienceleague.adobe.com/en/docs/commerce/optimizer/integrations-overview"
+   },
+   "connection_how": [
+    "We will set up Adobe's Commerce Salesforce Connector to sync your catalog and prices from Salesforce Commerce Cloud B2C into Commerce Optimizer, or a sync job for your other platform. Your platform will keep shopper accounts, cart, checkout and orders, and we will build the custom integration that hands shoppers from the new storefront to them."
+   ],
+   "product_facts": [
+    "Adobe's Commerce Salesforce Connector, built on App Builder, syncs catalog and price data from Salesforce Commerce Cloud B2C into Commerce Optimizer on a schedule or on demand. The other platform keeps shopper accounts, cart, checkout and orders; joining them to the storefront is a custom build with API Mesh, App Builder or direct APIs, and Adobe's checkout starter kit for Salesforce Commerce Cloud is a reference to adapt.",
+    "Your client keeps its commerce platform for orders and gets Adobe's search, merchandising and storefront on top of it.",
+    "syncs catalog and price data from Salesforce Commerce Cloud B2C into Adobe Commerce Optimizer",
+    "The host commerce platform remains responsible for shopper accounts, cart, checkout, and order processing.",
+    "Integration with the host platform is a custom implementation, using API Mesh, App Builder, direct APIs, or a combination of these tools.",
+    "Use it as a reference implementation and adapt it to your storefront; it is not a generic, out-of-the-box connector.",
+    "Businesses where a third-party system manages the cart and checkout lifecycle."
+   ]
+  },
+  {
+   "id": "ACO08",
+   "name": "Cart and checkout hand-off to the other commerce platform",
+   "owner": [
+    "Commerce Optimizer + Other commerce platform"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 80,
+    "base": 160,
+    "high": 320
+   },
+   "scope": "Build the custom integration that hands your client's shoppers from the Optimizer storefront to the other platform's accounts, cart and checkout with API Mesh, App Builder or its APIs, adapting Adobe's checkout starter kit for Salesforce Commerce Cloud where it applies, and test a full order.",
+   "adobe_quote": "Integration with the host platform is a custom implementation, using API Mesh, App Builder, direct APIs, or a combination of these tools.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Adobe Commerce Optimizer integrations",
+    "url": "https://experienceleague.adobe.com/en/docs/commerce/optimizer/integrations-overview"
+   },
+   "connection_how": [
+    "We will set up Adobe's Commerce Salesforce Connector to sync your catalog and prices from Salesforce Commerce Cloud B2C into Commerce Optimizer, or a sync job for your other platform. Your platform will keep shopper accounts, cart, checkout and orders, and we will build the custom integration that hands shoppers from the new storefront to them."
+   ],
+   "product_facts": [
+    "Adobe's Commerce Salesforce Connector, built on App Builder, syncs catalog and price data from Salesforce Commerce Cloud B2C into Commerce Optimizer on a schedule or on demand. The other platform keeps shopper accounts, cart, checkout and orders; joining them to the storefront is a custom build with API Mesh, App Builder or direct APIs, and Adobe's checkout starter kit for Salesforce Commerce Cloud is a reference to adapt.",
+    "Your client keeps its commerce platform for orders and gets Adobe's search, merchandising and storefront on top of it.",
+    "syncs catalog and price data from Salesforce Commerce Cloud B2C into Adobe Commerce Optimizer",
+    "The host commerce platform remains responsible for shopper accounts, cart, checkout, and order processing.",
+    "Integration with the host platform is a custom implementation, using API Mesh, App Builder, direct APIs, or a combination of these tools.",
+    "Use it as a reference implementation and adapt it to your storefront; it is not a generic, out-of-the-box connector.",
+    "Businesses where a third-party system manages the cart and checkout lifecycle."
+   ]
+  },
+  {
+   "id": "ACO09",
+   "name": "Storefront on Edge Delivery for Commerce Optimizer",
+   "owner": [
+    "Commerce Optimizer + AEM Sites with Edge Delivery Services"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 60,
+    "base": 120,
+    "high": 240
+   },
+   "scope": "Create your client's storefront project on Edge Delivery Services with Adobe's Site Creator, point it at the Optimizer instance, catalog view and locale, build the product detail, search and category pages from Adobe's ready-made storefront parts, brand them and test them against the agreed pages.",
+   "adobe_quote": "This guide walks you through setting up a storefront for your Adobe Commerce Optimizer instance using Adobe Edge Delivery Services.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Set up your storefront (Commerce Optimizer)",
+    "url": "https://experienceleague.adobe.com/en/docs/commerce/optimizer/storefront"
+   },
+   "connection_how": [
+    "We will build your storefront on Edge Delivery Services with Adobe's Commerce storefront for Commerce Optimizer: its ready-made storefront parts will take catalog, search and recommendations from Optimizer, while your commerce platform keeps cart, checkout and accounts."
+   ],
+   "product_facts": [
+    "Adobe's Commerce storefront on Edge Delivery Services runs on Commerce Optimizer: its ready-made storefront parts ask Optimizer for catalog, search and recommendations, while the commerce platform behind it keeps cart, checkout and accounts. The storefront comes with the Optimizer package, not with Optimizer Headless.",
+    "Your client's shoppers browse and search a storefront on Edge Delivery Services, fed by Optimizer's catalog views and merchandising.",
+    "This guide walks you through setting up a storefront for your Adobe Commerce Optimizer instance using Adobe Edge Delivery Services.",
+    "Drop-ins are licensed exclusively for use with Adobe Commerce as a Cloud Service and Adobe Commerce Optimizer.",
+    "Commerce Storefront powered by Edge Delivery Services is not included in Adobe Commerce Optimizer Headless."
+   ]
+  },
+  {
+   "id": "ACO10",
+   "name": "Product images from AEM Assets with Product Visuals",
+   "owner": [
+    "Commerce Optimizer + AEM Assets"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 24,
+    "high": 48
+   },
+   "scope": "Configure AEM Assets for Commerce Optimizer to turn on Product Visuals, agree with your client's DAM owner how product images carry their SKU and are approved, and check that approved images show on the storefront.",
+   "adobe_quote": "The integration matches assets to products by SKU.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Adobe Commerce Optimizer integrations",
+    "url": "https://experienceleague.adobe.com/en/docs/commerce/optimizer/integrations-overview"
+   },
+   "connection_how": [
+    "We will turn on Product Visuals so your product images in AEM Assets reach Commerce Optimizer, matched to products by SKU, and updates reach your storefronts without manual re-uploads."
+   ],
+   "product_facts": [
+    "Product Visuals lets your client manage product images in AEM Assets for Commerce Optimizer: it matches assets to products by SKU, and updates reach the storefronts without manual re-uploads.",
+    "Your client's product images are approved and kept in AEM Assets, and the storefront shows the latest ones.",
+    "Product Visuals lets you manage product images through Adobe Experience Manager (AEM) Assets.",
+    "The integration matches assets to products by SKU.",
+    "Updates flow through Adobe's integration services so storefronts reflect the latest media without manual re-uploads."
+   ]
+  },
+  {
+   "id": "MBI01",
+   "name": "Commerce database connection for Commerce Intelligence",
+   "owner": [
+    "Commerce Intelligence + Adobe Commerce"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 8,
+    "base": 16,
+    "high": 32
+   },
+   "scope": "Connect your client's Commerce database to Commerce Intelligence through an SSH tunnel, with a read-only database user and the host key checked, choose the first tables to sync and check the first sync.",
+   "adobe_quote": "As the Adobe Commerce database is based on MySQL, you can connect it to Commerce Intelligence through a direct connection , cPanel , or via an SSH tunnel .",
+   "license": "",
+   "source": {
+    "title": "Experience League: Connect your Adobe Commerce database",
+    "url": "https://experienceleague.adobe.com/en/docs/commerce-business-intelligence/mbi/analyze/integration/magento"
+   },
+   "connection_how": [
+    "We will connect your Adobe Commerce database to Commerce Intelligence through an SSH tunnel, the method Adobe recommends as the most secure, and sync the tables your reports need into its data warehouse."
+   ],
+   "product_facts": [
+    "Commerce Intelligence connects to the Adobe Commerce database, which is MySQL, through a direct connection, cPanel or an SSH tunnel, the method Adobe recommends as the most secure, and copies the chosen tables into its data warehouse for reports.",
+    "Your client's teams report on orders, customers and products from Commerce without exports or spreadsheets.",
+    "As the Adobe Commerce database is based on MySQL, you can connect it to Commerce Intelligence through a direct connection , cPanel , or via an SSH tunnel .",
+    "The SSH method is recommended because it is the most secure.",
+    "Adobe Commerce Intelligence means the On-demand Service business intelligence platform that can be purchased as part of a bundled offering or as an upgrade to the Base Package and that includes data extraction, data warehousing, data analysis, and data visualization capabilities."
+   ]
+  },
+  {
+   "id": "MBI06",
+   "name": "Salesforce data into Commerce Intelligence",
+   "owner": [
+    "Commerce Intelligence + CRM"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 8,
+    "base": 16,
+    "high": 32
+   },
+   "scope": "Connect your client's Salesforce to Commerce Intelligence with a Salesforce user that can read the agreed objects, choose the tables to sync and join them to the Commerce data for the agreed reports.",
+   "adobe_quote": "Connecting your Salesforce data enables a range of analyses, from scoring and optimizing leads to hitting your goals for converted opportunities.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Salesforce in Commerce Intelligence",
+    "url": "https://experienceleague.adobe.com/en/docs/commerce-business-intelligence/mbi/analyze/saas/salesforce"
+   },
+   "connection_how": [
+    "We will connect your Salesforce to Commerce Intelligence so its data sits in the data warehouse beside your Commerce data."
+   ],
+   "product_facts": [
+    "Commerce Intelligence's Salesforce integration brings your client's Salesforce data into its data warehouse beside the Commerce data, for analyses from lead scoring to converted opportunities.",
+    "Your client's reports put Salesforce leads and opportunities next to Commerce orders.",
+    "SaaS integrations are services like Google Adwords , Salesforce , and Zendesk .",
+    "Connecting your Salesforce data enables a range of analyses, from scoring and optimizing leads to hitting your goals for converted opportunities."
+   ]
+  },
+  {
+   "id": "MBI07",
+   "name": "Google Ads cost data into Commerce Intelligence",
+   "owner": [
+    "Commerce Intelligence + Ad platforms"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 8,
+    "base": 16,
+    "high": 32
+   },
+   "scope": "Connect your client's Google Ads account to Commerce Intelligence, check that campaign tracking on the storefront ties orders to campaigns, and build the report of campaign cost against the lifetime value of the customers each campaign brought.",
+   "adobe_quote": "you can measure campaign ROI by marrying your advertising cost and the customer lifetime value (CLV) of users acquired from your campaigns.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Google Adwords in Commerce Intelligence",
+    "url": "https://experienceleague.adobe.com/en/docs/commerce-business-intelligence/mbi/analyze/saas/google-adwords"
+   },
+   "connection_how": [
+    "We will connect your Google Ads account to Commerce Intelligence so its campaign costs sit in the data warehouse beside your Commerce orders."
+   ],
+   "product_facts": [
+    "Commerce Intelligence's Google Adwords integration brings your client's advertising costs into its data warehouse, so campaign return can be measured against the lifetime value of the customers each campaign brought.",
+    "Your client sees which Google Ads campaigns bring customers worth more than they cost.",
+    "SaaS integrations are services like Google Adwords , Salesforce , and Zendesk .",
+    "you can measure campaign ROI by marrying your advertising cost and the customer lifetime value (CLV) of users acquired from your campaigns."
+   ]
+  }
+ ]
+}

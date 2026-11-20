@@ -949,12 +949,12 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     // 1. the menu on every Brand Visibility play; none on Coworker or Create your own play; nothing on when a play starts
     // Nov 18 2026: a play also offers every outside system that connects to a product on it: ChatGPT, Claude and Microsoft Copilot beside Customer Journey
     // Analytics, ChatGPT and Claude beside Edge Delivery Services, the CRM beside Adobe Commerce
-    const want = {cja: 'dwh,cstore,crm,ads,bi,search,chatgpt,claude,copilot', commerce: 'search,crm', aem: 'search,csrc,chatgpt,claude', fsi: 'search,cms', abv: 'search'}, seen = {};
+    const want = {cja: 'dwh,cstore,crm,ads,bi,search,chatgpt,claude,copilot', commerce: 'search,crm,erp,pim,oms,wms', aem: 'search,csrc,chatgpt,claude', fsi: 'search,cms', abv: 'search'}, seen = {};
     for (const play of Object.keys(want)) { const p = await fresh(); await pick(p, play, 150);
       seen[play] = {btn: await p.isVisible('#out-btn'), boxes: await outs(p), stored: (await canvasState(p)).out}; await noCdn(p); seen[play].menu = (await menuIds(p)).join(','); await p.context().close(); }
     // Nov 18 2026 (Adam: "we should automatically put those outside systems in and then people can delete them"): they all start on the canvas, the CDN first
     ok(Object.entries(want).every(([k, v]) => seen[k].btn && seen[k].menu === 'cdn,' + v && seen[k].boxes === ('cdn,' + v).split(',').sort().join() && JSON.stringify(seen[k].stored) === JSON.stringify(('cdn,' + v).split(','))),
-      'S27: every Brand Visibility play has Add outside system; the CDN is on when the play starts (step 45), and the menu lists the other systems that connect to the play (search data on all five; a data warehouse, cloud storage, a CRM, ad platforms and BI tools on CJA; authoring documents on AEM; another CMS on FSI; step 96: no Adobe product on a built play; Nov 18: ChatGPT, Claude and Microsoft Copilot on CJA, ChatGPT and Claude on AEM, the CRM on Commerce)', JSON.stringify(seen));
+      'S27: every Brand Visibility play has Add outside system; the CDN is on when the play starts (step 45), and the menu lists the other systems that connect to the play (search data on all five; a data warehouse, cloud storage, a CRM, ad platforms and BI tools on CJA; authoring documents on AEM; another CMS on FSI; step 96: no Adobe product on a built play; Nov 18: ChatGPT, Claude and Microsoft Copilot on CJA, ChatGPT and Claude on AEM, the CRM on Commerce; Nov 19: the ERP, PIM, order management and warehouse management on Commerce too)', JSON.stringify(seen));
     const nob = {};
     for (const play of ['coworker', 'custom']) { const p = await fresh(); await pick(p, play); nob[play] = await p.isVisible('#out-btn'); await p.context().close(); }
     ok(nob.coworker && nob.custom, 'S27: Coworker has an Add outside system button (Nov 18 2026: ChatGPT, Claude and Microsoft Copilot connect to it); Create your own play has one (step 44)', JSON.stringify(nob));
@@ -1052,7 +1052,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     const e = await fresh(); await e.goto(BASE + 'sow/'); await e.waitForTimeout(400); await openDraft(e, draft, 's27.json'); await build(e);
     const ed = {boxes: await outs(e), total: await canvasTotal(e)}; await cont(e); await services(e); ed.tool = await toolTotal(e);
     // Nov 18 2026: the other plays keep the systems they start with
-    const START_OUT = {abv: 'cdn,search', commerce: 'cdn,search,crm', aem: 'cdn,search,csrc,chatgpt,claude', fsi: 'cdn,search,cms', coworker: 'chatgpt,claude,copilot'};
+    const START_OUT = {abv: 'cdn,search', commerce: 'cdn,search,crm,erp,pim,oms,wms', aem: 'cdn,search,csrc,chatgpt,claude', fsi: 'cdn,search,cms', coworker: 'chatgpt,claude,copilot'};
     ok(Object.entries(dj.outside || {}).every(([k, v]) => k === 'cja' || v.join() === START_OUT[k]) && dj.outside.cja.slice().sort().join(',') === 'cdn,crm,cstore,dwh' && ed.boxes === 'cdn,crm,cstore,dwh' && ed.total === dt && ed.tool === dt,
       `S27: a saved draft keeps the outside systems; opened in an empty browser, Build shows them with the same total (${dt})`, JSON.stringify({saved: dj.outside, ed}));
     const none = JSON.parse(draft); delete none.outside;

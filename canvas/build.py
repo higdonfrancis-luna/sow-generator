@@ -334,8 +334,17 @@ def main():
     cards = [r['card'] for r in rows if 'card' in r]
     assert sorted(cards) == sorted(k for k in ('family', 'agentic') if k in custom_play), "each of Create your own play's cards sits in one row of the first page"
     used = {l: lines[l] for o in keep_p + keep_c for l in o['lines'] + o['more']}
+    # Nov 19 2026 (Adam approved the pickers): the version picker inside the Workfront and Adobe Commerce boxes. Each gate names connections or
+    # services of the catalog, versions the picker offers (scope-choices.js holds the words) and products of the catalog
+    versions, picker = cmap['versions'], open(os.path.join(HERE, 'scope-choices.js'), encoding='utf-8').read()
+    for key, v in versions.items():
+        assert v['product'] in pby and re.search(r'\b' + key + r': \{label: ', picker), f'version picker {key} has no product or no choices'
+        for g in v['gates']:
+            assert g['ids'] and set(g['ids']) <= {c['id'] for c in keep_c} | set(used), f'version picker {key} gates something the catalog does not have: {g["ids"]}'
+            assert ('when' in g or 'with' in g) and all(f"['{w}', " in picker for w in g.get('when', [])), f'version picker {key}: a gate with no version or an unknown one'
+            assert all(g[k] in pby for k in ('with', 'unless') if k in g) and g['reason'], f'version picker {key}: a gate with an unknown product or no reason'
     cat = {'checked': max([c for c in checked if c] or ['']), 'products': keep_p, 'connections': keep_c,
-           'lines': used, 'plays': plays, 'ownSites': own, 'rows': rows}
+           'lines': used, 'plays': plays, 'ownSites': own, 'rows': rows, 'versions': versions}
     apply_catalog(cat)
     cat = plain(sow_view(connection_notes(public_copy(cat))))   # per-connection partner notes, the Client's SOW lines where they differ, then step 86's plain wording
     keep_p, keep_c, used = cat['products'], cat['connections'], cat['lines']

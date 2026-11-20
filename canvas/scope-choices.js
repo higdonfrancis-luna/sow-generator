@@ -73,6 +73,15 @@ const CanvasScope = (() => {
     authoring: {label: 'Page authoring', options: [
       ['', 'Choose authoring method'], ['universal', 'AEM Universal Editor'],
       ['documents', 'Word or Google Docs']
+    ]},
+    // Nov 19 2026 (Adam approved the pickers): the version a client has of Workfront and of Adobe Commerce, picked inside their boxes.
+    // What each version makes unavailable is in the catalog ('versions'). A canvas saved before the pickers gets the version that keeps its services and totals.
+    // New keys: the scope questions' old answers (commerce, workfront) stay dropped.
+    workfrontVersion: {label: 'Workfront version', options: [
+      ['before', 'Bought before March 12, 2026'], ['after', 'Bought after March 12, 2026']
+    ]},
+    commerceVersion: {label: 'Commerce version', options: [
+      ['', 'Choose a version'], ['onprem', 'On-premises'], ['paas', 'On Cloud'], ['saas', 'Cloud Service']
     ]}
   };
   // Services within one workstream can be complementary (for example base page tracking and a new CTA).
@@ -90,7 +99,7 @@ const CanvasScope = (() => {
       if (value && choice.options.some(([id]) => id === value)) result[key] = value;
     }
     // An unanswered choice on a saved quote is distinct from a pre-dropdown draft.
-    if (Object.hasOwn(values || {}, 'authoring') && !result.authoring) result.authoring = '';
+    for (const key of ['authoring', 'commerceVersion']) if (Object.hasOwn(values || {}, key) && !result[key]) result[key] = '';
     return result;
   }
   function restoreDecisions(values, actualHas) {
@@ -122,7 +131,7 @@ const CanvasScope = (() => {
     return catalogDefault;
   }
   function newDecisions() {
-    return {authoring: ''};
+    return {authoring: '', workfrontVersion: 'before', commerceVersion: 'saas'};
   }
   return {choices, normalize, restoreDecisions, hasProduct, defaultSelection, newDecisions, trackingOverlap, trackingNote, authoringText};
 })();

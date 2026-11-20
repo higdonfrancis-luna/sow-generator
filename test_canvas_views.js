@@ -118,7 +118,7 @@ const server = http.createServer((req, res) => {
     await seed(['commerce']);
     await p.click('.node[data-p="commerce"]');
     const commerce = await p.evaluate(() => ({open: document.querySelector('#card details.more').open, rows: [...document.querySelectorAll('#card .ln')].map(e => ({id: e.dataset.l, status: e.querySelector('.fee')?.textContent, add: e.querySelector('[data-t]')?.getAttribute('aria-label')})), footer: document.querySelector('#card .ft').textContent, total: totals()}));
-    ok(commerce.open && commerce.rows.length === 7 && commerce.rows.every(r => /^CE0[1-7]$/.test(r.id)), 'Commerce exposes all seven available product services by default');
+    ok(commerce.open && commerce.rows.length === 16 && commerce.rows.every(r => /^CE(?:0[1-9]|1[0-6])$/.test(r.id)), 'Commerce exposes all its available product services by default (seven, and nine more since Nov 19 2026)');
     ok(commerce.rows.every(r => r.status === 'Not selected' && r.add.startsWith('Add ') && !r.add.startsWith('Add back ')) && commerce.footer.includes('No product services selected'), 'unselected services are clearly labelled even before a rate is entered');
     ok(commerce.total.n === 0 && commerce.total.one === 0 && commerce.total.mon === 0, 'viewing available Commerce services does not select or charge for them');
     await p.click('#card details.more summary'); await p.waitForTimeout(30);
@@ -128,7 +128,7 @@ const server = http.createServer((req, res) => {
     await p.click('#card [data-t="CE01"]');
     const added = await p.evaluate(() => ({n: ownerTotal(P.commerce).n, fee: totals().one, expected: fee('CE01'), copies: document.querySelectorAll('#card [data-l="CE01"]').length, open: document.querySelector('#card details.more').open, selected: all(P.commerce).filter(counted)}));
     ok(added.n === 1 && added.fee === added.expected && added.copies === 1 && added.selected.join() === 'CE01', 'adding one available service selects and prices exactly that service once');
-    ok(added.open && await p.$eval('#card details.more summary', e => e.textContent.includes('Available services (6)')), 'the remaining available services stay visible after one is added');
+    ok(added.open && await p.$eval('#card details.more summary', e => e.textContent.includes('Available services (15)')), 'the remaining available services stay visible after one is added');
     await p.click('#card [data-t="CE01"]');
     ok(await p.evaluate(() => ownerTotal(P.commerce).n === 0 && totals().one === 0 && document.querySelector('#card [data-l="CE01"] .fee').textContent === 'Not selected'), 'removing the service returns it to Not selected with no product fee');
 

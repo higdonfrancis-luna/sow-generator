@@ -75,13 +75,13 @@ function expected(id) {
     if (new Set(urls).size !== urls.length) bad.push(id + ': a link is listed twice');
   }
   ok(bad.length === 0, 'every entry has a search term or a Products filter the training catalog has, the hub page and hub search the owner confirmed, addresses on the hosts the record uses, the same exams with their titles and notes, the same closest product and the same training links with their kinds and titles as the research record, known link kinds, no release labels and no repeated link', bad.join(' | '));
-  ok(Object.values(DATA.products).filter(t => t.hubSearch).length === 31 && JSON.stringify(Object.keys(HUB_SEARCH.none).sort()) === '["brandintel","ca","cja"]',
-    'thirty-one products carry a hub search link; Customer Journey Analytics, Content Analytics and Brand Intelligence carry none, as the README says');
+  ok(Object.values(DATA.products).filter(t => t.hubSearch).length === 31 && JSON.stringify(Object.keys(HUB_SEARCH.none).sort()) === '["aco","brandintel","ca","cintel","cja"]',
+    'thirty-one products carry a hub search link; Customer Journey Analytics, Content Analytics and Brand Intelligence carry none, as the README says, and nor do Commerce Optimizer and Commerce Intelligence (Nov 19 2026), which the owner has not checked on the hub');
   ok(DATA.hubSearch + DATA.products.bc.hubSearch === 'https://partners.adobe.com/digitalexperience/home/search/?filters=yes&products=caas:products/brand-concierge' && DATA.hubSearch + DATA.products.eds.hubSearch === 'https://partners.adobe.com/digitalexperience/home/search/?term=edge+delivery',
     'a hub search link has the form of the addresses the owner copied from the hub');
   ok(Object.values(DATA.products).filter(t => t.courses).length === 20, 'twenty products carry an Adobe courses link, as the README says');
-  ok(JSON.stringify(Object.keys(DATA.products).filter(id => DATA.products[id].closest).sort()) === '["aemforms","ca","collab","fireflycm","mmeasure","moptimizer","mqualifier","planning","so"]',
-    'nine products show another product\'s list as the closest, as the README says');
+  ok(JSON.stringify(Object.keys(DATA.products).filter(id => DATA.products[id].closest).sort()) === '["aco","aemforms","ca","cintel","collab","fireflycm","mmeasure","moptimizer","mqualifier","planning","so"]',
+    'eleven products show another product\'s list as the closest, as the README says (Commerce Optimizer and Commerce Intelligence show Adobe Commerce\'s since Nov 19 2026)');
   ok(DATA.hub === 'https://partners.adobe.com/digitalexperience/products/' && DATA.catalog === 'https://partners.adobe.com/digitalexperience/learn/on-demand-trainings#resources',
     'the partner hub and training catalog addresses are the ones the owner confirmed while signed in');
   ok(DATA.courses === 'https://certification.adobe.com/courses/#filters=' && DATA.courses + encodeURIComponent(DATA.products.bc.courses) === 'https://certification.adobe.com/courses/#filters=Adobe%20Brand%20Concierge',

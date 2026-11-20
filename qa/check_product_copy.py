@@ -78,13 +78,19 @@ assert not found, f'{len(found)} release label(s) or date(s) in shipped product 
 # Nov 18 2026 (Adam: three boxes, lines that sell no hours are fine, no Adobe Analytics lines): ChatGPT, Claude and Microsoft Copilot connect to 18 products
 # with 41 connections (two of them between boxes the tool already had), and six service definitions and canvas services sit on the products (XT01, XT03 to XT07).
 # Later on Nov 18 (the Adobe agentic AI play): Claude + Brand Intelligence, a 42nd line with no service of its own
-assert len(templates) == 48 and len(concepts) == 529 and len(canvas['connections']) == 204 and len(canvas['lines']) == 575, (len(templates), len(concepts), len(canvas['connections']), len(canvas['lines']))
+# Nov 19 2026 (the Commerce round): Adobe Commerce Optimizer and Adobe Commerce Intelligence, five outside systems (ERP, PIM, order management, warehouse
+# management, other commerce platform) and 13 connections; 33 service definitions and canvas services: nine on Adobe Commerce (CE08 to CE16), three on
+# Commerce Optimizer, four on Commerce Intelligence and 17 on the connections
+assert len(templates) == 48 and len(concepts) == 562 and len(canvas['connections']) == 217 and len(canvas['lines']) == 608, (len(templates), len(concepts), len(canvas['connections']), len(canvas['lines']))
 NOV17 = ['CW09', 'CW10', 'CW11', 'XA28', 'XA29', 'XA30', 'XA31', 'XL27', 'XA32', 'XA33', 'XA34', 'XA35', 'XA36', 'XA37', 'XA38', 'XA39', 'XA40',
          'AXD13', 'AXD14', 'AXD15', 'AXD16', 'XB17', 'XB18', 'XB19', 'XQ09', 'XQ10']
 assert all(i in canvas['lines'] for i in NOV17) and all((i in concepts) == (not i.startswith('CW')) for i in NOV17), 'a Nov 17 Coworker service is missing'
 assert any(x['id'] == 'cw-aa' and x['more'] == ['XL27'] for x in canvas['connections']), 'Coworker + Adobe Analytics is missing, or its service no longer starts off'
 assert all(i in concepts and i in canvas['lines'] for i in ('CE01', 'CE02', 'CE03', 'CE04', 'CE05', 'CE06', 'CE07', 'XR01')), 'a step 85 Commerce service is missing'
 assert any(x['id'] == 'commerce-crm' for x in canvas['connections']), 'Adobe Commerce + CRM is missing'
+NOV19 = ['CE%02d' % i for i in range(8, 17)] + ['ACO%02d' % i for i in range(1, 11)] + ['MBI%02d' % i for i in range(1, 8)] + ['XR%02d' % i for i in range(2, 9)]
+assert all(i in concepts and i in canvas['lines'] for i in NOV19), 'a Commerce round service is missing'
+assert all(i not in o['lines'] for o in canvas['products'] + canvas['connections'] for i in NOV19), 'a Commerce round service starts on'
 
 # step 58 (Nov 10 2026, Adam: "trial for brand visibility is over now", and Brand Visibility is not pitched with Adobe Analytics):
 # nothing shipped says trial, free trial or paid offer about Brand Visibility, and no sentence names Adobe Analytics as a way to

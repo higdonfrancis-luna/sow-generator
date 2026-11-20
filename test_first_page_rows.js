@@ -90,8 +90,8 @@ const COPILOT_STUDIO = 'https://experienceleague.adobe.com/en/docs/experience-ma
   ok(/Copilot Studio with Adobe's AEM address for Microsoft Copilot/.test(KB.services.XT03.steps.join(' ')) && /in Microsoft Copilot following Microsoft's steps/.test(KB.services.XT05.steps.join(' ')) && /Copilot Studio/.test(KB.services.XT01.steps.join(' ')) &&
       /the Copilot Studio agent with Adobe's AEM address for Microsoft Copilot/.test(KB.services.XT04.steps.join(' ')) && /in Microsoft Copilot, following Microsoft's steps for a custom connection/.test(KB.services.XT06.steps.join(' ')),
     '1. the five RFI write-ups name the same Copilot routes (Customer Journey Analytics, AEM Sites and AEM Assets through Copilot Studio, Workfront and GenStudio for Performance Marketing by Microsoft\'s steps)');
-  ok(same(CAT.products.filter(p => p.info).map(p => [p.id, p.info]), [['creativecloud', CC_NOTE]]) && P.creativecloud.title === 'Creative Cloud for enterprise',
-    '1. Creative Cloud alone carries a note, in plain words: what the tool means by Creative Cloud and what its services cover, naming no app');
+  ok(same(CAT.products.filter(p => p.info && p.id !== 'aco').map(p => [p.id, p.info]), [['creativecloud', CC_NOTE]]) && P.creativecloud.title === 'Creative Cloud for enterprise',
+    '1. Creative Cloud carries a note, in plain words: what the tool means by Creative Cloud and what its services cover, naming no app (since Nov 19 2026 Commerce Optimizer has one too, naming its two packages: test_commerce_versions.js)');
   const shown = [...CAT.rows.map(r => r.head), ...CUSTOM.starts.flatMap(x => [x.label, x.sub]), ...A.areas.flatMap(a => [a.label, a.line]), A.all.label, A.all.name, CC_NOTE, LOOK.eye, LOOK.title, LOOK.line,
     ca.how, ca.label, ca.sowHow, ...ca.prereqs, ...Object.keys(XT).map(id => CAT.lines[id].scope)];
   ok(!shown.some(s => LABELS.test(s)), '1. no release label, date or caveat in the rows, the cards, the note, the first look\'s words, the corrected line or the five scopes', shown.filter(s => LABELS.test(s)).join(' | '));

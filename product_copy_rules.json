@@ -2271,6 +2271,71 @@
       "how": "Your developer connects Claude to Brand Intelligence's brand checks (Validate), following Adobe's developer guide; your marketers then give Claude an image or a link, ask for a brand check, and get Brand Intelligence's findings against your brand's guidelines.",
       "gain": "Your marketers check a draft against your brand's guidelines by asking in Claude, before it goes to review.",
       "note": ""
+    },
+    "commerce-erp": {
+      "how": "We will connect Adobe Commerce and your ERP on Adobe's Commerce integration starter kit, which runs in Adobe Developer App Builder, or with a prebuilt connector from Adobe Exchange where one fits your ERP. Commerce will send order, customer and product events to the integration, which will call your ERP's APIs, and stock, price and order status changes from your ERP will be written back to Commerce. Where Commerce needs an answer at once, such as taxes or order totals, a webhook will ask your ERP before checkout goes on.",
+      "gain": "Orders placed in Commerce will reach your ERP without re-entry, and your ERP's stock, prices and order status will reach Commerce.",
+      "note": ""
+    },
+    "commerce-pim": {
+      "how": "We will connect your PIM to Adobe Commerce on Adobe's Commerce integration starter kit, which runs in Adobe Developer App Builder. When a product is created, updated or deleted in your PIM, the integration will write the change to Commerce through its APIs.",
+      "gain": "Your product team will keep names, descriptions and attributes in the PIM, and Commerce will show them without a second round of entry.",
+      "note": ""
+    },
+    "commerce-oms": {
+      "how": "We will connect Adobe Commerce and your order management system on Adobe's Commerce integration starter kit, which runs in Adobe Developer App Builder, or with a prebuilt connector from Adobe Exchange, such as IBM Sterling Order Management. Each order will go to your order management system, and order status and shipments will come back to Commerce. A webhook can ask your order management system for a product's stock status before a shopper buys.",
+      "gain": "Your orders will reach your order management system as they are placed, and shoppers will see the status and tracking it sends back.",
+      "note": ""
+    },
+    "commerce-wms": {
+      "how": "We will connect Adobe Commerce and your warehouse management system on Adobe's Commerce integration starter kit, which runs in Adobe Developer App Builder. Orders will go to your warehouse system, and stock quantities for each source and shipments with tracking numbers will come back to Commerce.",
+      "gain": "The stock your shoppers see in Commerce will follow your warehouse, and shipments and tracking numbers will reach orders without re-entry.",
+      "note": ""
+    },
+    "aco-commerce": {
+      "how": "We will install Adobe's Commerce Optimizer Connector on your Adobe Commerce with Composer, after taking Live Search, Product Recommendations and Catalog Service off it. The connector will sync your products, prices and catalog structure to Commerce Optimizer, where search, recommendations and merchandising will run, while Commerce keeps cart, checkout, orders and customer accounts.",
+      "gain": "You will keep Adobe Commerce for orders and accounts, and get catalog views, search and recommendations from Commerce Optimizer, with no new platform.",
+      "note": ""
+    },
+    "aco-pim": {
+      "how": "We will send your products, categories and prices from your PIM to Commerce Optimizer through Adobe's Data Ingestion API, a REST API built for backend systems, and check each sync on Optimizer's Data Sync page.",
+      "gain": "Your catalog in Commerce Optimizer will come from your PIM, so your storefronts show the product data your product team keeps.",
+      "note": ""
+    },
+    "aco-ocp": {
+      "how": "We will set up Adobe's Commerce Salesforce Connector to sync your catalog and prices from Salesforce Commerce Cloud B2C into Commerce Optimizer, or a sync job for your other platform. Your platform will keep shopper accounts, cart, checkout and orders, and we will build the custom integration that hands shoppers from the new storefront to them.",
+      "gain": "You will keep your commerce platform for orders and get Adobe's search, merchandising and storefront on top of it.",
+      "note": ""
+    },
+    "aco-eds": {
+      "how": "We will build your storefront on Edge Delivery Services with Adobe's Commerce storefront for Commerce Optimizer: its ready-made storefront parts will take catalog, search and recommendations from Optimizer, while your commerce platform keeps cart, checkout and accounts.",
+      "gain": "Your shoppers will browse and search a storefront on Edge Delivery Services, fed by Optimizer's catalog views and merchandising.",
+      "note": ""
+    },
+    "aco-aemassets": {
+      "how": "We will turn on Product Visuals so your product images in AEM Assets reach Commerce Optimizer, matched to products by SKU, and updates reach your storefronts without manual re-uploads.",
+      "gain": "Your product images will be approved and kept in AEM Assets, and your storefront will show the latest ones.",
+      "note": ""
+    },
+    "aco-so": {
+      "how": "Sites Optimizer will analyze your Commerce website and show its Opportunities, recommendations to improve discovery, engagement and conversions, inside Commerce Optimizer, with the Sites Optimizer Ultimate license you request through your Adobe Customer Technical Advisor.",
+      "gain": "Your merchandisers will see Sites Optimizer's recommendations for the storefront inside Commerce Optimizer.",
+      "note": ""
+    },
+    "cintel-commerce": {
+      "how": "We will connect your Adobe Commerce database to Commerce Intelligence through an SSH tunnel, the method Adobe recommends as the most secure, and sync the tables your reports need into its data warehouse.",
+      "gain": "Your teams will report on orders, customers and products from Commerce without exports or spreadsheets.",
+      "note": ""
+    },
+    "cintel-crm": {
+      "how": "We will connect your Salesforce to Commerce Intelligence so its data sits in the data warehouse beside your Commerce data.",
+      "gain": "Your reports will put Salesforce leads and opportunities next to Commerce orders.",
+      "note": ""
+    },
+    "cintel-ads": {
+      "how": "We will connect your Google Ads account to Commerce Intelligence so its campaign costs sit in the data warehouse beside your Commerce orders.",
+      "gain": "You will see which Google Ads campaigns bring customers worth more than they cost.",
+      "note": ""
     }
   },
   "line_scopes": {
