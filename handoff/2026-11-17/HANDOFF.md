@@ -4,7 +4,7 @@ Read this first in the new chat. Everything below is on GitHub, so a new account
 
 ## PICK UP HERE (updated Friday, November 20, 2026)
 
-**State.** The Friday scope and the seven approved edition pickers are built on `claude/sow-generator-handoff-517tq8`. Make the Adobe Proto upload with `git archive --format=zip -o <file>.zip HEAD:site` (index.html at the root). The data owner signs off on the ranked Add product list before anything goes to main, and main needs Adam's go.
+**State.** The Friday scope, the seven approved edition pickers and the product map are built on `claude/sow-generator-handoff-517tq8`. Make the Adobe Proto upload with `git archive --format=zip -o <file>.zip HEAD:site` (index.html at the root). The data owner signs off on the ranked Add product list before anything goes to main, and main needs Adam's go.
 
 **How to work (binding, from Adam).** Use plain words. Start product research at [Adobe Experience League](https://experienceleague.adobe.com/en/home). Keep the existing design and take major changes to Adam for approval. Show pictures before building visible changes. Keep changes surgical. Leave release labels, dates and editorial caveats out of the tool. Every service and connection needs an Adobe quote, matched word for word using `evidence_page/tools/verify.py` and its `found()` function. Use the text Adam pastes for business.adobe.com. Skip partners.adobe.com. Generate the site with `python3 canvas/build.py` followed by `python3 build_site.py`, twice. Run the test suites one at a time. Keep `combinedDefaultsVersion` unchanged so saved quotes reopen as saved.
 
@@ -17,6 +17,10 @@ Read this first in the new chat. Everything below is on GitHub, so a new account
 - Saved canvases and drafts retain their original starting services and selections. The new defaults have their own saved flag and leave the earlier restore rules in place. The catalog has 217 connections and 610 services.
 
 **Edition pickers.** The approved round adds Journey Optimizer, AEM Assets, AEM Sites, Adobe Target, Frame.io, Marketo Engage and Workfront Workflow. The site uses the existing layout and controls. Shared work starts selected for a new quote, and each package or deployment changes the relevant services. Previously saved quotes retain their scope. The catalog now has 217 connections and 626 services. Journey Optimizer covers Select, Prime, Ultimate and Ultimate Starter. The separate Campaigns and Journeys packaging can be reviewed when a request calls for it.
+
+**Product map.** The opening map shows the 36 Adobe products in fixed positions. Choosing a product draws its direct connections and reveals its outside systems. A play shows the connections between its selected Adobe products and the outside systems those products support. A shared system appears once. Removing the last supporting product hides it. Choosing a system opens the corresponding catalog details and Adobe sources. Blue dots identify the items actually on the canvas. Browsing and resetting the map preserve selected services, hours, rates and saved quotes.
+
+**Map checks.** The browser tests cover all 36 products on desktop and phone, AEM Sites and Commerce together, a shared CRM, removing each supporting product, keyboard navigation and reopening a priced play.
 
 **Checks.** All 69 Commerce and Workfront checks, eight product edition scenarios, 144 SOW smoke checks, the site and draft suites, and the RFI export suite passed. The desktop AEM canvas shifted nine pixels vertically in the reload check on both the original and updated builds. The Proto archive contains both entry pages and the first-look video.
 

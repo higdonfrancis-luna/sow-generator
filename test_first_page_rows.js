@@ -247,7 +247,10 @@ const COPILOT_STUDIO = 'https://experienceleague.adobe.com/en/docs/experience-ma
 
   // ============ 6. the assistant lines' own look: thinner and grey, with a key entry only when one is on the canvas ============
   { const p = await page(1440, 900);
-    await clickIn(p, '#picker-list .pc-card[data-assistant="claude"]'); await p.keyboard.press('Escape'); await p.evaluate(() => { showAllEdges = true; fsel = null; render(); }); await p.waitForTimeout(900);
+    await clickIn(p, '#picker-list .pc-card[data-assistant="claude"]'); await p.keyboard.press('Escape');
+    // The five active assistant lines include the AEM as a Cloud Service connection.
+    await p.locator('#stage select[data-choice="sitesDeployment"]').selectOption('cloud');
+    await p.evaluate(() => { showAllEdges = true; fsel = null; render(); }); await p.waitForTimeout(900);
     const look = await p.evaluate(() => { const st_ = e => { const s = getComputedStyle(e); return [s.stroke, s.strokeWidth]; };
       const es = [...document.querySelectorAll('path.edge')], ai = es.filter(e => /^claude-/.test(e.dataset.c)), other = es.filter(e => !/^claude-/.test(e.dataset.c) && !e.classList.contains('pf') && !e.classList.contains('pw') && !e.classList.contains('ex'));
       const key = document.querySelector('#t-legend .key-item.assistant');

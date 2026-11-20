@@ -1,208 +1,154 @@
-// Step 95 (Nov 14 2026, Adam: "kill everything in image 1", Continue "at the top right hand side of canvas", the ring below "reflects
-// the play you have built above", "a reset tab and when you press it goes back to match the products above", then "yes" to
-// sow/mockups/nov14_play_ring/). Run from the repo root after python3 sow/build_site.py:
-//   node sow/test_step95.js
-const path = require('path');
+// The catalog ring follows the play above it. Browsing a direct connection is read-only.
+const assert = require('node:assert/strict');
+const path = require('node:path');
 const {chromium} = require('playwright');
-const PAGE = 'file://' + path.join(__dirname, 'site', 'index.html');
-let fails = 0, n = 0;
-const ok = (c, m, d = '') => { n++; console.log((c ? '✅ ' : '❌ ') + m + (c || !d ? '' : '  [' + String(d).slice(0, 500) + ']')); if (!c) fails++; };
-(async () => {
-  const b = await chromium.launch(), errs = [];
-  const fresh = async (w = 1600, h = 950) => { const ctx = await b.newContext({viewport: {width: w, height: h}}), p = await ctx.newPage();
-    p.on('pageerror', e => errs.push(e.message)); p.on('console', m => { if (m.type() === 'error') errs.push(m.text()); });
-    await p.goto(PAGE); return p; };
-  const choose = async (p, label) => { const id = await p.$$eval('#picker [data-play]', (bs, l) => bs.find(x => x.textContent.includes(l)).dataset.play, label);
-    await p.click(`#picker [data-play="${id}"]`); await p.waitForTimeout(500); };
-  // what the ring shows: red boxes, red lines (as pairs of product ids) and the panel beside it
-  const ring = p => p.evaluate(() => {
-    const at = {}; document.querySelectorAll('.wke-node').forEach(n => { at[n.getAttribute('transform')] = n.dataset.id; });
-    const key = l => { const a = Object.keys(at).find(k => k === `translate(${l.getAttribute('x1')},${l.getAttribute('y1')})`), c = Object.keys(at).find(k => k === `translate(${l.getAttribute('x2')},${l.getAttribute('y2')})`); return [at[a], at[c]].sort().join('+'); };
-    return {red: [...document.querySelectorAll('.wke-node-focus')].map(n => n.dataset.id).sort(), near: [...document.querySelectorAll('.wke-node-near')].map(n => n.dataset.id).sort(),
-      pressed: [...document.querySelectorAll('.wke-node[aria-pressed="true"]')].map(n => n.dataset.id),
-      lines: [...document.querySelectorAll('.wke-edge-active')].map(key).sort(), all: document.querySelectorAll('.wke-edge').length, nodes: document.querySelectorAll('.wke-node').length,
-      panel: document.querySelector('.wke-inspector').innerText.replace(/\n+/g, '\n'), away: document.querySelector('.wke-reset').classList.contains('wke-reset-away')};
-  });
-  const between = (p, ids) => p.evaluate(ids => CAT.connections.filter(c => ids.includes(c.a) && ids.includes(c.b)).map(c => [c.a, c.b].sort().join('+')).sort(), ids);
+const catalog = require('./canvas/catalog.json');
+const products = new Map(catalog.products.map(p=>[p.id,p]));
+const sorted = list => Array.from(list).sort();
+const url = 'file://'+path.join(__dirname,'site','index.html');
+const root = '#knowledge-model-root';
+const node = (p,id) => p.locator(root+' .wke-node[data-id="'+id+'"]');
+const reset = p => p.locator(root+' .wke-reset').click();
+const choose = (p,id) => p.locator('#picker [data-play="'+id+'"]').click();
+const add = (p,id) => p.evaluate(id=>addProduct(id),id);
+const remove = (p,id) => p.evaluate(id=>removeProduct(id),id);
+const snapshot = p => p.evaluate(()=>JSON.stringify({
+  st,products:prods().map(p=>p.id),edges:conns().map(c=>c.id),totals:totals(),focus:fsel,allEdges:showAllEdges,
+  card,pinned,cardHidden:document.getElementById('card').hidden,storage:{...localStorage}
+}));
+const edgeIds = (p,selector='.wke-edge') => p.locator(root+' '+selector).evaluateAll(ls=>ls.map(l=>l.dataset.edge).sort());
+const visibleOutside = p => p.locator(root+' .wke-node-outside').evaluateAll(ns=>ns.map(n=>n.dataset.id).sort());
+const heading = p => p.locator(root+' .wke-inspector h3').innerText();
+const selected = p => p.locator(root+' .wke-node[aria-pressed="true"]').evaluateAll(ns=>ns.map(n=>n.dataset.id));
+async function verifyPlay(p) {
+  const ids=await p.evaluate(()=>displayProducts().map(n=>n.id));
+  const adobe=new Set(ids.filter(id=>!products.get(id).outside));
+  const edges=catalog.connections.filter(c=>(adobe.has(c.a)&&(adobe.has(c.b)||products.get(c.b).outside)) ||
+    (adobe.has(c.b)&&products.get(c.a).outside));
+  const outside=new Set(edges.flatMap(c=>[c.a,c.b]).filter(id=>products.get(id).outside));
+  assert.deepEqual(await edgeIds(p),sorted(edges.map(c=>c.id)));
+  assert.deepEqual(await visibleOutside(p),sorted(outside));
+  assert.deepEqual(await p.locator(root+' .wke-node-focus').evaluateAll(ns=>ns.map(n=>n.dataset.id).sort()),sorted(adobe));
+  assert.deepEqual(await p.locator(root+' .wke-on-canvas').evaluateAll(ns=>ns.map(n=>n.parentNode.dataset.id).sort()),
+    sorted(ids.filter(id=>adobe.has(id)||outside.has(id))));
+  assert.equal(await heading(p),await p.evaluate(()=>play().title||play().label));
+}
 
-  const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
-  const canvasState = p => p.evaluate(() => JSON.stringify({
-    saved: st, products: prods().map(p => p.id), connections: conns().map(c => c.id), totals: totals(),
-    focus: fsel, allEdges: showAllEdges, card, pinned, cardHidden: document.getElementById('card').hidden
-  }));
+(async()=>{
+  const browser=await chromium.launch(), errors=[];
+  try {
+    const fresh=async(width=1600,height=950)=>{
+      const p=await browser.newPage({viewport:{width,height}});
+      p.on('pageerror',e=>errors.push(e.message));
+      await p.goto(url); await p.waitForFunction(()=>window.READY);
+      return p;
+    };
+    const p=await fresh(); await choose(p,'aem');
+    const sec=await p.locator('#knowledge-model-section').evaluate(s=>({
+      visible:!s.hidden,stats:!!s.querySelector('.km-stats'),first:s.firstElementChild.id,
+      oldControls:s.querySelectorAll('.wke-heading,.wke-modes,.wke-summary,[data-action="mode"]').length
+    }));
+    assert.deepEqual(sec,{visible:true,stats:true,first:'knowledge-model-root',oldControls:0});
+    const cont=await p.evaluate(()=>{
+      const s=document.getElementById('save').getBoundingClientRect(),c=document.getElementById('canvas').getBoundingClientRect();
+      return {top:Math.round(s.top-c.top),right:Math.round(c.right-s.right),text:document.getElementById('save').innerText.trim()};
+    });
+    assert.deepEqual(cont,{top:18,right:30,text:'Continue →'});
+    await verifyPlay(p);
+    await node(p,'target').click();
+    assert.deepEqual(await edgeIds(p),sorted(catalog.connections.filter(c=>c.a==='target'||c.b==='target').map(c=>c.id)));
+    assert.equal(await p.locator('.wke-membership').innerText(),'Not on my canvas');
+    await reset(p); await verifyPlay(p);
+    await node(p,'bv').click();
+    assert.equal(await p.locator('.wke-membership').innerText(),'On my canvas');
+    assert.deepEqual(await edgeIds(p),sorted(catalog.connections.filter(c=>c.a==='bv'||c.b==='bv').map(c=>c.id)));
+    await node(p,'search').click();
+    assert(await p.locator(root+' details[data-relationship="bv-search"][open] a,'+root+' details[data-relationship="search-bv"][open] a').isVisible());
+    assert.equal(await p.locator(root+' .wke-add').count(),0);
+    await p.locator('.wke-reset').focus(); await p.keyboard.press('Enter');
+    assert.equal(await p.evaluate(()=>document.activeElement.dataset.focusKey),'reset');
+    await verifyPlay(p);
+    console.log('PASS ready-made play, selected and suggested relationships, membership, keyboard reset and Continue');
 
-  // 1. what image 1 held is gone; the canvas, then the ring and the stats
-  const p = await fresh(); await choose(p, 'Sites Optimizer'); await p.fill('#rate', '150'); await p.waitForTimeout(300);
-  const sec = await p.evaluate(() => { const s = document.getElementById('knowledge-model-section'); return {shown: !s.hidden, text: s.innerText, summary: !!s.querySelector('summary,details.knowledge-model-disclosure'),
-    controls: s.querySelectorAll('.wke-heading,.wke-controls,.wke-modes,.wke-summary,[data-control="product"],[data-action="mode"],[data-action="connections"]').length, stats: !!s.querySelector('.km-stats'), first: s.firstElementChild.id}; });
-  ok(sec.shown && !sec.summary && !sec.controls && !/Explore product connections|The knowledge model|A connected catalog|My solution|Explore the catalog|Explore a product or system|Focus on selected product|Browsing does not change your canvas/.test(sec.text) && sec.stats && sec.first === 'knowledge-model-root',
-    'the section under the canvas opens straight on the ring: no title, heading, paragraph, switch, dropdown, focus button or count line', JSON.stringify(sec).slice(0, 400));
-  const cont = await p.evaluate(() => { const s = document.getElementById('save').getBoundingClientRect(), c = document.getElementById('canvas').getBoundingClientRect(); return {top: Math.round(s.top - c.top), right: Math.round(c.right - s.right)}; });
-  ok(!(await p.$('#hint')) && cont.top === 18 && cont.right === 30 && (await p.textContent('#save')).trim() === 'Continue →', 'Continue sits at the top right of the canvas, and the lightning bolt line is gone', JSON.stringify(cont));
+    await p.locator('#change-play').click(); await p.locator('#confirm-yes').click(); await choose(p,'custom');
+    await p.keyboard.press('Escape'); await verifyPlay(p);
+    assert.match(await p.locator('.wke-inspector').innerText(),/Nothing is on your canvas yet/);
+    await add(p,'aemsites');
+    assert.deepEqual(await visibleOutside(p),['chatgpt','claude','copilot']);
+    await add(p,'commerce'); await verifyPlay(p);
+    const both=await visibleOutside(p);
+    assert.deepEqual(both,['chatgpt','claude','copilot','crm','erp','oms','pim','wms']);
+    await add(p,'cja');
+    assert.equal(await node(p,'crm').count(),1);
+    await node(p,'crm').focus(); await p.keyboard.press('Enter');
+    assert.equal(await heading(p),'CRM');
+    const crmRelations=catalog.connections.filter(c=>[c.a,c.b].includes('crm') && [c.a,c.b].some(id=>['cja','commerce'].includes(id)));
+    assert.deepEqual(await edgeIds(p,'.wke-edge-detail'),sorted(crmRelations.map(c=>c.id)));
+    assert.deepEqual(await p.locator('.wke-connections details').evaluateAll(ds=>ds.map(d=>d.dataset.relationship).sort()),sorted(crmRelations.map(c=>c.id)));
+    assert.equal(await p.locator('.wke-inspector .wke-membership').innerText(),'Not on my canvas');
+    await remove(p,'commerce');
+    assert.deepEqual(await selected(p),['crm']);
+    assert.deepEqual(await edgeIds(p,'.wke-edge-detail'),sorted(crmRelations.filter(c=>[c.a,c.b].includes('cja')).map(c=>c.id)));
+    assert.equal(await node(p,'erp').count(),0); assert.equal(await node(p,'pim').count(),0);
+    await remove(p,'cja'); await verifyPlay(p);
+    assert.equal(await node(p,'crm').count(),0);
+    console.log('PASS AEM Sites with Commerce, a shared CRM shown once, and removing its first and last supporting products');
 
-  // 2. the play view: the play's products and systems in red, the catalog's lines between them in red, the panel names the play
-  const mine = await p.evaluate(() => prods().map(x => x.id).sort()), names = await p.evaluate(() => prods().map(x => x.name)), label = await p.evaluate(() => play().label);
-  let r = await ring(p);
-  ok(JSON.stringify(r.red) === JSON.stringify(mine) && !r.near.length && r.nodes === await p.evaluate(() => CAT.products.length) && r.all === await p.evaluate(() => CAT.connections.length),
-    `the whole catalog is drawn (${r.nodes} products and systems, ${r.all} relationships), with the play's ${mine.length} in red`, JSON.stringify(r.red) + ' vs ' + JSON.stringify(mine));
-  const want = await between(p, mine);
-  ok(JSON.stringify(r.lines) === JSON.stringify(want) && want.length > 0, `the ${want.length} catalog relationships between them are the red lines`, JSON.stringify(r.lines) + ' vs ' + JSON.stringify(want));
-  ok(r.panel.startsWith('YOUR PLAY\n' + label) && names.every(x => r.panel.includes(x)) && r.panel.includes(want.length + ' connection' + (want.length === 1 ? '' : 's') + ' between them in the catalog.'),
-    'the panel beside the ring names the play, lists its products and counts the connections between them', r.panel);
-  ok(!r.away && await p.isVisible('.wke-reset') && (await p.textContent('.wke-reset')).trim() === 'Reset to my play', 'Reset to my play sits on the ring\'s left, outlined while the ring shows the play');
+    for(const id of ['cja','rtcdp','ajo','target','marketo','bv']) await add(p,id);
+    await p.evaluate(()=>{addOutside('crm');addOutside('cdn');});
+    await p.fill('#rate','150'); await p.locator('.node[data-p="bv"]').click(); await p.locator('#fb-svc').click();
+    await p.waitForFunction(()=>!document.getElementById('card').hidden);
+    const before=await snapshot(p);
+    await node(p,'cja').focus(); await p.keyboard.press('Space');
+    assert.deepEqual(await selected(p),['cja']);
+    assert.equal(await p.evaluate(()=>document.activeElement.dataset.id),'cja');
+    const read=p.locator('.wke-inspector');
+    const cjaEdges=catalog.connections.filter(c=>c.a==='cja'||c.b==='cja');
+    assert.deepEqual(await edgeIds(p),sorted(cjaEdges.map(c=>c.id)));
+    assert.deepEqual(await read.locator('details[data-relationship]').evaluateAll(ds=>ds.map(d=>d.dataset.relationship).sort()),sorted(cjaEdges.map(c=>c.id)));
+    await read.locator('details[data-relationship="copilot-cja"] summary').click();
+    await read.locator('details[data-disclosure="services"] > summary').click();
+    const ids=[...new Set([...products.get('cja').lines,...products.get('cja').more])];
+    assert.deepEqual(await read.locator('[data-control="service"] option').evaluateAll(os=>os.map(o=>o.value)),ids);
+    await read.locator('[data-control="service"]').selectOption(ids[1]);
+    assert.equal(await read.locator('.wke-service-id').innerText(),ids[1]);
+    assert(await read.locator('[data-relationship="copilot-cja"][open] a').isVisible());
+    await node(p,'aemassets').click();
+    assert(!await node(p,'crm').count());
+    await reset(p);
+    await node(p,'crm').click(); assert.equal(await read.locator('.wke-membership').innerText(),'On my canvas');
+    await reset(p); await verifyPlay(p);
+    assert.equal(await snapshot(p),before,'reading sources and switching products changed the quote or upper canvas');
+    console.log('PASS reading connection evidence and services preserves a priced quote, stored state, totals and open canvas card');
 
-  // 3. a click on another product shows what it connects with; Reset goes back to the play
-  await p.click('.wke-node[data-id="target"]'); await p.waitForTimeout(200); r = await ring(p);
-  const tg = await p.evaluate(() => CAT.connections.filter(c => c.a === 'target' || c.b === 'target').map(c => [c.a, c.b].sort().join('+')).sort());
-  ok(JSON.stringify(r.red) === '["target"]' && JSON.stringify(r.lines) === JSON.stringify(tg) && r.near.length === tg.length && /^ADOBE PRODUCT\nTarget\nNot on my canvas/.test(r.panel) && r.away,
-    `a click on Target shows its ${tg.length} relationships and its card, and Reset turns solid red`, JSON.stringify(r).slice(0, 400));
-  await p.click('.wke-reset'); await p.waitForTimeout(200); r = await ring(p);
-  ok(JSON.stringify(r.red) === JSON.stringify(mine) && JSON.stringify(r.lines) === JSON.stringify(want) && r.panel.startsWith('YOUR PLAY') && !r.away, 'Reset to my play goes back to the play');
-  await p.click('.wke-node[data-id="bv"]'); await p.waitForTimeout(200); r = await ring(p);
-  ok(same(r.red, mine) && same(r.lines, want) && same(r.pressed, ['bv']) && /^ADOBE PRODUCT\nBrand Visibility\nOn my canvas/.test(r.panel),
-    'inspecting Brand Visibility opens its card while the built play and its connections stay highlighted');
-  await p.click('.wke-reset'); await p.waitForTimeout(200);
+    await node(p,'cja').click(); await add(p,'aemassets');
+    assert.deepEqual(await selected(p),['cja']);
+    await node(p,'aemforms').click(); await remove(p,'aemassets');
+    await verifyPlay(p);
+    await node(p,'cja').click(); await remove(p,'cja'); await verifyPlay(p);
+    await node(p,'cja').click(); await add(p,'cja');
+    assert.deepEqual(await selected(p),['cja']); assert.equal(await read.locator('.wke-membership').innerText(),'On my canvas');
+    await p.reload(); await p.waitForFunction(()=>window.READY); await verifyPlay(p);
+    const saved=await snapshot(p); await node(p,'commerce').click(); await node(p,'erp').click(); await reset(p);
+    assert.equal(await snapshot(p),saved);
+    await p.locator('#start-over').click(); await p.locator('#confirm-yes').click(); await choose(p,'custom');
+    await verifyPlay(p); assert.deepEqual(await visibleOutside(p),[]);
+    console.log('PASS canvas edits, saved play reload, Change play and Start over');
+    await p.close();
 
-  // Browsing is read-only, including products and connected outside systems that the canvas can add.
-  { await p.click('.wke-node[data-id="aemassets"]'); await p.waitForTimeout(200); const assets = !!(await p.$('.wke-add'));
-    await p.click('.wke-node[data-id="search"]'); await p.waitForTimeout(200); const search = !!(await p.$('.wke-add'));
-    await p.click('.wke-node[data-id="cja"]'); await p.waitForTimeout(200); const cja = !!(await p.$('.wke-add'));
-    ok(!assets && !cja && !search, 'neither an Adobe product nor an eligible outside system offers a canvas write from the ring', JSON.stringify({assets, search, cja}));
-    await p.click('.wke-reset'); await p.waitForTimeout(200); }
-
-  // 4. the keyboard reaches the same things
-  await p.focus('.wke-node[data-id="cja"]'); await p.keyboard.press('Enter'); await p.waitForTimeout(200); r = await ring(p);
-  ok(JSON.stringify(r.red) === '["cja"]' && await p.evaluate(() => document.activeElement.dataset.id === 'cja'), 'Enter on a product selects it and keeps the focus there');
-  await p.focus('.wke-reset'); await p.keyboard.press('Enter'); await p.waitForTimeout(200); r = await ring(p);
-  ok(r.panel.startsWith('YOUR PLAY') && await p.evaluate(() => document.activeElement.classList.contains('wke-reset')), 'Enter on Reset goes back to the play and keeps the focus on Reset');
-  await p.context().close();
-
-  // 5. the ring follows the canvas: Create your own play, products added and removed above, a clicked product kept
-  const q = await fresh(); await choose(q, 'Create your own'); await q.waitForTimeout(300);
-  r = await ring(q);
-  ok(!r.red.length && /Nothing is on your canvas yet/.test(r.panel) && r.panel.startsWith('YOUR PLAY\nYour own play\n'), 'an empty Create your own play: nothing in red, the panel names it as the canvas does ("Your own play") and says to add products above', r.panel);
-  await q.evaluate(() => addProduct('cja')); await q.keyboard.press('Escape'); await q.waitForTimeout(300); r = await ring(q);
-  ok(/The 1 product on your canvas/.test(r.panel) && !/between them/.test(r.panel), 'with one product the panel counts no connections "between them"', r.panel);
-  await q.evaluate(() => addProduct('rtcdp')); await q.keyboard.press('Escape'); await q.waitForTimeout(300); r = await ring(q);
-  ok(JSON.stringify(r.red) === '["cja","rtcdp"]' && JSON.stringify(r.lines) === JSON.stringify(await between(q, ['cja', 'rtcdp'])) && /The 2 products on your canvas/.test(r.panel), 'products added on the canvas turn red in the ring at once', JSON.stringify(r).slice(0, 300));
-  const example = ['rtcdp', 'ajo', 'target', 'cja', 'bv', 'marketo', 'cdn', 'crm'].sort();
-  await q.evaluate(() => {
-    for (const id of ['ajo', 'target', 'bv', 'marketo']) addProduct(id);
-    addOutside('cdn'); addOutside('crm');
-  });
-  await q.fill('#rate', '150');
-  await q.click('.node[data-p="bv"]');
-  await q.click('#fb-svc');
-  const beforeBrowse = await canvasState(q);
-  const playLines = await between(q, example);
-  r = await ring(q);
-  ok(same(r.red, example) && same(r.lines, playLines) && playLines.length === 15 && !r.pressed.length && await q.isVisible('#card'),
-    'the eight-product play has 15 highlighted links, with an upper canvas product card open');
-  await q.click('.wke-node[data-id="cja"]');
-  r = await ring(q);
-  ok(same(r.red, example) && same(r.lines, playLines) && !r.near.length && same(r.pressed, ['cja']) && r.panel.startsWith('ADOBE PRODUCT\nCustomer Journey Analytics\nOn my canvas'),
-    'clicking CJA preserves every red product and link and selects only CJA for inspection');
-  const catalog = await q.evaluate(() => ({
-    links: CAT.connections.filter(c => c.a === 'cja' || c.b === 'cja').map(c => c.id).sort(),
-    services: [...new Set([...P.cja.lines, ...P.cja.more])]
-  }));
-  const displayed = await q.evaluate(() => ({
-    links: [...document.querySelectorAll('.wke-connections details')].map(d => d.dataset.relationship).sort(),
-    services: [...document.querySelector('.wke-services select').options].map(o => o.value)
-  }));
-  // 18 since the Edge Delivery measurement relationship (eds-cja, service EDC01) joined the catalog; 21 and eight services since Nov 18 2026
-  // (ChatGPT, Claude and Microsoft Copilot, and Customer Journey Analytics questions in ChatGPT, Claude or Microsoft Copilot)
-  ok(catalog.links.length === 21 && catalog.links.includes('eds-cja') && ['chatgpt-cja', 'claude-cja', 'copilot-cja'].every(id => catalog.links.includes(id)) && catalog.services.length === 8 && same(displayed, catalog),
-    'the CJA inspector offers all 21 catalog relationships and eight product services', JSON.stringify(displayed));
-  const relationship = q.locator('.wke-connections details').first();
-  await relationship.locator('summary').click();
-  await q.selectOption('.wke-services select', catalog.services[1]);
-  r = await ring(q);
-  ok(await relationship.getAttribute('open') !== null && await q.isVisible('.wke-connections details[open] .wke-relationship') &&
-    (await q.textContent('.wke-service-id')).trim() === catalog.services[1] && same(r.red, example) && same(r.lines, playLines) && same(r.pressed, ['cja']),
-    'reading a relationship and switching services keeps the same play and CJA inspector');
-
-  await q.focus('.wke-node[data-id="aemassets"]');
-  await q.keyboard.press('Space');
-  r = await ring(q);
-  const assetsLinks = await q.evaluate(() => CAT.connections.filter(c => c.a === 'aemassets' || c.b === 'aemassets').map(c => [c.a, c.b].sort().join('+')).sort());
-  ok(same(r.red, ['aemassets']) && same(r.pressed, ['aemassets']) && same(r.lines, assetsLinks) && r.away &&
-    /Not on my canvas/.test(r.panel) && !await q.locator('[data-action="add"]').count(),
-    'Space on an eligible out-of-play product explores only its connections without offering to add it');
-  await q.focus('.wke-node[data-id="crm"]');
-  await q.keyboard.press('Enter');
-  r = await ring(q);
-  ok(same(r.red, example) && same(r.lines, playLines) && same(r.pressed, ['crm']) && /On my canvas/.test(r.panel),
-    'Enter on an in-play outside system returns to the play graph and opens its details');
-  await q.keyboard.press('Escape');
-  await q.click('.wke-reset');
-  r = await ring(q);
-  ok(same(r.red, example) && same(r.lines, playLines) && !r.pressed.length && r.panel.startsWith('YOUR PLAY') && await canvasState(q) === beforeBrowse,
-    'inspecting products, relationships and services and resetting leave the upper canvas choices, prices, focus and open card intact');
-
-  await q.click('.wke-node[data-id="cja"]');
-  await q.evaluate(() => addProduct('aemassets'));
-  const extended = [...example, 'aemassets'].sort();
-  r = await ring(q);
-  ok(same(r.red, extended) && same(r.lines, await between(q, extended)) && same(r.pressed, ['cja']),
-    'adding a canvas product updates the ring immediately and preserves an inspector that is still in the play');
-  await q.click('.wke-node[data-id="aemforms"]');
-  await q.evaluate(() => removeProduct('aemassets'));
-  r = await ring(q);
-  ok(same(r.red, example) && same(r.lines, playLines) && !r.pressed.length && r.panel.startsWith('YOUR PLAY'),
-    'a canvas membership change while browsing outside returns to the updated play');
-  await q.click('.wke-node[data-id="cja"]');
-  await q.evaluate(() => removeProduct('cja'));
-  const remaining = await q.evaluate(() => prods().map(p => p.id).sort());
-  r = await ring(q);
-  ok(same(r.red, remaining) && same(r.lines, await between(q, remaining)) && !r.pressed.length && r.panel.startsWith('YOUR PLAY'),
-    'removing the inspected member on the upper canvas closes its inspector and shows the remaining play');
-  await q.click('.wke-node[data-id="cja"]');
-  await q.click('.wke-reset');
-  r = await ring(q);
-  ok(same(r.red, remaining) && !r.red.includes('cja') && same(r.lines, await between(q, remaining)) && !r.pressed.length,
-    'Reset from the removed product restores the latest canvas membership and links');
-  await q.click('.wke-node[data-id="cja"]');
-  await q.evaluate(() => addProduct('cja'));
-  r = await ring(q);
-  ok(same(r.red, example) && same(r.lines, playLines) && same(r.pressed, ['cja']) && /On my canvas/.test(r.panel),
-    'adding the product being explored to the upper canvas keeps its details and restores the full play graph');
-  await q.context().close();
-
-  // 5b. review fix: a new play opens the ring on that play, not on the product clicked under the last one (Change play and Start over)
-  { const c = await fresh(); await choose(c, 'Customer Journey Analytics'); await c.click('.wke-node[data-id="target"]'); await c.waitForTimeout(200);
-    await c.click('#change-play'); await c.waitForTimeout(200); if (await c.isVisible('#confirm-yes')) await c.click('#confirm-yes'); await c.waitForTimeout(300);
-    await choose(c, 'Adobe Commerce'); r = await ring(c);
-    const label = await c.evaluate(() => play().title || play().label), mine = await c.evaluate(() => prods().map(x => x.id).sort());
-    ok(r.panel.startsWith('YOUR PLAY\n' + label) && JSON.stringify(r.red) === JSON.stringify(mine) && !r.away, 'Change play: the ring shows the new play, with Reset outlined', r.panel.slice(0, 120));
-    await c.click('.wke-node[data-id="target"]'); await c.waitForTimeout(200);
-    await c.click('#start-over'); await c.waitForTimeout(200); if (await c.isVisible('#confirm-yes')) await c.click('#confirm-yes'); await c.waitForTimeout(300);
-    await choose(c, 'Create your own'); r = await ring(c);
-    ok(/Nothing is on your canvas yet/.test(r.panel) && !r.red.length && !r.away, 'Start over: the next play opens on its own empty view', r.panel.slice(0, 120));
-    await c.context().close(); }
-
-  // 5c. review fix: phones and tablets keep Continue at the canvas's bottom right, inside the canvas even in a busy focus view
-  for (const [w, h] of [[360, 640], [375, 667], [820, 600]]) {
-    const m = await fresh(w, h); await choose(m, 'Create your own');
-    await m.evaluate(() => { for (const i of ['rtcdp', 'cja', 'ajo', 'aemsites', 'target', 'marketo']) addProduct(i); }); await m.keyboard.press('Escape'); await m.waitForTimeout(400);
-    const g = await m.evaluate(() => { const s = document.getElementById('save').getBoundingClientRect(), c = document.getElementById('canvas').getBoundingClientRect();
-      return {focus: !document.getElementById('fbar').hidden, gapBottom: Math.round(c.bottom - s.bottom), inside: s.top >= c.top && s.bottom <= c.bottom}; });
-    ok(g.focus && g.inside && g.gapBottom === 18, `at ${w}x${h} a busy canvas keeps Continue at its bottom right, whole`, JSON.stringify(g));
-    await m.context().close();
-  }
-
-  // 6. readable everywhere: no faded text, no dashes; a tablet and a phone keep the page from scrolling sideways
-  const f = await fresh(); await choose(f, 'Sites Optimizer');
-  const faded = await f.evaluate(() => [...document.querySelectorAll('#knowledge-model-section *')].filter(e => parseFloat(getComputedStyle(e).opacity) < 1).length);
-  ok(faded === 0 && !/[–—]/.test(await f.textContent('#knowledge-model-section')), 'no faded text and no dashes in the ring\'s section');
-  await f.context().close();
-  for (const [w, h] of [[768, 1024], [390, 844]]) {
-    const m = await fresh(w, h); await choose(m, 'Sites Optimizer');
-    const s = await m.evaluate(() => ({wide: document.documentElement.scrollWidth, reset: document.querySelector('.wke-reset').getBoundingClientRect().width > 0}));
-    ok(s.wide <= w && s.reset, `at ${w} pixels the page does not scroll sideways and Reset to my play shows`, JSON.stringify(s));
-    await m.context().close();
-  }
-  ok(!errs.length, 'no page errors', errs.join(' | '));
-  console.log(fails ? `\n${fails} OF ${n} STEP 95 CHECKS FAILED` : `\nALL STEP 95 CHECKS PASSED (${n})`);
-  await b.close(); process.exit(fails ? 1 : 0);
-})().catch(e => { console.error(e); process.exit(1); });
+    for(const [w,h] of [[360,640],[375,667],[390,844],[768,1024],[820,600]]) {
+      const m=await fresh(w,h); await choose(m,'custom');
+      for(const id of ['rtcdp','cja','ajo','aemsites','target','marketo']) await add(m,id);
+      await m.keyboard.press('Escape');
+      const g=await m.evaluate(()=>{
+        const s=document.getElementById('save').getBoundingClientRect(),c=document.getElementById('canvas').getBoundingClientRect();
+        return {focus:!document.getElementById('fbar').hidden,bottom:Math.round(c.bottom-s.bottom),inside:s.top>=c.top&&s.bottom<=c.bottom,
+          wide:document.documentElement.scrollWidth, faded:[...document.querySelectorAll('#knowledge-model-section *')].filter(e=>+getComputedStyle(e).opacity<1).length};
+      });
+      assert(g.focus&&g.inside&&g.bottom===18&&g.wide<=w&&!g.faded,JSON.stringify({w,h,g}));
+      assert(await m.locator('.wke-reset').isVisible()); await m.close();
+    }
+    assert.deepEqual(errors,[]);
+    console.log('PASS five phone and tablet sizes, readable map, contained horizontal scroll and canvas controls');
+  } finally { await browser.close(); }
+})().catch(e=>{console.error(e);process.exitCode=1;});
