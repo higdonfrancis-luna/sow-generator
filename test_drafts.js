@@ -67,7 +67,7 @@ function serve(proto) {
   // a phone: the picker's top bar stays on one row
   const {s, base} = await serve(false); const ph = await (await b.newContext({viewport: {width: 390, height: 844}, isMobile: true, hasTouch: true})).newPage();
   await ph.goto(base); await ph.waitForTimeout(400);
-  ok(await ph.isHidden('#open-draft') && await ph.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'on a phone the picker\'s top bar stays one row (Open draft shows once a play is picked)');
+  ok(await ph.isVisible('#open-draft') && await ph.isVisible('#rfi-door') && await ph.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'the phone picker shows both entry points without sideways scrolling');
   await ph.tap('#picker [data-play="cja"]'); await ph.waitForTimeout(400);
   ok(await ph.isVisible('#save-draft') && await ph.isVisible('#open-draft') && await ph.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'on a phone with a play, both buttons show with no sideways scroll');
   s.close(); await b.close();

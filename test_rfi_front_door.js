@@ -29,12 +29,20 @@ const server = http.createServer((req, res) => {
   const visit = async u => { await p.goto('about:blank'); await p.goto(B + u); await p.waitForTimeout(700); };
   // 1. the front door
   await p.goto(B + 'index.html'); await p.waitForTimeout(600);
-  const door = await p.evaluate(() => { const d = document.getElementById('rfi-door'), bp = document.getElementById('bp'), a = d && d.querySelector('a');
-    return d && {title: d.querySelector('h2').textContent.trim(), link: a.getAttribute('href'), button: a.textContent.trim(), afterProblem: bp.nextElementSibling === d, beforePlays: d.nextElementSibling && d.nextElementSibling.textContent === 'Choose a play to start', sameBox: d.classList.contains('bp')}; });
-  ok(door && door.title === 'Have an RFI? Start from it' && door.button === 'Open the RFI Builder' && door.link === 'sow/index.html#rfi', 'the first page has the RFI front door with its red button to the RFI Builder', JSON.stringify(door));
-  ok(door && door.afterProblem && door.beforePlays && door.sameBox, 'the door sits under the problem box, in its style, above Choose a play to start');
-  // 2. through the door: the RFI Builder on its own
-  await p.click('#rfi-door a'); await p.waitForTimeout(800);
+  const door = p.getByRole('link', {name: 'Have an RFI? Open the RFI Builder'});
+  ok(await door.count() === 1 && await door.getAttribute('href') === 'sow/index.html#rfi' &&
+    await p.locator('.masthead #open-draft + #rfi-door').isVisible(), 'the header opens the standalone RFI Builder beside Open draft');
+  ok(await p.locator('#bp + h2').textContent() === 'Choose a play to start', 'the play choices follow the problem finder directly');
+  for (const width of [320, 390, 768, 1400]) {
+    await p.setViewportSize({width, height: 900});
+    const open = await p.locator('#open-draft').boundingBox(), rfi = await door.boundingBox();
+    ok(open && rfi && open.y === rfi.y && open.x + open.width <= rfi.x && rfi.x + rfi.width <= width,
+      'both header actions fit side by side at ' + width + ' pixels');
+  }
+  // 2. through the header with the keyboard: the RFI Builder on its own
+  await p.focus('#open-draft'); await p.keyboard.press('Tab');
+  ok(await door.evaluate(a => a === document.activeElement), 'Tab from Open draft focuses the RFI link');
+  await p.keyboard.press('Enter'); await p.waitForTimeout(800);
   ok(await only() && new URL(p.url()).hash === '#rfp' && await shown('#rfp-panel'), 'the door opens the RFI Builder in RFI-only mode, on #rfp');
   ok(!await shown('.steps') && !await shown('#save-draft') && !await shown('#open-draft') && !await shown('#start-over') && !await shown('#play-title') && !await shown('[data-change]'), 'no steps, no play heading, no Change play and no SOW draft buttons');
   ok(await shown('.rfi-top') && (await p.$eval('.rfi-top h1', e => e.textContent)) === 'Answer an RFI' && (await p.$eval('.rfi-top .eyebrow', e => e.textContent)) === 'RFI Builder' && await shown('#rfi-back') && !await shown('#rfp-panel .section-intro h2'), 'its own heading, Answer an RFI, and Back to the first page');
@@ -63,19 +71,19 @@ const server = http.createServer((req, res) => {
   // 5. Back to the home page, the way a partner gets there (a fresh browser, through the door): no warning, the picker and its door
   const ctx2 = await b.newContext({viewport: {width: 1400, height: 1000}}), q = await ctx2.newPage();
   const dialogs2 = []; q.on('dialog', d => { dialogs2.push(d.type()); d.accept(); }); q.on('pageerror', e => errs.push(e.message));
-  await q.goto(B + 'index.html'); await q.waitForTimeout(600); await q.click('#rfi-door a'); await q.waitForTimeout(800);
+  await q.goto(B + 'index.html'); await q.waitForTimeout(600); await q.click('#rfi-door'); await q.waitForTimeout(800);
   await q.setInputFiles('#rfp-file', path.join(FIX, 'bank_rfp.txt'));
   await q.waitForFunction(() => /questions found/.test(document.getElementById('rfp-status').textContent), null, {timeout: 30000});
   await q.click('#rfp-use').catch(() => {}); await q.waitForTimeout(150);
   await q.click('#rfi-back'); await q.waitForTimeout(800);
   ok(new URL(q.url()).pathname === '/index.html' && dialogs2.length === 0 && await q.isVisible('#rfi-door'), 'Back to the home page goes back to the play picker and its door, with no leave-this-page warning', JSON.stringify({path: new URL(q.url()).pathname, dialogs: dialogs2}));
-  await q.click('#rfi-door a'); await q.waitForTimeout(800);
+  await q.click('#rfi-door'); await q.waitForTimeout(800);
   ok(await q.evaluate(() => RFPBuilder.state.questions.length) === 12, 'going back in through the door finds the RFI still there (the work is kept in the tab)');
   // 6. the Build page's own step row has the RFI Builder tab
   await q.click('#rfi-back'); await q.waitForTimeout(800);
   await q.click('#picker [data-play="cja"]'); await q.waitForTimeout(600);
   const tabs = await q.$$eval('.tabs button', e => e.map(x => x.textContent.trim()).join('|'));
-  ok(tabs === 'Build|Scope|Services|Statement of work|RFI Builder', 'the Build page shows five tabs, RFI Builder last', tabs);
+  ok(tabs === 'Build|Scope|Services|Statement of work|RFI Builder' && await q.isHidden('#rfi-door'), 'the Build page shows five tabs, RFI Builder last', tabs);
   await q.click('.tabs [data-tab="rfp"]'); await q.waitForTimeout(900);
   ok(/\/sow\/index\.html$/.test(new URL(q.url()).pathname) && new URL(q.url()).hash === '#rfp' && await q.isVisible('#rfp-panel') && !await q.evaluate(() => document.body.classList.contains('rfi-only')) && await q.isVisible('.steps'), 'the RFI Builder tab on Build opens the RFI Builder inside the full tool, with the play');
   await ctx2.close();

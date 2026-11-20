@@ -8,6 +8,12 @@ Read this first in the new chat. Everything below is on GitHub, so a new account
 
 **How to work (binding, from Adam).** Use plain words. Start product research at [Adobe Experience League](https://experienceleague.adobe.com/en/home). Keep the existing design and take major changes to Adam for approval. Show pictures before building visible changes. Keep changes surgical. Leave release labels, dates and editorial caveats out of the tool. Every service and connection needs an Adobe quote, matched word for word using `evidence_page/tools/verify.py` and its `found()` function. Use the text Adam pastes for business.adobe.com. Skip partners.adobe.com. Generate the site with `python3 canvas/build.py` followed by `python3 build_site.py`, twice. Run the test suites one at a time. Keep `combinedDefaultsVersion` unchanged so saved quotes reopen as saved.
 
+**RFI entry.** On the first page, “Have an RFI?” opens the standalone RFI Builder from the header beside “Open draft,” including on phones. The play choices follow the problem finder directly. Inside a play, the RFI Builder tab opens the RFI in that play.
+
+**Coworker estimate.** The optional “Coworker set up in an AI platform” service is shared across the ChatGPT, Claude and Copilot connections. Its Typical estimate is 16 one-time partner hours for one platform, up to 10 pilot users, five test prompts and a short user guide. Adobe describes the approval and installation steps on [Experience League](https://experienceleague.adobe.com/en/docs/coworker/content/ai-platforms).
+
+**RFI and Coworker checks.** The header, RFI round trip, drafts, play rows and first-page video passed their browser checks. In the Proto package, selecting the pilot on one of the three assistant cards took the Coworker play from six to seven services and included a single 16-hour line in the SOW. Two older assistant checks produce the same failures on the previous and updated builds. One expects the Copilot service on AEM Sites before choosing an AEM deployment. The other expects a different service list from a Claude Design email question about Journey Optimizer in the RFI Builder.
+
 **Friday's changes.**
 
 - Fresh canvases select the main setup services. The Brand Visibility cross-sell plays leave the existing CJA or Adobe Commerce product's own work open for manual selection and select connection work. The ERP, PIM, order management and warehouse management boxes and their main services start selected on the Commerce play.

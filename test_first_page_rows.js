@@ -128,8 +128,8 @@ const COPILOT_STUDIO = 'https://experienceleague.adobe.com/en/docs/experience-ma
     ok(same(f.rows, ROWS), '2. the first page shows five rows in Adam\'s order, under these headings: Brand Visibility plays (the four plays), Adobe agentic lineup (Adobe Coworker, Adobe Brand Visibility, Adobe Brand Concierge, Adobe Brand Intelligence), Adobe GenStudio lineup, Client KBO plays (a card with no title) and Build your own play (Create your own play and the three assistant cards)',
       JSON.stringify(f.rows));
     ok(f.sizes.every(s => s === 1) && f.badge.join() === 'abv:New', '2. every row of plays is level with its cards the same size, and Adobe Brand Visibility keeps its New badge in the agentic lineup', JSON.stringify(f));
-    ok(same(f.kids.slice(0, 5), ['vids', 'bp', 'rfi-door', 'H2', 'lead']) && f.kids[5] === 'picker-list',
-      '2. everything else keeps its place: the videos at the top, then the problem finder, the RFI Builder door, Choose a play to start, and the rows', JSON.stringify(f.kids));
+    ok(same(f.kids.slice(0, 5), ['vids', 'bp', 'H2', 'lead', 'picker-list']),
+      '2. the videos and problem finder are followed by Choose a play to start and its rows', JSON.stringify(f.kids));
     const gs = await p.evaluate(() => { const x = document.querySelector('#picker-list .pc-fam[data-card="family"]'); return {label: x.querySelector(':scope>b').textContent, sub: x.querySelector(':scope>.s').textContent,
       areas: [...x.querySelectorAll('.fam-area')].map(a => a.querySelector('b').textContent + ':' + [...a.querySelectorAll('.chips span')].map(s => s.textContent).join('|')), all: x.querySelector('.fam-all').textContent}; });
     ok(gs.label === 'Adobe GenStudio' && gs.sub === 'People think it is one product. It is a family of products in six areas. Pick the area your client is buying.' && gs.areas.length === 6 &&

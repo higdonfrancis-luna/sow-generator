@@ -39,10 +39,10 @@ const server = http.createServer((req, res) => {
     const top = document.querySelector('#picker .in').firstElementChild.getBoundingClientRect().top, mast = document.querySelector('.masthead');
     const shown = e => { const r = e.getBoundingClientRect(); return r.width > 0 && r.height > 0 && getComputedStyle(e).visibility !== 'hidden'; };
     const other = [...document.querySelectorAll('body *')].filter(e => shown(e) && e.getBoundingClientRect().bottom <= top + 0.5 && !e.closest('.masthead,.topline')).map(e => e.id || e.getAttribute('class') || e.tagName);
-    const r = {picker: shown(document.getElementById('picker')), other, mast: [...mast.children].filter(shown).map(e => e.alt || e.textContent.trim()).filter(Boolean).join('|'),
+    const r = {picker: shown(document.getElementById('picker')), other, mast: [...mast.querySelectorAll('img,.t,.saved,button,a')].filter(shown).map(e => e.alt || e.textContent.trim()).filter(Boolean).join('|'),
       flush: Math.abs(document.getElementById('canvas').getBoundingClientRect().top - mast.getBoundingClientRect().bottom) < 1,
       menu: ['play-btn', 'play-menu', 'choose'].filter(id => document.getElementById(id))};
-    r.ok = r.picker && !r.other.length && ['Adobe|Partner services statement of work|Open draft', 'Adobe|Partner services statement of work'].includes(r.mast) && (innerWidth <= 520) === !r.mast.includes('Open draft') && r.flush;   // step 43 (Adam: keep Open draft on the picker; phones wait for a play)
+    r.ok = r.picker && !r.other.length && r.mast === 'Adobe|Partner services statement of work|Open draft|Have an RFI?' && r.flush;
     return r;
   });
 
