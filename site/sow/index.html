@@ -862,8 +862,10 @@ function canvasEff(){const plays={};for(const p of Object.keys(PLAYS)){const est
 const canvasPlay=()=>{try{const c=JSON.parse(localStorage.getItem('abv-sow-build-v1')||'null');return c&&typeof c==='object'?c.play:null;}catch(e){return null;}};
 /* the rate, size, term, currency, every service choice and each line's own settings set here are the canvas's too, so a trip back to Build keeps them and both show the same total;
    restore (an opened draft, or Build when the canvas holds another play) also gives the canvas this play and its products (on a ready-made play, the ones added to it), even in an empty browser */
-function syncCanvas(restore){let c=null;try{c=JSON.parse(localStorage.getItem('abv-sow-build-v1')||'null');}catch(e){}if(!c||typeof c!=='object'||Array.isArray(c)){if(!restore)return;c={};}const was=JSON.stringify(c);
- if(restore){c.play=state.play;c.ls={};c.keep={};delete c.fresh;delete c.recover;c.on=state.play==='custom'?state.customProducts.slice():(state.added?.[state.play]?.products||[]).slice();c.out=((state.outside||{})[state.play]||[]).slice();if(state.goal)c.goal=state.goal;else delete c.goal;if(state.area)c.area=state.area;else delete c.area;if(state.play==='custom'&&!c.on.length&&state.customNames.length)c.recover=state.customNames.slice();}
+function syncCanvas(restore, openingDraft = false){let c=null;try{c=JSON.parse(localStorage.getItem('abv-sow-build-v1')||'null');}catch(e){}if(!c||typeof c!=='object'||Array.isArray(c)){if(!restore)return;c={};}const was=JSON.stringify(c);
+ if(restore){
+  if(openingDraft || c.play!==state.play)delete c.questionOrigin;
+  c.play=state.play;c.ls={};c.keep={};delete c.fresh;delete c.recover;c.on=state.play==='custom'?state.customProducts.slice():(state.added?.[state.play]?.products||[]).slice();c.out=((state.outside||{})[state.play]||[]).slice();if(state.goal)c.goal=state.goal;else delete c.goal;if(state.area)c.area=state.area;else delete c.area;if(state.play==='custom'&&!c.on.length&&state.customNames.length)c.recover=state.customNames.slice();}
  if(c.play===state.play)c.decisions=CanvasScope.normalize(state.canvasDecisions[state.play]);
  c.rate=state.rate===''?0:Number(state.rate);c.size=state.size;c.months=state.months;c.cur=state.currency;c.v=2;c.eff=canvasEff();
  /* the FSI answer sets the canvas's starting services; the canvas's play-just-picked mark is spent once these steps hold that play */
@@ -1111,7 +1113,7 @@ $('custom-form').onsubmit=e=>{e.preventDefault();if(!$('custom-name').value.trim
 $('save-draft').onclick=()=>{ProductCopy.state(state);download(slug()+'.json',JSON.stringify(state,null,2),'application/json');};
 $('open-draft').onclick=()=>$('draft-file').click();
 /* step 43: one way to open a draft, from Open draft here or on Build (which hands the file over through this tab's session storage) */
-function openDraftText(text){const data=JSON.parse(text);if(!data||![2,3,4].includes(data.version)||!validPlay(data.play)||!data.estimates||typeof data.estimates!=='object')throw Error('schema');state=normalize(data);loadFailed=false;for(const p of Object.keys(PLAYS))syncBands(p);state.handoffAt=Math.min(state.handoffAt,Date.now());try{localStorage.removeItem(HANDOFF);}catch(err){}syncCanvas(true);
+function openDraftText(text){const data=JSON.parse(text);if(!data||![2,3,4].includes(data.version)||!validPlay(data.play)||!data.estimates||typeof data.estimates!=='object')throw Error('schema');state=normalize(data);loadFailed=false;for(const p of Object.keys(PLAYS))syncBands(p);state.handoffAt=Math.min(state.handoffAt,Date.now());try{localStorage.removeItem(HANDOFF);}catch(err){}syncCanvas(true,true);
   return state.play==='custom'&&!state.customProducts.length&&!state.customNames.length?'Draft opened with no products on the canvas: add them on Build and their services come back as they were.':'Draft opened. Build shows its play and service choices.';}
 const DRAFT_BAD='Choose a JSON draft saved by this tool or its earlier focused version.';
 $('draft-file').onchange=async e=>{try{const file=e.target.files[0];if(!file)return;if(file.size>3000000)throw Error('size');const msg=openDraftText(await file.text());go('scope');if(!sizeNotice('Draft opened. '))toast(msg);}catch(err){toast(DRAFT_BAD);}e.target.value='';};

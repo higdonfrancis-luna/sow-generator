@@ -43,11 +43,17 @@ function serve(proto) {
     // a new browser: Open draft from the play picker
     const c2 = await b.newContext({viewport: {width: 1440, height: 900}}); const q = await c2.newPage(); const e2 = []; q.on('pageerror', e => e2.push(e.message));
     await q.goto(base); await q.waitForTimeout(400);
+    if (proto) {
+      await q.getByRole('button', {name: "My client's website is slow", exact: true}).click();
+      await q.locator('#bp [data-bpa="build"]').click();
+      await q.locator('#back-to-answer').waitFor();
+    }
     await q.setInputFiles('#draft-file', file); await q.waitForURL(u => /synced=|index\.html$|\/$/.test(String(u)) && !/\/sow\//.test(String(u)), {timeout: 15000}); await q.waitForTimeout(900);
     ok(await q.isHidden('#picker') && (await q.textContent('#play-label')).includes('Sites Optimizer') && (await q.inputValue('#rate')) === '175', 'Open draft on a new browser puts the play and rate back on Build' + tag, await q.textContent('#play-label'));
     ok(await q.evaluate(() => lineOn('A03') === false) && (await q.textContent('#t-big')) === total, 'with the same services and the same total' + tag, await q.textContent('#t-big') + ' vs ' + total);
     await q.waitForFunction(() => document.getElementById('toast').textContent.includes('Draft opened'), null, {timeout: 5000}).catch(() => {});
     ok((await q.textContent('#toast')).includes('Draft opened'), 'a message says the draft was opened' + tag, await q.textContent('#toast'));
+    ok(await q.isHidden('#back-to-answer'), 'opening another engagement clears the previous question history' + tag);
     // the SOW steps hold the same engagement
     await q.click('#save'); await q.waitForURL('**/sow/index.html#scope', {timeout: 15000}); await q.waitForTimeout(600);
     ok(await q.evaluate(() => state.play === 'aem' && Number(state.rate) === 175 && state.estimates.aem.A03.on === false), 'Continue shows the same engagement on the SOW steps' + tag);
