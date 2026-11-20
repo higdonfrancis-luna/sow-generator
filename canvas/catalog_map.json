@@ -1893,7 +1893,35 @@
        "workfront",
        "aemassets"
       ],
-      "line": "Keep campaigns on schedule by giving each request, deadline and approval a clear owner."
+      "line": "Keep campaigns on schedule by giving each request, deadline and approval a clear owner.",
+      "why": "Workfront gives each campaign request an owner and tracks the people responsible for approval. When the file is approved, the team can send it to AEM Assets with the project details mapped in the integration. The team receiving the file can trace it back to the job that produced it.",
+      "deliverable": "Walk a sample campaign from intake through sign-off, then check that the approved file reaches AEM Assets with its campaign name and the agreed project details.",
+      "refine": [
+       {
+        "chip": "My client already manages campaign requests in Workfront",
+        "add": [],
+        "owned": [
+         "workfront"
+        ]
+       },
+       {
+        "chip": "Reviewers need to mark up individual video frames",
+        "note": "On shared Adobe cloud storage, the project owner can track the approval in Workfront while reviewers comment in the Frame.io viewer.",
+        "add": [
+         "frameio"
+        ]
+       }
+      ],
+      "references": [
+       {
+        "title": "Review and approval in Workfront",
+        "url": "https://experienceleague.adobe.com/en/docs/workfront/using/review-and-approve-work/document-approvals-overview"
+       },
+       {
+        "title": "Connect Workfront projects to AEM Assets",
+        "url": "https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/configure-integrations/configure-aacs-integration"
+       }
+      ]
      },
      {
       "label": "Creative foundations",
@@ -1911,7 +1939,33 @@
        "creativecloud",
        "frameio"
       ],
-      "line": "Collect feedback on the exact creative version or video frame that needs to change."
+      "line": "Collect feedback on the exact creative version or video frame that needs to change.",
+      "why": "Reviewers can compare versions in Frame.io and leave a comment on the exact video frame that needs a change. In Premiere Pro, selecting that comment takes the editor to the same point in the timeline.",
+      "deliverable": "Set up a Frame.io review project and sharing permissions, then have an editor and a reviewer test comments on two versions of the same cut.",
+      "refine": [
+       {
+        "chip": "My client tracks review deadlines in Workfront",
+        "add": [
+         "workfront"
+        ],
+        "owned": [
+         "workfront"
+        ]
+       },
+       {
+        "chip": "My client needs a library for approved files",
+        "note": "Designers can use Adobe Asset Link in supported Creative Cloud apps. Sending a Frame.io approval to AEM Assets also requires a Workfront integration.",
+        "add": [
+         "aemassets"
+        ]
+       }
+      ],
+      "references": [
+       {
+        "title": "Review video versions and comments in Frame.io and Premiere Pro (PDF)",
+        "url": "https://experienceleague.adobe.com/en/docs/creative-cloud-enterprise-learn/cce-learning-hub/videooverview/videotutorials/video-review-frame-io"
+       }
+      ]
      },
      {
       "label": "Scaled content production",
@@ -1930,7 +1984,39 @@
        "fireflycp",
        "fireflycm"
       ],
-      "line": "Produce on-brand image variations in bulk when the team needs more sizes and formats than it can make by hand."
+      "line": "Produce on-brand image variations in bulk when the team needs more sizes and formats than it can make by hand.",
+      "why": "A Firefly custom model trained on the client’s images can generate variations of a chosen subject or visual style. Firefly Creative Production can apply a crop or background change to a whole batch. Brand Intelligence checks production outputs against the client’s guidelines so reviewers can see what needs attention.",
+      "deliverable": "Prepare a training image set, test a custom model and a batch preset, then review sample outputs against the client’s brand guidelines.",
+      "refine": [
+       {
+        "chip": "Reviewers need to sign off on the batch in Frame.io",
+        "note": "Send a sample batch from Creative Production to Frame.io and test the review with the person who signs it off.",
+        "add": [
+         "frameio"
+        ]
+       },
+       {
+        "chip": "The team needs an asset library for approved variations",
+        "note": "Agree on where approved variations will live in AEM Assets and which campaign details the team will use to find them.",
+        "add": [
+         "aemassets"
+        ]
+       }
+      ],
+      "references": [
+       {
+        "title": "Train a Firefly custom model",
+        "url": "https://experienceleague.adobe.com/en/docs/creative-cloud-enterprise-learn/cce-learning-hub/fireflyoverview/firefly-tutorials/custom-model"
+       },
+       {
+        "title": "Apply edits in bulk with Firefly Creative Production",
+        "url": "https://experienceleague.adobe.com/en/docs/creative-cloud-enterprise-learn/cce-learning-hub/fireflyoverview/firefly-creative-production/overview-firefly-creative-production"
+       },
+       {
+        "title": "Brand validation in Firefly Creative Production for Enterprise",
+        "url": "https://business.adobe.com/products/firefly-business/firefly-creative-production.html"
+       }
+      ]
      },
      {
       "label": "Marketer-led creation",
@@ -1947,7 +2033,40 @@
        "gspm",
        "express"
       ],
-      "line": "Let marketers create ads and emails from approved templates without sending every edit back to design."
+      "line": "Let marketers create ads and emails from approved templates without sending every edit back to design.",
+      "why": "A designer can lock brand elements in an Adobe Express ad template. Those locks carry into GenStudio for Performance Marketing, where marketers can make paid ad variants within the approved design. For email, marketers choose an email template in GenStudio and adapt its message, image and call to action.",
+      "deliverable": "Set up a locked ad template and a separate email template, then help a marketer create and review the first variants for a campaign.",
+      "refine": [
+       {
+        "chip": "My client’s approved images already live in AEM Assets",
+        "note": "Include read access to approved images from AEM Assets Content Hub in the marketer’s workflow.",
+        "add": [
+         "aemassets"
+        ],
+        "owned": [
+         "aemassets"
+        ]
+       },
+       {
+        "chip": "My client already routes campaign approvals through Workfront",
+        "add": [
+         "workfront"
+        ],
+        "owned": [
+         "workfront"
+        ]
+       }
+      ],
+      "references": [
+       {
+        "title": "Use Adobe Express templates in GenStudio",
+        "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/templates/express-templates"
+       },
+       {
+        "title": "Create an email experience in GenStudio",
+        "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/create/create-email-experience"
+       }
+      ]
      },
      {
       "label": "Asset management",
@@ -1965,7 +2084,35 @@
        "aemassets",
        "workfront"
       ],
-      "line": "Help teams find and reuse approved assets so they stop recreating files that already exist."
+      "line": "Help teams find and reuse approved assets so they stop recreating files that already exist.",
+      "why": "AEM Assets holds the approved file and the metadata people use to find it. With the Workfront integration configured, a project team can link an existing asset to a brief or task. Changes to the asset in AEM Assets are reflected in Workfront, so the next campaign can reuse the current file.",
+      "deliverable": "Agree on the tags the team will search by, then test finding an approved asset, linking it to a Workfront task and seeing an update to the linked file.",
+      "refine": [
+       {
+        "chip": "My client already has AEM Assets in place",
+        "add": [],
+        "owned": [
+         "aemassets"
+        ]
+       },
+       {
+        "chip": "Web authors need approved assets in AEM Sites",
+        "note": "Have a site author place an approved asset on a page and check the rendition in context.",
+        "add": [
+         "aemsites"
+        ]
+       }
+      ],
+      "references": [
+       {
+        "title": "Find and link AEM assets in Workfront",
+        "url": "https://experienceleague.adobe.com/en/docs/workfront/using/documents/wf-aem-integrations/wf-aem-essentials/link-to-aem"
+       },
+       {
+        "title": "Map project metadata between Workfront and AEM Assets",
+        "url": "https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/configure-integrations/configure-aacs-integration"
+       }
+      ]
      },
      {
       "label": "Content insights",
@@ -1983,7 +2130,37 @@
        "ca",
        "gspm"
       ],
-      "line": "See which images and messages earn clicks, then use those results to plan the next campaign."
+      "line": "See which images and messages earn clicks, then use those results to plan the next campaign.",
+      "why": "GenStudio Insights shows clicks and click-through rates for creative from a connected ad account. Content Analytics shows which assets people see and interact with on a site set up for measurement. For paid media, Content Analytics reads the supported channel’s data through Experience Platform, so the partner can identify the data source behind each result.",
+      "deliverable": "Connect an agreed ad account, set up reporting for the site content in scope, and walk the campaign team through choosing an image or message for its next test.",
+      "refine": [
+       {
+        "chip": "My client already uses Customer Journey Analytics",
+        "add": [
+         "cja"
+        ],
+        "owned": [
+         "cja"
+        ]
+       },
+       {
+        "chip": "Marketers need reusable ad templates for the next test",
+        "note": "Use an Adobe Express template to control which design elements marketers can vary in the next round of paid ads.",
+        "add": [
+         "express"
+        ]
+       }
+      ],
+      "references": [
+       {
+        "title": "Compare media performance in GenStudio Insights",
+        "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/insights/media"
+       },
+       {
+        "title": "How Content Analytics measures web and paid media",
+        "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/content-analytics"
+       }
+      ]
      }
     ],
     "all": "Or open the whole family together"
@@ -2293,7 +2470,7 @@
    ]
   },
   {
-   "head": "Build your own play",
+   "head": "Build your own play, frontier model integrations",
    "plays": [
     "custom"
    ]

@@ -246,10 +246,7 @@
       return '<ul class="wke-product-list">'+products.map(p => '<li><button type="button" data-action="focus-product" data-id="'+escapeHTML(p.id)+'" data-focus-key="list-'+escapeHTML(p.id)+'">'+escapeHTML(p.name)+'<span aria-hidden="true">→</span></button></li>').join('')+'</ul>';
     }
     function overview(map) {
-      if (noCanvas) {
-        const examples = ['aemsites','commerce'].map(id => catalog.byId[id]).filter(Boolean);
-        return examples.length ? '<h4>Try a product</h4>'+productButtons(examples) : '<p class="wke-lead">Choose an Adobe product to see its connections.</p>';
-      }
+      if (noCanvas) return '';
       let name = '';
       try { name = typeof o.getPlayName === 'function' ? String(o.getPlayName() || '') : ''; } catch (_) {}
       const own = adobe.filter(p => map.anchors.has(p.id));
