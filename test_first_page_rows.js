@@ -303,7 +303,7 @@ const COPILOT_STUDIO = 'https://experienceleague.adobe.com/en/docs/experience-ma
     const creative = page => page.getByRole('button',{name:CUSTOM.family.areas[1].question,exact:true}).click();
     await creative(p);
     const icons = await p.evaluate(() => [...document.querySelectorAll('#bp .info-i')].map(b => [b.dataset.info, b.closest('.bp-p').textContent, b.getAttribute('aria-label'), b.closest('.bp-ans').querySelector('h3').textContent]));
-    ok(same(icons, [['creativecloud', 'Creative Cloud', 'What Creative Cloud means here', 'GenStudio · Creative foundations']]), '8. the first page shows one i, on the Creative Cloud chip of GenStudio\'s Creative foundations; the chip still reads Creative Cloud', JSON.stringify(icons));
+    ok(same(icons, [['creativecloud', 'Creative Cloud', 'What Creative Cloud means here', 'Recommended: GenStudio · Creative foundations']]), '8. the first page shows one i, on the Creative Cloud chip of GenStudio\'s Creative foundations; the chip still reads Creative Cloud', JSON.stringify(icons));
     const i = '#bp .info-i[data-info="creativecloud"]';
     await p.hover(i); await p.waitForTimeout(150); const m1 = await tip(); await p.mouse.move(5, 5); await p.waitForTimeout(150); const m2 = await tip();
     await p.click(i); await p.waitForTimeout(150); const m3 = await tip(); await p.mouse.move(5, 5); await p.waitForTimeout(150); const m4 = await tip();

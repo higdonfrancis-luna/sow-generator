@@ -14,7 +14,7 @@ let fails = 0;
 const ok = (c, m, d = '') => { console.log((c ? '✅ ' : '❌ ') + m + (c || !d ? '' : '  [' + d + ']')); if (!c) fails++; };
 const same = (a, b) => [...a].sort().join() === [...b].sort().join();
 
-async function answer(page) { await page.waitForSelector('#bp-body .bp-ans', {timeout: 5000}); await page.waitForTimeout(950); }
+async function answer(page) { await page.locator('#bp-body .bp-ans').waitFor({timeout: 5000}); }
 async function read(page) {
   return page.evaluate(() => ({rec: document.querySelector('.bp-ans .bp-lbl').textContent,
     boxes: [...document.querySelectorAll('.bp-ans .bp-p')].map(e => e.textContent.replace(' (outside system)', '')),
@@ -23,10 +23,10 @@ async function read(page) {
     refine: [...document.querySelectorAll('[data-bpr]')].map(b => b.textContent)}));
 }
 async function build(page) {
-  await page.click('[data-bpa="build"]'); await page.waitForTimeout(250);
+  await page.click('[data-bpa="build"]'); await page.locator('#stage').waitFor();
   const r = await page.evaluate(() => ({picker: document.getElementById('picker').hidden, total: document.getElementById('t-big').textContent,
     nodes: [...document.querySelectorAll('#stage .node')].map(n => n.dataset.p), play: JSON.parse(localStorage.getItem('abv-sow-build-v1')).play}));
-  await page.click('#change-play'); await page.click('#confirm-yes'); await page.waitForTimeout(150);
+  await page.click('#change-play'); await page.click('#confirm-yes'); await page.locator('#bp-form').waitFor();
   return r;
 }
 const names = ids => ids.map(id => P[id].name);
@@ -39,7 +39,7 @@ const withStart = (play, ids) => [...new Set([...ids, ...starting(play, ids.filt
 
 (async () => {
   const b = await chromium.launch();
-  const ctx = await b.newContext({viewport: {width: 1440, height: 1000}});
+  const ctx = await b.newContext({viewport: {width: 1440, height: 1000}, reducedMotion:'reduce'});
   const page = await ctx.newPage(); const errs = []; page.on('pageerror', e => errs.push(e.message));
   await page.goto(CANVAS); await page.waitForTimeout(300);
 
@@ -97,7 +97,7 @@ const withStart = (play, ids) => [...new Set([...ids, ...starting(play, ids.filt
   const bubbles = await page.locator('.bp-ask').count();
   ok(bubbles === 2, 'the question and the refine chip show as the partner\'s messages', String(bubbles));
   await page.click('[data-bpa="again"]');
-  ok(await page.locator('#bp-form').isVisible() && await page.locator('[data-bpp]').count() === 15, 'Ask about another problem goes back to the question box');
+  ok(await page.locator('#bp-form').isVisible() && await page.locator('[data-bpp]').count() === 32, 'Back to questions restores the expanded list the partner came from');
 
   // a switch to Create your own play keeps the CDN box (step 44: outside systems on every play)
   await page.click('[data-bpp="1"]'); await answer(page);
@@ -150,11 +150,11 @@ const withStart = (play, ids) => [...new Set([...ids, ...starting(play, ids.filt
   await page.click('#change-play'); await page.click('#confirm-yes'); await page.waitForTimeout(150);
   ok(PROBS.every(p => p.refine.every(r => !(r.owned || []).length || r.add.some(id => r.owned.includes(id)))), 'S41: every owned product is one the chip adds');
 
-  // an answer left on the picker works out its fees again after the canvas changes (rate, size)
+  // A partner can return to the answer and see its new rate and delivery size.
   await page.click('[data-bpp="1"]'); await answer(page); const st0 = await read(page);
-  await page.click('#picker [data-play="aem"]'); await page.waitForTimeout(300);
+  await page.click('#bp [data-bpa="build"]');
   await page.fill('#rate', '300'); await page.click('#size [data-size="large"]'); await page.waitForTimeout(150);
-  await page.click('#change-play'); await page.click('#confirm-yes'); await page.waitForTimeout(400);
+  await page.click('#back-to-answer'); await answer(page);
   const st1 = await read(page);
   ok(st1.total !== st0.total && /at \$300 an hour/.test(st1.del), 'S41: after a new rate and size, the answer on the picker quotes them', st0.total + ' then ' + st1.total);
   const st2 = await build(page);
@@ -256,7 +256,7 @@ const withStart = (play, ids) => [...new Set([...ids, ...starting(play, ids.filt
   ok(cx.h3[0].startsWith('Recommended') && cx.h3.includes('How they connect') && cx.h3.includes('Why they work together'), 'S43: the answer\'s section labels are headings', cx.h3.join(' | '));
   ok(cx.txt.every(t => !/\bthe client\b|\bthe customer's\b/i.test(t)), 'S43: connection lines speak to the partner ("your client")', JSON.stringify(cx.txt));
   const allCx = await page.evaluate(() => PROBS.filter(p => p.familyKey!=='agentic').every(p => { bpAsk(p.chip, PROBS.indexOf(p)); clearTimeout(bpT); bp.view = 'answer'; bpRender(); return document.querySelectorAll('.bp-ans .bp-cx').length === bpConns(bp.setup).length; }));
-  ok(allCx, 'S43: on all 23 answers, How they connect lists exactly the setup\'s connections');
+  ok(allCx, 'S43: every detailed answer lists exactly the connections in the setup');
   await page.evaluate(() => { clearTimeout(bpT); bp.view = 'start'; bpRender(); });
 
   // the why text drops a product a chip took out; notes are full sentences; outside systems lowercase mid-sentence

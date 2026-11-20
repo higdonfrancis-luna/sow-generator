@@ -119,11 +119,11 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
     const shown = e => { const r = e.getBoundingClientRect(); return r.width > 0 && r.height > 0 && getComputedStyle(e).visibility !== 'hidden'; };
     const other = [...document.querySelectorAll('body *')].filter(e => shown(e) && e.getBoundingClientRect().bottom <= top + 0.5 && !e.closest('.masthead,.topline')).map(e => e.id || e.getAttribute('class') || e.tagName);
     const kids = [...mast.children].filter(shown), cs = getComputedStyle(mast);
-    const r = {picker: shown(document.getElementById('picker')), other, mast: kids.map(e => e.alt || e.textContent.trim()).filter(Boolean).join('|'),
+    const r = {picker: shown(document.getElementById('picker')), other, mast: [...mast.querySelectorAll('img,.t,.saved,button,a')].filter(shown).map(e => e.alt || e.textContent.trim()).filter(Boolean).join('|'),
       flush: Math.abs(document.getElementById('canvas').getBoundingClientRect().top - mast.getBoundingClientRect().bottom) < 1,
       oneRow: mast.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom) <= Math.max(...kids.map(e => e.getBoundingClientRect().height)) + 1,
       menu: ['play-btn', 'play-menu', 'choose'].filter(id => document.getElementById(id))};
-    r.ok = r.picker && !r.other.length && ['Adobe|Partner services statement of work|Open draft', 'Adobe|Partner services statement of work'].includes(r.mast) && (innerWidth <= 520) === !r.mast.includes('Open draft') && r.flush;   // step 43 (Adam: keep Open draft on the picker; phones wait for a play)
+    r.ok = r.picker && !r.other.length && r.mast === 'Adobe|Partner services statement of work|Open draft|Have an RFI?' && r.flush;
     return r;
   });
 
@@ -166,7 +166,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
     'the steps, the toolbar and Start over wait for a play; so do Change play, Add product and Save');
   ok(fs.readFileSync(path.join(HERE, 'index.html'), 'utf8').includes('<body class="picking">'), 'the page starts on the boxes, so a slow first load never shows the steps, the toolbar or Start over');
   const om0 = await onlyMasthead(p);
-  ok(om0.ok, 'only the masthead sits above the boxes: the Adobe logo, Partner services statement of work and Open draft', JSON.stringify(om0));
+  ok(om0.ok, 'only the masthead sits above the boxes, with the Adobe logo, title, Open draft and Have an RFI?', JSON.stringify(om0));
   ok(!om0.menu.length && (await p.$$eval('#picker [data-play]', x => x.map(y => y.dataset.play))).sort().join() === CAT.plays.map(q => q.id).sort().join(),
     'no Choose a play menu: each of the seven plays is picked from its box', om0.menu.join());
 
