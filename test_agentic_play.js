@@ -35,7 +35,7 @@ const GENSTUDIO = {
 // the Adobe agentic AI card, word for word as in the build data (the tool writes a straight apostrophe), and what each canvas it opens holds.
 // Nov 19 2026 (Adam's decisions of Nov 18, evening; test_first_page_rows.js): it is the Client KBO plays card, with no title or sub line; Find new customers adds
 // GenStudio for Performance Marketing (and with it Figma), all three together drop Brand Intelligence, and the canvases take the area's own name
-const AGENTIC = {section: 'Client KBO plays',
+const AGENTIC = {section: 'Revenue growth goals',
   areas: [
     ['Find new customers', 'Reach new buyers in ad and media channels, and show up when they ask AI.', ['rtcdp', 'gspm', 'bv', 'cw', 'cja'],
       ['cdn', 'dwh', 'cstore', 'crm', 'ads', 'bi', 'search', 'figma', 'chatgpt', 'claude', 'copilot']],
@@ -45,7 +45,7 @@ const AGENTIC = {section: 'Client KBO plays',
       ['dwh', 'cstore', 'crm', 'ads', 'bi', 'chatgpt', 'claude', 'copilot']]],
   all: ['Find, keep and grow customers', 'Or open all three together',
     ['rtcdp', 'gspm', 'bv', 'ajo', 'bc', 'target', 'cw', 'cja'], ['cdn', 'dwh', 'cstore', 'crm', 'ads', 'bi', 'search', 'cms', 'figma', 'chatgpt', 'claude', 'copilot']]};
-const GS = 0, AG = 1;   // the GenStudio card, then the Client KBO plays card (the first page's rows, Nov 19 2026)
+const GS = 0, AG = 1;   // GenStudio family and revenue goal entries
 // Ask it: the question each AI assistant line's card opens with, word for word (agentic_play_data.json, ask_it)
 const ASK = {
   'Show journeys with loyalty audiences.': ['chatgpt-cw', 'claude-cw', 'copilot-cw'],
@@ -117,31 +117,38 @@ const fix = s => s.replace(/’/g, "'");
     n: totals().n, yr: totals().yr, full: document.querySelectorAll('#edges path.edge').length === displayConnections().length, ids: [...prods(), ...conns()].flatMap(o => all(o)).filter(counted)}));
   // each starting system's connections to the canvas's products count exactly their starting services (the canvas's own default for each)
   const ticked = p => p.evaluate(() => st.out.every(x => conns().filter(c => c.a === x || c.b === x).every(c => all(c).every(l => counted(l) === defOf(l)))));
-  const famClick = (p, k, i) => p.evaluate(([k, i]) => { const f = document.querySelectorAll('#picker-list .pc-fam')[k]; (i < 0 ? f.querySelector('.fam-all') : f.querySelectorAll('.fam-area')[i]).click(); }, [k, i]).then(() => p.waitForTimeout(400));
+  const famClick = async (p, k, i) => {
+    if (k === AG) {
+      const question = PLAY.custom.agentic.areas[Math.max(i, 0)].question;
+      await p.getByRole('button', {name:question, exact:true}).click();
+      await p.locator(i < 0 ? '#bp [data-bpa="build-all"]' : '#bp [data-bpa="build"]').click();
+    } else {
+      const family = p.locator('#picker-list [data-card="family"]');
+      await (i < 0 ? family.locator('.fam-all') : family.locator('.fam-area').nth(i)).click();
+    }
+    await p.waitForTimeout(400);
+  };
 
-  // ============ 2. the first page: the Client KBO plays card after GenStudio's (Nov 19 2026), GenStudio's unchanged ============
+  // The revenue goals are in the problem finder and the GenStudio lineup stays in the play list.
   { const p = await page(1440, 900);
     const f = await p.evaluate(() => { const fams = [...document.querySelectorAll('#picker-list .pc-fam')], heads = [...document.querySelectorAll('#picker-list .sh')].map(h => h.textContent);
       const card = x => ({head: x.previousElementSibling.textContent, label: (x.querySelector(':scope>b') || {}).textContent || '', sub: (x.querySelector(':scope>.s') || {}).textContent || '',
         areas: [...x.querySelectorAll('.fam-area')].map(a => [a.querySelector('b').textContent, (a.querySelector('.s') || {}).textContent || '', [...a.querySelectorAll('.chips span')].map(s => s.textContent), a.dataset.start, a.dataset.name || '']),
         all: [x.querySelector('.fam-all').textContent, x.querySelector('.fam-all').dataset.start, x.querySelector('.fam-all').dataset.name || '']});
       return {heads, cards: fams.map(card)}; });
-    const [gs, ag] = f.cards, A = AGENTIC;
-    ok(f.cards.length === 2 && same(f.heads.slice(-3), ['Adobe GenStudio lineup', A.section, 'Build your own play']) && ag.head === A.section,
-      '2. the first page shows the section "Client KBO plays" after the GenStudio section and before Build your own play', JSON.stringify(f.heads));
-    ok(ag.label === '' && ag.sub === '' && same(ag.areas.map(a => [a[0], a[1], a[2]]), A.areas.map(a => [a[0], a[1], a[2].map(id => P[id].name)])) &&
-        same(ag.areas.map(a => a[3]), A.areas.map(a => a[2].join())) && ag.all[0] === A.all[1] && ag.all[1] === A.all[2].join(),
-      '2. the card has no title or sub line, the three areas keep their sentences with their product chips, and the button reads "Or open all three together"', JSON.stringify(ag));
-    ok(gs.label === 'Adobe GenStudio' && gs.sub === 'People think it is one product. It is a family of products in six areas. Pick the area your client is buying.' &&
-        same(gs.areas.map(a => [a[0], a[1], a[2].join('|'), a[4]]), [['Workflow & planning', '', 'Workfront|AEM Assets', ''], ['Creative foundations', '', 'Creative Cloud|Frame.io', ''],
-          ['Scaled content production', '', 'Brand Intelligence|Firefly Creative Production|Firefly Custom Models', ''], ['Marketer-led creation', '', 'GenStudio for Performance Marketing|Adobe Express', ''],
-          ['Asset management', '', 'AEM Assets|Workfront', ''], ['Content insights', '', 'Content Analytics|GenStudio for Performance Marketing', '']]) && gs.all[0] === 'Or open the whole family together' && !gs.all[2],
-      '2. the GenStudio card keeps its words, its six areas and its button, and its canvases are still Your own play', JSON.stringify(gs));
+    const [gs] = f.cards, A = AGENTIC;
+    ok(f.cards.length === 1 && same(f.heads, ['Brand Visibility plays', 'Adobe agentic lineup', 'Adobe GenStudio lineup', 'Build your own play']) &&
+      await p.locator('#bp .bp-gh').first().textContent() === A.section, '2. the problem finder offers revenue goals above the four play rows', JSON.stringify(f.heads));
+    ok(gs.label === 'Adobe GenStudio' && gs.sub === 'Choose the content problem your client needs to solve.' &&
+        same(gs.areas.map(a => [a[0], a[1], a[2].join('|'), a[4]]), [['Workflow & planning', 'Keep campaigns on schedule by giving each request, deadline and approval a clear owner.', 'Workfront|AEM Assets', ''], ['Creative foundations', 'Collect feedback on the exact creative version or video frame that needs to change.', 'Creative Cloud|Frame.io', ''],
+          ['Scaled content production', 'Produce on-brand image variations in bulk when the team needs more sizes and formats than it can make by hand.', 'Brand Intelligence|Firefly Creative Production|Firefly Custom Models', ''], ['Marketer-led creation', 'Let marketers create ads and emails from approved templates without sending every edit back to design.', 'GenStudio for Performance Marketing|Adobe Express', ''],
+          ['Asset management', 'Help teams find and reuse approved assets so they stop recreating files that already exist.', 'AEM Assets|Workfront', ''], ['Content insights', 'See which images and messages earn clicks, then use those results to plan the next campaign.', 'Content Analytics|GenStudio for Performance Marketing', '']]) && gs.all[0] === 'Or open the whole family together' && !gs.all[2],
+      '2. each of the six GenStudio areas explains its client problem and offers its products, and its canvases are still Your own play', JSON.stringify(gs));
     // Nov 19 2026: the area cards show no fee line (Adam: the canvas estimates and the Services step are where fees live), before or after a rate is entered
     const noFee = () => p.evaluate(() => [...document.querySelectorAll('#picker-list .fam-area')].map(a => ({fee: !!a.querySelector('.fam-fee'), text: a.textContent})));
     const before = await noFee(); await p.evaluate(() => { st.rate = 185; render(); }); const after = await noFee();
-    ok(before.length === 9 && [...before, ...after].every(a => !a.fee && !/\$|an hour/.test(a.text)),
-      '2. no area on the GenStudio or Client KBO card shows a fee line, before or after the partner enters a rate', JSON.stringify(after.filter(a => a.fee || /\$|an hour/.test(a.text))));
+    ok(before.length === 6 && [...before, ...after].every(a => !a.fee && !/\$|an hour/.test(a.text)),
+      '2. no area on the GenStudio card shows a fee line, before or after the partner enters a rate', JSON.stringify(after.filter(a => a.fee || /\$|an hour/.test(a.text))));
     const opened = [];
     for (let i = 0; i < 3; i++) { await famClick(p, AG, i); opened.push(await state(p)); await p.click('#change-play'); await p.click('#confirm-yes'); await p.waitForTimeout(300); }
     ok(opened.every((s, i) => s.play === 'custom' && same(s.on, A.areas[i][2]) && same(s.out.slice().sort(), A.areas[i][3].slice().sort()) && s.n > 0),
@@ -218,14 +225,16 @@ const fix = s => s.replace(/’/g, "'");
 
   // ============ 4. the problem finder: its fee is the estimate of the canvas Build this opens ============
   { const p = await page(1440, 1000); await p.evaluate(() => { st.rate = 150; }); const rows = [];
-    const ids = await p.evaluate(() => PROBS.map(q => q.id));
-    for (let i = 0; i < ids.length; i++) {
+    const entries = await p.evaluate(() => PROBS.map(q => ({id:q.id, goal:!!q.area})));
+    for (let i = 0; i < entries.length; i++) {
       await p.evaluate(i => bpAsk(PROBS[i].chip, i), i); await p.waitForTimeout(1200);
       const shown = await p.evaluate(() => { const b = document.querySelector('#bp-body .bp-del b'); return b ? b.textContent : ''; });
       await p.click('#bp-body [data-bpa="build"]'); await p.waitForTimeout(350);
-      rows.push([ids[i], shown, await p.evaluate(() => money(totals().yr))]);
+      rows.push({...entries[i], shown, total:await p.evaluate(() => money(totals().yr))});
       await p.click('#change-play'); await p.click('#confirm-yes'); await p.waitForTimeout(250); await p.evaluate(() => { st.rate = 150; }); }
-    ok(rows.length === 23 && rows.every(([, shown, total]) => shown === total), '4. for all 23 client problems, the fee the problem finder shows is the total of the canvas Build this opens, the starting outside systems\' services included', JSON.stringify(rows.filter(r => r[1] !== r[2])));
+    const priced = rows.filter(r => !r.goal), goals = rows.filter(r => r.goal);
+    ok(priced.length === 23 && priced.every(r => r.shown === r.total), '4. each detailed problem quotes the fee on the canvas it opens', JSON.stringify(priced.filter(r => r.shown !== r.total)));
+    ok(goals.length === 3 && goals.every(r => !r.shown && r.total.startsWith('$')), '4. revenue goals preview the play and show the estimate once its canvas opens');
     await p.context().close(); }
 
   // ============ 5. the SOW steps, the area's name, and states saved before this change ============

@@ -4,6 +4,8 @@
 
 The SOW Generator lives at the root of this repository. Earlier project notes use `warroom/sow/` paths. Drop that prefix when locating source files here. The built app opens at `site/index.html`; the Services and RFI page is `site/sow/index.html`.
 
+Partners can start with one of three **Revenue growth goals** in the problem finder to preview a play for acquisition, retention or growing spend with existing customers. The GenStudio lineup describes the client problem behind each product combination.
+
 From the repository root, rebuild the app and run the focused canvas checks:
 
 ```sh

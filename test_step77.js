@@ -25,24 +25,24 @@ const same = (a, b) => [...a].sort().join() === [...b].sort().join();
   ok(NEW.every(id => by[id].play === 'custom' && !by[id].starter && /^My client|^Visitors/.test(by[id].problem) && !/\bbeta\b|early access|coming soon|[–—]/i.test(JSON.stringify(by[id]))),
     'they are in the partner\'s voice, on Create your own play, with no release label and no dash');
 
-  // the starting row is unchanged
+  // The three growth goals precede the existing six starters.
   const start = await page.$$eval('[data-bpp]', x => x.map(e => e.textContent));
-  ok(start.length === 6 && !await page.$('.bp-gh') && !!await page.$('[data-bpa="all"]'), 'the starting row still has six problems, no headings, and See all problems', start.join(' | '));
+  ok(start.length === 9 && (await page.locator('.bp-gh').allTextContents()).join('|') === 'Revenue growth goals|Common problems' && !!await page.$('[data-bpa="all"]'), 'the starting view has three revenue goals, six common problems and See all problems', start.join(' | '));
 
   // See all problems: five headings, each group's problems under it
   await page.click('[data-bpa="all"]');
   const groups = await page.$$eval('.bp-gh', hs => hs.map(h => ({h: h.textContent, chips: [...h.nextElementSibling.querySelectorAll('[data-bpp]')].map(c => c.textContent), tag: h.tagName, color: getComputedStyle(h).color, op: getComputedStyle(h).opacity})));
-  ok(groups.map(g => g.h).join('|') === 'Get found in AI and search|Website and online store|Leads and sales|Customer messages and data|Content and team productivity', 'See all problems has five use-case headings, in order', groups.map(g => g.h).join('|'));
+  ok(groups.map(g => g.h).join('|') === 'Revenue growth goals|Get found in AI and search|Website and online store|Leads and sales|Customer messages and data|Content and team productivity', 'See all problems has six group headings, in order', groups.map(g => g.h).join('|'));
   const chips = groups.flatMap(g => g.chips);
-  ok(groups.map(g => g.chips.length).join() === '5,5,5,4,4' && chips.length === 23 && new Set(chips).size === 23, 'the 23 problems sit under them, 5, 5, 5, 4 and 4, each once', groups.map(g => g.chips.length).join());
-  ok(groups.length > 2 && groups[2].chips.join('|') === ["My client's B2B leads go cold", "My client's sales reps research and email every lead by hand", "My client's website chats never reach a salesperson", 'My client sends every lead down the same nurture path', "My client's ad audiences are out of date"].join('|'),
-    'Leads and sales holds B2B leads go cold and the four new problems, as drawn', groups.length > 2 ? groups[2].chips.join('|') : '');
-  ok(groups.length === 5 && groups[0].chips[0] === 'My client is missing from AI answers' && groups[1].chips[0] === "My client's website is slow" && groups[4].chips[3] === "My client's team spends too long pulling reports", 'the other groups are in the order drawn');
+  ok(groups.map(g => g.chips.length).join() === '3,5,5,5,4,4' && chips.length === 26 && new Set(chips).size === 26, 'three revenue goals and all 23 problems each occur once', groups.map(g => g.chips.length).join());
+  ok(groups.length > 3 && groups[3].chips.join('|') === ["My client's B2B leads go cold", "My client's sales reps research and email every lead by hand", "My client's website chats never reach a salesperson", 'My client sends every lead down the same nurture path', "My client's ad audiences are out of date"].join('|'),
+    'Leads and sales holds B2B leads go cold and the four new problems, as drawn', groups.length > 3 ? groups[3].chips.join('|') : '');
+  ok(groups.length === 6 && groups[1].chips[0] === 'My client is missing from AI answers' && groups[2].chips[0] === "My client's website is slow" && groups[5].chips[3] === "My client's team spends too long pulling reports", 'the other groups are in the order drawn');
   ok(groups.every(g => g.tag === 'H3' && g.color === 'rgb(196, 0, 0)' && g.op === '1'), 'the headings are real headings in solid red, not dimmed', JSON.stringify(groups[0] || {}));
   ok(!/\bNEW\b/.test(await page.textContent('#bp')), 'no NEW tag is shown (it was only in the picture)');
   ok(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth), 'nothing runs off the side of the page');
   await page.click('[data-bpa="fewer"]');
-  ok((await page.$$('[data-bpp]')).length === 6 && !await page.$('.bp-gh'), 'Show fewer problems goes back to the six');
+  ok((await page.$$('[data-bpp]')).length === 9 && (await page.locator('.bp-gh').allTextContents()).join('|') === 'Revenue growth goals|Common problems', 'Show fewer problems restores the three goals and six starters');
 
   // each new problem: its chip gives the setup and the connections, and Build this puts the same products on the canvas
   for (const id of NEW) {
@@ -66,6 +66,21 @@ const same = (a, b) => [...a].sort().join() === [...b].sort().join();
   const typed = await page.evaluate(qs => qs.map(q => { bpAsk(q); clearTimeout(bpT); return bp.view === 'nomatch' ? 'NOMATCH' : PROBS[bp.hits[0]].id; }), QS);
   ok(typed.slice(0, 4).join() === NEW.join(), 'a typed problem about outbound, chat handoff, nurture paths or ad audiences finds its new problem', typed.join());
   ok(typed[4] === 'b2b-leads-go-cold' && typed[5] === 'site-visitors-cant-find-answers' && typed[6] === 'ai-answers-missing', 'typed problems that matched before still lead to the same answers', typed.slice(4).join());
+
+  // Use the actual input and keyboard from the expanded list. Inspecting a goal must leave the canvas unopened.
+  await page.reload(); await page.click('[data-bpa="all"]');
+  for (const [query, name] of [
+    ['My client needs more new customers', 'Find new customers'],
+    ['My client needs to reduce customer churn', 'Keep customers'],
+    ['My client wants to grow share of wallet', 'Grow share of wallet']
+  ]) {
+    await page.fill('#bp-q', query); await page.press('#bp-q', 'Enter');
+    ok(await page.locator('#bp-goal-title').innerText() === name && await page.evaluate(() => !st.play && document.activeElement.id === 'bp-goal-title'),
+      'Typing a goal previews ' + name + ' and moves focus to the play name');
+    await page.getByRole('button', {name:'Back to questions'}).click();
+    ok(await page.locator('[data-bpp]').count() === 26 && await page.evaluate(() => document.activeElement.hasAttribute('data-bpp')),
+      'Back restores the full question list and keyboard focus after ' + name);
+  }
 
   ok(!errs.length, 'no script errors', errs.join(' | '));
   await b.close();

@@ -55,8 +55,8 @@ const URL = 'https://abvfirefly.netlify.app/brand-visibility-four-plays-coworker
 
   // the rest of the first page is as it was
   await page.reload(); await page.waitForSelector('#vid-card');
-  ok((await page.$$('[data-bpp]')).length === 6 && await page.isVisible('#picker-list') && await page.isVisible('.masthead #rfi-door'), 'the six starting problems, the play cards and the RFI door are all still there');
-  await page.click('[data-bpp]'); await page.waitForSelector('#bp-body .bp-ans', {timeout: 5000});
+  ok((await page.$$('[data-bpp]')).length === 9 && await page.isVisible('#picker-list') && await page.isVisible('.masthead #rfi-door'), 'the three goals, six starting problems, the play cards and the RFI door are all still there');
+  await page.click('[data-bpp="0"]'); await page.waitForSelector('#bp-body .bp-ans', {timeout: 5000});
   ok(await page.isVisible('#vid-card'), 'asking about a problem leaves the video where it is');
   await page.click('#picker-list [data-play], #picker-list button, #picker-list a').catch(() => {}); await page.waitForTimeout(400);
   ok(await page.evaluate(() => document.getElementById('picker').hidden) ? !(await box('#vid-card')).vis : true, 'once a play is picked and the canvas opens, the video goes with the rest of the first page');

@@ -1202,10 +1202,9 @@ const PLUSR='<svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
    'named' names the canvas it opens after itself ("Adobe in Claude") */
 const startsBy=(k,id)=>((CUSTOM&&CUSTOM.starts)||[]).filter(x=>x[k]===id);
 const startCards=(k,id)=>startsBy(k,id).map(x=>`<button class="pc-card" data-start="${x.products.join(',')}"${x.named?` data-name="${esc(x.label)}"`:''}${x.assistant?` data-assistant="${x.assistant}"`:''}><b>${esc(x.label)}</b><span class="s">${esc(x.sub)}</span><span class="chips">${x.assistant?`<span class="oc">${esc(short(x.assistant))}</span>`:''}${x.products.map(id=>`<span>${esc(short(id))}</span>`).join('')}</span></button>`).join('');
-/* GenStudio: one card holding Adobe's six areas; each area, or the whole family, opens Your own play with its products placed.
-   Nov 18 2026: the Client KBO plays card is built the same way, with no title of its own; each of its areas has a one-line sentence, all three together
-   have products of their own, and the canvases it opens take the area's name ("Keep customers") */
-const FAMS=CAT.rows.filter(r=>r.card).map(r=>CUSTOM[r.card]);
+/* GenStudio areas open from the family card. Named revenue plays open from the problem finder.
+   Both supply the saved canvas layouts below. */
+const FAMS=[CUSTOM.family,CUSTOM.agentic];
 const famAll=F=>typeof F.all==='string'?{label:F.all,products:[...new Set(F.areas.flatMap(a=>a.products))]}:F.all;
 const famName=(F,x)=>F.named?` data-name="${esc(x)}"`:'';
 /* the canvases the first page names (each named card's areas and all three together, each named start card) and their own places (areaPlaces), by name */
@@ -1819,6 +1818,10 @@ for(const k in VIDEOS)for(const b of ['-play','-watch'])$(k+b).addEventListener(
    No AI: the partner's words are matched to the problems in problems.json (keywords first, then shared words), and the
    answer comes from the catalog: the play, its products and connections, and its starting services priced with the canvas's own math */
 const PROBS=/*PROBLEMS*/null;
+for(const area of CUSTOM.agentic.areas){
+  PROBS.push({id:area.id,chip:area.question,problem:area.label,group:'growth',keywords:area.keywords,requires:area.keywords,
+    play:CUSTOM.id,products:area.products,why:area.line,refine:[],area});
+}
 const BP_STOP=new Set('a about an and are as at be by can cant client clients do does doesnt dont for from get gets has have how i in is isnt it its just my no not of on or our people so that the their them they this to too us very want wants we what when which who why with wont'.split(' '));
 /* step 41: plurals, endings, verb forms and spelling variants match too: the question and every keyword are reduced to the same word stems */
 const BP_SYN=[[/ chat gpt /g,' chatgpt '],[/ a b /g,' ab '],[/ personalis/g,' personaliz'],[/ optimis/g,' optimiz'],[/ llms /g,' llm '],[/ insurers? /g,' insurance ']];
@@ -1886,23 +1889,30 @@ const bpVoice=s=>s.replace(/\b([Tt])he client\b(?![-\w'])/g,(m,t)=>(t==='T'?'You
 const bpHrs=n=>(Math.round(n*10)/10).toLocaleString('en-US');
 const bpChip=(i,cls)=>`<button type="button" class="bp-chip${cls||''}" data-bpp="${i}">${esc(PROBS[i].chip)}</button>`;
 /* step 77: See all problems lists them by use case, in each group's own order (problems.json gives every problem its group) */
-const BP_GROUPS=[['found','Get found in AI and search'],['site','Website and online store'],['leads','Leads and sales'],['messages','Customer messages and data'],['team','Content and team productivity']];
+const BP_GROUPS=[['growth','Revenue growth goals'],['found','Get found in AI and search'],['site','Website and online store'],['leads','Leads and sales'],['messages','Customer messages and data'],['team','Content and team productivity']];
 const BP_ORDER=['ai-answers-missing','ai-traffic-revenue','organic-traffic-falling','seo-fix-backlog','product-pages-ai','slow-website','storefront-hard-to-update','site-visitors-cant-find-answers','same-site-for-everyone','fsi-complex-questions','b2b-leads-go-cold','reps-email-by-hand','chats-never-reach-sales','same-nurture-path','ad-audiences-stale','disconnected-messages','abandoned-carts','customer-data-silos','cant-see-what-works','content-too-slow','off-brand-assets','team-busywork','slow-reporting'];
 const bpRank=i=>{const k=BP_ORDER.indexOf(PROBS[i].id);return k<0?BP_ORDER.length+i:k;};
 const bpGrouped=ids=>{const known=new Set(BP_GROUPS.map(g=>g[0]));return [...BP_GROUPS,['','More problems']].map(([g,h])=>[h,ids.filter(i=>g?PROBS[i].group===g:!known.has(PROBS[i].group)).sort((a,b)=>bpRank(a)-bpRank(b))]).filter(x=>x[1].length);};
-function bpStartHTML(){const all=bp.view==='all',ids=PROBS.map((p,i)=>i).filter(i=>all||PROBS[i].starter);
-  if(!all)return `<div class="bp-chips">${ids.map(i=>bpChip(i)).join('')}<button type="button" class="bp-chip red" data-bpa="all">See all problems</button></div>`;
-  return bpGrouped(ids).map(([h,m])=>`<h3 class="bp-gh">${esc(h)}</h3><div class="bp-chips">${m.map(i=>bpChip(i)).join('')}</div>`).join('')+'<div class="bp-chips" style="margin-top:18px"><button type="button" class="bp-chip red" data-bpa="fewer">Show fewer problems</button></div>';}
+function bpStartHTML(){
+  const all=bp.view==='all',ids=PROBS.map((p,i)=>i),groups=bpGrouped(all?ids:ids.filter(i=>PROBS[i].area));
+  if(!all)groups.push(['Common problems',ids.filter(i=>PROBS[i].starter)]);
+  const more='<button type="button" class="bp-chip red" data-bpa="all">See all problems</button>';
+  return groups.map(([h,m],i)=>`<h3 class="bp-gh">${esc(h)}</h3><div class="bp-chips">${m.map(n=>bpChip(n)).join('')}${!all&&i===groups.length-1?more:''}</div>`).join('')+
+    (all?'<div class="bp-chips" style="margin-top:18px"><button type="button" class="bp-chip red" data-bpa="fewer">Show fewer problems</button></div>':'');
+}
 function bpAnswerHTML(){const p=PROBS[bp.hits[bp.i]],s=bp.setup,pl=PLAYS[s.play],ids=[...s.prods,...s.out],last=bp.steps[bp.steps.length-1];
+  /* the boxes the canvas will draw: beside Edge Delivery Services, AEM Sites is part of the one "AEM Sites with Edge Delivery Services"
+     box (its AEM authoring), as on the canvas (combinesSites), so it is not shown as a box of its own */
+  const boxes=ids.filter(id=>!(id==='aemsites'&&ids.includes('eds'))).map(id=>`<span class="bp-p${P[id].outside?' out':''}">${esc(P[id].name)}${P[id].outside?' (outside system)':''}</span>`).join('');
+  if(p.area)return `<div class="bp-ans"><h3 class="bp-t" id="bp-goal-title" tabindex="-1">${esc(p.area.label)}</h3>
+<p class="bp-heard">${esc(p.area.line)}</p><div class="bp-prods">${boxes}</div>
+<div class="bp-row"><button type="button" class="bp-build" data-bpa="build">Open this play</button><button type="button" class="bp-alt" data-bpa="goals">Back to questions</button><button type="button" class="bp-alt" data-bpa="build-all">${esc(CUSTOM.agentic.all.label)}</button></div></div>`;
   let heard;
   if(last)heard=`<b>Updated:</b> ${esc(bpYou(last.chip))}.${last.note?' '+esc(last.note):''}`;
   else if(bp.pair&&bp.i===0)heard=`<b>Two problems here:</b> ${esc(bpYou(PROBS[bp.pair[0]].chip))}, and ${esc(bpYou(PROBS[bp.pair[1]].chip))}. Here's the setup you can offer for both.`;
   else heard=`<b>Heard:</b> ${esc(bpYou(p.chip))}. Here's the setup you can offer for that.`;
   if(!last&&p.note)heard+=' '+esc(p.note);
-  /* the boxes the canvas will draw: beside Edge Delivery Services, AEM Sites is part of the one "AEM Sites with Edge Delivery Services"
-     box (its AEM authoring), as on the canvas (combinesSites), so it is not shown as a box of its own */
-  const boxes=ids.filter(id=>!(id==='aemsites'&&ids.includes('eds'))).map(id=>`<span class="bp-p${P[id].outside?' out':''}">${esc(P[id].name)}${P[id].outside?' (outside system)':''}</span>`).join(''),
-    links=bpConns(s).map(c=>`<div class="bp-cx"><span class="bp-pill" aria-hidden="true">${I.bolt}</span><span><b>${esc(P[c.a].name)} + ${esc(P[c.b].name)}</b> · ${esc(KIND[c.kind]||'Connection')}.${c.label?' '+esc(bpVoice(c.label.replace(/\s*$/,'').replace(/([^.])$/,'$1.'))):''}</span></div>`).join('');
+  const links=bpConns(s).map(c=>`<div class="bp-cx"><span class="bp-pill" aria-hidden="true">${I.bolt}</span><span><b>${esc(P[c.a].name)} + ${esc(P[c.b].name)}</b> · ${esc(KIND[c.kind]||'Connection')}.${c.label?' '+esc(bpVoice(c.label.replace(/\s*$/,'').replace(/([^.])$/,'$1.'))):''}</span></div>`).join('');
   const gone=bpBase(p).prods.filter(id=>!s.prods.includes(id)),sents=q=>q.why.replace(/\.\s+(?=[A-Z])/g,'.\n').split('\n'),kept=sents(p).filter(w=>!gone.some(id=>[P[id].name,P[id].short].filter(Boolean).some(n=>w.includes(n)))),own=PROBS.find(q=>q.play===s.play),why=kept.length||pl.custom||!own?kept:sents(own);
   const priced=st.rate>0,lo=bpSim(s,priced?undefined:100),hi=priced?null:bpSim(s,300),n=lo.names.length;
   const names=n<=6?andList(lo.names):lo.names.slice(0,5).join(', ')+' and '+(n-5)+' more';
@@ -1927,7 +1937,12 @@ function bpRender(){const v=bp.view,talk=v==='working'||v==='answer';$('bp-form'
   else $('bp-body').innerHTML=bpStartHTML();}
 let bpT=0;
 const bpWait=ms=>matchMedia('(prefers-reduced-motion: reduce)').matches?150:ms;
-function bpShow(ms){clearTimeout(bpT);bp.view='working';bpRender();bpT=setTimeout(()=>{bp.view='answer';bpRender();const a=$('bp-body').querySelector('.bp-ans');if(a&&a.getBoundingClientRect().top<0)a.scrollIntoView({block:'start'});},bpWait(ms));}
+function bpShow(ms){
+  clearTimeout(bpT);
+  const reveal=()=>{bp.view='answer';bpRender();const a=$('bp-body').querySelector('.bp-ans');if(a.getBoundingClientRect().top<0)a.scrollIntoView({block:'start'});};
+  if(PROBS[bp.hits[bp.i]].area){reveal();$('bp-goal-title').focus({preventScroll:true});return;}
+  bp.view='working';bpRender();bpT=setTimeout(reveal,bpWait(ms));
+}
 /* a typed problem, or a problem chip (forced): the best matches, and when one setup covers the other's, both are heard */
 /* ties go to the problem whose keywords matched more specifically */
 const bpKwPts=(i,t)=>bpKw(i,t).reduce((s,k)=>s+bpPts(k),0);
@@ -1937,13 +1952,13 @@ function bpMatch(text,forced){const t=bpNorm(text),sc=PROBS.map((p,i)=>[i,bpScor
   /* a specialized problem whose required word is there and a keyword of its own matched (financial services) leads over the general one it specializes */
   for(const h of hits){const g=bpKwPts(h[0],t)>0&&PROBS[h[0]].specializes,gi=hits.findIndex(x=>PROBS[x[0]].id===g),hi=hits.indexOf(h);if(g&&gi>=0&&gi<hi){hits.splice(hi,1);hits.splice(gi,0,h);}}
   return {t,sc,hits};}
-function bpAsk(text,forced){const {t,sc,hits}=bpMatch(text,forced);bp.asked=text;bp.steps=[];bp.pair=null;bp.i=0;
+function bpAsk(text,forced){const {t,sc,hits}=bpMatch(text,forced);bp.listView=bp.view==='all'?'all':'start';bp.asked=text;bp.steps=[];bp.pair=null;bp.i=0;
   if(!hits.length){bp.near=sc.filter(([,v])=>v>0).slice(0,4).map(([i])=>i);if(!bp.near.length)bp.near=PROBS.map((p,i)=>i).filter(i=>PROBS[i].starter);clearTimeout(bpT);bp.view='nomatch';bpRender();return;}
   /* two problems only when the partner named both: the second scores 5 or more on keywords of its own (not shared with
      another problem, not part of a keyword the first matched, not built on one) and at least 40% of the first, and one setup covers both
      (it leads; with the same products, the higher score leads) */
   let lead=hits[0][0];
-  if(forced===undefined&&hits.length>1){const [a,va]=hits[0],[b,vb]=hits[1],ka=bpKw(a,t),kb=bpKw(b,t),cov=(x,y)=>PROBS[y].products.every(id=>PROBS[x].products.includes(id));
+  if(forced===undefined&&hits.length>1&&!PROBS[lead].area&&!PROBS[hits[1][0]].area){const [a,va]=hits[0],[b,vb]=hits[1],ka=bpKw(a,t),kb=bpKw(b,t),cov=(x,y)=>PROBS[y].products.every(id=>PROBS[x].products.includes(id));
     const own=kb.filter(k=>!BPG.has(k[2])&&!ka.some(x=>x[2].includes(k[2])||(x[1].length===1&&k[1].some(part=>part.includes(x[1][0])||x[1][0].includes(part))))).reduce((s,k)=>s+bpPts(k),0);
     if(vb>=5&&vb>=0.4*va&&own>=5&&(cov(a,b)||cov(b,a))){bp.pair=[a,b];if(!cov(a,b))lead=b;}}
   /* Show another setup offers only setups not already shown */
@@ -1961,9 +1976,16 @@ $('bp').addEventListener('click',e=>{const pc=e.target.closest('[data-bpp]');if(
     bp.steps.push({chip:r.chip,note:notes.join(' ')});bp.setup=n;bpShow(500);return;}
   const a=e.target.closest('[data-bpa]');if(!a)return;const k=a.dataset.bpa;
   if(k==='all'||k==='fewer'){bp.view=k==='all'?'all':'start';bpRender();return;}
+  if(k==='goals'){bp.view=bp.listView;$('bp-q').value='';bpRender();$('bp-body').querySelector('[data-bpp="'+bp.hits[bp.i]+'"]').focus();return;}
   if(k==='again'){clearTimeout(bpT);bp.view='start';bpRender();$('bp-q').value='';$('bp-q').focus();return;}
   if(k==='another'){bp.i=(bp.i+1)%bp.hits.length;bp.steps=[];bp.setup=bpBase(PROBS[bp.hits[bp.i]]);bpShow(500);return;}
-  if(k==='build'){const s=bp.setup;clearTimeout(bpT);st.goal=PROBS[bp.hits[bp.i]].id;delete st.area;st.play=s.play;st.decisions=setupDecisions(s);st.serviceDefaults=true;st.on=PLAYS[s.play].custom?s.prods.slice():[];st.out=bpStart(s);st.ls=Object.fromEntries((s.off||[]).map(l=>[l,false]));st.keep={};st.fresh=true;st.pubSig=null;moreOpen={};
+  if(k==='build'||k==='build-all'){
+    const p=PROBS[bp.hits[bp.i]],combined=k==='build-all',area=combined?CUSTOM.agentic.all:p.area;
+    const s=combined?{play:CUSTOM.id,prods:area.products,out:[]}:bp.setup;
+    clearTimeout(bpT);
+    if(combined)delete st.goal;else st.goal=p.id;
+    if(area)st.area=area.name||area.label;else delete st.area;
+    st.play=s.play;st.decisions=setupDecisions(s);st.serviceDefaults=true;st.on=PLAYS[s.play].custom?s.prods.slice():[];st.out=bpStart(s);st.ls=Object.fromEntries((s.off||[]).map(l=>[l,false]));st.keep={};st.fresh=true;st.pubSig=null;moreOpen={};
     bp.view='start';$('bp-q').value='';bpRender();render();}});
 $('confirm-yes').addEventListener('click',()=>setTimeout(()=>{if(!play()&&bp.view==='answer')bpRender();},0));
 bpRender();

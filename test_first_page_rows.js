@@ -15,15 +15,15 @@ const P = Object.fromEntries(CAT.products.map(p => [p.id, p])), CBY = Object.fro
 const CUSTOM = PLAY.custom, AI = ['chatgpt', 'claude', 'copilot'];
 // Adam, Nov 12 and Nov 18: "They don't need our editorial and our caveat and dates that things are coming"
 const LABELS = /\bbeta\b|early access|early adopter|limited availability|coming soon|\bpreview\b|not yet|roadmap|\b(?:is|are|was|were) planned\b|planned for a future|future release|confirm(?:ed|s)? (?:[\w'-]+ ){0,6}with adobe|\bask adobe\b|written confirmation|(?:january|february|march|april|may|june|july|august|september|october|november|december)\s+(?:\d{1,2},?\s+)?20\d\d|\bq[1-4]\s+20\d\d|\b20[2-3]\d\b|\bAdam\b/i;
-// the first page, top to bottom (Adam: "First row should be those 4 Brand Visibility plays ... Second row should be our Adobe agentic offering ... Third row should
-// be GenStudio ... Client KBO plays ... last row would be build your own play")
+// The standalone play rows follow the problem finder.
+const BRAND_OUTCOMES = ["Attract new customers through SEO and AI search, and give them a fast-loading site when they click through.", "Attract visitors from AI search. Use on-site AI to answer their questions and help them buy or contact sales."];
 const ROWS = [
   ['Brand Visibility plays', ['Brand Visibility + Customer Journey Analytics', 'Brand Visibility + Adobe Commerce', 'Brand Visibility + Sites Optimizer and Edge Delivery Services', 'Brand Visibility + Brand Concierge']],
   ['Adobe agentic lineup', ['Adobe Coworker', 'Adobe Brand Visibility', 'Adobe Brand Concierge', 'Adobe Brand Intelligence']],
   ['Adobe GenStudio lineup', ['Adobe GenStudio']],
-  ['Client KBO plays', ['']],
   ['Build your own play', ['Create your own play', 'Adobe in Claude', 'Adobe in ChatGPT', 'Adobe in Microsoft Copilot']]];
 // the Client KBO plays: each area's sentence, products and the outside systems its canvas starts with (the rule: every system that connects to one of them)
+const GOAL_QUESTIONS = ['My client wants to win new customers', 'My client is losing customers', 'My client wants existing customers to buy more'];
 const KBO = [
   ['Find new customers', 'Reach new buyers in ad and media channels, and show up when they ask AI.', ['rtcdp', 'gspm', 'bv', 'cw', 'cja'],
     ['cdn', 'dwh', 'cstore', 'crm', 'ads', 'bi', 'search', 'figma', 'chatgpt', 'claude', 'copilot']],
@@ -53,8 +53,8 @@ const COPILOT_STUDIO = 'https://experienceleague.adobe.com/en/docs/experience-ma
 
 // ============ 1. the catalog: the rows, the cards, the line types, Copilot's steps and the Creative Cloud note ============
 { ok(same(CAT.rows.map(r => [r.head, r.plays || r.card]), [['Brand Visibility plays', ['cja', 'commerce', 'aem', 'fsi']], ['Adobe agentic lineup', ['coworker', 'abv']],
-      ['Adobe GenStudio lineup', 'family'], ['Client KBO plays', 'agentic'], ['Build your own play', ['custom']]]) && CAT.plays.every(p => !('section' in p)),
-    '1. the first page\'s rows are data, top to bottom: the four Brand Visibility plays, the agentic lineup (Coworker, then Brand Visibility), the GenStudio card, the Client KBO plays card and Build your own play; no play keeps a heading of its own',
+      ['Adobe GenStudio lineup', 'family'], ['Build your own play', ['custom']]]) && CAT.plays.every(p => !('section' in p)),
+    '1. the first page\'s rows are data, top to bottom: the four Brand Visibility plays, the agentic lineup (Coworker, then Brand Visibility), the GenStudio card and Build your own play; no play keeps a heading of its own',
     JSON.stringify(CAT.rows));
   ok(same(CUSTOM.starts.map(x => [x.label, x.after]), [['Adobe Brand Concierge', 'abv'], ['Adobe Brand Intelligence', 'abv'], ['Adobe in Claude', 'custom'], ['Adobe in ChatGPT', 'custom'], ['Adobe in Microsoft Copilot', 'custom']]),
     '1. Adobe Brand Concierge and Adobe Brand Intelligence sit after Adobe Brand Visibility, and the three assistant cards after Create your own play', JSON.stringify(CUSTOM.starts.map(x => [x.label, x.after])));
@@ -112,6 +112,7 @@ const COPILOT_STUDIO = 'https://experienceleague.adobe.com/en/docs/experience-ma
   const state = p => p.evaluate(() => ({play: st.play, on: st.on.slice(), out: (st.out || []).slice(), area: st.area || null, label: document.getElementById('play-label').textContent,
     n: totals().n, yr: totals().yr, menu: outsideOffer().filter(id => !has(id))}));
   const clickIn = (p, sel) => p.evaluate(sel => document.querySelector(sel).click(), sel).then(() => p.waitForTimeout(450));
+  const preview = (p, i) => p.getByRole('button', {name: GOAL_QUESTIONS[i], exact: true}).click();
   // no box on another, no bolt on a box, every box inside the canvas (with every line drawn), and nothing scrolls sideways
   const clean = p => p.evaluate(() => { const boxes = [...document.querySelectorAll('#stage .node')].map(e => e.getBoundingClientRect()), dots = [...document.querySelectorAll('.ib')].map(e => e.getBoundingClientRect());
     const hit = (a, c) => a.left < c.right && c.left < a.right && a.top < c.bottom && c.top < a.bottom, se = document.scrollingElement;
@@ -125,20 +126,22 @@ const COPILOT_STUDIO = 'https://experienceleague.adobe.com/en/docs/experience-ma
       const kids = [...document.querySelector('#picker .in').children].map(e => e.id || e.className || e.tagName);
       const sizes = [...document.querySelectorAll('#picker-list .grid')].map(g => new Set([...g.children].map(c => { const r = c.getBoundingClientRect(); return [Math.round(r.top), Math.round(r.width), Math.round(r.height)].join(); })).size);
       return {rows: out, kids, sizes, badge: [...document.querySelectorAll('#picker-list .pc-badge')].map(x => x.closest('[data-play]').dataset.play + ':' + x.textContent)}; });
-    ok(same(f.rows, ROWS), '2. the first page shows five rows in Adam\'s order, under these headings: Brand Visibility plays (the four plays), Adobe agentic lineup (Adobe Coworker, Adobe Brand Visibility, Adobe Brand Concierge, Adobe Brand Intelligence), Adobe GenStudio lineup, Client KBO plays (a card with no title) and Build your own play (Create your own play and the three assistant cards)',
+    ok(same(f.rows, ROWS), '2. the four standalone play rows retain their titles and products',
       JSON.stringify(f.rows));
     ok(f.sizes.every(s => s === 1) && f.badge.join() === 'abv:New', '2. every row of plays is level with its cards the same size, and Adobe Brand Visibility keeps its New badge in the agentic lineup', JSON.stringify(f));
     ok(same(f.kids.slice(0, 5), ['vids', 'bp', 'H2', 'lead', 'picker-list']),
       '2. the videos and problem finder are followed by Choose a play to start and its rows', JSON.stringify(f.kids));
     const gs = await p.evaluate(() => { const x = document.querySelector('#picker-list .pc-fam[data-card="family"]'); return {label: x.querySelector(':scope>b').textContent, sub: x.querySelector(':scope>.s').textContent,
       areas: [...x.querySelectorAll('.fam-area')].map(a => a.querySelector('b').textContent + ':' + [...a.querySelectorAll('.chips span')].map(s => s.textContent).join('|')), all: x.querySelector('.fam-all').textContent}; });
-    ok(gs.label === 'Adobe GenStudio' && gs.sub === 'People think it is one product. It is a family of products in six areas. Pick the area your client is buying.' && gs.areas.length === 6 &&
-        gs.areas[1] === 'Creative foundations:Creative Cloud|Frame.io' && gs.all === 'Or open the whole family together', '2. the GenStudio card is unchanged but for its heading', JSON.stringify(gs));
-    const kbo = await p.evaluate(() => { const x = document.querySelector('#picker-list .pc-fam[data-card="agentic"]');
-      return {title: !!x.querySelector(':scope>b'), sub: !!x.querySelector(':scope>.s'), text: x.textContent, areas: [...x.querySelectorAll('.fam-area')].map(a => [a.querySelector('b').textContent, a.querySelector('.s').textContent, [...a.querySelectorAll('.chips span')].map(s => s.textContent), a.dataset.name]),
-        all: [x.querySelector('.fam-all').textContent, x.querySelector('.fam-all').dataset.name]}; });
-    ok(!kbo.title && !kbo.sub && !/agentic/i.test(kbo.text) && same(kbo.areas, KBO.slice(0, 3).map(a => [a[0], a[1], a[2].map(id => P[id].name), a[0]])) && same(kbo.all, ['Or open all three together', KBO[3][0]]),
-      '2. the Client KBO plays card: no "Adobe agentic AI" title or sub line, the three areas with their sentences and chips, and "Or open all three together"', JSON.stringify(kbo).slice(0, 600));
+    ok(gs.label === 'Adobe GenStudio' && gs.sub === 'Choose the content problem your client needs to solve.' && gs.areas.length === 6 &&
+        gs.areas[1] === 'Creative foundations:Creative Cloud|Frame.io' && gs.all === 'Or open the whole family together', '2. the GenStudio family introduces its six client problems', JSON.stringify(gs));
+    const questions = await p.locator('#bp .bp-gh').first().evaluate(h => ({
+      heading: h.textContent, chips: [...h.nextElementSibling.querySelectorAll('button')].map(b => b.textContent)
+    }));
+    ok(questions.heading === 'Revenue growth goals' && same(questions.chips, GOAL_QUESTIONS) &&
+      await p.locator('#picker-list [data-card="agentic"]').count() === 0, '2. the three revenue goals appear once, in the problem finder', JSON.stringify(questions));
+    const brandCards = await p.locator('#picker-list [data-play="aem"] .s, #picker-list [data-play="fsi"] .s').allTextContents();
+    ok(same(brandCards, BRAND_OUTCOMES), '2. the Sites and Concierge plays describe acquisition and conversion', JSON.stringify(brandCards));
     const cards = await p.evaluate(() => [...document.querySelectorAll('#picker-list .pc-card[data-assistant]')].map(c => ({ai: c.dataset.assistant, name: c.dataset.name, label: c.querySelector('b').textContent, sub: c.querySelector('.s').textContent,
       chips: [...c.querySelectorAll('.chips span')].map(s => [s.textContent, getComputedStyle(s).borderTopStyle])})));
     const short = id => P[id].short || P[id].name;
@@ -154,15 +157,28 @@ const COPILOT_STUDIO = 'https://experienceleague.adobe.com/en/docs/experience-ma
 
   // ============ 3. the Client KBO plays: products, outside systems, names, and no fee line ============
   { const p = await page(1440, 900), seen = [];
-    for (const [name] of KBO) { await home(p); await clickIn(p, `#picker-list [data-name="${name}"]`); seen.push(await state(p)); }
+    for (let i = 0; i < KBO.length; i++) {
+      await home(p); await preview(p, i === 3 ? 0 : i);
+      await p.locator(i === 3 ? '#bp [data-bpa="build-all"]' : '#bp [data-bpa="build"]').click();
+      seen.push(await state(p));
+    }
     ok(seen.every((s, i) => s.play === 'custom' && same(s.on, KBO[i][2]) && same(s.out, KBO[i][3]) && s.area === KBO[i][0] && s.label === KBO[i][0]),
       '3. each Client KBO area and all three together open Your own play with their products placed, every outside system they connect to on (the rule), and the canvas named "Find new customers", "Keep customers", "Grow share of wallet" or "Find, keep and grow customers"',
       JSON.stringify(seen.map(s => [s.label, s.on, s.out])));
     // Nov 19 2026: the area cards show no fee line (Adam: that is what the canvas estimates and the Services step are for), before or after a rate is entered
-    await home(p); const look = () => p.evaluate(() => [...document.querySelectorAll('#picker-list .pc-fam[data-card="agentic"] .fam-area')].map(a => ({fee: !!a.querySelector('.fam-fee'), text: a.textContent})));
-    const before = await look(); await p.evaluate(() => { st.rate = 175; render(); }); const after = await look();
-    ok(before.length === 3 && [...before, ...after].every(a => !a.fee && !/\$|an hour/.test(a.text)),
-      '3. no Client KBO area shows a fee line, before or after the partner enters a rate', JSON.stringify(after));
+    await home(p);
+    for (const rate of [0, 175]) {
+      await p.evaluate(r => { st.rate = r; render(); }, rate);
+      for (let i = 0; i < 3; i++) {
+        await preview(p, i);
+        const card = p.locator('#bp .bp-ans');
+        ok(await card.locator('h3').innerText() === KBO[i][0] && await card.locator('.bp-heard').innerText() === KBO[i][1] &&
+          same(await card.locator('.bp-p').allTextContents(), KBO[i][2].map(id => P[id].name)) &&
+          !/\$|an hour/.test(await card.innerText()), '3. ' + KBO[i][0] + ' previews its outcome and products before opening at rate ' + rate);
+        await card.getByRole('button', {name:'Back to questions'}).click();
+        ok(await p.evaluate(() => document.activeElement.textContent) === GOAL_QUESTIONS[i], '3. returning to questions restores focus to the chosen goal');
+      }
+    }
     await p.context().close(); }
 
   // ============ 4. one start card per AI assistant: its assistant alone, its products, its name, its places ============

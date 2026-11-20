@@ -328,13 +328,12 @@ def main():
         for p in pl['products']:
             if len(pl['products']) > 1 and not any(p in (c['a'], c['b']) for c in mine if 'a' in c):
                 warnings.append(f"{p} has no documented connection in play {pl['id']}")
-    # Nov 19 2026 (Adam's row order for the first page): 'rows' is the first page, top to bottom; every play sits in exactly one row, and each of the custom
-    # play's cards (GenStudio's 'family', the Client KBO plays' 'agentic') in one row of its own
+    # The play picker has one row per group, including the GenStudio family. Revenue goals live in the problem finder.
     rows, custom_play = cmap['rows'], next(pl for pl in plays if pl.get('custom'))
     assert all(r['head'] and ('plays' in r) != ('card' in r) for r in rows), 'a row of the first page has a heading and holds plays or one card'
     assert sorted(x for r in rows for x in r.get('plays', [])) == sorted(pl['id'] for pl in plays), 'every play sits in exactly one row of the first page'
     cards = [r['card'] for r in rows if 'card' in r]
-    assert sorted(cards) == sorted(k for k in ('family', 'agentic') if k in custom_play), "each of Create your own play's cards sits in one row of the first page"
+    assert cards == ['family'] and 'family' in custom_play, 'the GenStudio family has one row in the play picker'
     used = {l: lines[l] for o in keep_p + keep_c for l in o['lines'] + o['more']}
     # Nov 19 2026 (Adam approved the pickers): the version picker inside the Workfront and Adobe Commerce boxes. Each gate names connections or
     # services of the catalog, versions the picker offers (scope-choices.js holds the words) and products of the catalog
@@ -427,6 +426,10 @@ def main():
     fonts = os.path.join(HERE, 'fonts', 'source-sans-3-latin-{}-normal.woff2')
     # Start from your client's problem (step 40): every product and play a problem names must be on the canvas
     probs = public_copy(json.load(open(os.path.join(HERE, 'problems.json'), encoding='utf-8'))['problems'])
+    goals = custom_play['agentic']['areas']
+    question_ids = [q['id'] for q in probs + goals]
+    assert len(question_ids) == len(set(question_ids)), 'each problem and revenue goal needs a unique id'
+    assert all(g['question'] and g['keywords'] for g in goals), 'each revenue goal needs a question and search terms'
     pids, plids = {p['id'] for p in keep_p}, {p['id'] for p in plays}
     for q in probs:
         assert q['play'] in plids and all(x in pids for x in q['products']), q['id']

@@ -50,11 +50,11 @@ const withStart = (play, ids) => [...new Set([...ids, ...starting(play, ids.filt
   ok(top.t === "Not sure which play? Start from your client's problem", 'the box asks about your client\'s problem', top.t);
   ok(top.ph === "e.g. My client doesn't show up when people ask ChatGPT about their category", 'the example is in the partner\'s voice', top.ph);
   ok(top.above, 'the box sits above the play cards');
-  ok(top.chips.length === 6 && top.all, 'six suggested problems and See all problems', top.chips.join(' | '));
+  ok(top.chips.length === 9 && top.all, 'three growth goals, six suggested problems and See all problems', top.chips.join(' | '));
   await page.click('[data-bpa="all"]');
-  ok(await page.locator('[data-bpp]').count() === 23, 'See all problems shows all 23 (19, and the four of step 77)');
+  ok(await page.locator('[data-bpp]').count() === 26, 'See all problems shows the three goals and all 23 problems');
   await page.click('[data-bpa="fewer"]');
-  ok(await page.locator('[data-bpp]').count() === 6, 'Show fewer problems goes back to six');
+  ok(await page.locator('[data-bpp]').count() === 9, 'Show fewer problems restores the goals and six starters');
   ok(PROBS.every(p => /\bmy client/i.test(p.problem) && /\bmy client/i.test(p.chip) && !/\b(we|our|us)\b/i.test(p.problem + ' ' + p.chip)), 'every problem and chip speaks as the partner, about my client');
   ok(PROBS.every(p => p.refine.every(r => /\bmy client/i.test(r.chip))), 'every refine chip speaks about my client');
 
@@ -97,7 +97,7 @@ const withStart = (play, ids) => [...new Set([...ids, ...starting(play, ids.filt
   const bubbles = await page.locator('.bp-ask').count();
   ok(bubbles === 2, 'the question and the refine chip show as the partner\'s messages', String(bubbles));
   await page.click('[data-bpa="again"]');
-  ok(await page.locator('#bp-form').isVisible() && await page.locator('[data-bpp]').count() === 6, 'Ask about another problem goes back to the question box');
+  ok(await page.locator('#bp-form').isVisible() && await page.locator('[data-bpp]').count() === 9, 'Ask about another problem goes back to the question box');
 
   // a switch to Create your own play keeps the CDN box (step 44: outside systems on every play)
   await page.click('[data-bpp="1"]'); await answer(page);
@@ -255,7 +255,7 @@ const withStart = (play, ids) => [...new Set([...ids, ...starting(play, ids.filt
   ok(cx.n === cx.want && cx.n === 2 && cx.txt.some(t => /CDN \+ Brand Visibility/.test(t)) && cx.bolt, 'S43: How they connect lists every connection, the CDN one included, each with the bolt', JSON.stringify(cx.txt));
   ok(cx.h3[0].startsWith('Recommended') && cx.h3.includes('How they connect') && cx.h3.includes('Why they work together'), 'S43: the answer\'s section labels are headings', cx.h3.join(' | '));
   ok(cx.txt.every(t => !/\bthe client\b|\bthe customer's\b/i.test(t)), 'S43: connection lines speak to the partner ("your client")', JSON.stringify(cx.txt));
-  const allCx = await page.evaluate(() => PROBS.every(p => { bpAsk(p.chip, PROBS.indexOf(p)); clearTimeout(bpT); bp.view = 'answer'; bpRender(); return document.querySelectorAll('.bp-ans .bp-cx').length === bpConns(bp.setup).length; }));
+  const allCx = await page.evaluate(() => PROBS.filter(p => !p.area).every(p => { bpAsk(p.chip, PROBS.indexOf(p)); clearTimeout(bpT); bp.view = 'answer'; bpRender(); return document.querySelectorAll('.bp-ans .bp-cx').length === bpConns(bp.setup).length; }));
   ok(allCx, 'S43: on all 23 answers, How they connect lists exactly the setup\'s connections');
   await page.evaluate(() => { clearTimeout(bpT); bp.view = 'start'; bpRender(); });
 
