@@ -39,7 +39,45 @@ jobs:
         run: node test_question_navigation.js
       - name: Check every focused product and the full opening map
         run: node test_map_first_page.js
-      - name: Check first-page plays and restored drafts
+      - name: Check opening older drafts
+        run: node test_drafts.js
+      - name: Check the first page and its MP4 players in Google Chrome
         run: |
-          node test_first_page_rows.js
-          node test_drafts.js
+          export PROTO_CHROME_BINARY="$(command -v google-chrome || command -v google-chrome-stable)"
+          "$PROTO_CHROME_BINARY" --version
+          cat > "$RUNNER_TEMP/proto-chrome.cjs" <<'JS'
+          const { chromium } = require('playwright');
+          const launch = chromium.launch.bind(chromium);
+          chromium.launch = (options = {}) => launch({...options, executablePath: process.env.PROTO_CHROME_BINARY});
+          JS
+          NODE_OPTIONS="--require=$RUNNER_TEMP/proto-chrome.cjs" node test_first_page_rows.js
+  download:
+    needs: proto
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: codex/verify-genstudio-questions-nov20
+      - name: Save the verified Proto ZIP for download
+        env:
+          VERIFIED_SITE_TREE: 43fc71d23d518ea46b1aff19d90fa2212f445840
+        run: |
+          test "$(git rev-parse HEAD:site)" = "$VERIFIED_SITE_TREE"
+          mkdir -p proto
+          git archive --format=zip -o proto/sow-generator-proto-nov20.zip HEAD:site
+          python3 - <<'PY'
+          import hashlib, pathlib, zipfile
+          folder = pathlib.Path('site')
+          expected = {p.relative_to(folder).as_posix() for p in folder.rglob('*') if p.is_file()}
+          with zipfile.ZipFile('proto/sow-generator-proto-nov20.zip') as archive:
+              assert archive.testzip() is None
+              assert {f.filename for f in archive.infolist() if not f.is_dir()} == expected
+              for name in expected:
+                  assert archive.read(name) == (folder / name).read_bytes(), name
+          print(len(expected), 'files verified with index.html at the archive root')
+          PY
+          git add -f proto/sow-generator-proto-nov20.zip
+          git -c user.name=github-actions -c user.email=github-actions@users.noreply.github.com commit -m "Save the verified Adobe Proto download [skip ci] [skip netlify]"
+          git push origin HEAD:refs/heads/codex/verify-genstudio-questions-nov20
