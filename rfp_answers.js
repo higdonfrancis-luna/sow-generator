@@ -1362,18 +1362,23 @@ function toSow(){
     const dropSow=new Set();if(conn)for(const p of (o.prereqs||[]))if(dropped.has(p)){dropSow.add(p);const cv=closest(p,o.sowPrereqs||[]);if(cv)dropSow.add(cv);}
     const pre=conn?((o.sowPrereqs&&o.sowPrereqs.length?o.sowPrereqs:(o.prereqs||[])).filter(p=>!dropSow.has(p))):[];
     for(const l of [...(o.lines||[]),...(o.more||[])]){if(seen.has(l)||!LN[l])continue;seen.add(l);const L=LN[l];
-      selection.defaults[l]=(o.lines||[]).includes(l);
+      const defaultOn=existingOwner
+        ? (selection.defaults[l]??CanvasScope.startingService(l,(o.lines||[]).includes(l),'custom',selection.serviceDefaults))
+        : (o.lines||[]).includes(l);
+      selection.defaults[l]=defaultOn;
       if(!existingOwner&&!Object.hasOwn(ls,l))ls[l]=false; // An RFI adds only requested work on a newly introduced owner.
       if(existingOwner&&inScope('eds')&&!previouslyInScope('eds')&&!Object.hasOwn(ls,l)&&onInTool(l))ls[l]=true; // Edge Delivery from an RFI changes the defaults. Work already on stays on.
       const on=ls[l]??onInTool(l);
-      const lock=!(L.needs||[]).every(inScope)||
+      const versionLocked=CanvasScope.versionReason(CAT.versions,l,decisions,inScope)||
+        (conn&&CanvasScope.versionReason(CAT.versions,o.id,decisions,inScope));
+      const lock=!!versionLocked||!(L.needs||[]).every(inScope)||
         (!!L.needs_any?.length&&!L.needs_any.some(inScope));
-      payload.push({id:l,on,lock,want:on,def:(o.lines||[]).includes(l),name:L.name,unit:L.unit,low:L.low,base:L.base,high:L.high,url:L.url,src:L.src,references:L.references||[],scope:L.scope||'',stage:L.unit==='monthly'?'Optimize':conn?'Connect':'Launch',
+      payload.push({id:l,on,lock,want:on,def:defaultOn,name:L.name,unit:L.unit,low:L.low,base:L.base,high:L.high,url:L.url,src:L.src,references:L.references||[],scope:L.scope||'',stage:L.unit==='monthly'?'Optimize':conn?'Connect':'Launch',
         prereqs:[L.origin==='research'&&conn&&(o.sowAvailability||o.availability)?'Availability: '+String(o.sowAvailability||o.availability).replace(/([^.])$/,'$1.'):'',L.origin==='research'&&conn&&pre.length?'Prerequisites for '+P[o.a].name+' + '+P[o.b].name+': '+pre.join('; ').replace(/\.$/,'')+'.':'',L.ext?'Also needs '+L.ext.replace(/\.$/,'')+'.':'',L.tier&&![...dropped].some(k=>k.endsWith(': '+L.tier.replace(/\.?$/,'')+'.'))?'Assumes your client has '+L.tier.replace(/\.$/,'')+'.':''].filter(Boolean).join(' ')});}}
   const now=Date.now(),names=offeringNames(adobe);
   try{
     localStorage.setItem('abv-sow-handoff',JSON.stringify({v:1,play:'custom',selection,decisions,size:state.size||'typical',lines:payload,managed:[...lines],fresh:false,products:adobe,names,outside,at:now}));
-    localStorage.setItem('abv-sow-build-v1',JSON.stringify(Object.assign({},c,{v:2,selectionVersion:1,combinedDefaultsVersion:1,play:'custom',on:adobe,out:outside,decisions,ls,keep:selection.keepGeneric?{CW03:true}:{},rate:held&&'rate' in c?c.rate:(state.rate||0),size:c.size||state.size||'typical',months:c.months||state.months||12,eff:held?c.eff||null:null,fresh:false,cur:c.cur||state.currency||'USD',def:held?c.def||null:null,recover:names})));
+    localStorage.setItem('abv-sow-build-v1',JSON.stringify(Object.assign({},c,{v:2,selectionVersion:1,combinedDefaultsVersion:1,serviceDefaults:selection.serviceDefaults,play:'custom',on:adobe,out:outside,decisions,ls,keep:selection.keepGeneric?{CW03:true}:{},rate:held&&'rate' in c?c.rate:(state.rate||0),size:c.size||state.size||'typical',months:c.months||state.months||12,eff:held?c.eff||null:null,fresh:false,cur:c.cur||state.currency||'USD',def:held?c.def||null:null,recover:names})));
   }catch(e){toast('This browser blocks saving, so the services could not be carried over.');return;}
   if(R.rfiOnly)R.rfiOnly(false);   // step 57: the RFI Builder on its own hands over to the full tool
   applyHandoff();refreshSelections();render();go('services');

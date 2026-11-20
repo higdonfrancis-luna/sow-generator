@@ -146,6 +146,8 @@ const CanvasScope = (() => {
         else if (actualHas('csrc')) result.authoring = 'documents';
       }
     }
+    // Quotes saved before the picker used Workfront Proof.
+    if (!Object.hasOwn(result, 'workfrontVersion')) result.workfrontVersion = 'before';
     return result;
   }
   function hasProduct(id, actualHas, decisions) {
@@ -158,6 +160,8 @@ const CanvasScope = (() => {
   function defaultSelection(id, catalogDefault, hasProduct, selected, decisions) {
     // Document setup does not establish a Sites Optimizer Ultimate write-back entitlement.
     if (id === 'CS2' && hasProduct('eds') && Object.hasOwn(decisions || {}, 'authoring')) return false;
+    // The Commerce to Edge Delivery connection already scopes the storefront build.
+    if (id === 'ACO09' && hasProduct('commerce') && !hasProduct('ocp')) return false;
     if (hasProduct('aemsites') && hasProduct('eds')) {
       if (['SI02', 'SI04', 'SI06'].includes(id)) return false;
       if (['AXA04', 'AXA05'].includes(id) && !selected('AXD04')) return false;
@@ -166,11 +170,29 @@ const CanvasScope = (() => {
     return catalogDefault;
   }
   function newDecisions() {
-    return {authoring: '', workfrontVersion: 'before', commerceVersion: 'saas'};
+    return {authoring: '', workfrontVersion: 'after', commerceVersion: 'saas'};
   }
-  return {choices, normalize, restoreDecisions, hasProduct, defaultSelection, newDecisions, trackingOverlap, trackingNote, authoringText};
+  function startingService(id, catalogDefault, play, useNewDefaults) {
+    if (!useNewDefaults) return catalogDefault;
+    if (CanvasServiceDefaults.off[play]?.includes(id)) return false;
+    return catalogDefault || CanvasServiceDefaults.on.includes(id);
+  }
+  function versionReason(versions, id, decisions, hasProduct) {
+    for (const [key, version] of Object.entries(versions)) {
+      if (!hasProduct(version.product)) continue;
+      for (const gate of version.gates) {
+        if (gate.ids.includes(id) && (!gate.when || gate.when.includes(decisions[key]))
+            && (!gate.with || hasProduct(gate.with)) && !(gate.unless && hasProduct(gate.unless))) return gate.reason;
+      }
+    }
+    return '';
+  }
+  const commerceNames = {onprem: 'Adobe Commerce on-premises', paas: 'Adobe Commerce on Cloud', saas: 'Adobe Commerce as a Cloud Service'};
+  return {choices, normalize, restoreDecisions, hasProduct, defaultSelection, newDecisions, startingService,
+    versionReason, commerceNames, trackingOverlap, trackingNote, authoringText};
 })();
-const CanvasPresets = {"abv": {"products": ["bv"], "startingOutside": ["cdn", "search"], "startingLines": [{"id": "SD1", "name": "Search Console and GA4 connections, and prompts picked from search queries", "stage": "Connect", "unit": "one-time", "low": 4, "base": 8, "high": 16}]}, "cja": {"products": ["bv", "cja"], "startingOutside": ["cdn", "dwh", "cstore", "crm", "ads", "bi", "search", "chatgpt", "claude", "copilot"], "startingLines": [{"id": "AD1", "name": "Ad platform sources into CJA, with your client's ad admins", "stage": "Connect", "unit": "one-time", "low": 16, "base": 32, "high": 56}, {"id": "AD2", "name": "Ad spend joined to web conversions: ROAS and cost per web order", "stage": "Connect", "unit": "one-time", "low": 16, "base": 32, "high": 56}, {"id": "BI1", "name": "BI extension setup and number check", "stage": "Connect", "unit": "one-time", "low": 16, "base": 24, "high": 48}, {"id": "BI2", "name": "Executive dashboards in your client's BI tool", "stage": "Connect", "unit": "one-time", "low": 24, "base": 48, "high": 96}, {"id": "SD1", "name": "Search Console and GA4 connections, and prompts picked from search queries", "stage": "Connect", "unit": "one-time", "low": 4, "base": 8, "high": 16}]}, "commerce": {"products": ["bv", "commerce"], "startingOutside": ["cdn", "search", "crm", "erp", "pim", "oms", "wms"], "startingLines": [{"id": "SD1", "name": "Search Console and GA4 connections, and prompts picked from search queries", "stage": "Connect", "unit": "one-time", "low": 4, "base": 8, "high": 16}]}, "aem": {"products": ["bv", "so", "eds"], "startingOutside": ["cdn", "search", "csrc", "chatgpt", "claude"], "startingLines": [{"id": "SD1", "name": "Search Console and GA4 connections, and prompts picked from search queries", "stage": "Connect", "unit": "one-time", "low": 4, "base": 8, "high": 16}, {"id": "CS1", "name": "Document authoring setup with your client's Microsoft 365 or Google admin, and author training", "stage": "Connect", "unit": "one-time", "low": 8, "base": 16, "high": 32}, {"id": "CS2", "name": "Sites Optimizer write-back to SharePoint or Google Drive", "stage": "Connect", "unit": "one-time", "low": 4, "base": 8, "high": 16}]}, "fsi": {"products": ["bv", "bc"], "startingOutside": ["cdn", "search", "cms"], "startingLines": [{"id": "SD1", "name": "Search Console and GA4 connections, and prompts picked from search queries", "stage": "Connect", "unit": "one-time", "low": 4, "base": 8, "high": 16}, {"id": "CM1", "name": "Brand Concierge script and surface rules through your client's tag manager", "stage": "Connect", "unit": "one-time", "low": 4, "base": 8, "high": 16}, {"id": "CM2", "name": "Website Links knowledge source and refresh", "stage": "Connect", "unit": "one-time", "low": 2, "base": 4, "high": 8}]}, "coworker": {"products": ["cw"], "startingOutside": ["chatgpt", "claude", "copilot"], "startingLines": []}};
+const CanvasPresets = {"abv": {"products": ["bv"], "startingOutside": ["cdn", "search"], "startingLines": [{"id": "SD1", "name": "Search Console and GA4 connections, and prompts picked from search queries", "stage": "Connect", "unit": "one-time", "low": 4, "base": 8, "high": 16}]}, "cja": {"products": ["bv", "cja"], "startingOutside": ["cdn", "dwh", "cstore", "crm", "ads", "bi", "search", "chatgpt", "claude", "copilot"], "startingLines": [{"id": "AD1", "name": "Ad platform sources into CJA, with your client's ad admins", "stage": "Connect", "unit": "one-time", "low": 16, "base": 32, "high": 56}, {"id": "AD2", "name": "Ad spend joined to web conversions: ROAS and cost per web order", "stage": "Connect", "unit": "one-time", "low": 16, "base": 32, "high": 56}, {"id": "BI1", "name": "BI extension setup and number check", "stage": "Connect", "unit": "one-time", "low": 16, "base": 24, "high": 48}, {"id": "BI2", "name": "Executive dashboards in your client's BI tool", "stage": "Connect", "unit": "one-time", "low": 24, "base": 48, "high": 96}, {"id": "SD1", "name": "Search Console and GA4 connections, and prompts picked from search queries", "stage": "Connect", "unit": "one-time", "low": 4, "base": 8, "high": 16}]}, "commerce": {"products": ["bv", "commerce"], "startingOutside": ["cdn", "search", "crm", "erp", "pim", "oms", "wms"], "startingLines": [{"id": "SD1", "name": "Search Console and GA4 connections, and prompts picked from search queries", "stage": "Connect", "unit": "one-time", "low": 4, "base": 8, "high": 16}, {"id": "XR01", "name": "Commerce to CRM integration", "stage": "Connect", "unit": "one-time", "low": 60, "base": 120, "high": 240}, {"id": "XR02", "name": "Commerce to ERP integration", "stage": "Connect", "unit": "one-time", "low": 60, "base": 120, "high": 240}, {"id": "XR05", "name": "Product data from the PIM into Commerce", "stage": "Connect", "unit": "one-time", "low": 40, "base": 80, "high": 160}, {"id": "XR06", "name": "Commerce to order management integration", "stage": "Connect", "unit": "one-time", "low": 60, "base": 120, "high": 240}, {"id": "XR08", "name": "Stock and shipment sync with the warehouse system", "stage": "Connect", "unit": "one-time", "low": 40, "base": 80, "high": 160}]}, "aem": {"products": ["bv", "so", "eds"], "startingOutside": ["cdn", "search", "csrc", "chatgpt", "claude"], "startingLines": [{"id": "SD1", "name": "Search Console and GA4 connections, and prompts picked from search queries", "stage": "Connect", "unit": "one-time", "low": 4, "base": 8, "high": 16}, {"id": "CS1", "name": "Document authoring setup with your client's Microsoft 365 or Google admin, and author training", "stage": "Connect", "unit": "one-time", "low": 8, "base": 16, "high": 32}, {"id": "CS2", "name": "Sites Optimizer write-back to SharePoint or Google Drive", "stage": "Connect", "unit": "one-time", "low": 4, "base": 8, "high": 16}]}, "fsi": {"products": ["bv", "bc"], "startingOutside": ["cdn", "search", "cms"], "startingLines": [{"id": "SD1", "name": "Search Console and GA4 connections, and prompts picked from search queries", "stage": "Connect", "unit": "one-time", "low": 4, "base": 8, "high": 16}, {"id": "CM1", "name": "Brand Concierge script and surface rules through your client's tag manager", "stage": "Connect", "unit": "one-time", "low": 4, "base": 8, "high": 16}, {"id": "CM2", "name": "Website Links knowledge source and refresh", "stage": "Connect", "unit": "one-time", "low": 2, "base": 4, "high": 8}]}, "coworker": {"products": ["cw"], "startingOutside": ["chatgpt", "claude", "copilot"], "startingLines": []}};
+const CanvasServiceDefaults = {"on": ["CJ01", "CJ02", "CJ04", "CJ05", "CE01", "CE02", "CE03", "CE04", "CE05", "CE07", "CE14", "CE16", "XR01", "XR02", "XR05", "XR06", "XR08", "XF01", "XF02", "XF03", "XF04", "XF05", "XF06", "XK16", "XT01", "XT03", "XT04", "XT05", "XT06", "XT07", "ACO01", "ACO02", "ACO03", "ACO04", "ACO06", "ACO07", "ACO08", "ACO09", "ACO10", "ACO11", "ACO12", "MBI01", "MBI02", "MBI03", "MBI06", "MBI07"], "off": {"cja": ["C06", "CJ01", "CJ02", "CJ03", "CJ04", "CJ05", "CJ06", "XT01"], "commerce": ["CE01", "CE02", "CE03", "CE04", "CE05", "CE06", "CE07", "CE08", "CE09", "CE10", "CE11", "CE12", "CE13", "CE14", "CE15", "CE16"]}};
 const CanvasOutside = ["cdn", "dwh", "cstore", "crm", "ads", "bi", "search", "csrc", "cms", "figma", "chatgpt", "claude", "copilot", "erp", "pim", "oms", "wms", "ocp"];
 </script>
 <script id="capability-references-runtime">
@@ -733,8 +755,8 @@ const KEY='abv-sow-build-v1',TOOL_KEY='partner-sow-studio-v6',HANDOFF='abv-sow-h
 const CUSTOM=CAT.plays.find(p=>p.custom)||null;
 /* on: the products a partner put on the canvas, in the order added: all of them on Create your own play, the ones added to a ready-made play */
 let restorePriorDefaults=false,restorePriorRouting=false;
-let st={combinedDefaultsVersion:1,play:null,on:[],out:[],ls:{},keep:{},rate:0,size:'typical',months:12,v:2,eff:null,fresh:false,cur:'USD',def:null};
-try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&typeof s==='object'){st={...st,...s,play:PLAYS[s.play]?s.play:null,on:Array.isArray(s.on)&&CUSTOM?s.on.filter(id=>CUSTOM.products.includes(id)&&!(PLAYS[s.play]&&!PLAYS[s.play].custom&&PLAYS[s.play].products.includes(id))):[],out:Array.isArray(s.out)?[...new Set(s.out.filter(id=>P[id]&&(P[id].outside||CAT.plays.some(q=>(q.kept||[]).includes(id)))))]:[],ls:s.ls&&typeof s.ls==='object'?s.ls:{},keep:s.keep&&typeof s.keep==='object'?s.keep:{},rate:Number(s.rate)>0&&(s.v===2||Number(s.rate)!==150)?Number(s.rate):0,months:Number.isInteger(s.months)&&s.months>=1&&s.months<=120?s.months:12,v:2,eff:s.eff&&typeof s.eff==='object'&&s.eff.plays&&typeof s.eff.plays==='object'?s.eff:null,fresh:s.fresh===true,cur:['USD','EUR','GBP','CAD','AUD'].includes(s.cur)?s.cur:'USD',def:s.def&&typeof s.def==='object'?s.def:null};restorePriorDefaults=s.combinedDefaultsVersion!==1;restorePriorRouting=s.selectionVersion!==1;delete st.recover;
+let st={combinedDefaultsVersion:1,serviceDefaults:true,decisions:CanvasScope.newDecisions(),play:null,on:[],out:[],ls:{},keep:{},rate:0,size:'typical',months:12,v:2,eff:null,fresh:false,cur:'USD',def:null};
+try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&typeof s==='object'){st={...st,...s,serviceDefaults:s.serviceDefaults===true,decisions:s.decisions,play:PLAYS[s.play]?s.play:null,on:Array.isArray(s.on)&&CUSTOM?s.on.filter(id=>CUSTOM.products.includes(id)&&!(PLAYS[s.play]&&!PLAYS[s.play].custom&&PLAYS[s.play].products.includes(id))):[],out:Array.isArray(s.out)?[...new Set(s.out.filter(id=>P[id]&&(P[id].outside||CAT.plays.some(q=>(q.kept||[]).includes(id)))))]:[],ls:s.ls&&typeof s.ls==='object'?s.ls:{},keep:s.keep&&typeof s.keep==='object'?s.keep:{},rate:Number(s.rate)>0&&(s.v===2||Number(s.rate)!==150)?Number(s.rate):0,months:Number.isInteger(s.months)&&s.months>=1&&s.months<=120?s.months:12,v:2,eff:s.eff&&typeof s.eff==='object'&&s.eff.plays&&typeof s.eff.plays==='object'?s.eff:null,fresh:s.fresh===true,cur:['USD','EUR','GBP','CAD','AUD'].includes(s.cur)?s.cur:'USD',def:s.def&&typeof s.def==='object'?s.def:null};restorePriorDefaults=s.combinedDefaultsVersion!==1;restorePriorRouting=s.selectionVersion!==1;delete st.recover;
   /* a draft opened on the SOW steps names its products when their ids weren't saved: match them by name */
   if(CUSTOM&&st.play===CUSTOM.id&&!st.on.length&&Array.isArray(s.recover))st.on=CUSTOM.products.filter(id=>P[id]&&(s.recover.includes(P[id].name)||(id==='eds'&&s.recover.includes('Edge Delivery Services'))));}
   else{const t=JSON.parse(localStorage.getItem(TOOL_KEY)||'null');if(t&&typeof t==='object'){if(Number(t.rate)>0)st.rate=Number(t.rate);if(['small','typical','large'].includes(t.size))st.size=t.size;if(Number.isInteger(t.months)&&t.months>=1&&t.months<=120)st.months=t.months;if(['USD','EUR','GBP','CAD','AUD'].includes(t.currency))st.cur=t.currency;}}}catch(e){}
@@ -815,7 +837,7 @@ st.decisions=CanvasScope.restoreDecisions(st.decisions,actualHas);
 const has=id=>CanvasScope.hasProduct(id,actualHas,st.decisions);
 /* a line's starting state: on by default unless the play turns it off (Commerce starts without L03, FSI without C04), or turned on by the play (Brand Visibility on its own starts with C05);
    an answer on the SOW steps can set it too (FSI, Brand Concierge live and healthy: F02 off, C04 on) */
-const catalogDefault=id=>{const pl=play()||{},d=st.def&&st.def[pl.id];if(d&&typeof d[id]==='boolean')return d[id];return (!!DEF[id]&&!(pl.off||[]).includes(id))||(pl.on||[]).includes(id);};
+const catalogDefault=id=>{const pl=play()||{},d=st.def&&st.def[pl.id];if(d&&typeof d[id]==='boolean')return d[id];const base=(!!DEF[id]&&!(pl.off||[]).includes(id))||(pl.on||[]).includes(id);return CanvasScope.startingService(id,base,pl.id,st.serviceDefaults);};
 const separateSitesWork=['SI02','SI04','SI06'];
 const componentTracking=['AXA04','AXA05'];
 const combinesSites=()=>has('aemsites')&&has('eds');
@@ -901,7 +923,7 @@ const SPECIAL=['CW-CJA','CW-AEM','CW-FSI','AXD11','XA25','XA26','XA27'];
 const specialOn=()=>conns().some(c=>all(c).some(l=>SPECIAL.includes(l)&&lineOn(l)&&met(l)));
 /* overlaps: the three CJA source services from outside systems overlap CJA data preparation in Experience Platform; both count, and the SOW steps ask how they differ.
    Nov 18 2026: so do two AI assistant services and the Coworker services that set the same Workfront switches or the same publishing rule */
-const OVERLAP={ACO09:['XA18'],CE11:['XA18','XR02','XR05','XR06','XR08'],ACO06:['XR05'],XR06:['XR02'],XR08:['XR06','XR02'],XR05:['XR02'],OX3:['CJ01','DW1','DW2'],OX4:['CJ01'],OX5:['CJ01'],XT05:['XB14','XJ32'],XT06:['XG08'],DW1:['DW2'],CS1:['SI05']};   // Nov 19 2026: the warehouse source each of CJA, Real-Time CDP and Journey Optimizer sets up in Experience Platform, and document author training beside Universal Editor training
+const OVERLAP={ACO09:['XA18'],ACO11:['XA19'],ACO12:['XA20'],CE11:['XA18','XR02','XR05','XR06','XR08'],ACO06:['XR05'],XR06:['XR02'],XR08:['XR06','XR02'],XR05:['XR02'],OX3:['CJ01','DW1','DW2'],OX4:['CJ01'],OX5:['CJ01'],XT05:['XB14','XJ32'],XT06:['XG08'],DW1:['DW2'],CS1:['SI05']};   // Nov 19 2026: the warehouse source each of CJA, Real-Time CDP and Journey Optimizer sets up in Experience Platform, and document author training beside Universal Editor training
 const replaced=l=>l==='CW03'&&!st.keep.CW03&&specialOn();
 const overlapsOn=l=>counted(l)?(OVERLAP[l]||[]).filter(x=>!!LN[x]&&counted(x)&&[...prods(),...conns()].some(o=>all(o).includes(x))):[];
 /* Nov 19 2026 (Adam approved the pickers): the version picked inside the Workfront and Adobe Commerce boxes. A gate (CAT.versions, from catalog_map.json)
@@ -909,15 +931,12 @@ const overlapsOn=l=>counted(l)?(OVERLAP[l]||[]).filter(x=>!!LN[x]&&counted(x)&&[
    them, leaves their services out of the estimate and the hand-over, and says why. gateOf gives the reason, or '' */
 const VER=CAT.versions,VBOX=Object.fromEntries(Object.entries(VER).map(([k,v])=>[v.product,k]));
 const OWNER={};for(const c of C)for(const l of [...c.lines,...c.more])OWNER[l]=c.id;
-function gateOf(id,dec=st.decisions){for(const [k,v] of Object.entries(VER)){if(!has(v.product))continue;
-    for(const g of v.gates)if(g.ids.includes(id)&&(!g.when||g.when.includes(dec[k]))&&(!g.with||has(g.with))&&!(g.unless&&has(g.unless)))return g.reason;}
-  return '';}
+const gateOf=(id,dec=st.decisions)=>CanvasScope.versionReason(VER,id,dec,has);
 const lineGate=(l,dec)=>gateOf(l,dec)||(OWNER[l]?gateOf(OWNER[l],dec):'');
 const counted=l=>lineOn(l)&&met(l)&&!replaced(l)&&!lineGate(l);
 /* a canvas saved before the pickers has no version: Workfront bought before March 12, 2026, and the Commerce version that keeps every service it counts
    (Cloud Service, then On Cloud, then on-premises); where none does, no version, which changes nothing until the partner picks one */
 const keeps=v=>![...prods(),...conns()].some(o=>all(o).some(l=>lineOn(l)&&met(l)&&!replaced(l)&&lineGate(l,{...st.decisions,commerceVersion:v})));
-if(!Object.hasOwn(st.decisions,'workfrontVersion'))st.decisions.workfrontVersion='before';
 if(!Object.hasOwn(st.decisions,'commerceVersion'))st.decisions.commerceVersion=['saas','paas','onprem'].find(keeps)||'';
 const short=id=>P[id].short||P[id].name;
 /* the lines this play's canvas can show: those of its products, of the products added to it, and of the connections between them */
@@ -1069,7 +1088,7 @@ function authoringControl(){
 /* the box keeps its usual size: its name, the picker's name (left out on a busy canvas, where the box counts its connections, and on a phone) and the picker */
 function versionControl(key,busy){const c=CanvasScope.choices[key],now=st.decisions[key]||'';
   const options=c.options.filter(([value])=>value||!now).map(([value,label])=>'<option value="'+esc(value)+'"'+(value===now?' selected':'')+'>'+esc(label)+'</option>').join('');
-  return '<label class="offering-version">'+(busy?'':'<span class="vlab">'+esc(c.label)+'</span>')+'<select data-choice="'+key+'" aria-label="'+esc(c.label)+'">'+options+'</select></label>';}
+  return '<label class="offering-version">'+(busy?'':'<span class="vlab">'+esc(c.label)+'</span>')+'<select data-choice="'+key+'" aria-label="'+esc(c.label)+'"'+(key==='commerceVersion'?' title="Choose the version your client runs today"':'')+'>'+options+'</select></label>';}
 /* the smaller Cloud Service services take over from the full ones when the partner moves a Commerce canvas to Cloud Service, and back */
 const SMALLER=[['CE05','CE14'],['CE06','CE15']];
 $('stage').addEventListener('change',e=>{
@@ -1509,11 +1528,11 @@ $('card').addEventListener('click',e=>{e.stopPropagation();
   if(e.target.closest('[data-remove-sites]')){st.on=st.on.filter(id=>id!=='aemsites');removeProduct('eds');return;}
   const rm=e.target.closest('[data-rm]');if(rm){removeProduct(rm.dataset.rm);return;}
   if(e.target.closest('[data-focus-authoring]')){hideCard(true);$('stage').querySelector('select[data-choice="authoring"]')?.focus();return;}
-  const ap=e.target.closest('[data-addp]');if(ap){addProduct(ap.dataset.addp);if(card)pinned=true;refreshCard();return;}
+  const ap=e.target.closest('[data-addp]');if(ap){const id=ap.dataset.addp;if(P[id]?.outside)addOutside(id);else addProduct(id);if(card)pinned=true;refreshCard();return;}
   const sm=e.target.closest('summary');if(sm){const d=sm.parentElement,box=$('card'),y=box.scrollTop;setTimeout(()=>{moreOpen[d.dataset.more]=d.open;const L0=box.style.left;placeCard();if(fv())box.style.left=L0;
     /* Get your team ready: the card stays where it was, then scrolls just far enough to show the opened box without losing its heading */
     if(d.classList.contains('ready')){box.scrollTop=y;const c=box.getBoundingClientRect(),r=d.getBoundingClientRect();if(d.open&&r.bottom>c.bottom)box.scrollTop+=Math.min(r.top-c.top-8,r.bottom-c.bottom+8);}},0);pinned=true;}});
-function pick(e){e.stopPropagation();const b=e.target.closest('[data-play],[data-start]');if(!b)return;st.play=b.dataset.play||CUSTOM.id;st.on=b.dataset.start?b.dataset.start.split(','):[];st.out=startOut(PLAYS[st.play],st.on,b.dataset.assistant);if(b.dataset.name)st.area=b.dataset.name;else delete st.area;st.decisions=CanvasScope.newDecisions();st.ls={};st.keep={};st.fresh=true;st.pubSig=null;moreOpen={};fsel=null;showAllEdges=false;render();if(play().custom&&!st.on.length&&document.documentElement.clientWidth>900)openAdd(true);}
+function pick(e){e.stopPropagation();const b=e.target.closest('[data-play],[data-start]');if(!b)return;st.play=b.dataset.play||CUSTOM.id;st.on=b.dataset.start?b.dataset.start.split(','):[];st.out=startOut(PLAYS[st.play],st.on,b.dataset.assistant);if(b.dataset.name)st.area=b.dataset.name;else delete st.area;st.decisions=CanvasScope.newDecisions();st.serviceDefaults=true;st.ls={};st.keep={};st.fresh=true;st.pubSig=null;moreOpen={};fsel=null;showAllEdges=false;render();if(play().custom&&!st.on.length&&document.documentElement.clientWidth>900)openAdd(true);}
 /* ---------- The Add product menu (every play; Create your own play starts with it) ---------- */
 /* step 63: the menu's groups, under the headings of Adobe's own product menu and in its order; a product not listed falls under More products */
 const GROUPS=[['AI & agents',['bv','bc','cw','brandintel']],['Content & workflows',['aemsites','aemassets','eds','so','aemforms','commerce','aco','workfront','gspm','frameio','planning']],['Creativity & design',['creativecloud','express','fireflycp','fireflycm']],['Data & analytics',['rtcdp','cja','aa','ca','mmm','collab','cintel']],['Campaign management',['ajo','ajob2b','xa','marketo','moptimizer','mqualifier','mmeasure','target']],['Document productivity',['acrobat','acrobatsign']]];
@@ -1866,7 +1885,7 @@ const BP_MIN=3;
 const bpYou=s=>(/^[A-Z][a-z]/.test(s)?s[0].toLowerCase()+s.slice(1):s).replace(/\bmy client/g,'your client');
 const bpKey=s=>s.play+'|'+[...s.prods].sort().join()+'|'+[...s.out].sort().join()+'|'+[...(s.off||[])].sort().join();
 /* step 41: when a refine chip says the client already has a product, the services that stand it up start off (the work done in it stays on) */
-const OWNED_OFF={eds:['A04','A01','A02','A03','A05','SI01','SI02','SI04','SI05','AXD01','AXD02'],storefront:['XA18','XA19'],commerce:['XA18','XA19'],aemsites:['SI01','SI02','SI04','SI05'],aemassets:['AS01','AS02','AS03','AS04'],'commerce-media':['XC15'],
+const OWNED_OFF={eds:['A04','A01','A02','A03','A05','SI01','SI02','SI04','SI05','AXD01','AXD02'],storefront:['XA18','XA19'],commerce:['XA18','XA19',...CanvasServiceDefaults.off.commerce],cja:CanvasServiceDefaults.off.cja,aemsites:['SI01','SI02','SI04','SI05'],aemassets:['AS01','AS02','AS03','AS04'],'commerce-media':['XC15'],
   marketo:['MK01','MK02','MK03','MK04','MK05'],workfront:['WF01','WF02','WF03','WF04','WF05'],ajo:['JO01','JO02','JO04','JO05'],bc:['F02'],target:['TG01','TG02'],rtcdp:['RT01','RT02','RT03','RT05'],cw:['CW02'],bv:['L02']};
 const bpOff=(s,r)=>[...new Set([...(s.off||[]),...(r.owned||[]).flatMap(id=>OWNED_OFF[id]||[])])];
 const bpLc=s=>/^[A-Z][a-z]/.test(s)?s[0].toLowerCase()+s.slice(1):s;
@@ -1892,8 +1911,8 @@ function setupDecisions(s){
   if(s.prods.includes('eds'))decisions.authoring=s.prods.includes('aemsites')?'universal':s.out.includes('csrc')?'documents':'';
   return decisions;
 }
-function bpSim(s,rate){const was={play:st.play,on:st.on,out:st.out,ls:st.ls,keep:st.keep,fresh:st.fresh,rate:st.rate,decisions:st.decisions};
-  st.decisions=setupDecisions(s);st.play=s.play;st.on=PLAYS[s.play].custom?s.prods.slice():[];st.out=bpStart(s);st.ls=Object.fromEntries((s.off||[]).map(l=>[l,false]));st.keep={};st.fresh=true;if(rate!==undefined)st.rate=rate;UNI={k:'',s:new Set()};
+function bpSim(s,rate){const was={play:st.play,on:st.on,out:st.out,ls:st.ls,keep:st.keep,fresh:st.fresh,rate:st.rate,decisions:st.decisions,serviceDefaults:st.serviceDefaults};
+  st.decisions=setupDecisions(s);st.serviceDefaults=true;st.play=s.play;st.on=PLAYS[s.play].custom?s.prods.slice():[];st.out=bpStart(s);st.ls=Object.fromEntries((s.off||[]).map(l=>[l,false]));st.keep={};st.fresh=true;if(rate!==undefined)st.rate=rate;UNI={k:'',s:new Set()};
   const r={names:[],ids:[],oh:0,mh:0,concept:false};
   try{for(const o of [...prods(),...conns()])for(const l of all(o))if(counted(l)){r.names.push(LN[l].name);r.ids.push(l);if(unitOf(l)==='monthly')r.mh+=hrs(l);else r.oh+=hrs(l);if(LN[l].origin==='research'&&!(effOf(l)&&effOf(l).w))r.concept=true;}
     const t=totals();r.yr=t.yr;}
@@ -1981,7 +2000,7 @@ $('bp').addEventListener('click',e=>{const pc=e.target.closest('[data-bpp]');if(
   if(k==='all'||k==='fewer'){bp.view=k==='all'?'all':'start';bpRender();return;}
   if(k==='again'){clearTimeout(bpT);bp.view='start';bpRender();$('bp-q').value='';$('bp-q').focus();return;}
   if(k==='another'){bp.i=(bp.i+1)%bp.hits.length;bp.steps=[];bp.setup=bpBase(PROBS[bp.hits[bp.i]]);bpShow(500);return;}
-  if(k==='build'){const s=bp.setup;clearTimeout(bpT);st.goal=PROBS[bp.hits[bp.i]].id;delete st.area;st.play=s.play;st.decisions=setupDecisions(s);st.on=PLAYS[s.play].custom?s.prods.slice():[];st.out=bpStart(s);st.ls=Object.fromEntries((s.off||[]).map(l=>[l,false]));st.keep={};st.fresh=true;st.pubSig=null;moreOpen={};fsel=null;
+  if(k==='build'){const s=bp.setup;clearTimeout(bpT);st.goal=PROBS[bp.hits[bp.i]].id;delete st.area;st.play=s.play;st.decisions=setupDecisions(s);st.serviceDefaults=true;st.on=PLAYS[s.play].custom?s.prods.slice():[];st.out=bpStart(s);st.ls=Object.fromEntries((s.off||[]).map(l=>[l,false]));st.keep={};st.fresh=true;st.pubSig=null;moreOpen={};fsel=null;
     bp.view='start';showAllEdges=false;$('bp-q').value='';bpRender();render();}});
 $('confirm-yes').addEventListener('click',()=>setTimeout(()=>{if(!play()&&bp.view==='answer')bpRender();},0));
 bpRender();
@@ -2037,7 +2056,7 @@ function publish(force){const pl=play();if(!pl||(!prods().length&&!pl.custom))re
   if(!pl.custom){const seen=new Set(lines.map(x=>x.id)),ids=[...pl.products,...st.on,...outsideOffer()];
     for(const x of outsideOffer().filter(id=>!has(id)))for(const c of C.filter(c=>(c.a===x||c.b===x)&&ids.includes(c.a)&&ids.includes(c.b)))for(const l of all(c)){if(seen.has(l))continue;seen.add(l);const L=LN[l];
       lines.push({id:l,on:false,lock:true,want:lineOn(l),def:defOf(l),name:L.name,unit:L.unit,low:L.low,base:L.base,high:L.high,url:L.url,src:L.src,references:CapabilityReferences.list(L),scope:L.scope||'',stage:L.unit==='monthly'?'Optimize':'Connect',prereqs:''});}}
-  const body={v:1,play:pl.id,selection:{choices:st.ls,keepGeneric:st.keep.CW03===true,defaults:Object.fromEntries(lines.map(l=>[l.id,catalogDefault(l.id)]))},decisions:CanvasScope.normalize(st.decisions),size:st.size,rate:st.rate||'',lines,managed:[...universe()],fresh:!!st.fresh,products:CAT.products.filter(p=>!p.outside&&actualHas(p.id)).map(p=>p.id),names:displayProducts().filter(p=>!p.outside).map(p=>p.name),outside:(st.out||[]).filter(id=>has(id)),...(pl.custom||!st.on.length?{}:{added:st.on.slice(),addedNames:st.on.filter(id=>displayProducts().some(p=>p.id===id)).map(id=>P[id].name)}),...(st.goal?{goal:st.goal}:{}),...(pl.custom?{area:st.area||''}:{})},sig=sigOf(JSON.stringify(body));
+  const body={v:1,play:pl.id,selection:{choices:st.ls,keepGeneric:st.keep.CW03===true,serviceDefaults:st.serviceDefaults,defaults:Object.fromEntries(lines.map(l=>[l.id,catalogDefault(l.id)]))},decisions:CanvasScope.normalize(st.decisions),size:st.size,rate:st.rate||'',lines,managed:[...universe()],fresh:!!st.fresh,products:CAT.products.filter(p=>!p.outside&&actualHas(p.id)).map(p=>p.id),names:displayProducts().filter(p=>!p.outside).map(p=>p.name),outside:(st.out||[]).filter(id=>has(id)),...(pl.custom||!st.on.length?{}:{added:st.on.slice(),addedNames:st.on.filter(id=>displayProducts().some(p=>p.id===id)).map(id=>P[id].name)}),...(st.goal?{goal:st.goal}:{}),...(pl.custom?{area:st.area||''}:{})},sig=sigOf(JSON.stringify(body));
   if(!force&&sig===st.pubSig)return true;
   try{localStorage.setItem(HANDOFF,JSON.stringify({...body,at:Date.now()}));st.pubSig=sig;return true;}catch(e){return false;}}
 function handoff(step){if(!prods().some(p=>!p.outside)){toast('Add a product to the canvas first.');return;}

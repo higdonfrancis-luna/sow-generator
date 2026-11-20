@@ -529,8 +529,8 @@ const server = http.createServer((req, res) => {
     await p.evaluate(() => localStorage.clear()); await pick(p, 'custom'); await p.evaluate(() => { for (const id of ['bv', 'cja']) addProduct(id); openAdd(false); }); await p.waitForTimeout(300); const none = await need();
     await p.evaluate(() => { addProduct('rtcdp'); openAdd(false); }); await p.waitForTimeout(300); const rt = await need();
     await p.evaluate(() => { removeProduct('rtcdp'); addProduct('ajo'); openAdd(false); }); await p.waitForTimeout(300); const jo = await need();
-    ok(cja.includes('Also needs Real-Time CDP or Journey Optimizer') && on && none.includes('Also needs') && !rt.includes('Also needs') && !jo.includes('Also needs'),
-      'step 48 fix 4: Audiences that act on the data says Also needs Real-Time CDP or Journey Optimizer on the CJA play (still counted there) and on a canvas without either, and not once Real-Time CDP or Journey Optimizer is on it', JSON.stringify({cja, on, none, rt, jo}).slice(0, 500));
+    ok(cja.includes('Also needs Real-Time CDP or Journey Optimizer') && !on && none.includes('Also needs') && !rt.includes('Also needs') && !jo.includes('Also needs'),
+      'step 48 fix 4: Audiences that act on the data says Also needs Real-Time CDP or Journey Optimizer on the CJA cross-sell (available to select) and on a canvas without either, and not once Real-Time CDP or Journey Optimizer is on it', JSON.stringify({cja, on, none, rt, jo}).slice(0, 500));
     await p.context().close(); }
   // 32. (step 48, fix 5) the banking question offers no Coworker chip, before or after the CJA chip
   { const p = await fresh(); await p.goto(BASE); await p.waitForTimeout(400);

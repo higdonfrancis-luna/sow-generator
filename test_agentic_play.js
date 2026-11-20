@@ -73,8 +73,8 @@ const BI_URL = 'https://developer.adobe.com/adobe-brand-intelligence/guides/mcp-
 const fix = s => s.replace(/’/g, "'");
 
 // ============ 1. the catalog: the starting systems, Ask it and Claude + Brand Intelligence ============
-{ ok(CAT.products.length === 54 && CAT.products.filter(p => p.outside).length === 18 && CAT.connections.length === 217 && Object.keys(CAT.lines).length === 608 && WAVE.connections.length === 42,
-    '1. the catalog holds 54 products (18 outside systems), 217 connections and 608 services (the Commerce round added 7, 13 and 33 on Nov 19), and 42 lines for ChatGPT, Claude and Microsoft Copilot (Claude + Brand Intelligence added, no new service)',
+{ ok(CAT.products.length === 54 && CAT.products.filter(p => p.outside).length === 18 && CAT.connections.length === 217 && Object.keys(CAT.lines).length === 610 && WAVE.connections.length === 42,
+    '1. the catalog holds 54 products (18 outside systems), 217 connections and 610 services (the Commerce round added 7, 13 and 33 on Nov 19), and 42 lines for ChatGPT, Claude and Microsoft Copilot (Claude + Brand Intelligence added, no new service)',
     [CAT.products.length, CAT.connections.length, Object.keys(CAT.lines).length, WAVE.connections.length].join());
   ok(Object.entries(START).every(([id, want]) => same(PLAY[id].ostart, want)),
     '1. each ready-made play starts with every outside system on its own list and every one that connects to one of its products: Adobe Brand Visibility the CDN and Search data; + Customer Journey Analytics the CDN, Data warehouse, Cloud storage, CRM, Ad platforms, BI tools, Search data, ChatGPT, Claude and Microsoft Copilot; + Adobe Commerce the CDN, Search data and the CRM; + Sites Optimizer and Edge Delivery Services the CDN, Search data, Authoring docs, ChatGPT and Claude; + Brand Concierge the CDN, Search data and another CMS site; Adobe Coworker ChatGPT, Claude and Microsoft Copilot',
@@ -198,7 +198,7 @@ const fix = s => s.replace(/’/g, "'");
     await Promise.all([p.waitForURL(/\/sow\//), p.click('#save')]); await p.waitForTimeout(900); await p.fill('#service-rate', '150').catch(() => {});
     await p.evaluate(() => go('services')); await p.waitForTimeout(400);
     const sowFlags = await p.evaluate(() => [...document.querySelectorAll('.service-flag')].map(e => e.textContent));
-    ok(same(flags.map(f => [f.on, f.ox3, f.dw1]), [['OX3,DW1,DW2', 'DW1,DW2', 'DW2'], ['OX3,DW1', 'DW1', ''], ['OX3,DW2', 'DW2', ''], ['OX3,DW2', 'DW2', '']]) && sowFlags.filter(t => /Warehouse tables into|Data Mirror/.test(t)).length >= 1,
+    ok(same(flags.map(f => [f.on, f.ox3, f.dw1]), [['OX3,DW1,DW2', 'CJ01,DW1,DW2', 'DW2'], ['OX3,DW1', 'CJ01,DW1', ''], ['OX3,DW2', 'CJ01,DW2', ''], ['OX3,DW2', 'CJ01,DW2', '']]) && sowFlags.some(t => /CJA data preparation in Experience Platform/.test(t) && /Data Mirror/.test(t)),
       '3. the warehouse source CJA, Real-Time CDP and Journey Optimizer each set up in Experience Platform is flagged as shared work on every agentic canvas, and on the SOW steps', JSON.stringify({flags, sowFlags}).slice(0, 700));
     await p.context().close(); }
 
@@ -237,8 +237,8 @@ const fix = s => s.replace(/’/g, "'");
     for (const id of Object.keys(START)) { const ctx = await context(), a = watch(await ctx.newPage()); await a.goto(ORIGIN + 'sow/index.html?play=' + id); await a.waitForTimeout(900); const direct = await read(a); await ctx.close();
       const c = await page(); await c.click(`#picker [data-play="${id}"]`); await c.waitForTimeout(300); await Promise.all([c.waitForURL(/\/sow\//), c.click('#save')]); await c.waitForTimeout(900);
       rows[id] = {direct, canvas: await read(c)}; await c.context().close(); }
-    ok(Object.entries(rows).every(([id, r]) => same(r.direct.out, START[id]) && JSON.stringify(r.direct) === JSON.stringify(r.canvas)) && rows.cja.direct.one === 512 && ['OX1', 'OX3', 'OX4', 'OX5', 'CANVAS-SD1', 'CANVAS-AD1'].every(l => rows.cja.direct.ids.split(',').includes(l)),
-      '5. a new engagement opened on the SOW steps at each ready-made play starts with the same outside systems, services and hours as the canvas hands over (Brand Visibility + Customer Journey Analytics 512 one-time hours)', JSON.stringify(rows).slice(0, 900)); }
+    ok(Object.entries(rows).every(([id, r]) => same(r.direct.out, START[id]) && JSON.stringify(r.direct) === JSON.stringify(r.canvas)) && rows.cja.direct.one === 464 && ['OX1', 'OX3', 'OX4', 'OX5', 'CANVAS-SD1', 'CANVAS-AD1'].every(l => rows.cja.direct.ids.split(',').includes(l)),
+      '5. a new engagement opened on the SOW steps at each ready-made play starts with the same outside systems, services and hours as the canvas hands over (Brand Visibility + Customer Journey Analytics 464 one-time hours)', JSON.stringify(rows).slice(0, 900)); }
   { const p = await page(); await famClick(p, AG, 1); await p.fill('#rate', '150'); await p.waitForTimeout(200);
     const c0 = await state(p); await p.reload(); await p.waitForFunction('window.READY===true'); await p.waitForTimeout(300); const c1 = await state(p);
     await Promise.all([p.waitForURL(/\/sow\//), p.click('#save')]); await p.waitForTimeout(1000);

@@ -1,5 +1,5 @@
-// The Commerce round (Adam approved the pickers, Nov 19 2026): a version picker inside the Workfront box ("Bought before March 12, 2026", the default, or
-// after: no Workfront Proof, so the Proof lines to GenStudio for Performance Marketing and Express fade) and inside the Adobe Commerce box (On-premises, On Cloud
+// The Commerce round (Adam approved the pickers, Nov 19 2026): a version picker inside the Workfront box ("Bought before March 12, 2026", or
+// after, the default: no Workfront Proof, so the Proof lines to GenStudio for Performance Marketing and Express fade) and inside the Adobe Commerce box (On-premises, On Cloud
 // or Cloud Service, the default, which keeps today's starting services and totals); four back-office systems for Commerce (ERP, PIM, order management,
 // warehouse management); Adobe Commerce Optimizer, Adobe Commerce Intelligence and Other commerce platform; the move to Commerce as a Cloud Service and
 // multi-store setup. The build data is canvas/research/wave8_commerce.json, with every quote proven word for word on Adobe's pages and Adam's paste.
@@ -24,20 +24,20 @@ const LABELS = /\bbeta\b|early access|early adopter|limited availability|coming 
 const norm = s => String(s).replace(/[‘’]/g, "'").replace(/[“”]/g, '"').replace(/\s+/g, ' ').trim();
 const inPaste = q => { let at = 0; const t = norm(PASTE); return q.split('...').map(norm).filter(Boolean).every(part => { const i = t.indexOf(part, at); if (i < 0) return false; at = i + part.length; return true; }); };
 
-// ============ 1. the catalog: two products, five outside systems, 13 connections and 33 services, as the build data says ============
+// ============ 1. the catalog: two products, five outside systems, 13 connections and 35 services, as the build data says ============
 { ok(NEWP.every(id => P[id] && !P[id].outside) && NEWOUT.every(id => P[id] && P[id].outside && P[id].icon && P[id].systems) && P.aco.info && /Optimizer Headless/.test(P.aco.info),
     '1. Adobe Commerce Optimizer and Adobe Commerce Intelligence are Adobe products; ERP, PIM, Order management, Warehouse management and Other commerce platform are outside systems with an icon and what they cover; Commerce Optimizer\'s i names its two packages', JSON.stringify(NEWOUT.map(id => P[id] && P[id].systems)));
-  ok(CAT.products.length === 54 && CAT.products.filter(p => p.outside).length === 18 && CAT.connections.length === 217 && Object.keys(CAT.lines).length === 608,
-    '1. the catalog holds 54 products (18 outside systems), 217 connections and 608 services', [CAT.products.length, CAT.connections.length, Object.keys(CAT.lines).length].join());
+  ok(CAT.products.length === 54 && CAT.products.filter(p => p.outside).length === 18 && CAT.connections.length === 217 && Object.keys(CAT.lines).length === 610,
+    '1. the catalog holds 54 products (18 outside systems), 217 connections and 610 services', [CAT.products.length, CAT.connections.length, Object.keys(CAT.lines).length].join());
   ok(NEWC.length === 13 && NEWC.every(id => CBY[id] && CBY[id].how && CBY[id].label && CBY[id].gain && CBY[id].sowHow && CBY[id].sowGain && CBY[id].prereqs.length >= 2 && ALLOWED.test(CBY[id].source.url) &&
       (CBY[id].flows || []).every(f => ALLOWED.test(f.source.url)) && !CBY[id].availability) && SYSTEMS.every(s => CBY['commerce-' + s] && CBY['commerce-' + s].kind === 'outside' && CBY['commerce-' + s].line === 'native'),
     '1. each of the 13 connections has its how, label, what you get, prerequisites, flows on Adobe pages, client wording and no availability line; the four back-office systems connect to Adobe Commerce as outside systems drawn as their own connections',
     NEWC.filter(id => !CBY[id] || !CBY[id].sowHow).join());
   ok(['aco-commerce', 'aco-pim', 'aco-ocp', 'aco-eds', 'aco-aemassets', 'aco-so', 'cintel-commerce', 'cintel-crm', 'cintel-ads'].every(id => CBY[id]) && CBY['aco-so'].no_services,
     '1. Commerce Optimizer connects to Adobe Commerce, the PIM, Other commerce platform, Edge Delivery Services, AEM Assets and Sites Optimizer; Commerce Intelligence to Adobe Commerce, the CRM and Ad platforms');
-  ok(NEWL.length === 33 && NEWL.every(i => CAT.lines[i] && !CAT.products.concat(CAT.connections).some(o => o.lines.includes(i)) && CAT.lines[i].scope && ALLOWED.test(CAT.lines[i].url) &&
+  ok(NEWL.length === 35 && NEWL.every(i => CAT.lines[i] && !CAT.products.concat(CAT.connections).some(o => o.lines.includes(i)) && CAT.lines[i].scope && ALLOWED.test(CAT.lines[i].url) &&
       KB.services[i] && KB.services[i].steps.length >= 3 && (KB.services[i].phrases || []).length >= 4) && !CAT.plays.some(pl => (pl.on || []).some(l => NEWL.includes(l))),
-    '1. the 33 services start off on every play, each with its scope, its Adobe page and an RFI write-up with its phrases', NEWL.filter(i => !KB.services[i]).join());
+    '1. the 35 service definitions keep their original defaults, each with its scope, its Adobe page and an RFI write-up with its phrases', NEWL.filter(i => !KB.services[i]).join());
   const quotes = [...Object.values(DATA.product_evidence).flat(), ...DATA.version_evidence, ...DATA.more_evidence, ...NEWC.flatMap(id => TYPES[id].evidence),
     ...DATA.products.flatMap(p => p.lines).concat(DATA.connections.flatMap(c => c.lines || [])).map(l => ({url: l.source.url, quote: l.evidence}))];
   const paste = quotes.filter(q => /business\.adobe\.com/.test(q.url));
@@ -56,6 +56,7 @@ const inPaste = q => { let at = 0; const t = norm(PASTE); return q.split('...').
 (async () => {
   const b = await chromium.launch(), errs = [];
   const context = async (w = 1440, h = 900, o = {}) => { const ctx = await b.newContext({viewport: {width: w, height: h}, acceptDownloads: true, ...o});
+    await ctx.route('https://fonts.googleapis.com/**', r => r.fulfill({contentType: 'text/css', body: ''}));
     await ctx.route(ORIGIN + '**', async r => { let u = decodeURIComponent(new URL(r.request().url()).pathname); if (u.endsWith('/')) u += 'index.html';
       const f = path.join(ROOT, 'site', u); if (!fs.existsSync(f) || fs.statSync(f).isDirectory()) return r.fulfill({status: 404, body: u.endsWith('robots.txt') ? 'User-agent: *' : ''}); await r.fulfill({path: f}); });
     await ctx.route('https://abvfirefly.netlify.app/**', r => r.fulfill({status: 404, body: ''}));
@@ -75,10 +76,11 @@ const inPaste = q => { let at = 0; const t = norm(PASTE); return q.split('...').
   // ============ 2. the Workfront picker ============
   { const p = await page(); await pick(p, 'custom'); for (const id of ['workfront', 'gspm', 'express']) await add(p, id);
     if (await p.isVisible('#view-all')) await p.click('#view-all');
-    const s0 = await state(p), opts = await options(p, 'workfrontVersion'), inBox = await p.evaluate(() => { const s = document.querySelector('select[data-choice="workfrontVersion"]'), n = s && s.closest('.node');
+    const first = await state(p), opts = await options(p, 'workfrontVersion'), inBox = await p.evaluate(() => { const s = document.querySelector('select[data-choice="workfrontVersion"]'), n = s && s.closest('.node');
       const a = n && n.getBoundingClientRect(), c = s && s.getBoundingClientRect(); return !!n && n.dataset.p === 'workfront' && c.left >= a.left && c.right <= a.right && c.top >= a.top && c.bottom <= a.bottom; });
-    ok(same(opts, ['Bought before March 12, 2026', 'Bought after March 12, 2026']) && s0.dec.workfrontVersion === 'before' && inBox && !s0.gone.length,
-      '2. the Workfront box holds its version picker inside it, "Bought before March 12, 2026" (picked to start) or "Bought after March 12, 2026", and no line is faded', JSON.stringify({opts, dec: s0.dec, inBox}));
+    ok(same(opts, ['Bought before March 12, 2026', 'Bought after March 12, 2026']) && first.dec.workfrontVersion === 'after' && inBox && same(first.gone.sort(), ['express-workfront', 'workfront-gspm']),
+      '2. the Workfront box holds its version picker inside it, "Bought before March 12, 2026" or "Bought after March 12, 2026" is picked to start and both Proof connections are faded', JSON.stringify({opts, dec: first.dec, inBox}));
+    await choose(p, 'workfrontVersion', 'before'); const s0 = await state(p);
     const fees = await p.evaluate(() => ['XG01', 'XG02', 'XJ04', 'XJ05'].map(l => counted(l) ? (unitOf(l) === 'monthly' ? fee(l) * st.months : fee(l)) : 0).reduce((a, x) => a + x, 0));
     await choose(p, 'workfrontVersion', 'after'); const s1 = await state(p);
     const off = await p.evaluate(() => ['XG01', 'XG02', 'XJ04', 'XJ05'].filter(l => counted(l)));
@@ -95,7 +97,7 @@ const inPaste = q => { let at = 0; const t = norm(PASTE); return q.split('...').
     ok(sow.dec.workfrontVersion === 'after' && !['XG01', 'XG02', 'XJ04', 'XJ05'].some(i => sow.ids.includes(i)) && sow.total === s1.yr && sow.n === s1.n,
       '2. the SOW steps keep the version and leave the four services out, with the canvas\'s total', JSON.stringify({sow, canvas: [s1.n, s1.yr]}));
     const [dl] = await Promise.all([p.waitForEvent('download', {timeout: 15000}), p.click('#save-draft')]); const file = path.join(require('os').tmpdir(), 'commerce-round-wf-draft.json'); await dl.saveAs(file);
-    const q = await page(); await q.setInputFiles('#draft-file', file); await q.waitForURL(u => !/\/sow\//.test(String(u)), {timeout: 15000}); await q.waitForFunction('window.READY===true'); await q.waitForTimeout(500);
+    const q = await page(); await q.setInputFiles('#draft-file', file); await q.waitForURL(u => u.searchParams.has('synced'), {timeout: 15000}); await q.waitForFunction('window.READY===true'); await q.waitForTimeout(500);
     const s3 = await state(q);
     ok(s3.dec.workfrontVersion === 'after' && s3.yr === s1.yr && same(s3.gone.sort(), ['express-workfront', 'workfront-gspm']), '2. a draft saved with it opens in a new browser with the same version, faded lines and total', JSON.stringify(s3));
     await choose(q, 'workfrontVersion', 'before'); const s4 = await state(q);
@@ -142,8 +144,11 @@ const inPaste = q => { let at = 0; const t = norm(PASTE); return q.split('...').
     ok(after.dec.commerceVersion === 'paas' && after.yr === before.yr, '3. the version holds through a reload', JSON.stringify(after.dec));
     const sow = await toSow(p);
     ok(sow.dec.commerceVersion === 'paas' && sow.total === before.yr && !sow.ids.includes('XA18') && sow.ids.includes('CE07'), '3. the SOW steps keep the version, leave the faded storefront services out and match the canvas\'s total', JSON.stringify({sow, yr: before.yr}));
+    await p.click('[data-step="document"]');
+    ok((await p.textContent('#sow-preview')).includes('The Client runs Adobe Commerce on Cloud.'), '3. the statement of work names the Commerce version the client runs');
+    await p.click('[data-step="scope"]');
     const [dl] = await Promise.all([p.waitForEvent('download', {timeout: 15000}), p.click('#save-draft')]); const file = path.join(require('os').tmpdir(), 'commerce-round-commerce-draft.json'); await dl.saveAs(file);
-    const q = await page(); await q.setInputFiles('#draft-file', file); await q.waitForURL(u => !/\/sow\//.test(String(u)), {timeout: 15000}); await q.waitForFunction('window.READY===true'); await q.waitForTimeout(500);
+    const q = await page(); await q.setInputFiles('#draft-file', file); await q.waitForURL(u => u.searchParams.has('synced'), {timeout: 15000}); await q.waitForFunction('window.READY===true'); await q.waitForTimeout(500);
     const s5 = await state(q); ok(s5.dec.commerceVersion === 'paas' && s5.yr === before.yr && s5.gone.includes('commerce-eds'), '3. a draft saved with it opens in a new browser with the same version and total', JSON.stringify(s5));
     await q.context().close(); await p.context().close();
     // the RFI Builder is unaffected: the maintenance question still draws the monthly service
@@ -154,15 +159,15 @@ const inPaste = q => { let at = 0; const t = norm(PASTE); return q.split('...').
 
   // ============ 4. the four back-office systems on Brand Visibility + Adobe Commerce ============
   { const p = await page(); await pick(p, 'commerce', ''); const s = await state(p);
-    ok(same(s.out, ['cdn', 'search', 'crm', 'erp', 'pim', 'oms', 'wms']) && SYSTEMS.every(x => s.lines.includes('commerce-' + x)) && s.n === 8,
-      '4. Brand Visibility + Adobe Commerce starts with the ERP, PIM, order management and warehouse management on the canvas, beside the CDN, Search data and the CRM, by the on-from-the-start rule; their services start off, so the starting services stay the same', JSON.stringify(s));
+    ok(same(s.out, ['cdn', 'search', 'crm', 'erp', 'pim', 'oms', 'wms']) && SYSTEMS.every(x => s.lines.includes('commerce-' + x)) && s.n === 13,
+      '4. Brand Visibility + Adobe Commerce starts with the ERP, PIM, order management and warehouse management on the canvas, beside the CDN, Search data and the CRM, by the on-from-the-start rule; their four main services and the CRM integration start on', JSON.stringify(s));
     const clean = await p.evaluate(() => { const boxes = [...document.querySelectorAll('.node')].map(e => e.getBoundingClientRect()), dots = [...document.querySelectorAll('.ib')].map(e => e.getBoundingClientRect());
       const hit = (a, c) => a.left < c.right && c.left < a.right && a.top < c.bottom && c.top < a.bottom; return boxes.every((a, i) => boxes.every((c, j) => i === j || !hit(a, c))) && dots.every(d => boxes.every(x => !hit(d, x))); });
     ok(clean, '4. no box or bolt overlaps another on that canvas');
     for (const x of SYSTEMS) { await p.click(`.ib[data-c="commerce-${x}"]`); await p.waitForTimeout(400);
       const card = await p.evaluate(() => ({text: document.getElementById('card').innerText, rows: [...document.querySelectorAll('#card .ln')].map(r => r.dataset.l), on: [...document.querySelectorAll('#card .ln:not(.off)')].map(r => r.dataset.l)}));
-      ok(/Outside system/i.test(card.text) && /Before it works/i.test(card.text) && /starter kit/.test(card.text) && card.rows.length && card.rows.every(l => CBY['commerce-' + x].more.includes(l)) && !LABELS.test(card.text),
-        `4. the Adobe Commerce + ${P[x].name} card: outside system, built on Adobe's integration starter kit, what comes first, its services offered and off, no caveat`, JSON.stringify(card.rows));
+      ok(/Outside system/i.test(card.text) && /Before it works/i.test(card.text) && /starter kit/.test(card.text) && card.rows.length && card.rows.every(l => CBY['commerce-' + x].more.includes(l)) && card.on.length === 1 && !LABELS.test(card.text),
+        `4. the Adobe Commerce + ${P[x].name} card: outside system, built on Adobe's integration starter kit, what comes first, the main service selected and the specialized work optional`, JSON.stringify(card.rows));
       await p.keyboard.press('Escape'); }
     const ex = await p.evaluate(() => { const c = CBY['commerce-erp']; return c.how + ' ' + c.prereqs.join(' '); });
     ok(/Adobe Exchange/.test(ex) && /SAP S\/4HANA/.test(ex) && /Dynamics 365 ERP/.test(ex) && /IBM Sterling/.test(CBY['commerce-oms'].how), '4. the ERP and order management cards name the prebuilt connectors on Adobe Exchange (SAP S/4HANA, Microsoft Dynamics 365 ERP, IBM Sterling Order Management)');
@@ -181,8 +186,8 @@ const inPaste = q => { let at = 0; const t = norm(PASTE); return q.split('...').
     const s = await state(p);
     ok(['aco-commerce', 'aco-pim', 'aco-ocp', 'cintel-commerce', 'cintel-crm', 'cintel-ads', 'commerce-pim'].every(id => s.lines.includes(id)), '5. their lines draw: Optimizer to Commerce, the PIM and Other commerce platform; Intelligence to Commerce, the CRM and Ad platforms', s.lines.join());
     const gone = await p.evaluate(() => ({conn: ['ACO04', 'ACO05'].map(l => lineGate(l)), aco: counted('ACO01') || counted('ACO02') || counted('MBI02')}));
-    ok(gone.conn.every(r => /Cloud Service/.test(r)) && !gone.aco && same(s.gone.sort(), ['aco-commerce', 'cintel-commerce']) && same(s.faded.sort(), s.gone),
-      '5. on Cloud Service the Commerce Optimizer Connector line and the Commerce Intelligence database line fade (both are for Commerce on Cloud or on-premises), and the new products\' services start off', JSON.stringify({gone, lines: s.gone}));
+    ok(gone.conn.every(r => /Cloud Service/.test(r)) && gone.aco && same(s.gone.sort(), ['aco-commerce', 'cintel-commerce']) && same(s.faded.sort(), s.gone),
+      '5. on Cloud Service the Commerce Optimizer Connector line and the Commerce Intelligence database line fade (both are for Commerce on Cloud or on-premises), while each product retains its own main services', JSON.stringify({gone, lines: s.gone}));
     await p.click('.ib[data-c="aco-commerce"]'); await p.waitForTimeout(400);
     const why = await p.evaluate(() => (document.querySelector('#card .gone-why') || {}).textContent || ''); await p.keyboard.press('Escape');
     await p.click('.ib[data-c="cintel-commerce"]'); await p.waitForTimeout(400);
@@ -235,7 +240,7 @@ const inPaste = q => { let at = 0; const t = norm(PASTE); return q.split('...').
     ok(same(got.saved_commerce_mixed.sel, ['Choose a version', 'On-premises', 'On Cloud', 'Cloud Service']), '7. that canvas asks for a version in the box ("Choose a version") and changes nothing until one is picked', JSON.stringify(got.saved_commerce_mixed.sel));
     ok(got.saved_commerce_mixed.c.wait.every(r => /Pick the Commerce version on the box first/.test(r)), '7. until then, the new services that depend on the version wait for one', JSON.stringify(got.saved_commerce_mixed.c.wait));
     const p = watch(await (await context()).newPage()); await p.goto(ORIGIN + 'index.html'); await p.waitForFunction('window.READY===true');
-    await p.setInputFiles('#draft-file', path.join(FIX, 'draft_commerce.json')); await p.waitForURL(/\/sow\//); await p.waitForURL(u => !/\/sow\//.test(String(u)), {timeout: 15000});
+    await p.setInputFiles('#draft-file', path.join(FIX, 'draft_commerce.json')); await p.waitForURL(u => u.searchParams.has('synced'), {timeout: 15000});
     await p.waitForFunction('window.READY===true'); await p.waitForTimeout(400); const c = await state(p);
     await p.goto(ORIGIN + 'sow/index.html#services'); await p.waitForTimeout(1200);
     const s = await p.evaluate(() => ({n: selectedLines().length, total: totals().totalFee})), was = BEFORE.draft_commerce;
@@ -249,6 +254,59 @@ const inPaste = q => { let at = 0; const t = norm(PASTE); return q.split('...').
       return c.left >= a.left && c.right <= a.right && c.bottom <= a.bottom + 1 && parseFloat(getComputedStyle(s).minHeight) >= 40; });
     ok(fit, '8. on a phone the Commerce picker sits inside its box and is as tall to tap as Page authoring\'s (40 px before the map is scaled to fit)');
     await p.context().close(); }
+
+  // ============ 9. starting services on new quotes and the older quote defaults ============
+  {
+    const p = await page(); await pick(p, 'cja');
+    const cja = await p.evaluate(() => ({on: all(P.cja).filter(counted), connection: counted('C01')}));
+    ok(!cja.on.length && cja.connection, '9. the CJA cross-sell starts without CJA product services and keeps its Brand Visibility connection', JSON.stringify(cja));
+    const sow = await toSow(p);
+    ok(sow.ids.includes('C01') && ![...P.cja.lines, ...P.cja.more].some(id => sow.ids.includes(id)), '9. the cross-sell selections carry to the SOW', JSON.stringify(sow.ids));
+    await p.context().close();
+
+    const q = await page(); await pick(q, 'custom');
+    for (const id of ['cja', 'commerce', 'aemsites', 'aemassets', 'gspm', 'express', 'fireflycm', 'brandintel', 'workfront', 'marketo']) await add(q, id);
+    await q.evaluate(() => addOutside('figma'));
+    const selected = await q.evaluate(() => ({
+      main: ['C06', 'CJ01', 'CJ02', 'CE01', 'CE02', 'CE03', 'CE14', 'XT01', 'XT03', 'XT04', 'XT05', 'XT06', 'XT07', 'XF01', 'XF02', 'XF03', 'XF04', 'XF05', 'XF06', 'XK16'].filter(id => !counted(id)),
+      optional: ['CJ03', 'CJ06', 'CE13', 'CE15'].filter(counted)
+    }));
+    ok(!selected.main.length && !selected.optional.length, '9. new implementations select the main setup, Figma and assistant services while keeping specialized work optional', JSON.stringify(selected));
+    await choose(q, 'commerceVersion', 'paas');
+    ok(await q.evaluate(() => counted('CE05') && !counted('CE06') && !['CE08', 'CE09', 'CE10', 'CE11', 'CE12'].some(counted)), '9. B2B and the Cloud Service migration remain optional on Commerce on Cloud');
+    await q.context().close();
+
+    const legacy = await page();
+    await legacy.evaluate(() => localStorage.setItem(KEY, JSON.stringify({
+      play: 'cja', on: [], out: ['cdn'], ls: {}, decisions: {workfrontVersion:'before',commerceVersion:'saas'},
+      selectionVersion: 1, combinedDefaultsVersion: 1, rate: 150, v: 2
+    })));
+    await legacy.reload(); await legacy.waitForFunction('window.READY===true');
+    ok(await legacy.evaluate(() => counted('C06') && !counted('CJ01') && !counted('XT01')), '9. the last release’s saved cross-sell uses its original selections');
+    const oldSow = await toSow(legacy);
+    ok(oldSow.ids.includes('C06') && !oldSow.ids.includes('CJ01'), '9. opening that saved quote through Services keeps its selections');
+    await legacy.context().close();
+  }
+
+  // ============ 10. Optimizer storefront on a third-party commerce backend ============
+  {
+    const p = await page(); await pick(p, 'custom');
+    for (const id of ['aco', 'eds']) await add(p, id);
+    const selected = () => p.evaluate(() => ['ACO09', 'ACO11', 'ACO12'].filter(counted));
+    ok(same(await selected(), ['ACO09']), '10. the third-party storefront services wait for a backend');
+    await p.evaluate(() => showCard('c', 'aco-eds'));
+    await p.locator('#card [data-l="ACO11"] [data-addp="ocp"]').click();
+    ok(same(await selected(), ['ACO09', 'ACO11']), '10. a third-party storefront gets launch work when the backend is attached');
+    await add(p, 'cja');
+    ok(same(await selected(), ['ACO09', 'ACO11', 'ACO12']), '10. storefront analytics joins once an Experience Platform application is on the canvas');
+    const sow = await toSow(p);
+    ok(['ACO11', 'ACO12'].every(id => sow.ids.includes(id) && KB.services[id]), '10. both services carry into the SOW and have RFI methods', JSON.stringify(sow.ids));
+    await p.click('[data-step="document"]');
+    const document = await p.textContent('#sow-preview');
+    ok(/Optimizer storefront SEO and launch checklist/.test(document) && /Optimizer storefront events to Experience Platform/.test(document)
+      && !/The Client runs Adobe Commerce/.test(document), '10. an Optimizer-only storefront SOW names its services without assuming an Adobe Commerce backend');
+    await p.context().close();
+  }
 
   ok(!errs.length, 'no script errors on the canvas or the SOW steps', errs.slice(0, 3).join(' | '));
   await b.close();

@@ -111,6 +111,8 @@ const CanvasScope = (() => {
         else if (actualHas('csrc')) result.authoring = 'documents';
       }
     }
+    // Quotes saved before the picker used Workfront Proof.
+    if (!Object.hasOwn(result, 'workfrontVersion')) result.workfrontVersion = 'before';
     return result;
   }
   function hasProduct(id, actualHas, decisions) {
@@ -123,6 +125,8 @@ const CanvasScope = (() => {
   function defaultSelection(id, catalogDefault, hasProduct, selected, decisions) {
     // Document setup does not establish a Sites Optimizer Ultimate write-back entitlement.
     if (id === 'CS2' && hasProduct('eds') && Object.hasOwn(decisions || {}, 'authoring')) return false;
+    // The Commerce to Edge Delivery connection already scopes the storefront build.
+    if (id === 'ACO09' && hasProduct('commerce') && !hasProduct('ocp')) return false;
     if (hasProduct('aemsites') && hasProduct('eds')) {
       if (['SI02', 'SI04', 'SI06'].includes(id)) return false;
       if (['AXA04', 'AXA05'].includes(id) && !selected('AXD04')) return false;
@@ -131,7 +135,24 @@ const CanvasScope = (() => {
     return catalogDefault;
   }
   function newDecisions() {
-    return {authoring: '', workfrontVersion: 'before', commerceVersion: 'saas'};
+    return {authoring: '', workfrontVersion: 'after', commerceVersion: 'saas'};
   }
-  return {choices, normalize, restoreDecisions, hasProduct, defaultSelection, newDecisions, trackingOverlap, trackingNote, authoringText};
+  function startingService(id, catalogDefault, play, useNewDefaults) {
+    if (!useNewDefaults) return catalogDefault;
+    if (CanvasServiceDefaults.off[play]?.includes(id)) return false;
+    return catalogDefault || CanvasServiceDefaults.on.includes(id);
+  }
+  function versionReason(versions, id, decisions, hasProduct) {
+    for (const [key, version] of Object.entries(versions)) {
+      if (!hasProduct(version.product)) continue;
+      for (const gate of version.gates) {
+        if (gate.ids.includes(id) && (!gate.when || gate.when.includes(decisions[key]))
+            && (!gate.with || hasProduct(gate.with)) && !(gate.unless && hasProduct(gate.unless))) return gate.reason;
+      }
+    }
+    return '';
+  }
+  const commerceNames = {onprem: 'Adobe Commerce on-premises', paas: 'Adobe Commerce on Cloud', saas: 'Adobe Commerce as a Cloud Service'};
+  return {choices, normalize, restoreDecisions, hasProduct, defaultSelection, newDecisions, startingService,
+    versionReason, commerceNames, trackingOverlap, trackingNote, authoringText};
 })();

@@ -12319,7 +12319,9 @@
    "b": "eds",
    "lines": [],
    "more": [
-    "ACO09"
+    "ACO09",
+    "ACO11",
+    "ACO12"
    ],
    "how": "Adobe's Commerce storefront on Edge Delivery Services runs on Commerce Optimizer: its ready-made storefront parts ask Optimizer for catalog, search and recommendations, while the commerce platform behind it keeps cart, checkout and accounts. The storefront comes with the Optimizer package, not with Optimizer Headless.",
    "source": {
@@ -21277,6 +21279,43 @@
    "scope": "Create your client's storefront project on Edge Delivery Services with Adobe's Site Creator, point it at the Optimizer instance, catalog view and locale, build the product detail, search and category pages from Adobe's ready-made storefront parts, brand them and test them against the agreed pages.",
    "evidence": "This guide walks you through setting up a storefront for your Adobe Commerce Optimizer instance using Adobe Edge Delivery Services."
   },
+  "ACO11": {
+   "id": "ACO11",
+   "name": "Optimizer storefront SEO and launch checklist",
+   "unit": "one-time",
+   "low": 24,
+   "base": 48,
+   "high": 96,
+   "url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/launch/launch-checklist/",
+   "src": "Experience League: Adobe Commerce Storefront launch checklist",
+   "origin": "research",
+   "scope": "Run the launch checklist for your client's Optimizer storefront on Edge Delivery Services. Verify metadata, redirects and indexing in staging, test product discovery and the cart and checkout hand-off to the commerce backend, and document the DNS, CDN and publishing sequence and rollback plan.",
+   "evidence": "Complete these steps before production traffic reaches your Adobe Commerce Storefront (EDS).",
+   "needs": [
+    "ocp"
+   ]
+  },
+  "ACO12": {
+   "id": "ACO12",
+   "name": "Optimizer storefront events to Experience Platform",
+   "unit": "one-time",
+   "low": 12,
+   "base": 24,
+   "high": 48,
+   "url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/analytics/adobe-experience-platform/",
+   "src": "Experience League: Adobe Experience Platform for Commerce Storefront",
+   "origin": "research",
+   "scope": "Configure your client's Adobe organization and datastream on the Optimizer storefront and connect the client's consent platform. Test product views and cart actions and validate purchase events where the checkout integration emits them. Verify the agreed events reach the Experience Platform dataset.",
+   "evidence": "This integration allows your storefront to send commerce events (product views, purchases, cart actions) directly to the Experience Platform Edge Network",
+   "needs": [
+    "ocp"
+   ],
+   "needs_any": [
+    "rtcdp",
+    "ajo",
+    "cja"
+   ]
+  },
   "ACO10": {
    "id": "ACO10",
    "name": "Product images from AEM Assets with Product Visuals",
@@ -22711,6 +22750,86 @@
      "with": "aco",
      "reason": "With Commerce Optimizer, search and recommendations run in Optimizer: its services on this canvas cover them."
     }
+   ]
+  }
+ },
+ "serviceDefaults": {
+  "on": [
+   "CJ01",
+   "CJ02",
+   "CJ04",
+   "CJ05",
+   "CE01",
+   "CE02",
+   "CE03",
+   "CE04",
+   "CE05",
+   "CE07",
+   "CE14",
+   "CE16",
+   "XR01",
+   "XR02",
+   "XR05",
+   "XR06",
+   "XR08",
+   "XF01",
+   "XF02",
+   "XF03",
+   "XF04",
+   "XF05",
+   "XF06",
+   "XK16",
+   "XT01",
+   "XT03",
+   "XT04",
+   "XT05",
+   "XT06",
+   "XT07",
+   "ACO01",
+   "ACO02",
+   "ACO03",
+   "ACO04",
+   "ACO06",
+   "ACO07",
+   "ACO08",
+   "ACO09",
+   "ACO10",
+   "ACO11",
+   "ACO12",
+   "MBI01",
+   "MBI02",
+   "MBI03",
+   "MBI06",
+   "MBI07"
+  ],
+  "off": {
+   "cja": [
+    "C06",
+    "CJ01",
+    "CJ02",
+    "CJ03",
+    "CJ04",
+    "CJ05",
+    "CJ06",
+    "XT01"
+   ],
+   "commerce": [
+    "CE01",
+    "CE02",
+    "CE03",
+    "CE04",
+    "CE05",
+    "CE06",
+    "CE07",
+    "CE08",
+    "CE09",
+    "CE10",
+    "CE11",
+    "CE12",
+    "CE13",
+    "CE14",
+    "CE15",
+    "CE16"
    ]
   }
  }

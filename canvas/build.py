@@ -28,11 +28,12 @@ def starting_lines(pl, cat):
     # Nov 19 2026: the services researched for the canvas that a ready-made play's starting outside systems bring, on, as the canvas starts them
     # (each starting connection's starting lines, less the play's 'off', plus its 'on'), so a new engagement on the SOW steps starts as the canvas does
     on, out, eds = set(pl['products']) | set(pl['ostart']), set(pl['ostart']), 'eds' in pl['products']
+    promoted = set(cat['serviceDefaults']['on'])
     return [dict(id=lid, name=cat['lines'][lid]['name'], stage='Optimize' if cat['lines'][lid]['unit'] == 'monthly' else 'Connect',
                  unit=cat['lines'][lid]['unit'], low=cat['lines'][lid]['low'], base=cat['lines'][lid]['base'], high=cat['lines'][lid]['high'])
             for c in cat['connections'] if {c['a'], c['b']} <= on and {c['a'], c['b']} & out and not (eds and c['id'] in cat['ownSites'])
             for lid in c['lines'] + c['more'] if cat['lines'][lid]['origin'] == 'research' and not (eds and lid in cat['ownSites'])
-            and ((lid in c['lines'] and lid not in pl.get('off', [])) or lid in pl.get('on', []))]
+            and ((lid in c['lines'] and lid not in pl.get('off', [])) or lid in pl.get('on', []) or lid in promoted)]
 
 
 def scope_runtime(html, cat):
@@ -47,6 +48,7 @@ def scope_runtime(html, cat):
     outside = [p['id'] for p in cmap['products'] if p.get('outside')]
     with open(os.path.join(HERE, 'scope-choices.js'), encoding='utf-8') as source:
         script = (marker + '\n' + source.read() + 'const CanvasPresets = ' + json.dumps(presets) + ';\n'
+                  + 'const CanvasServiceDefaults = ' + json.dumps(cat['serviceDefaults']) + ';\n'
                   + 'const CanvasOutside = ' + json.dumps(outside) + ';\n</script>')
     if marker in html:
         return re.sub(re.escape(marker) + r'.*?</script>', lambda _: script, html, count=1, flags=re.S)
@@ -343,8 +345,18 @@ def main():
             assert g['ids'] and set(g['ids']) <= {c['id'] for c in keep_c} | set(used), f'version picker {key} gates something the catalog does not have: {g["ids"]}'
             assert ('when' in g or 'with' in g) and all(f"['{w}', " in picker for w in g.get('when', [])), f'version picker {key}: a gate with no version or an unknown one'
             assert all(g[k] in pby for k in ('with', 'unless') if k in g) and g['reason'], f'version picker {key}: a gate with an unknown product or no reason'
+    defaults = cmap['new_service_defaults']
+    optional = {lid for owner in keep_p + keep_c for lid in owner['more']}
+    assert set(defaults['on']) <= optional, 'new starting services must be optional in saved quotes'
+    ready = {pl['id']: pl['products'] for pl in plays if not pl.get('custom')}
+    for play_id, product_id in defaults['already_owned'].items():
+        assert product_id in ready.get(play_id, []), f'{play_id} has no {product_id} product to leave unticked'
+    service_defaults = {'on': defaults['on'], 'off': {
+        play_id: pby[product_id]['lines'] + pby[product_id]['more']
+        for play_id, product_id in defaults['already_owned'].items()
+    }}
     cat = {'checked': max([c for c in checked if c] or ['']), 'products': keep_p, 'connections': keep_c,
-           'lines': used, 'plays': plays, 'ownSites': own, 'rows': rows, 'versions': versions}
+           'lines': used, 'plays': plays, 'ownSites': own, 'rows': rows, 'versions': versions, 'serviceDefaults': service_defaults}
     apply_catalog(cat)
     cat = plain(sow_view(connection_notes(public_copy(cat))))   # per-connection partner notes, the Client's SOW lines where they differ, then step 86's plain wording
     keep_p, keep_c, used = cat['products'], cat['connections'], cat['lines']

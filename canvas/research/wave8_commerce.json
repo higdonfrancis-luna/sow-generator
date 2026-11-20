@@ -712,6 +712,39 @@
       "url": "https://experienceleague.adobe.com/en/docs/commerce/optimizer/storefront",
       "title": "Experience League: Set up your storefront (Commerce Optimizer)"
      }
+    },
+    {
+     "id": "ACO11",
+     "name": "Optimizer storefront SEO and launch checklist",
+     "unit": "one-time",
+     "low": 24,
+     "base": 48,
+     "high": 96,
+     "default": false,
+     "needs": ["ocp"],
+     "scope": "Run the launch checklist for your client's Optimizer storefront on Edge Delivery Services. Verify metadata, redirects and indexing in staging, test product discovery and the cart and checkout hand-off to the commerce backend, and document the DNS, CDN and publishing sequence and rollback plan.",
+     "evidence": "Complete these steps before production traffic reaches your Adobe Commerce Storefront (EDS).",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/launch/launch-checklist/",
+      "title": "Experience League: Adobe Commerce Storefront launch checklist"
+     }
+    },
+    {
+     "id": "ACO12",
+     "name": "Optimizer storefront events to Experience Platform",
+     "unit": "one-time",
+     "low": 12,
+     "base": 24,
+     "high": 48,
+     "default": false,
+     "needs": ["ocp"],
+     "needs_any": ["rtcdp", "ajo", "cja"],
+     "scope": "Configure your client's Adobe organization and datastream on the Optimizer storefront and connect the client's consent platform. Test product views and cart actions and validate purchase events where the checkout integration emits them. Verify the agreed events reach the Experience Platform dataset.",
+     "evidence": "This integration allows your storefront to send commerce events (product views, purchases, cart actions) directly to the Experience Platform Edge Network",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/analytics/adobe-experience-platform/",
+      "title": "Experience League: Adobe Experience Platform for Commerce Storefront"
+     }
     }
    ]
   },
@@ -1022,6 +1055,10 @@
   }
  ],
  "more_evidence": [
+  {
+   "url": "https://experienceleague.adobe.com/en/docs/commerce/information-center/explore-platforms-and-services/overview",
+   "quote": "When a third-party commerce platform is the backend"
+  },
   {
    "url": "https://experienceleague.adobe.com/en/docs/commerce/cloud-service/migration/migration-tools/assessment",
    "quote": "The Migration Assessment is only available when migrating Adobe Commerce on Cloud Infrastructure or Adobe Commerce on-premises projects to Adobe Commerce as a Cloud Service."

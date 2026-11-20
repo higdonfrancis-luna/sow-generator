@@ -27,6 +27,12 @@ Adam's rules for it (Oct 29 2026):
 - Adobe red (#EB1000), black and white, Source Sans 3 like the video page, the Adobe logo in the masthead. The SOW document itself carries the partner's name and no Adobe logo: it's the partner's paper to its customer.
 - Nothing about Adobe Consulting Services.
 
+## Starting services on new quotes (November 20, 2026)
+
+- New canvases start with the main setup services selected, including the Figma and AI assistant work and the core work for Commerce and its back office. The two Brand Visibility cross-sell plays leave the existing CJA or Commerce product's own services unticked and select the connection work. B2B, the move to Commerce as a Cloud Service, additional stores, and specialized back-office webhooks and admin screens remain optional.
+- New Workfront quotes start at “Bought after March 12, 2026.” Switching to “before” restores the Proof routes. The Commerce picker identifies the client's current version, which prints in Scope and coverage. Quotes saved before this round retain their starting selections and saved or inferred versions.
+- An Optimizer storefront on a third-party backend gets a launch checklist and a storefront events service on its Edge Delivery Services connection. The latter is scoped once a connected Experience Platform application is on the canvas. Both services cite Adobe's storefront documentation and have RFI methods. The catalog now has 217 connections and 610 services.
+
 ## Version pickers for Workfront and Adobe Commerce, Commerce's back office, Commerce Optimizer and Commerce Intelligence (November 19, 2026)
 
 As built, from the pictures Adam approved (`picker_workfront.png` and `picker_commerce.png`) and handoff/2026-11-17's PRODUCT_COVERAGE.md (section 3), EXPERIENCE_LEAGUE_SWEEP.md (sections 2 and 4) and Adam's paste of the Adobe Commerce FAQ (`adam_pastes/2026-11-19_business_adobe_commerce_faq.md`). The build data is `canvas/research/wave8_commerce.json`; every quote in it, and in the 13 connections' entries in `connection_types.json`, was proven word for word with `found()` on pages read with a plain fetch, or on Adam's paste for business.adobe.com (121 of 121).

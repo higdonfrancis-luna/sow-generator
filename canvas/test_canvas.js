@@ -41,10 +41,21 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   let one = 0, mon = 0;
   const add = l => (CAT.lines[l].unit === 'monthly' ? (mon += CAT.lines[l][size] * rate) : (one += CAT.lines[l][size] * rate));
   const need = l => (CAT.lines[l].needs || []).every(x => on.has(x)) && (!(CAT.lines[l].needs_any || []).length || CAT.lines[l].needs_any.some(x => on.has(x)));
+  const versions = {workfrontVersion: 'after', commerceVersion: 'saas'};
+  const gated = id => Object.entries(CAT.versions).some(([key, version]) => on.has(version.product)
+    && version.gates.some(gate => gate.ids.includes(id) && (!gate.when || gate.when.includes(versions[key]))
+      && (!gate.with || on.has(gate.with)) && !(gate.unless && on.has(gate.unless))));
   const counted = [];
   for (const o of owners) {
-    for (const l of o.lines) if ((l in ls ? ls[l] : !(pl.off || []).includes(l) && !(l === 'CS2' && on.has('eds'))) && need(l)) counted.push(l);   // a play can start a line off (step 18); Nov 18 2026: so does the write-back beside Edge Delivery Services (CanvasScope.defaultSelection), now that Authoring docs starts on
-    for (const l of o.more) if ((l in ls ? ls[l] : extra.includes(l)) && need(l)) counted.push(l);
+    if (gated(o.id)) continue;
+    for (const l of [...o.lines, ...o.more]) {
+      const main = o.lines.includes(l) && !(pl.off || []).includes(l);
+      const promoted = CAT.serviceDefaults.on.includes(l);
+      const owned = (CAT.serviceDefaults.off[playId] || []).includes(l);
+      const suppressed = (l === 'CS2' && on.has('eds')) || (l === 'ACO09' && on.has('commerce') && !on.has('ocp'));
+      const checked = ls[l] ?? (!owned && !suppressed && (main || promoted || extra.includes(l)));
+      if (checked && need(l) && !gated(l)) counted.push(l);
+    }
   }
   const special = counted.some(l => SPECIAL.includes(l));
   for (const l of counted) if (!(l === 'CW03' && special && !keep.CW03)) add(l);
@@ -324,7 +335,8 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   await addP(p, 'cja');
   ok(JSON.stringify(await edges(p)) === '["bv-cja"]', 'adding CJA connects it to Brand Visibility by itself');
   t = await read(p); e = expected('custom', 'base', 150, {}, ['bv', 'cja']);
-  ok(t.big === money(e.yr) && t.big === money(expected('cja', 'base', 150, {}, ['bv', 'cja']).yr), `Brand Visibility and CJA built by hand total the same as the CJA play without its CDN (${t.big})`, `${t.big}`);
+  const crossSell = expected('cja', 'base', 150, {}, ['bv', 'cja']);
+  ok(t.big === money(e.yr) && e.yr > crossSell.yr, `Brand Visibility and CJA built by hand include new CJA setup work (${t.big})`, `Cross-sell without outside systems: ${money(crossSell.yr)}`);
   await outside(p);
   ok(await p.isHidden('#add-menu'), 'a click outside closes the menu');
 

@@ -1,0 +1,45 @@
+[
+ {
+  "id": "ACO11",
+  "steps": [
+   "Confirm the storefront pages, production domain, publishing owners and transaction flows to test in staging.",
+   "Verify page metadata, redirects and indexing, then test product discovery and the cart and checkout hand-off.",
+   "Document the release order for DNS, CDN and content publishing, including who owns the rollback.",
+   "Run the shared launch checklist with the storefront and commerce backend teams and record any fixes."
+  ],
+  "deliverables": [
+   "Completed storefront launch checklist",
+   "Staging test results",
+   "Go-live sequence and rollback plan"
+  ],
+  "asks": [
+   "Access to staging and the publishing, DNS and CDN owners",
+   "Test accounts for cart and checkout"
+  ],
+  "risk": "A storefront can pass page tests while checkout fails. Test the checkout hand-off with the commerce backend team before go-live.",
+  "outcome": "The store team has a tested release sequence and can roll back if a critical storefront or transaction check fails.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "ACO12",
+  "steps": [
+   "Agree the storefront events, Adobe organization, datastream and Experience Platform dataset with the data owner.",
+   "Add the analytics settings to the storefront and connect the existing consent management platform.",
+   "Test views, cart actions and purchases that the checkout emits, including a session that declines analytics consent.",
+   "Verify the agreed events in Experience Platform and hand the validation record to the data owner."
+  ],
+  "deliverables": [
+   "Storefront configuration for consent and analytics",
+   "Storefront event validation record"
+  ],
+  "asks": [
+   "Adobe organization and datastream identifiers and dataset access",
+   "A test storefront, test checkout and access to the consent platform"
+  ],
+  "risk": "Purchases can be missed if the checkout runs separately. Verify which events the checkout emits before accepting the measurement scope.",
+  "outcome": "The data owner can see the agreed shopper events in Experience Platform and verify that analytics respects storefront consent.",
+  "kind": "task",
+  "phase": "build"
+ }
+]
