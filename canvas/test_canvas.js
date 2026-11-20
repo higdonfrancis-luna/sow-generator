@@ -511,7 +511,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   // button and chips to the first play box, and nothing hidden takes focus on the way
   ok(await kb.evaluate(() => document.activeElement.id) === 'open-draft', 'from the keyboard, the first Tab lands on Open draft in the top bar (step 43)');
   await kb.keyboard.press('Tab');
-  ok(await kb.evaluate(() => document.activeElement.id) === 'rfi-door', 'the next Tab opens the RFI entry beside Open draft');
+  ok(await kb.evaluate(() => document.activeElement.id) === 'rfi-door', 'the next Tab focuses Have an RFI? beside Open draft');
   await kb.keyboard.press('Tab');
   ok(await kb.evaluate(() => document.activeElement.id) === 'vid-play', 'the next on the plays video at the top of the page (step 83)');
   await kb.keyboard.press('Tab'); await kb.keyboard.press('Tab');
