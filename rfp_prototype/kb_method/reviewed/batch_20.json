@@ -1,0 +1,309 @@
+[
+ {
+  "id": "JO07",
+  "steps": [
+   "Identify the initial teams, permissions and sandboxes for the rollout.",
+   "Create or verify the roles and check each team can access the correct sandbox.",
+   "Map the licensed channels to the first use cases and record the required channel settings."
+  ],
+  "deliverables": [
+   "Roles and sandbox setup",
+   "Channel plan for the initial use cases"
+  ],
+  "asks": [
+   "Administrator access and a list of teams and licensed channels"
+  ],
+  "risk": "Shared access can expose work in the wrong sandbox. Test permissions as a representative user from each team.",
+  "outcome": "Each team can reach the right sandbox and knows which channels are in scope.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "JO08",
+  "steps": [
+   "Confirm the sending subdomain, consent fields and sender settings with the email team.",
+   "Configure the subdomain, IP pool and email channel settings for the approved use case.",
+   "Validate sender details, headers and suppression behavior with an approved test profile."
+  ],
+  "deliverables": [
+   "Configured email channel",
+   "Email channel validation results"
+  ],
+  "asks": [
+   "Licensed email channel and DNS owner",
+   "Approved sender settings and test profiles"
+  ],
+  "risk": "A sending identity or suppression gap can affect deliverability. Verify the approved settings before the first send.",
+  "outcome": "The email team can send through a tested channel configuration that uses the approved sender and suppression settings.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "JO09",
+  "steps": [
+   "Agree the audiences, messages and timing for the initial scheduled campaigns.",
+   "Configure each campaign with the agreed audience, channel, content and schedule.",
+   "Run proof and audience checks with test profiles and document the publication settings."
+  ],
+  "deliverables": [
+   "Scheduled campaign configurations",
+   "Audience and delivery test results"
+  ],
+  "asks": [
+   "Approved campaign content and target audiences"
+  ],
+  "risk": "A scheduled campaign can reach the wrong audience. Validate audience membership and test profiles before publishing.",
+  "outcome": "The marketing team can run the initial scheduled campaigns from reviewed audiences and channel settings.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "JO10",
+  "steps": [
+   "Agree which audience or profile event starts each supported journey.",
+   "Configure the entry, action and test profile data for each agreed journey.",
+   "Validate entry, action and exit behavior with representative profile-level tests."
+  ],
+  "deliverables": [
+   "Configured audience and profile entry",
+   "Journey entry and exit test results"
+  ],
+  "asks": [
+   "Agreed audiences or profile events and test profiles"
+  ],
+  "risk": "A broad audience can admit unintended profiles. Test the entry rules with profiles that should qualify and profiles that should not.",
+  "outcome": "The first journeys can start from approved audiences or supported profile-level entry conditions.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AS08",
+  "steps": [
+   "List the groups that need access and map each group to its product profile.",
+   "Set up the users and groups in Adobe Admin Console and link the product profiles.",
+   "Test membership and sample access as users from each agreed group."
+  ],
+  "deliverables": [
+   "Product profile and group mapping",
+   "Verified author and administrator access"
+  ],
+  "asks": [
+   "Adobe Admin Console access and approved user groups"
+  ],
+  "risk": "Group assignments can grant more access than needed. Test both permitted and restricted actions using sample accounts.",
+  "outcome": "Asset teams can sign in with the correct permissions for the agreed environment.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AS09",
+  "steps": [
+   "List the required standard renditions and the upload folders that need them.",
+   "Configure the supported processing profiles and apply them to the agreed folders.",
+   "Upload sample assets and verify the output renditions meet the agreed dimensions and formats."
+  ],
+  "deliverables": [
+   "Configured standard profiles",
+   "Sample rendition results"
+  ],
+  "asks": [
+   "Agreed upload folders and sample assets"
+  ],
+  "risk": "An incorrect folder assignment can generate unwanted renditions. Validate each profile against a sample upload before rollout.",
+  "outcome": "Asset teams receive the required standard renditions for uploads to the agreed folders.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "SI11",
+  "steps": [
+   "Check the deployment inventory and applicable service packs with the platform owner.",
+   "Validate applicable service packs and configuration changes in the test environment.",
+   "Coordinate production installation, review logs and rerun the agreed smoke tests."
+  ],
+  "deliverables": [
+   "Service pack and environment record",
+   "Test and deployment notes"
+  ],
+  "asks": [
+   "Deployment inventory and access to a test environment"
+  ],
+  "risk": "A service pack can affect existing integrations. Test critical pages and authoring before and after installation.",
+  "outcome": "The operating team has a repeatable path to validate and install the applicable service packs.",
+  "kind": "task",
+  "phase": "after launch"
+ },
+ {
+  "id": "SI12",
+  "steps": [
+   "Inventory the AEM installation, runtime dependencies, content and custom code.",
+   "Prepare the test environment and rehearse the upgrade on a representative copy.",
+   "Resolve agreed compatibility issues and validate authoring, publishing, integrations and the upgraded code.",
+   "Agree the production cutover, backup, rollback and ownership with operations."
+  ],
+  "deliverables": [
+   "Upgrade plan and compatibility inventory",
+   "Acceptance test record",
+   "Production cutover and rollback runbook"
+  ],
+  "asks": [
+   "AEM environment access and a representative test copy"
+  ],
+  "risk": "Custom code or runtime dependencies can block an upgrade. Rehearse the steps and agree recovery before production.",
+  "outcome": "The site team has a validated upgrade and a repeatable production cutover to AEM 6.5 LTS.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "SI13",
+  "steps": [
+   "Confirm the author, publish and delivery endpoints and identify critical paths.",
+   "Complete the test plan for authoring, publishing and representative page requests.",
+   "Document production checks, approvals and the recovery plan with the operations team."
+  ],
+  "deliverables": [
+   "Go-live validation results",
+   "Cutover and rollback checklist"
+  ],
+  "asks": [
+   "Test environment and production operations owner"
+  ],
+  "risk": "Publishing and public page delivery can fail independently. Test both before approving the cutover.",
+  "outcome": "The operations team can release the AEM 6.5 site using a validated sequence and recovery plan.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "TG06",
+  "steps": [
+   "Identify the users, access roles and starting audience use cases.",
+   "Assign Target permissions and configure the agreed environments and reporting settings.",
+   "Build the initial audiences and verify access and audience conditions with test users."
+  ],
+  "deliverables": [
+   "Target users and roles",
+   "Configured environments and audiences"
+  ],
+  "asks": [
+   "Admin Console access and the approved Target user roster"
+  ],
+  "risk": "Overbroad access and audience rules can affect experiments. Verify each role and audience before launch.",
+  "outcome": "The experiment team has the core users, environments and audiences for the first tests.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "MK08",
+  "steps": [
+   "Agree the lead fields, scoring signals and sales handoff requirements.",
+   "Configure the initial scoring and data cleanup programs and document the treatment of missing values.",
+   "Test scoring and handoff against representative leads and confirm the results with sales."
+  ],
+  "deliverables": [
+   "Lead scoring program and field rules",
+   "Sales handoff test results"
+  ],
+  "asks": [
+   "Sample lead data and approved scoring rules"
+  ],
+  "risk": "Unexpected field values can route leads incorrectly. Test edge cases before handing the scoring program to operations.",
+  "outcome": "Marketing can score leads consistently and verify their handoff to the sales team.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "MK09",
+  "steps": [
+   "Confirm the sandbox entitlement, test data and integration boundaries.",
+   "Set up representative programs and isolated test data in the sandbox.",
+   "Run program and handoff tests, then record approved steps for production configuration."
+  ],
+  "deliverables": [
+   "Sandbox test plan",
+   "Approved production configuration checklist"
+  ],
+  "asks": [
+   "Licensed sandbox and approved test data"
+  ],
+  "risk": "Test records can reach production when systems share a connection. Verify environment separation before running tests.",
+  "outcome": "Marketing can verify the agreed changes in a sandbox before configuring production.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "WF07",
+  "steps": [
+   "Identify the source and target environments and the objects approved for promotion.",
+   "Build an environment promotion package and check its object dependencies.",
+   "Install the package in the agreed test environment and review the installation record."
+  ],
+  "deliverables": [
+   "Promotion package and dependency inventory",
+   "Installation validation record"
+  ],
+  "asks": [
+   "Workfront sandbox access and approved object list"
+  ],
+  "risk": "A package can include unintended objects. Agree the inventory and validate the package before moving it to production.",
+  "outcome": "The Workfront team can promote the agreed objects with a tested package and recorded validation.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "WF08",
+  "steps": [
+   "Collect the field labels and tooltips that need translation and agree the scope with team owners.",
+   "Configure the approved translations for the selected terms and languages.",
+   "Verify the localized labels using representative accounts and hand over an update guide."
+  ],
+  "deliverables": [
+   "Configured field label translations",
+   "Language validation checklist"
+  ],
+  "asks": [
+   "Approved translations and representative user accounts"
+  ],
+  "risk": "Labels can differ from the teams’ working terms. Review sample forms in each agreed language before rollout.",
+  "outcome": "Team members see the approved custom field labels and tooltips in their configured language.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "WF09",
+  "steps": [
+   "Agree the reporting use case and the approved tool, users and network addresses.",
+   "Create the reader account and reporting connection and configure the approved allowlist.",
+   "Validate sample queries and document connection ownership and credential rotation."
+  ],
+  "deliverables": [
+   "Data Connect reporting connection",
+   "Validated reporting queries"
+  ],
+  "asks": [
+   "Workfront Data Connect entitlement and reporting tool access"
+  ],
+  "risk": "An overly broad network allowlist can expose the connection. Use the approved sources and test access from the reporting tool.",
+  "outcome": "The reporting team can query the approved Workfront data through a tested connection.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "WF10",
+  "steps": [
+   "Agree the approved cost model, project examples and ownership with finance.",
+   "Configure the approved job role and user rates and test project cost calculations.",
+   "Reconcile the sample results with finance and document the rate maintenance process."
+  ],
+  "deliverables": [
+   "Configured Workfront cost rates",
+   "Sample project cost reconciliation"
+  ],
+  "asks": [
+   "Approved financial model and sample project records"
+  ],
+  "risk": "An incorrect rate can affect cost reporting. Reconcile sample calculations before teams use the new rates.",
+  "outcome": "Finance and project owners can verify planned and actual costs in Workfront against the approved model.",
+  "kind": "task",
+  "phase": "build"
+ }
+]

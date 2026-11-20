@@ -117,6 +117,27 @@ const CanvasScope = (() => {
     ]},
     commerceVersion: {label: 'Commerce version', options: [
       ['', 'Choose a version'], ['onprem', 'On-premises'], ['paas', 'On Cloud'], ['saas', 'Cloud Service']
+    ]},
+    ajoPackage: {label: 'Journey Optimizer package', clearable: true, options: [
+      ['', 'Choose a package'], ['select', 'Select'], ['prime', 'Prime'], ['ultimate', 'Ultimate'], ['starter', 'Ultimate Starter']
+    ]},
+    assetsPackage: {label: 'AEM Assets package', clearable: true, options: [
+      ['', 'Choose a package'], ['prime', 'Prime'], ['ultimate', 'Ultimate']
+    ]},
+    sitesDeployment: {label: 'AEM Sites deployment', clearable: true, options: [
+      ['', 'Choose a deployment'], ['cloud', 'Cloud Service'], ['lts', '6.5 LTS'], ['v65', '6.5']
+    ]},
+    targetEdition: {label: 'Target edition', clearable: true, options: [
+      ['', 'Choose an edition'], ['standard', 'Standard'], ['premium', 'Premium']
+    ]},
+    frameVersion: {label: 'Frame.io version', clearable: true, options: [
+      ['', 'Choose a version'], ['legacy', 'Legacy'], ['v4select', 'V4 Select'], ['v4prime', 'V4 Prime']
+    ]},
+    marketoPackage: {label: 'Marketo Engage package', clearable: true, options: [
+      ['', 'Choose a package'], ['growth', 'Growth'], ['select', 'Select'], ['prime', 'Prime'], ['ultimate', 'Ultimate']
+    ]},
+    workflowPackage: {label: 'Workflow package', clearable: true, options: [
+      ['', 'Choose a package'], ['select', 'Select'], ['prime', 'Prime'], ['ultimate', 'Ultimate'], ['fusion', 'Ultimate + Fusion']
     ]}
   };
   // Services within one workstream can be complementary (for example base page tracking and a new CTA).
@@ -131,7 +152,7 @@ const CanvasScope = (() => {
     const result = {};
     for (const [key, choice] of Object.entries(choices)) {
       const value = values?.[key];
-      if (value && choice.options.some(([id]) => id === value)) result[key] = value;
+      if (choice.options.some(([id]) => id === value)) result[key] = value;
     }
     // An unanswered choice on a saved quote is distinct from a pre-dropdown draft.
     for (const key of ['authoring', 'commerceVersion']) if (Object.hasOwn(values || {}, key) && !result[key]) result[key] = '';
@@ -163,14 +184,15 @@ const CanvasScope = (() => {
     // The Commerce to Edge Delivery connection already scopes the storefront build.
     if (id === 'ACO09' && hasProduct('commerce') && !hasProduct('ocp')) return false;
     if (hasProduct('aemsites') && hasProduct('eds')) {
-      if (['SI02', 'SI04', 'SI06'].includes(id)) return false;
+      if (['SI02', 'SI04', 'SI06', 'SI13'].includes(id)) return false;
       if (['AXA04', 'AXA05'].includes(id) && !selected('AXD04')) return false;
       if (id === 'AXC01' && hasProduct('bv') && selected('A01')) return false;
     }
     return catalogDefault;
   }
   function newDecisions() {
-    return {authoring: '', workfrontVersion: 'after', commerceVersion: 'saas'};
+    return {authoring: '', workfrontVersion: 'after', commerceVersion: 'saas',
+      ...Object.fromEntries(Object.entries(choices).filter(([, choice]) => choice.clearable).map(([key]) => [key, '']))};
   }
   function startingService(id, catalogDefault, play, useNewDefaults) {
     if (!useNewDefaults) return catalogDefault;
@@ -182,6 +204,7 @@ const CanvasScope = (() => {
       if (!hasProduct(version.product)) continue;
       for (const gate of version.gates) {
         if (gate.ids.includes(id) && (!gate.when || gate.when.includes(decisions[key]))
+            && (!gate.only || !gate.only.includes(decisions[key]))
             && (!gate.with || hasProduct(gate.with)) && !(gate.unless && hasProduct(gate.unless))) return gate.reason;
       }
     }
@@ -929,7 +952,7 @@ const overlapsOn=l=>counted(l)?(OVERLAP[l]||[]).filter(x=>!!LN[x]&&counted(x)&&[
 /* Nov 19 2026 (Adam approved the pickers): the version picked inside the Workfront and Adobe Commerce boxes. A gate (CAT.versions, from catalog_map.json)
    makes connections or services unavailable for a version, or beside a product (with), unless another product is on the canvas (unless); the canvas fades
    them, leaves their services out of the estimate and the hand-over, and says why. gateOf gives the reason, or '' */
-const VER=CAT.versions,VBOX=Object.fromEntries(Object.entries(VER).map(([k,v])=>[v.product,k]));
+const VER=CAT.versions,VBOX=Object.fromEntries(Object.entries(VER).filter(([,v])=>!v.cardPicker).map(([k,v])=>[v.product,k]));
 const OWNER={};for(const c of C)for(const l of [...c.lines,...c.more])OWNER[l]=c.id;
 const gateOf=(id,dec=st.decisions)=>CanvasScope.versionReason(VER,id,dec,has);
 const lineGate=(l,dec)=>gateOf(l,dec)||(OWNER[l]?gateOf(OWNER[l],dec):'');
@@ -1087,17 +1110,25 @@ function authoringControl(){
 }
 /* the box keeps its usual size: its name, the picker's name (left out on a busy canvas, where the box counts its connections, and on a phone) and the picker */
 function versionControl(key,busy){const c=CanvasScope.choices[key],now=st.decisions[key]||'';
-  const options=c.options.filter(([value])=>value||!now).map(([value,label])=>'<option value="'+esc(value)+'"'+(value===now?' selected':'')+'>'+esc(label)+'</option>').join('');
+  const options=c.options.filter(([value])=>value||!now||c.clearable).map(([value,label])=>'<option value="'+esc(value)+'"'+(value===now?' selected':'')+'>'+esc(label)+'</option>').join('');
   return '<label class="offering-version">'+(busy?'':'<span class="vlab">'+esc(c.label)+'</span>')+'<select data-choice="'+key+'" aria-label="'+esc(c.label)+'"'+(key==='commerceVersion'?' title="Choose the version your client runs today"':'')+'>'+options+'</select></label>';}
 /* the smaller Cloud Service services take over from the full ones when the partner moves a Commerce canvas to Cloud Service, and back */
 const SMALLER=[['CE05','CE14'],['CE06','CE15']];
-$('stage').addEventListener('change',e=>{
+function changeScopeChoice(e){
   const key=e.target.matches('select[data-choice]')&&e.target.dataset.choice;if(!key)return;
   if(key==='commerceVersion'){const to=e.target.value;for(const [full,small] of SMALLER){if(to==='saas'&&counted(full))st.ls[small]=true;else if(st.decisions.commerceVersion==='saas'&&to&&counted(small))st.ls[full]=true;}}
-  st.decisions=CanvasScope.normalize({...st.decisions,[key]:e.target.value});
-  hideCard(true);render();
-  $('stage').querySelector('select[data-choice="'+key+'"]')?.focus({preventScroll:true});
-});
+  const next=CanvasScope.normalize({...st.decisions,[key]:e.target.value});
+  for(const [from,to] of (VER[key]?.equivalents||[]).flatMap(([a,b])=>[[a,b],[b,a]])){
+    if(Object.hasOwn(st.ls,from)&&!Object.hasOwn(st.ls,to)&&!lineGate(from)&&lineGate(to)&&lineGate(from,next)&&!lineGate(to,next))st.ls[to]=st.ls[from];
+  }
+  st.decisions=next;
+  if(e.currentTarget===$('stage'))hideCard(true);
+  else pinned=true;
+  render();
+  e.currentTarget.querySelector('select[data-choice="'+key+'"]')?.focus({preventScroll:true});
+}
+$('stage').addEventListener('change',changeScopeChoice);
+$('card').addEventListener('change',changeScopeChoice);
 /* ---------- render ---------- */
 let shown=new Set(),shownC=new Set(),card=null,pinned=false,moreOpen={};
 function render(){
@@ -1446,8 +1477,17 @@ function cardHTML(k,id){if(k==='p'&&P[id].outside)return outCardHTML(id);
   /* Nov 18 2026: an AI assistant's line opens with a question your client's team would ask it, for the partner only (never in what the client reads) */
   if(k==='c'&&o.ask)h+=`<p class="ask"><b>Ask it:</b> "${esc(o.ask)}"</p>`;
   if(k==='c'&&gateOf(id))h+=`<p class="gone-why">${esc(gateOf(id))}</p>`;
-  /* the card names the version picked, unless its words carry a date (the Workfront picker's), which the card copy never repeats */
-  if(k==='p'&&VBOX[id]){const c=CanvasScope.choices[VBOX[id]],v=c.options.find(([x])=>x===(st.decisions[VBOX[id]]||''));h+=`<p class="how">${st.decisions[VBOX[id]]&&/\b20\d\d\b/.test(v[1])?'':esc(c.label)+': '+esc(st.decisions[VBOX[id]]?v[1]:'not picked yet')+'. '}${id==='workfront'?'Its connections follow':'The services follow'} the ${esc(c.label)} picked on the box.</p>`;}
+  /* The card repeats the selection where an edition changes the scope. Keep the purchase date in its picker. */
+  if(k==='p'&&VBOX[id]){
+    const key=VBOX[id],c=CanvasScope.choices[key],picked=c.options.find(([x])=>x===st.decisions[key]);
+    if(key==='workfrontVersion')h+='<p class="how">The purchase choice on the box controls the Proof connections.</p>';
+    else if(picked?.[0])h+=`<p class="how">${esc(c.label)}: ${esc(picked[1])}.</p>`;
+  }
+  if(k==='p'&&id==='workfront')h+=versionControl('workflowPackage',false);
+  if(k==='p'&&id==='eds'&&combinesSites())h+=versionControl('sitesDeployment',false);
+  if(k==='p'&&id==='marketo'&&st.decisions.marketoPackage==='ultimate'&&!has('mmeasure')){
+    h+='<p class="how">Marketo Measure is included with Ultimate. Add Marketo Measure to scope its setup.</p>';
+  }
   if(k==='p'&&id==='eds'){
     const method=st.decisions.authoring;
     h+='<p class="how">'+(method==='universal'?'Pages are authored in AEM Universal Editor and published with Edge Delivery Services.':method==='documents'?'Pages are authored in Word or Google Docs and published with Edge Delivery Services.':'Choose a page authoring method on the canvas to scope the editor setup.')+'</p>';

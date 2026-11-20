@@ -73,8 +73,8 @@ const BI_URL = 'https://developer.adobe.com/adobe-brand-intelligence/guides/mcp-
 const fix = s => s.replace(/’/g, "'");
 
 // ============ 1. the catalog: the starting systems, Ask it and Claude + Brand Intelligence ============
-{ ok(CAT.products.length === 54 && CAT.products.filter(p => p.outside).length === 18 && CAT.connections.length === 217 && Object.keys(CAT.lines).length === 610 && WAVE.connections.length === 42,
-    '1. the catalog holds 54 products (18 outside systems), 217 connections and 610 services (the Commerce round added 7, 13 and 33 on Nov 19), and 42 lines for ChatGPT, Claude and Microsoft Copilot (Claude + Brand Intelligence added, no new service)',
+{ ok(CAT.products.length === 54 && CAT.products.filter(p => p.outside).length === 18 && CAT.connections.length === 217 && Object.keys(CAT.lines).length === 626 && WAVE.connections.length === 42,
+    '1. the catalog holds 54 products (18 outside systems), 217 connections and 626 services (the Commerce round added 7, 13 and 33 on Nov 19), and 42 lines for ChatGPT, Claude and Microsoft Copilot (Claude + Brand Intelligence added, no new service)',
     [CAT.products.length, CAT.connections.length, Object.keys(CAT.lines).length, WAVE.connections.length].join());
   ok(Object.entries(START).every(([id, want]) => same(PLAY[id].ostart, want)),
     '1. each ready-made play starts with every outside system on its own list and every one that connects to one of its products: Adobe Brand Visibility the CDN and Search data; + Customer Journey Analytics the CDN, Data warehouse, Cloud storage, CRM, Ad platforms, BI tools, Search data, ChatGPT, Claude and Microsoft Copilot; + Adobe Commerce the CDN, Search data and the CRM; + Sites Optimizer and Edge Delivery Services the CDN, Search data, Authoring docs, ChatGPT and Claude; + Brand Concierge the CDN, Search data and another CMS site; Adobe Coworker ChatGPT, Claude and Microsoft Copilot',

@@ -285,12 +285,11 @@ async def main():
         await fresh.click('[data-step="document"]')
         await fresh.wait_for_timeout(250)
         check('FSI: the named owner leads the operating model in the SOW, and the owner item clears', 'Operating owner for the Brand Concierge experience: Head of digital servicing.' in (await fresh.text_content('#sow-preview')) and 'operating owner' not in (await fresh.text_content('#readiness')))
-        async with fresh.expect_download() as info:
-            await fresh.click('#download-sow')
-        dl = await info.value
+        await fresh.evaluate("window.print = () => { window.printedSow = document.getElementById('sow-preview').innerHTML; }")
+        await fresh.click('#print-sow')
         n_open = await fresh.locator('#readiness li').count()
-        body = open(await dl.path(), encoding='utf-8').read()
-        check('with readiness items open, Download gives the SOW marked as a draft, not ready to issue, with the count, in a -DRAFT file (step 48)', dl.suggested_filename.endswith('-DRAFT.html') and f'Draft, not ready to issue: {n_open} open item' in body and 'Before you issue' in (await fresh.text_content('#toast')), dl.suggested_filename)
+        body = await fresh.evaluate("window.printedSow")
+        check('with readiness items open, the printed SOW carries the draft marker and item count', f'Draft, not ready to issue: {n_open} open item' in body)
         # Nov 19 2026: Search data's service concept, which the play starts with, taken off, so these checks run on the services they always had
         await fresh.evaluate("p=>{state.play=p;state.estimates.abv['CANVAS-SD1'].on=false;go('services');}", 'abv')
         await fresh.fill('[data-line="O02"] [data-line-field="hours"]', '64')
@@ -324,14 +323,11 @@ async def main():
         await fresh.click('[data-step="document"]')
         await fresh.wait_for_timeout(250)
         check('with the reason, the terms, the parties, the schedule and a rate written, the SOW is ready to issue', await fresh.is_hidden('#readiness'), (await fresh.text_content('#readiness'))[:300])
-        dl = None
-        async with fresh.expect_download() as info:
-            await fresh.click('#download-sow')
-        dl = await info.value
-        body = open(await dl.path(), encoding='utf-8').read()
-        check('the downloaded SOW (not just the preview) carries the estimate basis, the reason and the illustrative-fee wording, and no draft mark once ready (step 48)', not dl.suggested_filename.endswith('-DRAFT.html') and 'Draft, not ready to issue' not in body and 'Estimate basis' in body and 'Illustrative services fees' in body and 'Partner-set hours: 50' in body and 'Reason: Two refreshes a month' in body)
-        check('the downloaded SOW says illustrative throughout: section 5, the fee column, the total and the fine print (no "Estimated")', 'Illustrative services fees' in body and 'Illustrative services total' in body and '>Illustrative fee<' in body and 'not a quote' in body and 'Estimated' not in body)
-        # Services CSV sits beside Download SOW on the Statement of work step (step 31)
+        await fresh.click('#print-sow')
+        body = await fresh.evaluate("window.printedSow")
+        check('the printed SOW carries the estimate basis, the reason and the illustrative fees once ready', 'Draft, not ready to issue' not in body and 'Estimate basis' in body and 'Illustrative services fees' in body and 'Partner-set hours: 50' in body and 'Reason: Two refreshes a month' in body)
+        check('the printed SOW labels the fees and total illustrative', 'Illustrative services fees' in body and 'Illustrative services total' in body and '>Illustrative fee<' in body and 'not a quote' in body and 'Estimated' not in body)
+        # Services CSV sits beside Print / Save PDF on the Statement of work step.
         async with fresh.expect_download() as info:
             await fresh.click('#export-csv')
         csvb = open(await (await info.value).path(), encoding='utf-8-sig').read()

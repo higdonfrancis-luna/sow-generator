@@ -2354,6 +2354,356 @@
      "reason": "With Commerce Optimizer, search and recommendations run in Optimizer: its services on this canvas cover them."
     }
    ]
-  }
+  },
+   "ajoPackage": {
+    "product": "ajo",
+    "equivalents": [
+     [
+      "JO01",
+      "JO07"
+     ],
+     [
+      "JO02",
+      "JO10"
+     ],
+     [
+      "JO05",
+      "JO09"
+     ]
+    ],
+    "gates": [
+     {
+      "ids": [
+       "JO01"
+      ],
+      "when": [
+       "",
+       "select",
+       "prime",
+       "ultimate",
+       "starter"
+      ],
+      "reason": "Access and licensed channel setup are scoped separately for this package."
+     },
+     {
+      "ids": [
+       "JO07",
+       "JO08"
+      ],
+      "only": [
+       "",
+       "select",
+       "prime",
+       "ultimate",
+       "starter"
+      ],
+      "reason": "Choose the Journey Optimizer package to use the separate access and channel services."
+     },
+     {
+      "ids": [
+       "JO02"
+      ],
+      "when": [
+       "",
+       "select",
+       "starter"
+      ],
+      "reason": "Full journey event setup uses Prime or Ultimate. Ultimate Starter has its own audience and profile entry service."
+     },
+     {
+      "ids": [
+       "JO10"
+      ],
+      "only": [
+       "starter"
+      ],
+      "reason": "Choose Ultimate Starter for this audience and profile entry service."
+     },
+     {
+      "ids": [
+       "JO05",
+       "XA02",
+       "XA16",
+       "XB06",
+       "XL09",
+       "XQ02"
+      ],
+      "when": [
+       "",
+       "select"
+      ],
+      "reason": "Real-time journey work needs a package that includes it."
+     },
+     {
+      "ids": [
+       "JO09"
+      ],
+      "only": [
+       "",
+       "select"
+      ],
+      "reason": "Scheduled campaign scope is included in the first journeys and campaigns service with this package."
+     },
+     {
+      "ids": [
+       "XA07",
+       "XA03"
+      ],
+      "when": [
+       "",
+       "select",
+       "prime"
+      ],
+      "reason": "Offer Decisioning is included in Ultimate and Ultimate Starter."
+     },
+     {
+      "ids": [
+       "XA23"
+      ],
+      "when": [
+       "",
+       "select",
+       "starter"
+      ],
+      "reason": "Web campaigns need an inbound channel included with Prime or Ultimate."
+     }
+    ]
+   },
+   "assetsPackage": {
+    "product": "aemassets",
+    "equivalents": [
+     [
+      "AS01",
+      "AS08"
+     ],
+     [
+      "AS04",
+      "AS09"
+     ]
+    ],
+    "gates": [
+     {
+      "ids": [
+       "AS01",
+       "AS04"
+      ],
+      "when": [
+       "",
+       "prime"
+      ],
+      "reason": "This work includes additional environments or custom processing. The standard setup services cover the shared work."
+     },
+     {
+      "ids": [
+       "AS08",
+       "AS09"
+      ],
+      "only": [
+       "",
+       "prime"
+      ],
+      "reason": "The full onboarding and processing services cover this work in AEM Assets Ultimate."
+     }
+    ]
+   },
+   "sitesDeployment": {
+    "product": "aemsites",
+    "equivalents": [
+     [
+      "SI06",
+      "SI11"
+     ],
+     [
+      "SI04",
+      "SI13"
+     ]
+    ],
+    "gates": [
+     {
+      "ids": [
+       "SI01",
+       "SI03",
+       "SI04",
+       "SI06",
+       "XT03",
+       "chatgpt-aemsites",
+       "claude-aemsites",
+       "copilot-aemsites"
+      ],
+      "when": [
+       "",
+       "lts",
+       "v65"
+      ],
+      "reason": "This work uses AEM as a Cloud Service. Choose that deployment to include it."
+     },
+     {
+      "ids": [
+       "SI11",
+       "SI13"
+      ],
+      "only": [
+       "v65",
+       "lts"
+      ],
+      "reason": "This service is for an AEM 6.5 or 6.5 LTS deployment."
+     },
+     {
+      "ids": [
+       "SI12"
+      ],
+      "only": [
+       "v65"
+      ],
+      "reason": "Choose AEM 6.5 when the existing deployment is the source of an upgrade to 6.5 LTS."
+     }
+    ]
+   },
+   "targetEdition": {
+    "product": "target",
+    "equivalents": [
+     [
+      "TG02",
+      "TG06"
+     ]
+    ],
+    "gates": [
+     {
+      "ids": [
+       "TG02",
+       "TG04"
+      ],
+      "when": [
+       "",
+       "standard"
+      ],
+      "reason": "Properties and Permissions and Recommendations require Target Premium."
+     },
+     {
+      "ids": [
+       "TG06"
+      ],
+      "only": [
+       "",
+       "standard"
+      ],
+      "reason": "The Target Premium users and workspaces service covers this setup."
+     }
+    ]
+   },
+   "frameVersion": {
+    "product": "frameio",
+    "gates": [
+     {
+      "ids": ["FR05"],
+      "when": ["", "legacy"],
+      "reason": "Custom asset metadata is available in Frame.io V4."
+     },
+     {
+      "ids": [
+       "FR06"
+      ],
+      "when": [
+       "",
+       "legacy"
+      ],
+      "reason": "This API setup uses Adobe authentication for Frame.io V4. Choose a V4 edition to include it."
+     },
+     {
+      "ids": [
+       "FR04"
+      ],
+      "when": [
+       "",
+       "legacy",
+       "v4select"
+      ],
+      "reason": "This service scopes watermarking and rights protection for Frame.io V4 Enterprise Prime."
+     }
+    ]
+   },
+   "marketoPackage": {
+    "product": "marketo",
+    "equivalents": [
+     [
+      "MK04",
+      "MK08"
+     ]
+    ],
+    "gates": [
+     {
+      "ids": [
+       "MK04"
+      ],
+      "when": [
+       "",
+       "growth",
+       "select"
+      ],
+      "reason": "The Lifecycle Modeler is included with Prime and Ultimate. The core scoring service covers basic setup."
+     },
+     {
+      "ids": [
+       "MK08"
+      ],
+      "only": [
+       "",
+       "growth",
+       "select"
+      ],
+      "reason": "The lead scoring and lifecycle service covers this setup with Prime and Ultimate."
+     },
+     {
+      "ids": [
+       "MK09"
+      ],
+      "only": [
+       "prime",
+       "ultimate"
+      ],
+      "reason": "Prime and Ultimate include a sandbox for this work."
+     }
+    ]
+   },
+   "workflowPackage": {
+    "product": "workfront",
+    "cardPicker": true,
+    "gates": [
+     {
+      "ids": [
+       "WF07",
+       "WF08"
+      ],
+      "only": [
+       "prime",
+       "ultimate",
+       "fusion"
+      ],
+      "reason": "Environment promotion and custom localization are included in Workflow Prime and Ultimate."
+     },
+     {
+      "ids": [
+       "WF09"
+      ],
+      "only": [
+       "select",
+       "prime",
+       "ultimate",
+       "fusion"
+      ],
+      "reason": "Choose a Workflow package and check the Workfront Data Connect entitlement."
+     },
+     {
+      "ids": [
+       "WF10"
+      ],
+      "only": [
+       "ultimate",
+       "fusion"
+      ],
+      "reason": "This service uses the financial management features in Workflow Ultimate."
+     }
+    ]
+   }
  }
 }

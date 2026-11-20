@@ -27,8 +27,8 @@ const inPaste = q => { let at = 0; const t = norm(PASTE); return q.split('...').
 // ============ 1. the catalog: two products, five outside systems, 13 connections and 35 services, as the build data says ============
 { ok(NEWP.every(id => P[id] && !P[id].outside) && NEWOUT.every(id => P[id] && P[id].outside && P[id].icon && P[id].systems) && P.aco.info && /Optimizer Headless/.test(P.aco.info),
     '1. Adobe Commerce Optimizer and Adobe Commerce Intelligence are Adobe products; ERP, PIM, Order management, Warehouse management and Other commerce platform are outside systems with an icon and what they cover; Commerce Optimizer\'s i names its two packages', JSON.stringify(NEWOUT.map(id => P[id] && P[id].systems)));
-  ok(CAT.products.length === 54 && CAT.products.filter(p => p.outside).length === 18 && CAT.connections.length === 217 && Object.keys(CAT.lines).length === 610,
-    '1. the catalog holds 54 products (18 outside systems), 217 connections and 610 services', [CAT.products.length, CAT.connections.length, Object.keys(CAT.lines).length].join());
+  ok(CAT.products.length === 54 && CAT.products.filter(p => p.outside).length === 18 && CAT.connections.length === 217 && Object.keys(CAT.lines).length === 626,
+    '1. the catalog holds 54 products (18 outside systems), 217 connections and 626 services', [CAT.products.length, CAT.connections.length, Object.keys(CAT.lines).length].join());
   ok(NEWC.length === 13 && NEWC.every(id => CBY[id] && CBY[id].how && CBY[id].label && CBY[id].gain && CBY[id].sowHow && CBY[id].sowGain && CBY[id].prereqs.length >= 2 && ALLOWED.test(CBY[id].source.url) &&
       (CBY[id].flows || []).every(f => ALLOWED.test(f.source.url)) && !CBY[id].availability) && SYSTEMS.every(s => CBY['commerce-' + s] && CBY['commerce-' + s].kind === 'outside' && CBY['commerce-' + s].line === 'native'),
     '1. each of the 13 connections has its how, label, what you get, prerequisites, flows on Adobe pages, client wording and no availability line; the four back-office systems connect to Adobe Commerce as outside systems drawn as their own connections',
@@ -50,7 +50,7 @@ const inPaste = q => { let at = 0; const t = norm(PASTE); return q.split('...').
     ...Object.values(CAT.versions).flatMap(v => v.gates.map(g => g.reason))].filter(Boolean);
   ok(shown.length > 500 && !shown.some(t => LABELS.test(t)) && !shown.some(t => /[–—]/.test(t)), '1. no release label, date, caveat or dash in anything the round shows: names, systems, cards, services, write-ups and the reasons a version gives',
     shown.filter(t => LABELS.test(t) || /[–—]/.test(t)).slice(0, 3).join(' | '));
-  ok(same(Object.keys(CAT.versions), ['workfrontVersion', 'commerceVersion']) && same(CAT.versions.workfrontVersion.gates.map(g => g.ids), [['workfront-gspm', 'express-workfront'], ['XB02']]),
+  ok(!!CAT.versions.commerceVersion && same(CAT.versions.workfrontVersion.gates.map(g => g.ids), [['workfront-gspm', 'express-workfront'], ['XB02']]),
     '1. the catalog holds the two pickers\' rules; Workfront bought after March 12, 2026 leaves out Workfront + GenStudio for Performance Marketing, Express + Workfront and the Marketo email proofing loop, which all run on Workfront Proof'); }
 
 (async () => {
@@ -267,6 +267,7 @@ const inPaste = q => { let at = 0; const t = norm(PASTE); return q.split('...').
     const q = await page(); await pick(q, 'custom');
     for (const id of ['cja', 'commerce', 'aemsites', 'aemassets', 'gspm', 'express', 'fireflycm', 'brandintel', 'workfront', 'marketo']) await add(q, id);
     await q.evaluate(() => addOutside('figma'));
+    await choose(q, 'sitesDeployment', 'cloud');
     const selected = await q.evaluate(() => ({
       main: ['C06', 'CJ01', 'CJ02', 'CE01', 'CE02', 'CE03', 'CE14', 'XT01', 'XT03', 'XT04', 'XT05', 'XT06', 'XT07', 'XF01', 'XF02', 'XF03', 'XF04', 'XF05', 'XF06', 'XK16'].filter(id => !counted(id)),
       optional: ['CJ03', 'CJ06', 'CE13', 'CE15'].filter(counted)

@@ -41,10 +41,10 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   let one = 0, mon = 0;
   const add = l => (CAT.lines[l].unit === 'monthly' ? (mon += CAT.lines[l][size] * rate) : (one += CAT.lines[l][size] * rate));
   const need = l => (CAT.lines[l].needs || []).every(x => on.has(x)) && (!(CAT.lines[l].needs_any || []).length || CAT.lines[l].needs_any.some(x => on.has(x)));
-  const versions = {workfrontVersion: 'after', commerceVersion: 'saas'};
+  const versions = {...Object.fromEntries(Object.keys(CAT.versions).map(key => [key, ''])), workfrontVersion: 'after', commerceVersion: 'saas'};
   const gated = id => Object.entries(CAT.versions).some(([key, version]) => on.has(version.product)
     && version.gates.some(gate => gate.ids.includes(id) && (!gate.when || gate.when.includes(versions[key]))
-      && (!gate.with || on.has(gate.with)) && !(gate.unless && on.has(gate.unless))));
+      && (!gate.only || !gate.only.includes(versions[key])) && (!gate.with || on.has(gate.with)) && !(gate.unless && on.has(gate.unless))));
   const counted = [];
   for (const o of owners) {
     if (gated(o.id)) continue;
@@ -667,7 +667,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
         fc.every(c => c.how.split(/(?<=\.)\s+/).length <= 3) && !fc[1].prereqs.some(x => /Photoshop/.test(x)),
       'Nov 17: Figma + Firefly Custom Models promises only the custom models a designer has created, both plugin cards name the Firefly Enterprise and GenStudio plugin, each card says how it works in three sentences at most, and GenStudio Photoshop stays the conversion service\'s own note',
       JSON.stringify([cm.label, fc.map(c => c.how.split(/(?<=\.)\s+/).length), fc[1].prereqs.filter(x => /Photoshop/.test(x))]));
-    // on Create your own play: Figma beside the four products, its four lines, and the total unchanged until a service is chosen
+    // On a new custom canvas, attaching Figma selects the main services on its connections.
     const q = await fresh(); await q.goto(CANVAS); await choose(q, 'custom');
     for (const id of ['aemassets', 'gspm', 'express', 'fireflycm']) await addP(q, id);
     await outside(q); const t0 = await read(q);
@@ -677,7 +677,9 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
       'Nov 17: Add outside system offers Figma for the four products on the canvas, and its tag, on several lines, keeps its words inside its rounded corners', JSON.stringify(tag));
     await q.click('#out-menu [data-out="figma"]'); await q.waitForTimeout(500); await away(q);
     const drawn = await edges(q), t1 = await read(q);
-    ok(Object.keys(FIG).every(id => drawn.includes(id)) && t1.big === t0.big && t1.sub === t0.sub, 'Nov 17: adding Figma draws its four lines, and the total stays as it was: every Figma service starts off',
+    const sum = s => Number(s.replace(/[^0-9.]/g, ''));
+    const setupHours = xf.reduce((hours, [id]) => hours + CAT.lines[id].base, 0);
+    ok(Object.keys(FIG).every(id => drawn.includes(id)) && sum(t1.big) === sum(t0.big) + setupHours * 150 && t1.sub === t0.sub, 'adding Figma draws its four lines and includes their main services',
       drawn.join(',') + ' ' + t0.big + ' then ' + t1.big);
     ok(await layoutClean(q), 'Nov 17: and the canvas stays clean, with no box on another and every i clear of the boxes');
     await q.click('.ib[data-c="figma-aemassets"]'); await q.waitForTimeout(400);
@@ -686,8 +688,8 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
         card.rows.join() === 'XF01,XF02' && card.links.length > 0 && card.links.every(h => ADOBE_PAGE.test(h)),
       'Nov 17: the Figma + AEM Assets card says how they connect, what comes first and what you get, offers its two services and links only to Adobe pages', JSON.stringify(card).slice(0, 400));
     await q.click('#card [data-t="XF01"]'); await q.waitForTimeout(400);
-    const t2 = await read(q), sum = s => Number(s.replace(/[^0-9.]/g, ''));
-    ok(sum(t2.big) === sum(t0.big) + 16 * 150, 'Nov 17: choosing AEM Assets Connector rollout for Figma designers adds its 16 typical hours to the total', t0.big + ' then ' + t2.big);
+    const t2 = await read(q);
+    ok(sum(t2.big) === sum(t1.big) - CAT.lines.XF01.base * 150, 'removing the AEM Assets Connector rollout removes its typical hours from the total', t1.big + ' then ' + t2.big);
     await q.context().close(); }
 
   // Nov 17 2026, never go backwards (Adam: "any newer product that offers the same functionality that an older product did: they're not going to go

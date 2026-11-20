@@ -4,9 +4,9 @@ Read this first in the new chat. Everything below is on GitHub, so a new account
 
 ## PICK UP HERE (updated Friday, November 20, 2026)
 
-**State.** The Friday scope is built on `claude/sow-generator-handoff-517tq8`. Make the Adobe Proto upload with `git archive --format=zip -o <file>.zip HEAD:site` (index.html at the root). The data owner signs off on the ranked Add product list before anything goes to main, and main needs Adam's go.
+**State.** The Friday scope and the seven approved edition pickers are built on `claude/sow-generator-handoff-517tq8`. Make the Adobe Proto upload with `git archive --format=zip -o <file>.zip HEAD:site` (index.html at the root). The data owner signs off on the ranked Add product list before anything goes to main, and main needs Adam's go.
 
-**How to work (binding, from Adam).** Use plain words and show pictures before building. Keep changes surgical. Leave release labels, dates and editorial caveats out of the tool. Every service and connection needs an Adobe quote, matched word for word using `evidence_page/tools/verify.py` and its `found()` function. Use the text Adam pastes for business.adobe.com. Skip partners.adobe.com. Generate the site with `python3 canvas/build.py` followed by `python3 build_site.py`, twice. Run the test suites one at a time. Keep `combinedDefaultsVersion` unchanged so saved quotes reopen as saved.
+**How to work (binding, from Adam).** Use plain words. Start product research at [Adobe Experience League](https://experienceleague.adobe.com/en/home). Keep the existing design and take major changes to Adam for approval. Show pictures before building visible changes. Keep changes surgical. Leave release labels, dates and editorial caveats out of the tool. Every service and connection needs an Adobe quote, matched word for word using `evidence_page/tools/verify.py` and its `found()` function. Use the text Adam pastes for business.adobe.com. Skip partners.adobe.com. Generate the site with `python3 canvas/build.py` followed by `python3 build_site.py`, twice. Run the test suites one at a time. Keep `combinedDefaultsVersion` unchanged so saved quotes reopen as saved.
 
 **Friday's changes.**
 
@@ -16,14 +16,13 @@ Read this first in the new chat. Everything below is on GitHub, so a new account
 - The Commerce Optimizer + Edge Delivery Services connection includes the storefront launch checklist and storefront events to Experience Platform for a third-party commerce backend. The events service also requires an Experience Platform application on the canvas. Both services have RFI methods and Adobe sources.
 - Saved canvases and drafts retain their original starting services and selections. The new defaults have their own saved flag and leave the earlier restore rules in place. The catalog has 217 connections and 610 services.
 
-**Next review.** Adam has the product edition picker mockup. The proposal starts with shared setup work selected and waits for the partner to choose an edition before it scopes edition-specific work. Confirm the interaction before building. For Journey Optimizer, Adobe publishes both Select / Prime / Ultimate / Ultimate Starter and a separate Campaigns / Journeys package description. Confirm which offers the tool should cover. Workfront's Workflow package is separate from the existing purchase-date picker. Confirm the bundle and separately licensed features before they change any estimates.
+**Edition pickers.** The approved round adds Journey Optimizer, AEM Assets, AEM Sites, Adobe Target, Frame.io, Marketo Engage and Workfront Workflow. The site uses the existing layout and controls. Shared work starts selected for a new quote, and each package or deployment changes the relevant services. Previously saved quotes retain their scope. The catalog now has 217 connections and 626 services. Journey Optimizer covers Select, Prime, Ultimate and Ultimate Starter. The separate Campaigns and Journeys packaging can be reviewed when a request calls for it.
 
 **Then, in this order (from `PRODUCT_COVERAGE.md` and `EXPERIENCE_LEAGUE_SWEEP.md`, both in this folder, every finding with proven Adobe quotes):**
-1. The other version pickers: Journey Optimizer (Select/Prime/Ultimate), AEM Assets (Prime/Ultimate), AEM Sites (Cloud Service vs 6.5 LTS, plus a 6.5 LTS upgrade service), Target (Standard/Premium), Frame.io (Legacy/V4), Marketo (Growth/Select/Prime/Ultimate), Workfront Workflow packages.
-2. Experience Platform additions: event forwarding (a Real-Time CDP line), Privacy/Healthcare Shields, Federated Audience Composition, Data Distiller, the Marketing Agent for Microsoft 365 Copilot (copilot-rtcdp, copilot-ajo).
-3. New products and add-ons: Adobe Campaign (ask Adam to paste its business.adobe.com overview first), AEM Guides, Adobe LLM Apps, the Modernization Agent (lines on Edge Delivery), Journey Optimizer Loyalty, CJA B2B, Streaming Media, Marketo add-ons.
-4. About 120 one-line service gaps on existing products (EXPERIENCE_LEAGUE_SWEEP.md section 3).
-5. The maybes, after Adam pastes the business.adobe.com pages listed in both files.
+1. Experience Platform additions: event forwarding (a Real-Time CDP line), Privacy/Healthcare Shields, Federated Audience Composition, Data Distiller, the Marketing Agent for Microsoft 365 Copilot (copilot-rtcdp, copilot-ajo).
+2. New products and add-ons: Adobe Campaign (ask Adam to paste its business.adobe.com overview first), AEM Guides, Adobe LLM Apps, the Modernization Agent (lines on Edge Delivery), Journey Optimizer Loyalty, CJA B2B, Streaming Media, Marketo add-ons.
+3. About 120 one-line service gaps on existing products (EXPERIENCE_LEAGUE_SWEEP.md section 3).
+4. The maybes, after Adam pastes the business.adobe.com pages listed in both files.
 
 **Other open items:** check the first-look video plays from Proto after upload; the first look still says 569 services (Adam: leave it); Adam's private canvas gallery with every connection explained: https://claude.ai/artifact/6k6A8SjB7stGQrctfuX1iW (shows the state before the Commerce round).
 

@@ -27,6 +27,12 @@ Adam's rules for it (Oct 29 2026):
 - Adobe red (#EB1000), black and white, Source Sans 3 like the video page, the Adobe logo in the masthead. The SOW document itself carries the partner's name and no Adobe logo: it's the partner's paper to its customer.
 - Nothing about Adobe Consulting Services.
 
+## Product editions and deployments (November 20, 2026)
+
+- Journey Optimizer, AEM Assets, AEM Sites, Target, Frame.io, Marketo Engage and Workfront use the existing version controls. Workfront's Workflow package lives on its service card, alongside the purchase-date choice on its box. When AEM Sites supplies authoring for Edge Delivery Services, its deployment is set on the Edge Delivery services card.
+- A new quote starts with shared work. Edition-specific work follows the partner's selection and technical prerequisites. An existing quote keeps its earlier scope until the partner chooses an edition. The selected editions travel with the canvas, statement of work and saved draft.
+- The 16 new service definitions use Adobe Experience League evidence. Package boundaries are recorded with the matching Adobe documentation in `canvas/research/wave9_editions.json`. The catalog has 217 connections and 626 services.
+
 ## Starting services on new quotes (November 20, 2026)
 
 - New canvases start with the main setup services selected, including the Figma and AI assistant work and the core work for Commerce and its back office. The two Brand Visibility cross-sell plays leave the existing CJA or Commerce product's own services unticked and select the connection work. B2B, the move to Commerce as a Cloud Service, additional stores, and specialized back-office webhooks and admin screens remain optional.

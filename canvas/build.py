@@ -343,7 +343,7 @@ def main():
         assert v['product'] in pby and re.search(r'\b' + key + r': \{label: ', picker), f'version picker {key} has no product or no choices'
         for g in v['gates']:
             assert g['ids'] and set(g['ids']) <= {c['id'] for c in keep_c} | set(used), f'version picker {key} gates something the catalog does not have: {g["ids"]}'
-            assert ('when' in g or 'with' in g) and all(f"['{w}', " in picker for w in g.get('when', [])), f'version picker {key}: a gate with no version or an unknown one'
+            assert {'when', 'only', 'with'} & g.keys() and all(f"['{w}', " in picker for w in g.get('when', []) + g.get('only', [])), f'version picker {key}: a gate with no version or an unknown one'
             assert all(g[k] in pby for k in ('with', 'unless') if k in g) and g['reason'], f'version picker {key}: a gate with an unknown product or no reason'
     defaults = cmap['new_service_defaults']
     optional = {lid for owner in keep_p + keep_c for lid in owner['more']}

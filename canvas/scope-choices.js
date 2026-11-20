@@ -82,6 +82,27 @@ const CanvasScope = (() => {
     ]},
     commerceVersion: {label: 'Commerce version', options: [
       ['', 'Choose a version'], ['onprem', 'On-premises'], ['paas', 'On Cloud'], ['saas', 'Cloud Service']
+    ]},
+    ajoPackage: {label: 'Journey Optimizer package', clearable: true, options: [
+      ['', 'Choose a package'], ['select', 'Select'], ['prime', 'Prime'], ['ultimate', 'Ultimate'], ['starter', 'Ultimate Starter']
+    ]},
+    assetsPackage: {label: 'AEM Assets package', clearable: true, options: [
+      ['', 'Choose a package'], ['prime', 'Prime'], ['ultimate', 'Ultimate']
+    ]},
+    sitesDeployment: {label: 'AEM Sites deployment', clearable: true, options: [
+      ['', 'Choose a deployment'], ['cloud', 'Cloud Service'], ['lts', '6.5 LTS'], ['v65', '6.5']
+    ]},
+    targetEdition: {label: 'Target edition', clearable: true, options: [
+      ['', 'Choose an edition'], ['standard', 'Standard'], ['premium', 'Premium']
+    ]},
+    frameVersion: {label: 'Frame.io version', clearable: true, options: [
+      ['', 'Choose a version'], ['legacy', 'Legacy'], ['v4select', 'V4 Select'], ['v4prime', 'V4 Prime']
+    ]},
+    marketoPackage: {label: 'Marketo Engage package', clearable: true, options: [
+      ['', 'Choose a package'], ['growth', 'Growth'], ['select', 'Select'], ['prime', 'Prime'], ['ultimate', 'Ultimate']
+    ]},
+    workflowPackage: {label: 'Workflow package', clearable: true, options: [
+      ['', 'Choose a package'], ['select', 'Select'], ['prime', 'Prime'], ['ultimate', 'Ultimate'], ['fusion', 'Ultimate + Fusion']
     ]}
   };
   // Services within one workstream can be complementary (for example base page tracking and a new CTA).
@@ -96,7 +117,7 @@ const CanvasScope = (() => {
     const result = {};
     for (const [key, choice] of Object.entries(choices)) {
       const value = values?.[key];
-      if (value && choice.options.some(([id]) => id === value)) result[key] = value;
+      if (choice.options.some(([id]) => id === value)) result[key] = value;
     }
     // An unanswered choice on a saved quote is distinct from a pre-dropdown draft.
     for (const key of ['authoring', 'commerceVersion']) if (Object.hasOwn(values || {}, key) && !result[key]) result[key] = '';
@@ -128,14 +149,15 @@ const CanvasScope = (() => {
     // The Commerce to Edge Delivery connection already scopes the storefront build.
     if (id === 'ACO09' && hasProduct('commerce') && !hasProduct('ocp')) return false;
     if (hasProduct('aemsites') && hasProduct('eds')) {
-      if (['SI02', 'SI04', 'SI06'].includes(id)) return false;
+      if (['SI02', 'SI04', 'SI06', 'SI13'].includes(id)) return false;
       if (['AXA04', 'AXA05'].includes(id) && !selected('AXD04')) return false;
       if (id === 'AXC01' && hasProduct('bv') && selected('A01')) return false;
     }
     return catalogDefault;
   }
   function newDecisions() {
-    return {authoring: '', workfrontVersion: 'after', commerceVersion: 'saas'};
+    return {authoring: '', workfrontVersion: 'after', commerceVersion: 'saas',
+      ...Object.fromEntries(Object.entries(choices).filter(([, choice]) => choice.clearable).map(([key]) => [key, '']))};
   }
   function startingService(id, catalogDefault, play, useNewDefaults) {
     if (!useNewDefaults) return catalogDefault;
@@ -147,6 +169,7 @@ const CanvasScope = (() => {
       if (!hasProduct(version.product)) continue;
       for (const gate of version.gates) {
         if (gate.ids.includes(id) && (!gate.when || gate.when.includes(decisions[key]))
+            && (!gate.only || !gate.only.includes(decisions[key]))
             && (!gate.with || hasProduct(gate.with)) && !(gate.unless && hasProduct(gate.unless))) return gate.reason;
       }
     }
