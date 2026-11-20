@@ -18,6 +18,10 @@ Read this first in the new chat. Everything below is on GitHub, so a new account
 
 **Edition pickers.** The approved round adds Journey Optimizer, AEM Assets, AEM Sites, Adobe Target, Frame.io, Marketo Engage and Workfront Workflow. The site uses the existing layout and controls. Shared work starts selected for a new quote, and each package or deployment changes the relevant services. Previously saved quotes retain their scope. The catalog now has 217 connections and 626 services. Journey Optimizer covers Select, Prime, Ultimate and Ultimate Starter. The separate Campaigns and Journeys packaging can be reviewed when a request calls for it.
 
+**Checks.** All 69 Commerce and Workfront checks, eight product edition scenarios, 144 SOW smoke checks, the site and draft suites, and the RFI export suite passed. The desktop AEM canvas shifted nine pixels vertically in the reload check on both the original and updated builds. The Proto archive contains both entry pages and the first-look video.
+
+**Next review.** Adam has the mockup for the Experience Platform services and the two Copilot connections, all on existing cards. Check the proposed work with him before building the round.
+
 **Then, in this order (from `PRODUCT_COVERAGE.md` and `EXPERIENCE_LEAGUE_SWEEP.md`, both in this folder, every finding with proven Adobe quotes):**
 1. Experience Platform additions: event forwarding (a Real-Time CDP line), Privacy/Healthcare Shields, Federated Audience Composition, Data Distiller, the Marketing Agent for Microsoft 365 Copilot (copilot-rtcdp, copilot-ajo).
 2. New products and add-ons: Adobe Campaign (ask Adam to paste its business.adobe.com overview first), AEM Guides, Adobe LLM Apps, the Modernization Agent (lines on Edge Delivery), Journey Optimizer Loyalty, CJA B2B, Streaming Media, Marketo add-ons.

@@ -38,7 +38,8 @@ async def main():
     check('no navy template colors left', not any(c in html.lower() for c in ('#1c2e3e', '#203343', '#e16a5c', '#e35242', '#647482')))
     check('no planning note or repeated disclaimers (step 7: one intro line instead)', 'planning-note' not in html and 'estimateNote' not in html and 'library-note' not in html)
     cat15 = json.loads(re.search(r'<script>const CATALOG=(\[.*?\]);</script>', html, re.S).group(1))
-    check('every product-based service carries a source and a title (43 of 44; executive alignment has none; step 27 added the five outside-system lines)', len(cat15) == 44 and sum(bool(c.get('sourceTitle') and str(c.get('source', '')).startswith('https://')) for c in cat15) == 43)
+    unsourced = [c['id'] for c in cat15 if not (c.get('sourceTitle') and str(c.get('source', '')).startswith('https://'))]
+    check('every product-based service carries a source and a title', unsourced == ['X01'], ', '.join(unsourced))
     by15 = {c['id']: c for c in cat15}
     check('step 15: Technical SEO and AI-search improvements (O03) is retired; the content line is Content improvements for search and AI', 'O03' not in by15 and by15['O02']['name'] == 'Content improvements for search and AI' and 'logged once and tagged search, AI or both' in by15['O02']['scope'], str(len(cat15)))
     check('step 15: one owner per piece of work in the texts (O01 the one readout, SO2 takes the site fixes Brand Visibility flags, SO1 and L02 one access request, A02 no ranking promise)', 'the one monthly readout' in by15['O01']['assumptions'] and 'site fixes Brand Visibility flags' in by15['SO2']['assumptions'] and 'no separate report' not in by15['SO2']['deliverable'] and 'one access request' in by15['SO1']['assumptions'] and 'requested once per site' in by15['L02']['assumptions'] and 'rankings are not guaranteed' in by15['A02']['exclusions'])
@@ -60,7 +61,11 @@ async def main():
     check('AEM play reads as a new-site pursuit', 'Build the site on AEM Sites with Edge Delivery Services' in html)
     async with async_playwright() as p:
         browser = await p.chromium.launch()
+        async def test_fonts(route):
+            await route.fulfill(content_type='text/css', body='')
+
         page = await browser.new_page(viewport={'width': 1440, 'height': 1000})
+        await page.route('https://fonts.googleapis.com/**', test_fonts)
         errors = []
         page.on('pageerror', lambda e: errors.append(str(e)))
         page.on('console', lambda m: errors.append(m.type + ': ' + m.text) if m.type == 'error' else None)
@@ -164,6 +169,7 @@ async def main():
         await page.wait_for_timeout(150)
         # ---- a dollar figure from the start (step 4) and the caption that explains it (step 5)
         fresh = await browser.new_page(viewport={'width': 1440, 'height': 1000})
+        await fresh.route('https://fonts.googleapis.com/**', test_fonts)
         fresh.on('pageerror', lambda e: errors.append(str(e)))
         await fresh.goto('file://' + PATH)
         await fresh.wait_for_timeout(1000)
@@ -378,6 +384,7 @@ async def main():
                 await page.wait_for_timeout(300)
                 await page.screenshot(path=os.path.join(SHOTS, f'sow_{step}.png'))
             mobile = await browser.new_page(viewport={'width': 390, 'height': 844})
+            await mobile.route('https://fonts.googleapis.com/**', test_fonts)
             await mobile.goto('file://' + PATH)
             await mobile.wait_for_timeout(1200)
             await mobile.click('[data-step="services"]')
