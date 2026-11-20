@@ -42,15 +42,14 @@ jobs:
           chromium.launch = (options = {}) => launch({...options, executablePath: process.env.PROTO_CHROME_BINARY});
           JS
           echo "PROTO_CHROME_BINARY=$PROTO_CHROME_BINARY" >> "$GITHUB_ENV"
-          echo "NODE_OPTIONS=--require=$RUNNER_TEMP/proto-chrome.cjs" >> "$GITHUB_ENV"
       - name: Check question navigation at desktop and phone sizes
-        run: node test_question_navigation.js
+        run: node --require "$RUNNER_TEMP/proto-chrome.cjs" test_question_navigation.js
       - name: Check every focused product and the full opening map
-        run: node test_map_first_page.js
+        run: node --require "$RUNNER_TEMP/proto-chrome.cjs" test_map_first_page.js
       - name: Check opening older drafts
-        run: node test_drafts.js
+        run: node --require "$RUNNER_TEMP/proto-chrome.cjs" test_drafts.js
       - name: Check the first page and its MP4 players in Google Chrome
-        run: node test_first_page_rows.js
+        run: node --require "$RUNNER_TEMP/proto-chrome.cjs" test_first_page_rows.js
   download:
     needs: proto
     runs-on: ubuntu-24.04
