@@ -118,10 +118,10 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
     const top = document.querySelector('#picker .in').firstElementChild.getBoundingClientRect().top, mast = document.querySelector('.masthead');
     const shown = e => { const r = e.getBoundingClientRect(); return r.width > 0 && r.height > 0 && getComputedStyle(e).visibility !== 'hidden'; };
     const other = [...document.querySelectorAll('body *')].filter(e => shown(e) && e.getBoundingClientRect().bottom <= top + 0.5 && !e.closest('.masthead,.topline')).map(e => e.id || e.getAttribute('class') || e.tagName);
-    const kids = [...mast.children].filter(shown), cs = getComputedStyle(mast);
+    const draft = mast.querySelector('#open-draft').getBoundingClientRect(), rfi = mast.querySelector('#rfi-door').getBoundingClientRect();
     const r = {picker: shown(document.getElementById('picker')), other, mast: [...mast.querySelectorAll('img,.t,.saved,button,a')].filter(shown).map(e => e.alt || e.textContent.trim()).filter(Boolean).join('|'),
       flush: Math.abs(document.getElementById('canvas').getBoundingClientRect().top - mast.getBoundingClientRect().bottom) < 1,
-      oneRow: mast.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom) <= Math.max(...kids.map(e => e.getBoundingClientRect().height)) + 1,
+      actionsTogether: Math.abs(draft.top - rfi.top) < 1 && rfi.left >= draft.right,
       menu: ['play-btn', 'play-menu', 'choose'].filter(id => document.getElementById(id))};
     r.ok = r.picker && !r.other.length && r.mast === 'Adobe|Partner services statement of work|Open draft|Have an RFI?' && r.flush;
     return r;
@@ -498,9 +498,9 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   const ph = await fresh(390, 844); await ph.goto(CANVAS);
   ok(await ph.evaluate(() => document.documentElement.scrollWidth) <= 390, 'on a phone the picker doesn\'t scroll sideways');
   await ph.waitForTimeout(300); const om3 = await onlyMasthead(ph);
-  ok(om3.ok && om3.oneRow && await ph.isHidden('#start-over'), 'on a phone only the masthead sits above the boxes, on one row with no gap left for Start over', JSON.stringify(om3));
+  ok(om3.ok && om3.actionsTogether && await ph.isHidden('#start-over'), 'on a phone the two entry buttons share a row above the play picker', JSON.stringify(om3));
   const ph375 = await fresh(375, 812); await ph375.goto(CANVAS); await ph375.waitForTimeout(300); const om4 = await onlyMasthead(ph375);
-  ok(om4.ok && om4.oneRow, 'on a 375 px phone too, the masthead is one row, with no empty row under the title', JSON.stringify(om4));
+  ok(om4.ok && om4.actionsTogether, 'the two entry buttons also fit together at 375 px', JSON.stringify(om4));
   const tab = await fresh(768, 1024); await tab.goto(CANVAS); await tab.waitForTimeout(300);
   const mh0 = await tab.$eval('.masthead', e => e.getBoundingClientRect().height); await tab.click('#picker [data-play="aem"]'); await tab.waitForTimeout(500);
   const mh1 = await tab.$eval('.masthead', e => e.getBoundingClientRect().height);
@@ -511,13 +511,16 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   // button and chips to the first play box, and nothing hidden takes focus on the way
   ok(await kb.evaluate(() => document.activeElement.id) === 'open-draft', 'from the keyboard, the first Tab lands on Open draft in the top bar (step 43)');
   await kb.keyboard.press('Tab');
+  ok(await kb.evaluate(() => document.activeElement.id) === 'rfi-door', 'the next Tab opens the RFI entry beside Open draft');
+  await kb.keyboard.press('Tab');
   ok(await kb.evaluate(() => document.activeElement.id) === 'vid-play', 'the next on the plays video at the top of the page (step 83)');
   await kb.keyboard.press('Tab'); await kb.keyboard.press('Tab');
   ok(await kb.evaluate(() => document.activeElement.id) === 'look-play', 'then, after Watch the video, the first look beside it (Nov 19 2026)');
   await kb.keyboard.press('Tab'); await kb.keyboard.press('Tab');
   ok(await kb.evaluate(() => document.activeElement.id) === 'bp-q', 'then, after its Watch the video, the question box above the play boxes');
   let walk = [];
-  for (let i = 0; i < 12 && await kb.evaluate(() => !document.activeElement.dataset.play); i++) { await kb.keyboard.press('Tab'); walk.push(await kb.evaluate(() => { const e = document.activeElement, r = e.getBoundingClientRect(); return !!(r.width && r.height) && !e.closest('[hidden]'); })); }
+  const questionStops = await kb.locator('#bp button:visible').count();
+  for (let i = 0; i <= questionStops && await kb.evaluate(() => !document.activeElement.dataset.play); i++) { await kb.keyboard.press('Tab'); walk.push(await kb.evaluate(() => { const e = document.activeElement, r = e.getBoundingClientRect(); return !!(r.width && r.height) && !e.closest('[hidden]'); })); }
   ok(await kb.evaluate(() => document.activeElement.dataset.play) === first && walk.every(Boolean), 'then Tab reaches the first play box, with nothing hidden above it taking focus', walk.length + ' stops');
   await kb.keyboard.press('Enter'); await kb.waitForTimeout(500);
   ok(await kb.isHidden('#picker') && await kb.isVisible('.tabs') && (await kb.textContent('#play-label')).trim() === (PL[first].title || PL[first].label), 'Enter on a box picks that play and brings back the steps and the toolbar');
@@ -658,7 +661,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
     // On a new custom canvas, attaching Figma selects the main services on its connections.
     const q = await fresh(); await q.goto(CANVAS); await choose(q, 'custom');
     for (const id of ['aemassets', 'gspm', 'express', 'fireflycm']) await addP(q, id);
-    await outside(q); const t0 = await read(q);
+    await outside(q); const t0 = await read(q), monthlyBefore = await q.evaluate(() => totals().mon);
     await q.click('#out-btn'); await q.waitForTimeout(200);
     const tag = await q.$eval('#out-menu [data-out="figma"] .ctag', e => ({t: e.textContent, r: getComputedStyle(e).borderTopLeftRadius, h: Math.round(e.getBoundingClientRect().height)})).catch(() => ({t: 'no Figma item'}));
     ok(tag.t === 'Connects to AEM Assets, GenStudio for Performance Marketing, Adobe Express and Firefly Custom Models' && tag.r === '12px' && tag.h > 30,
@@ -667,7 +670,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
     const drawn = await edges(q), t1 = await read(q);
     const sum = s => Number(s.replace(/[^0-9.]/g, ''));
     const setupHours = xf.reduce((hours, [id]) => hours + CAT.lines[id].base, 0);
-    ok(Object.keys(FIG).every(id => drawn.includes(id)) && sum(t1.big) === sum(t0.big) + setupHours * 150 && t1.sub === t0.sub, 'adding Figma draws its four lines and includes their main services',
+    ok(Object.keys(FIG).every(id => drawn.includes(id)) && sum(t1.big) === sum(t0.big) + setupHours * 150 && await q.evaluate(() => totals().mon) === monthlyBefore, 'adding Figma draws its four lines and charges their main services once',
       drawn.join(',') + ' ' + t0.big + ' then ' + t1.big);
     ok(await layoutClean(q), 'Nov 17: and the canvas stays clean, with no box on another and every i clear of the boxes');
     await q.click('.ib[data-c="figma-aemassets"]'); await q.waitForTimeout(400);
@@ -712,7 +715,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
         `Nov 17: with ${T} on the canvas, ${H} sits once under "Not suggested", right after "Connects to your canvas", and in no other group`, m.heads.join(' | ') + ' ' + JSON.stringify(r));
       ok(r.length === 1 && r[0].name === H && r[0].tag === 'Add anyway' && r[0].why === why && r[0].seen, `Nov 17: its tag reads "Add anyway", and the line under its name, shown without pointing at the row, reads "${why}"`, JSON.stringify(r));
       // take the newer product off: the older one is an ordinary row again
-      await outside(q); await q.dblclick(`.node[data-p="${trigger}"]`); await q.waitForTimeout(300); await q.click(`#card [data-rm="${trigger}"]`); await q.waitForTimeout(400);
+      await outside(q); await tap(q, trigger, true); await q.click(`#card [data-rm="${trigger}"]`); await q.waitForTimeout(400);
       m = await menu(q); r = m.rows.filter(x => x.id === held);
       ok(!m.heads.includes('Not suggested') && r.length === 1 && r[0].under === 'Connects to your canvas' && r[0].tag === 'Connects to 1 on your canvas' && r[0].why === 'Lines to Real-Time CDP' && !r[0].seen,
         `Nov 17: with ${T} removed, ${H} is back in its normal place under "Connects to your canvas" and "Not suggested" is gone`, m.heads.join(' | ') + ' ' + JSON.stringify(r));
