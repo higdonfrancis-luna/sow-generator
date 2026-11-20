@@ -2,6 +2,31 @@
 
 Read this first in the new chat. Everything below is on GitHub, so a new account with access to the repository can pick it up.
 
+## PICK UP HERE (written Fri Nov 20, 2026, when Adam ran out of usage)
+
+**State.** Everything built is saved and pushed on branch `claude/sow-generator-handoff-517tq8` (last build commit: the Commerce round). Working tree clean. The latest zip for Adobe Proto is made with `git archive --format=zip -o <file>.zip HEAD:site` (index.html at the root). Nothing goes to `main` without Adam's go; the ranked Add product list also needs the data owner's sign-off first.
+
+**How to work (binding, from Adam):** plain words; pictures/mockups before building; surgical changes; no release labels, dates or caveats in the tool; every service and connection rests on an Adobe quote proven word for word (`handoff/2026-11-17/evidence_page/tools/verify.py`, `found()`); never business.adobe.com by tool (Adam pastes it; see `adam_pastes/`), never partners.adobe.com; never hand-edit generated files (`python3 canvas/build.py` then `python3 build_site.py`, twice); run test suites one at a time; do not bump `combinedDefaultsVersion` (saved quotes must reopen unchanged). Known failing check: `check.py` only (needs Python Playwright).
+
+**Decided by Adam on Nov 20, NOT BUILT YET — build these next (one round, mockup/real screens before saving):**
+1. **Services start ticked (assume the client does not own the product yet).** Every product and connection on a canvas starts with its main setup services ticked; partners remove what the client already has. This includes the services that were left unticked: the four back-office boxes (ERP, PIM, Order management, Warehouse management), the AI assistant services (XT01, XT03 to XT07), Figma's, and Commerce's. Extras only some clients need (for example B2B setup, the move to Commerce as a Cloud Service) stay listed but unticked (option A, Adam agreed to the reasoning).
+   - **Exception, the two cross-sell plays:** on "Brand Visibility + Customer Journey Analytics (Cross-sell to CJA customers)" and "Brand Visibility + Adobe Commerce (Cross-sell to Commerce customers)" the product in the title is already owned, so ITS setup services start unticked (still listed). The connection work (for example Brand Visibility to CJA, Brand Visibility to Commerce) stays ticked. Adam: "Cross-sell assumes they already own Customer Journey Analytics and Commerce ... we would not need implementation services there, only if they start a new play and it's on the canvas or they add it under some new play." Claude recommended keeping this exception; Adam was weighing it ("unless you think we should just treat Commerce and CJA the same irrespective of play") and Claude answered: keep the exception.
+   - Saved quotes must still reopen exactly as saved.
+2. **Workfront picker defaults to "Bought after March 12, 2026"** (Adam: "let's just assume this all after March 12, which it is, and these are new implementations"). So by default the Proof-based work is out: the Workfront + GenStudio for Performance Marketing and Express + Workfront connections, and the "email proofing and approval loop" service on Marketo + Workfront. Partners can switch to "before" for an older client.
+3. **Commerce picker** means the version the client runs today (Adam: yes), and anyone can switch it to see what another version would look like (already works).
+4. **The statement of work states the Commerce version** it assumes (Adam: yes), for example "The client runs Adobe Commerce on Cloud."
+5. **Commerce Optimizer on non-Adobe stores** (Adam asked; yes, Adobe documents a Salesforce Commerce Cloud connector and loading catalogs from any system): add the storefront launch checklist and storefront-events services for an Optimizer storefront in front of a non-Adobe store (today they exist only on Commerce + Edge Delivery Services). Prove the quotes.
+6. The four back-office boxes stay on from the start on the Brand Visibility + Adobe Commerce play (Adam's rule: everything a play's products connect to starts on).
+
+**Then, in this order (from `PRODUCT_COVERAGE.md` and `EXPERIENCE_LEAGUE_SWEEP.md`, both in this folder, every finding with proven Adobe quotes):**
+1. The other version pickers: Journey Optimizer (Select/Prime/Ultimate), AEM Assets (Prime/Ultimate), AEM Sites (Cloud Service vs 6.5 LTS, plus a 6.5 LTS upgrade service), Target (Standard/Premium), Frame.io (Legacy/V4), Marketo (Growth/Select/Prime/Ultimate), Workfront Workflow packages.
+2. Experience Platform additions: event forwarding (a Real-Time CDP line), Privacy/Healthcare Shields, Federated Audience Composition, Data Distiller, the Marketing Agent for Microsoft 365 Copilot (copilot-rtcdp, copilot-ajo).
+3. New products and add-ons: Adobe Campaign (ask Adam to paste its business.adobe.com overview first), AEM Guides, Adobe LLM Apps, the Modernization Agent (lines on Edge Delivery), Journey Optimizer Loyalty, CJA B2B, Streaming Media, Marketo add-ons.
+4. About 120 one-line service gaps on existing products (EXPERIENCE_LEAGUE_SWEEP.md section 3).
+5. The maybes, after Adam pastes the business.adobe.com pages listed in both files.
+
+**Other open items:** check the first-look video plays from Proto after upload; the first look still says 569 services (Adam: leave it); Adam's private canvas gallery with every connection explained: https://claude.ai/artifact/6k6A8SjB7stGQrctfuX1iW (shows the state before the Commerce round).
+
 ## Where everything is
 
 - **Repository:** `higdonfrancis-luna/sow-generator`
