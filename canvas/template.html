@@ -1824,7 +1824,7 @@ const PROBS=/*PROBLEMS*/null;
 for(const [group,familyKey] of [['growth','agentic'],['genstudio','family']]){
   for(const area of CUSTOM[familyKey].areas){
     PROBS.push({id:area.id,chip:area.question,problem:area.label,group,keywords:area.keywords,requires:area.keywords,
-      play:CUSTOM.id,products:area.products,why:area.line,refine:[],familyKey,area});
+      play:CUSTOM.id,products:area.products,why:area.why||area.line,refine:area.refine||[],familyKey,area});
   }
 }
 const BP_STOP=new Set('a about an and are as at be by can cant client clients do does doesnt dont for from get gets has have how i in is isnt it its just my no not of on or our people so that the their them they this to too us very want wants we what when which who why with wont'.split(' '));
@@ -1907,15 +1907,17 @@ function bpStartHTML(){
     (all?'<div class="bp-chips" style="margin-top:18px"><button type="button" class="bp-chip red" data-bpa="fewer">Show fewer problems</button></div>':'');
 }
 function bpAnswerHTML(){const p=PROBS[bp.hits[bp.i]],s=bp.setup,pl=PLAYS[s.play],ids=[...s.prods,...s.out],last=bp.steps[bp.steps.length-1];
+  const genStudio=p.familyKey==='family' ? p.area : null;
   /* the boxes the canvas will draw: beside Edge Delivery Services, AEM Sites is part of the one "AEM Sites with Edge Delivery Services"
      box (its AEM authoring), as on the canvas (combinesSites), so it is not shown as a box of its own */
-  const boxes=ids.filter(id=>!(id==='aemsites'&&ids.includes('eds'))).map(id=>`<span class="bp-p${P[id].outside?' out':''}">${esc(P[id].name)}${P[id].outside?' (outside system)':''}${p.familyKey==='family'?infoI(id):''}</span>`).join('');
-  if(p.area)return `<div class="bp-ans"><h3 class="bp-t" id="bp-goal-title" tabindex="-1">${p.familyKey==='family'?'GenStudio · ':''}${esc(p.area.label)}</h3>
+  const boxes=ids.filter(id=>!(id==='aemsites'&&ids.includes('eds'))).map(id=>`<span class="bp-p${P[id].outside?' out':''}">${esc(P[id].name)}${P[id].outside?' (outside system)':''}${genStudio?infoI(id):''}</span>`).join('');
+  if(p.familyKey==='agentic')return `<div class="bp-ans"><h3 class="bp-t" id="bp-goal-title" tabindex="-1">${esc(p.area.label)}</h3>
 <p class="bp-heard">${esc(p.area.line)}</p><div class="bp-prods">${boxes}</div>
-<div class="bp-row"><button type="button" class="bp-build" data-bpa="build">${p.familyKey==='family'?'Build this':'Open this play'}</button><button type="button" class="bp-alt" data-bpa="goals">Back to questions</button><button type="button" class="bp-alt" data-bpa="build-all">${esc(famAll(CUSTOM[p.familyKey]).label)}</button></div></div>`;
+<div class="bp-row"><button type="button" class="bp-build" data-bpa="build">Open this play</button><button type="button" class="bp-alt" data-bpa="goals">Back to questions</button><button type="button" class="bp-alt" data-bpa="build-all">${esc(famAll(CUSTOM.agentic).label)}</button></div></div>`;
   let heard;
   if(last)heard=`<b>Updated:</b> ${esc(bpYou(last.chip))}.${last.note?' '+esc(last.note):''}`;
   else if(bp.pair&&bp.i===0)heard=`<b>Two problems here:</b> ${esc(bpYou(PROBS[bp.pair[0]].chip))}, and ${esc(bpYou(PROBS[bp.pair[1]].chip))}. Here's the setup you can offer for both.`;
+  else if(genStudio)heard=`<b>Heard:</b> Your client wants to ${esc(bpLc(genStudio.line))}`;
   else heard=`<b>Heard:</b> ${esc(bpYou(p.chip))}. Here's the setup you can offer for that.`;
   if(!last&&p.note)heard+=' '+esc(p.note);
   const links=bpConns(s).map(c=>`<div class="bp-cx"><span class="bp-pill" aria-hidden="true">${I.bolt}</span><span><b>${esc(P[c.a].name)} + ${esc(P[c.b].name)}</b> · ${esc(KIND[c.kind]||'Connection')}.${c.label?' '+esc(bpVoice(c.label.replace(/\s*$/,'').replace(/([^.])$/,'$1.'))):''}</span></div>`).join('');
@@ -1927,14 +1929,15 @@ function bpAnswerHTML(){const p=PROBS[bp.hits[bp.i]],s=bp.setup,pl=PLAYS[s.play]
     (priced?`<b>${money(lo.yr)}</b> at ${money(st.rate)} an hour${term}.`:`<b>${money(lo.yr)} to ${money(hi.yr)}</b> at ${money(100)} to ${money(300)} an hour${term}; enter your rate on the next screen.`)+
     (lo.concept?' Includes service concepts with placeholder hours.':''):'No starting services yet; add them on the next screen.';
   const refs=p.refine.map((r,k)=>[r,k]).filter(([r])=>!bp.steps.some(x=>x.chip===r.chip)&&bpOk(s,r));
+  const recommended=genStudio?'GenStudio · '+genStudio.label:pl.custom?pl.label+': '+andList(s.prods.map(short)):pl.label;
   return `<div class="bp-ans"><div class="bp-heard">${heard}</div>
-<h3 class="bp-lbl">Recommended: ${esc(pl.custom?pl.label+': '+andList(s.prods.map(short)):pl.label)}</h3><div class="bp-prods">${boxes}</div>
+<h3 class="bp-lbl"${genStudio?' id="bp-goal-title" tabindex="-1"':''}>Recommended: ${esc(recommended)}</h3><div class="bp-prods">${boxes}</div>
 ${links?`<h3 class="bp-lbl">How they connect</h3><div class="bp-cxs">${links}</div>`:''}
 <h3 class="bp-lbl">Why they work together</h3><ul>${why.map(w=>`<li>${esc(w)}</li>`).join('')}</ul>
-<h3 class="bp-lbl">What you deliver</h3><div class="bp-del">${del}</div>
+<h3 class="bp-lbl">What you deliver</h3><div class="bp-del">${genStudio?'<p>'+esc(genStudio.deliverable)+'</p>':''}${del}</div>
 ${refs.length?`<h3 class="bp-lbl">Refine</h3><div class="bp-chips" style="margin-top:4px">${refs.map(([r,k])=>`<button type="button" class="bp-chip" data-bpr="${k}">${esc(r.chip)}</button>`).join('')}</div>`:''}
-<div class="bp-row"><button type="button" class="bp-build" data-bpa="build">Build this</button>${bp.hits.length>1?'<button type="button" class="bp-alt" data-bpa="another">Show another setup</button>':''}<button type="button" class="bp-alt" data-bpa="again">Back to questions</button></div>
-<div class="bp-note">Matched from a list of common client problems, using Adobe's documentation. Edit anything on the next screen, where each connection says whether Adobe documents it or a partner designs it.</div></div>`;}
+<div class="bp-row"><button type="button" class="bp-build" data-bpa="build">Build this</button>${!genStudio&&bp.hits.length>1?'<button type="button" class="bp-alt" data-bpa="another">Show another setup</button>':''}<button type="button" class="bp-alt" data-bpa="again">Back to questions</button>${genStudio?`<button type="button" class="bp-alt" data-bpa="build-all">${esc(famAll(CUSTOM.family).label)}</button>`:''}</div>
+<div class="bp-note">Matched from a list of common client problems, using Adobe's documentation. Edit anything on the next screen, where each connection says whether Adobe documents it or a partner designs it.</div>${genStudio?CapabilityReferences.supporting(genStudio,true):''}</div>`;}
 function bpRender(){const v=bp.view,talk=v==='working'||v==='answer';$('bp-form').hidden=talk;
   $('bp-clear').hidden=v==='start'&&!$('bp-q').value;
   $('bp-resume').hidden=!reviewingQuestion;
@@ -2054,7 +2057,8 @@ let replaceAll=false;
 function chooseQuestionCanvas(combined,confirmed=false){
   const p=PROBS[bp.hits[bp.i]],family=p.familyKey&&CUSTOM[p.familyKey];
   if(combined&&!family)return;
-  const area=combined?famAll(family):p.area,s=combined?{play:CUSTOM.id,prods:area.products,out:[]}:bp.setup;
+  const area=combined?famAll(family):p.area;
+  const s=combined?{...bp.setup,prods:[...new Set([...area.products,...bp.setup.prods])]}:bp.setup;
   const signature=JSON.stringify([p.id,combined,bpKey(s)]);
   if(reviewingQuestion&&st.questionOrigin?.signature===signature){showQuestionView(false);return;}
   if(reviewingQuestion&&!confirmed){replaceAll=combined;ask('replace');return;}

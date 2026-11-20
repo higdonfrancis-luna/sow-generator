@@ -124,22 +124,28 @@ const fix = s => s.replace(/’/g, "'");
     await p.waitForTimeout(400);
   };
 
-  // The revenue goals are in the problem finder and the GenStudio lineup stays in the play list.
+  // Revenue goals preview a play. GenStudio questions show a detailed, priced recommendation.
   { const p = await page(1440, 900);
     const A = AGENTIC, family=PLAY.custom.family;
     const heads=await p.locator('#picker-list .sh').allTextContents();
-    ok(same(heads,['Brand Visibility plays','Adobe agentic lineup','Build your own play']) &&
+    ok(same(heads,['Brand Visibility plays','Adobe agentic lineup','Build your own play, frontier model integrations']) &&
       await p.locator('#bp .bp-gh').first().textContent()===A.section,'2. the three play rows follow the revenue and GenStudio questions');
     for (const rate of [0,185]) {
       await p.evaluate(r=>{st.rate=r;render();},rate);
       for (const area of family.areas) {
         await p.getByRole('button',{name:area.question,exact:true}).click();
         const answer=p.locator('#bp .bp-ans');
-        ok(await answer.locator('h3').textContent()==='GenStudio · '+area.label && await answer.locator('.bp-heard').textContent()===area.line &&
+        const quoted=await answer.locator('.bp-del b').textContent();
+        const expected=await p.evaluate(rate=>rate?money(bpSim(bp.setup).yr):money(bpSim(bp.setup,100).yr)+' to '+money(bpSim(bp.setup,300).yr),rate);
+        ok(await answer.locator('#bp-goal-title').textContent()==='Recommended: GenStudio · '+area.label &&
           same(await answer.locator('.bp-p').allTextContents(),area.products.map(id=>P[id].name)) &&
-          await answer.locator('[data-bpa="build-all"]').textContent()===family.all && !/\$|an hour/.test(await answer.innerText()),
-          '2. '+area.label+' previews its own products, outcome and whole-family option at rate '+rate);
-        await answer.locator('[data-bpa="goals"]').click();
+          await answer.locator('.bp-cx').count()>0 && await answer.locator(':scope > ul > li').count()>=2 &&
+          await answer.locator('.bp-del p').textContent()===area.deliverable && quoted===expected &&
+          same(await answer.locator('[data-bpr]').allTextContents(),area.refine.map(r=>r.chip)) &&
+          await answer.locator('.capability-references a').count()===area.references.length &&
+          await answer.locator('[data-bpa="build-all"]').textContent()===family.all,
+          '2. '+area.label+' shows its connections, rationale, delivery, estimate, sources and refinements at rate '+rate);
+        await answer.locator('[data-bpa="again"]').click();
       }
     }
     const opened = [];
@@ -218,7 +224,7 @@ const fix = s => s.replace(/’/g, "'");
 
   // ============ 4. the problem finder: its fee is the estimate of the canvas Build this opens ============
   { const p = await page(1440, 1000); await p.evaluate(() => { st.rate = 150; }); const rows = [];
-    const entries = await p.evaluate(() => PROBS.map(q => ({id:q.id, goal:!!q.area})));
+    const entries = await p.evaluate(() => PROBS.map(q => ({id:q.id, goal:q.familyKey==='agentic'})));
     for (let i = 0; i < entries.length; i++) {
       await p.evaluate(i => bpAsk(PROBS[i].chip, i), i); await p.waitForTimeout(1200);
       const shown = await p.evaluate(() => { const b = document.querySelector('#bp-body .bp-del b'); return b ? b.textContent : ''; });
@@ -226,8 +232,8 @@ const fix = s => s.replace(/’/g, "'");
       rows.push({...entries[i], shown, total:await p.evaluate(() => money(totals().yr))});
       await p.click('#change-play'); await p.click('#confirm-yes'); await p.waitForTimeout(250); await p.evaluate(() => { st.rate = 150; }); }
     const priced = rows.filter(r => !r.goal), goals = rows.filter(r => r.goal);
-    ok(priced.length === 23 && priced.every(r => r.shown === r.total), '4. each detailed problem quotes the fee on the canvas it opens', JSON.stringify(priced.filter(r => r.shown !== r.total)));
-    ok(goals.length === 9 && goals.every(r => !r.shown && r.total.startsWith('$')), '4. revenue and GenStudio questions preview the play and show the estimate once its canvas opens');
+    ok(priced.length === 29 && priced.every(r => r.shown === r.total), '4. each detailed problem, including all six GenStudio plays, quotes the fee on the canvas it opens', JSON.stringify(priced.filter(r => r.shown !== r.total)));
+    ok(goals.length === 3 && goals.every(r => !r.shown && r.total.startsWith('$')), '4. revenue goals preview the play and show the estimate once its canvas opens');
     await p.context().close(); }
 
   // ============ 5. the SOW steps, the area's name, and states saved before this change ============

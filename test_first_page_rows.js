@@ -20,7 +20,7 @@ const BRAND_OUTCOMES = ["Attract new customers through SEO and AI search, and gi
 const ROWS = [
   ['Brand Visibility plays', ['Brand Visibility + Customer Journey Analytics', 'Brand Visibility + Adobe Commerce', 'Brand Visibility + Sites Optimizer and Edge Delivery Services', 'Brand Visibility + Brand Concierge']],
   ['Adobe agentic lineup', ['Adobe Coworker', 'Adobe Brand Visibility', 'Adobe Brand Concierge', 'Adobe Brand Intelligence']],
-  ['Build your own play', ['Create your own play', 'Adobe in Claude', 'Adobe in ChatGPT', 'Adobe in Microsoft Copilot']]];
+  ['Build your own play, frontier model integrations', ['Create your own play', 'Adobe in Claude', 'Adobe in ChatGPT', 'Adobe in Microsoft Copilot']]];
 // the Client KBO plays: each area's sentence, products and the outside systems its canvas starts with (the rule: every system that connects to one of them)
 const GOAL_QUESTIONS = ['My client wants to win new customers', 'My client is losing customers', 'My client wants existing customers to buy more'];
 const KBO = [
@@ -52,7 +52,7 @@ const COPILOT_STUDIO = 'https://experienceleague.adobe.com/en/docs/experience-ma
 
 // ============ 1. the catalog: the rows, the cards, the line types, Copilot's steps and the Creative Cloud note ============
 { ok(same(CAT.rows.map(r => [r.head, r.plays || r.card]), [['Brand Visibility plays', ['cja', 'commerce', 'aem', 'fsi']], ['Adobe agentic lineup', ['coworker', 'abv']],
-      ['Build your own play', ['custom']]]) && CAT.plays.every(p => !('section' in p)),
+      ['Build your own play, frontier model integrations', ['custom']]]) && CAT.plays.every(p => !('section' in p)),
     '1. the first page\'s rows are data, top to bottom: the four Brand Visibility plays, the agentic lineup (Coworker, then Brand Visibility), and Build your own play; no play keeps a heading of its own',
     JSON.stringify(CAT.rows));
   ok(same(CUSTOM.starts.map(x => [x.label, x.after]), [['Adobe Brand Concierge', 'abv'], ['Adobe Brand Intelligence', 'abv'], ['Adobe in Claude', 'custom'], ['Adobe in ChatGPT', 'custom'], ['Adobe in Microsoft Copilot', 'custom']]),

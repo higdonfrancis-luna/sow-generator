@@ -54,6 +54,9 @@ function checkLayout(nodes) {
       assert.deepEqual([base.outside,base.marked,base.selected],[[],[],[]]);
       assert.equal(await map.locator('.wke-edge-faint').count(),internal.length);
       assert.equal(await map.locator('.wke-reset').count(),0);
+      assert.equal(await map.locator('.wke-product-list').count(),0);
+      assert.equal(await map.locator('.wke-inspector').innerText(),'');
+      assert.deepEqual(sorted(await select.locator('option').evaluateAll(opts=>opts.map(o=>o.value).filter(Boolean))),sorted(adobe.map(p=>p.id)));
       assert.equal(await page.locator('#picker-map h2').innerText(),'SEE HOW EVERY PRODUCT CONNECTS');
       assert.equal(await page.locator('.picker-map-s').textContent(),'Explore the connections between Adobe products. Choose one to see its direct connections and supporting systems.');
       assert(await map.evaluate(s=>s.parentElement.id==='picker-map' && s.parentElement.previousElementSibling.classList.contains('one') && s.parentElement===s.parentElement.parentElement.lastElementChild));

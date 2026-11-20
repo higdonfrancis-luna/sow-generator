@@ -65,7 +65,7 @@ async function main() {
         await back.click(); await p.getByRole('button',{name:'Back to questions',exact:true}).click();
         assert.equal(await p.locator('#bp [data-bpp]').count(), 32);
         await p.getByRole('button',{name:family.areas[1].question,exact:true}).click();
-        assert.equal(await p.locator('#bp-goal-title').innerText(), 'GenStudio · Creative foundations');
+        assert.equal(await p.locator('#bp-goal-title').textContent(), 'Recommended: GenStudio · Creative foundations');
         await build.click(); await p.locator('#confirm-no').click();
         await resume.click(); assert.deepEqual(await snapshot(p), edited);
         await back.click(); await clear.click(); await familyQuestion(p,family.areas[1].question);
@@ -81,8 +81,27 @@ async function main() {
         assert.equal(await back.isVisible(), false);
         assert.equal(await p.locator('#bp [data-bpp]').count(), 15);
         assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth), true);
+        const insights = family.areas.find(area => area.id === 'genstudio-insights');
+        await familyQuestion(p, insights.question);
+        await familyQuestion(p, insights.refine[0].chip);
+        const refined = await p.evaluate(() => ({
+          quote: money(bpSim(bp.setup).yr), products: bp.setup.prods, off: bp.setup.off
+        }));
+        assert.deepEqual(refined.products, [...insights.products, 'cja']);
+        assert.ok(refined.off.length > 0);
+        assert.equal(await p.locator('#bp .bp-del b').innerText(), refined.quote);
+        await build.click(); await back.waitFor();
+        assert.equal(await p.evaluate(() => money(totals().yr)), refined.quote);
+        assert.deepEqual((await snapshot(p)).on, refined.products);
+        await back.click(); await answer.waitFor();
+        assert.equal(await p.locator('#bp .bp-ask').last().innerText(), insights.refine[0].chip);
+        await p.locator('#bp [data-bpa="build-all"]').click();
+        await p.locator('#confirm-yes').click(); await back.waitFor();
+        const combined = await snapshot(p);
+        assert.deepEqual(new Set(combined.on), new Set([...family.areas.flatMap(area => area.products), 'cja']));
+        for (const service of refined.off) assert.equal(combined.choices[service], false);
         assert.deepEqual(errors, []);
-        console.log(width + 'px: typed and refined questions, browser Back/Forward, reload, edited canvas, replace, cancel and clear passed.');
+        console.log(width + 'px: typed and refined questions, Back/Forward, reload, edited canvas, replace, clear, and refined GenStudio family passed.');
       } finally { await ctx.close(); }
     }
   } finally { await browser.close(); }
