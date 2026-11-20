@@ -30,19 +30,10 @@ jobs:
           if-no-files-found: error
           include-hidden-files: true
           retention-days: 14
-      - name: Install Chromium for the repository checks
+      - name: Use the runner's Google Chrome for browser and video checks
         run: |
           npm install --prefix "$RUNNER_TEMP/sow-browser" --no-audit --no-fund playwright@1.56.1
-          "$RUNNER_TEMP/sow-browser/node_modules/.bin/playwright" install --with-deps chromium
           echo "NODE_PATH=$RUNNER_TEMP/sow-browser/node_modules" >> "$GITHUB_ENV"
-      - name: Check question navigation at desktop and phone sizes
-        run: node test_question_navigation.js
-      - name: Check every focused product and the full opening map
-        run: node test_map_first_page.js
-      - name: Check opening older drafts
-        run: node test_drafts.js
-      - name: Check the first page and its MP4 players in Google Chrome
-        run: |
           export PROTO_CHROME_BINARY="$(command -v google-chrome || command -v google-chrome-stable)"
           "$PROTO_CHROME_BINARY" --version
           cat > "$RUNNER_TEMP/proto-chrome.cjs" <<'JS'
@@ -50,7 +41,16 @@ jobs:
           const launch = chromium.launch.bind(chromium);
           chromium.launch = (options = {}) => launch({...options, executablePath: process.env.PROTO_CHROME_BINARY});
           JS
-          NODE_OPTIONS="--require=$RUNNER_TEMP/proto-chrome.cjs" node test_first_page_rows.js
+          echo "PROTO_CHROME_BINARY=$PROTO_CHROME_BINARY" >> "$GITHUB_ENV"
+          echo "NODE_OPTIONS=--require=$RUNNER_TEMP/proto-chrome.cjs" >> "$GITHUB_ENV"
+      - name: Check question navigation at desktop and phone sizes
+        run: node test_question_navigation.js
+      - name: Check every focused product and the full opening map
+        run: node test_map_first_page.js
+      - name: Check opening older drafts
+        run: node test_drafts.js
+      - name: Check the first page and its MP4 players in Google Chrome
+        run: node test_first_page_rows.js
   download:
     needs: proto
     runs-on: ubuntu-24.04
