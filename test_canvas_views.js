@@ -234,20 +234,20 @@ const server = http.createServer((req, res) => {
     const bi = await f.evaluate(() => ({play: st.play, on: st.on.join(), boxes: [...document.querySelectorAll('#stage .node')].map(n => n.dataset.p).join(), services: totals().n}));
     await f.evaluate(() => localStorage.clear()); await f.reload(); await f.waitForFunction(() => window.READY);
     ok(bi.play === 'custom' && bi.on === 'brandintel' && bi.boxes === 'figma,claude,brandintel' && bi.services > 0, 'Adobe Brand Intelligence opens Your own play with Brand Intelligence placed, Figma and Claude beside it, and its services selected', JSON.stringify(bi));
-    const fam = await f.$$eval('#picker-list .pc-fam[data-card="family"] .fam-area', x => x.map(a => ({start: a.dataset.start, label: a.querySelector('b').textContent, fee: !!a.querySelector('.fam-fee'), text: a.textContent})));
-    ok(fam.length === 6 && fam.every(a => !a.fee && !/\$|an hour/.test(a.text)),
-      'GenStudio shows its six areas with no fee line (Nov 19 2026: removed, fees live on the canvas and the Services step)', JSON.stringify(fam));
-    await f.evaluate(() => { st.rate = 185; render(); });
-    ok(await f.$$eval('#picker-list .pc-fam[data-card="family"] .fam-area', x => x.every(a => !a.querySelector('.fam-fee') && !/\$|an hour/.test(a.textContent))),
-      'GenStudio\'s areas still show no fee line once the partner enters a rate');
-    for (let i = 0; i < fam.length; i++) {
-      await f.click(`#picker-list .pc-fam[data-card="family"] .fam-area:nth-child(${i + 1})`); await f.waitForTimeout(300);
+    const fam = await f.evaluate(()=>CUSTOM.family.areas.map(a=>({start:a.products.join(),label:a.label,question:a.question})));
+    ok(fam.length===6,'GenStudio has six client questions');
+    await f.evaluate(()=>{st.rate=185;render();});
+    for (let i=0;i<fam.length;i++){
+      await f.getByRole('button',{name:fam[i].question,exact:true}).click();
+      ok(!/\$|an hour/.test(await f.locator('#bp .bp-ans').innerText()),'The GenStudio preview shows the client problem before pricing');
+      await f.locator('#bp [data-bpa="build"]').click();await f.waitForTimeout(300);
       const got = await f.evaluate(() => ({play: st.play, on: st.on.join(), boxes: [...document.querySelectorAll('#stage .node')].map(n => n.dataset.p), services: totals().n}));
       ok(got.play === 'custom' && got.on === fam[i].start && fam[i].start.split(',').every(id => got.boxes.includes(id)) && got.services > 0,
         `GenStudio, ${fam[i].label}: opens Your own play with its products placed and its services selected`, JSON.stringify(got));
       await f.click('#change-play'); await f.click('#confirm-yes'); await f.waitForTimeout(300);
     }
-    await f.click('#picker-list .pc-fam[data-card="family"] .fam-all'); await f.waitForTimeout(300);   // Nov 19 2026: the GenStudio card comes first, before the Client KBO plays
+    await f.getByRole('button',{name:fam[0].question,exact:true}).click();
+    await f.locator('#bp [data-bpa="build-all"]').click(); await f.waitForTimeout(300);
     const family = await f.evaluate(() => st.on.slice().sort().join());
     ok(family === [...new Set(fam.flatMap(a => a.start.split(',')))].sort().join() && family.split(',').length === 10, 'Or open the whole family together places all ten GenStudio products', family);
     await f.evaluate(() => localStorage.clear()); await f.reload(); await f.waitForFunction(() => window.READY);

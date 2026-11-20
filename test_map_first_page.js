@@ -49,10 +49,13 @@ function checkLayout(nodes) {
       const node=id=>map.locator('.wke-node[data-id="'+id+'"]');
       const base=await graph(page);
       assert.deepEqual(sorted(Object.keys(base.nodes)),sorted(adobe.map(p=>p.id)));
-      assert.deepEqual([base.edges,base.outside,base.marked,base.selected],[[],[],[],[]]);
+      const internal=catalog.connections.filter(c=>!products.get(c.a).outside&&!products.get(c.b).outside);
+      assert.deepEqual(base.edges,sorted(internal.map(c=>c.id)));
+      assert.deepEqual([base.outside,base.marked,base.selected],[[],[],[]]);
+      assert.equal(await map.locator('.wke-edge-faint').count(),internal.length);
       assert.equal(await map.locator('.wke-reset').count(),0);
       assert.equal(await page.locator('#picker-map h2').innerText(),'SEE HOW EVERY PRODUCT CONNECTS');
-      assert.equal(await page.locator('.picker-map-s').textContent(),'Choose an Adobe product to see its direct connections.');
+      assert.equal(await page.locator('.picker-map-s').textContent(),'Explore the connections between Adobe products. Choose one to see its direct connections and supporting systems.');
       assert(await map.evaluate(s=>s.parentElement.id==='picker-map' && s.parentElement.previousElementSibling.classList.contains('one') && s.parentElement===s.parentElement.parentElement.lastElementChild));
       assert(await map.isVisible());
       const initialState=await page.evaluate(()=>JSON.stringify({st,totals:totals(),storage:{...localStorage}}));

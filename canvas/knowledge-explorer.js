@@ -118,10 +118,11 @@
     return Math.max(0, 31 - Math.hypot(point.x - start.x - t * dx, point.y - start.y - t * dy));
   }
 
-  function visibleMap(catalog, adobe, fixed, slots, focus, canvasIds) {
+  function visibleMap(catalog, adobe, fixed, slots, focus, canvasIds, overview) {
     const anchors = new Set(focus ? [focus] : canvasIds.filter(id => !catalog.byId[id].outside));
     const connections = catalog.connections.filter(c => {
       if (focus) return c.a === focus || c.b === focus;
+      if (overview) return !catalog.byId[c.a].outside && !catalog.byId[c.b].outside;
       return (anchors.has(c.a) && (anchors.has(c.b) || catalog.byId[c.b].outside)) ||
              (anchors.has(c.b) && catalog.byId[c.a].outside);
     });
@@ -180,9 +181,9 @@
     }
     function currentMap() {
       const ids = noCanvas ? [] : canvas.ids;
-      const key = JSON.stringify(focus || ids);
+      const key = JSON.stringify([noCanvas, focus, ids]);
       if (mapKey !== key) {
-        cachedMap = visibleMap(catalog, adobe, fixed, slots, focus, ids);
+        cachedMap = visibleMap(catalog, adobe, fixed, slots, focus, ids, noCanvas);
         mapKey = key;
       }
       return cachedMap;
@@ -210,7 +211,7 @@
         const a = map.positions[c.a], b = map.positions[c.b];
         const external = catalog.byId[c.a].outside || catalog.byId[c.b].outside;
         const picked = c.a === system || c.b === system;
-        const classes = ['wke-edge', system && !picked ? 'wke-edge-faint' : 'wke-edge-active'];
+        const classes = ['wke-edge', (noCanvas && !focus) || (system && !picked) ? 'wke-edge-faint' : 'wke-edge-active'];
         if (external) classes.push('wke-edge-outside');
         if (picked) classes.push('wke-edge-detail');
         if (c.kind === 'partner') classes.push('wke-edge-partner');
@@ -230,7 +231,7 @@
           '<title>'+caption+'</title><circle class="wke-node-circle" r="'+(highlighted ? 30 : 27)+'"/><text class="'+(words.some(w => w.length > 8) ? 'wke-node-small' : '')+'" text-anchor="middle" dominant-baseline="central">'+lines+'</text>'+
           (inPlay ? '<circle class="wke-on-canvas" cx="22" cy="-22" r="5"/>' : '')+'</g>';
       }).join('');
-      const label = focus ? 'Direct connections for '+catalog.byId[focus].name : noCanvas ? 'Adobe products' : 'Direct connections for the products on my canvas';
+      const label = focus ? 'Direct connections for '+catalog.byId[focus].name : noCanvas ? 'Connections between Adobe products' : 'Direct connections for the products on my canvas';
       return '<div class="wke-graph-scroll" tabindex="0" data-focus-key="graph" aria-label="Product map. Scroll horizontally on small screens.">'+
         '<svg class="wke-graph" viewBox="0 0 860 '+map.height+'" role="group" aria-label="'+escapeHTML(label)+'">'+edges+nodes+'</svg></div>';
     }

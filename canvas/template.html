@@ -696,6 +696,12 @@ button.rk-add:focus-visible,.rk-how:focus-visible,.rk-link:focus-visible,.rk-opt
 @media(max-width:899px),(pointer:coarse){.ln .tipb{width:30px;height:30px;font-size:15px;position:relative}.ln .tipb::after{content:'';position:absolute;inset:-4px}.ln .tipb+.src{margin-left:12px}}
 @media(max-width:599px){#map-info,#t-count{display:none}}
 @media(min-width:1100px){#map-info{position:relative;height:0;padding:0;border:0}#t-legend{position:absolute;left:30px;right:520px;bottom:10px}}
+.bp-head,.bp-nav{display:flex;align-items:center;flex-wrap:wrap;gap:8px 14px}
+.bp-head{justify-content:space-between}
+.bp-nav:empty{display:none}
+.bp-nav .bp-alt{margin:0}
+body.question-review #picker .in > :not(#bp),body.question-review #scroller,body.question-review #empty,body.question-review #save,body.question-review #fbar,body.question-review #map-info,body.question-review #knowledge-model-section,body.question-review #rfi-door{display:none}
+body.question-review #start-over{display:inline-flex}
 </style><style id="knowledge-explorer-styles">/*KNOWLEDGE_EXPLORER_CSS*/</style></head><body class="picking">
 <div class="sow-canvas-screen">
 <div class="topline"></div>
@@ -705,6 +711,7 @@ button.rk-add:focus-visible,.rk-how:focus-visible,.rk-link:focus-visible,.rk-opt
   <div class="playname" id="playname" hidden><span class="k">Play</span><b id="play-label"></b></div>
   <div class="addwrap" id="addwrap" hidden><button class="add" id="add-btn" aria-haspopup="true" aria-expanded="false"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M4 12h16" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>Add product <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="addmenu" id="add-menu" role="menu" hidden></div></div>
   <div class="addwrap" id="outwrap" hidden><button class="btn outadd" id="out-btn" aria-haspopup="true" aria-expanded="false"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M4 12h16" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>Add outside system <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="addmenu" id="out-menu" role="menu" tabindex="-1" hidden></div></div>
+  <button type="button" class="btn" id="back-to-answer" hidden>Back to answer</button>
   <button class="btn" id="change-play" hidden>Change play</button>
   <label class="rate">Your rate <input id="rate" inputmode="decimal" autocomplete="off" aria-label="Your approved hourly rate"> an hour</label>
   <div class="rate" title="Sets each service's planning band; the Services step shows what each band assumes">Delivery size <span class="seg" id="size"><button data-size="small">Small</button><button data-size="typical">Typical</button><button data-size="large">Large</button></span></div>
@@ -717,8 +724,8 @@ button.rk-add:focus-visible,.rk-how:focus-visible,.rk-link:focus-visible,.rk-opt
 <main class="canvas" id="canvas">
   <div class="empty" id="empty" hidden><h2>Add your first product</h2><p>Products connect where Adobe documents a connection or a partner workflow; each connection says which.</p><button class="add" id="empty-add"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M4 12h16" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>Add product</button></div>
   <div class="scroller" id="scroller"><div class="sizer" id="sizer"></div><div class="stage" id="stage"><svg id="edges" width="1710" height="640" aria-hidden="true"></svg></div></div>
-  <section class="picker" id="picker"><div class="in"><div class="vids"><div class="vid-card" id="vid-card"><div class="vid-box" id="vid-box"><button type="button" class="vid-poster" id="vid-play" aria-label="Play the video: the four Brand Visibility partner plays"><img src="data:image/jpeg;base64,{{VIDEO_POSTER}}" alt="" width="1120" height="630"></button></div><div class="vid-copy"><p class="vid-eye">Start here</p><h2 class="vid-t">Watch the four Brand Visibility partner plays</h2><p class="vid-s">Five minutes on what each play sells, who it is for and the services partners deliver. Then pick a play below and build its statement of work.</p><button type="button" class="vid-btn" id="vid-watch">Watch the video</button><p class="vid-fail" id="vid-fail" hidden>The video could not play here. <a href="https://abvfirefly.netlify.app/" target="_blank" rel="noopener">Open the video page</a></p></div></div><div class="vid-card" id="look-card"><div class="vid-box" id="look-box"><button type="button" class="vid-poster" id="look-play" aria-label="Play the video: a first look at the Statement of Work Generator and RFI Builder"><img src="data:image/jpeg;base64,{{FIRST_LOOK_POSTER}}" alt="" width="1120" height="630"></button></div><div class="vid-copy"><p class="vid-eye">A first look</p><h2 class="vid-t">See the services, the hours and the fees behind every Adobe product</h2><p class="vid-s">A 72-second overview: pick a play, see the services on every connection, enter your own rate, and turn it into a statement of work. Have an RFI? Drop it in for drafted answers with Adobe's sources.</p><button type="button" class="vid-btn" id="look-watch">Watch the video</button><p class="vid-fail" id="look-fail" hidden>The video could not play here. <a href="sow-generator-and-rfi-builder-first-look.mp4" target="_blank" rel="noopener">Open the video</a></p></div></div></div><div class="bp" id="bp"><h2 class="bp-t"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#EB1000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5"/></svg>Not sure which play? Start from your client's problem</h2><p class="bp-s">Describe what your client is trying to fix. You get the products, how they connect and the services you can offer, from Adobe's documentation.</p><form class="bp-box" id="bp-form"><input id="bp-q" maxlength="300" autocomplete="off" aria-label="Describe your client's problem" placeholder="e.g. My client doesn't show up when people ask ChatGPT about their category"><button class="bp-go" type="submit" aria-label="Ask"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></form><div id="bp-body" aria-live="polite"></div></div><h2>Choose a play to start</h2><p class="lead">The play puts its products and starting services on the canvas; each connection says whether Adobe documents it or a partner designs it.</p><div id="picker-list"></div>
-    <p class="one"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#EB1000" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M12 7v6.5M12 16.8v.2"/></svg>One play per statement of work. To quote a second play, start a second SOW.</p><div class="picker-map" id="picker-map"><h2 class="sh">See how every product connects</h2><p class="picker-map-s">Choose an Adobe product to see its direct connections.</p></div></div></section>
+  <section class="picker" id="picker"><div class="in"><div class="vids"><div class="vid-card" id="vid-card"><div class="vid-box" id="vid-box"><button type="button" class="vid-poster" id="vid-play" aria-label="Play the video: the four Brand Visibility partner plays"><img src="data:image/jpeg;base64,{{VIDEO_POSTER}}" alt="" width="1120" height="630"></button></div><div class="vid-copy"><p class="vid-eye">Start here</p><h2 class="vid-t">Watch the four Brand Visibility partner plays</h2><p class="vid-s">Five minutes on what each play sells, who it is for and the services partners deliver. Then pick a play below and build its statement of work.</p><button type="button" class="vid-btn" id="vid-watch">Watch the video</button><p class="vid-fail" id="vid-fail" hidden>The video could not play here. <a href="https://abvfirefly.netlify.app/" target="_blank" rel="noopener">Open the video page</a></p></div></div><div class="vid-card" id="look-card"><div class="vid-box" id="look-box"><button type="button" class="vid-poster" id="look-play" aria-label="Play the video: a first look at the Statement of Work Generator and RFI Builder"><img src="data:image/jpeg;base64,{{FIRST_LOOK_POSTER}}" alt="" width="1120" height="630"></button></div><div class="vid-copy"><p class="vid-eye">A first look</p><h2 class="vid-t">See the services, the hours and the fees behind every Adobe product</h2><p class="vid-s">A 72-second overview: pick a play, see the services on every connection, enter your own rate, and turn it into a statement of work. Have an RFI? Drop it in for drafted answers with Adobe's sources.</p><button type="button" class="vid-btn" id="look-watch">Watch the video</button><p class="vid-fail" id="look-fail" hidden>The video could not play here. <a href="sow-generator-and-rfi-builder-first-look.mp4" target="_blank" rel="noopener">Open the video</a></p></div></div></div><div class="bp" id="bp"><div class="bp-head"><h2 class="bp-t" id="bp-heading" tabindex="-1"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#EB1000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5"/></svg>Not sure which play? Start from your client's problem</h2><div class="bp-nav"><button type="button" class="bp-alt" id="bp-resume" hidden>Return to canvas</button><button type="button" class="bp-alt" id="bp-clear" hidden>Clear question</button></div></div><p class="bp-s">Describe what your client is trying to fix. You get the products, how they connect and the services you can offer, from Adobe's documentation.</p><form class="bp-box" id="bp-form"><input id="bp-q" maxlength="300" autocomplete="off" aria-label="Describe your client's problem" placeholder="e.g. My client doesn't show up when people ask ChatGPT about their category"><button class="bp-go" type="submit" aria-label="Ask"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></form><div id="bp-body" aria-live="polite"></div></div><h2>Choose a play to start</h2><p class="lead">The play puts its products and starting services on the canvas; each connection says whether Adobe documents it or a partner designs it.</p><div id="picker-list"></div>
+    <p class="one"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#EB1000" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M12 7v6.5M12 16.8v.2"/></svg>One play per statement of work. To quote a second play, start a second SOW.</p><div class="picker-map" id="picker-map"><h2 class="sh">See how every product connects</h2><p class="picker-map-s">Explore the connections between Adobe products. Choose one to see its direct connections and supporting systems.</p></div></div></section>
   <button class="save" id="save">Continue &rarr;</button>
   <div class="card" id="card" role="dialog" aria-labelledby="card-heading" hidden></div>
 </main>
@@ -1067,8 +1074,10 @@ $('stage').addEventListener('change',changeScopeChoice);
 $('card').addEventListener('change',changeScopeChoice);
 /* ---------- render ---------- */
 let shown=new Set(),shownC=new Set(),card=null,pinned=false,moreOpen={};
+let reviewingQuestion=false;
 function render(){
-  document.body.classList.toggle('picking',!play());
+  document.body.classList.toggle('picking',!play()||reviewingQuestion);
+  document.body.classList.toggle('question-review',reviewingQuestion);
   setLayout();
   const stage=$('stage'),ps=displayProducts(),F=compactCanvas();
   stage.querySelectorAll('.node').forEach(e=>e.remove());
@@ -1090,7 +1099,8 @@ function render(){
     hook(n,'p',p.id);
     stage.appendChild(n);}
   shown=new Set(ps.map(p=>p.id));
-  const pl=play(),own=!!pl&&!!pl.custom,nP=ps.filter(p=>!p.outside).length;$('picker').hidden=!!pl;$('save').hidden=own?!nP:!ps.length;$('playname').hidden=!pl;$('change-play').hidden=!pl;
+  const pl=play(),own=!!pl&&!!pl.custom,nP=ps.filter(p=>!p.outside).length;$('picker').hidden=!!pl&&!reviewingQuestion;
+  $('back-to-answer').hidden=!pl||!st.questionOrigin;$('save').hidden=own?!nP:!ps.length;$('playname').hidden=!pl;$('change-play').hidden=!pl;
   $('addwrap').hidden=!pl;$('outwrap').hidden=!pl||!outsideOffer().length;if($('outwrap').hidden)openOut(false);else if(!$('out-menu').hidden){$('out-menu').innerHTML=outMenuHTML();placeAdd();}$('empty').hidden=!(own&&!nP);if(!pl)openAdd(false);else if(!$('add-menu').hidden)drawAdd();
   $('play-label').textContent=pl?((pl.custom&&st.area)||pl.title||pl.label):'';
   drawEdges();
@@ -1202,11 +1212,9 @@ const PLUSR='<svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
    'named' names the canvas it opens after itself ("Adobe in Claude") */
 const startsBy=(k,id)=>((CUSTOM&&CUSTOM.starts)||[]).filter(x=>x[k]===id);
 const startCards=(k,id)=>startsBy(k,id).map(x=>`<button class="pc-card" data-start="${x.products.join(',')}"${x.named?` data-name="${esc(x.label)}"`:''}${x.assistant?` data-assistant="${x.assistant}"`:''}><b>${esc(x.label)}</b><span class="s">${esc(x.sub)}</span><span class="chips">${x.assistant?`<span class="oc">${esc(short(x.assistant))}</span>`:''}${x.products.map(id=>`<span>${esc(short(id))}</span>`).join('')}</span></button>`).join('');
-/* GenStudio areas open from the family card. Named revenue plays open from the problem finder.
-   Both supply the saved canvas layouts below. */
+/* Both outcome families open from the question finder. Named revenue plays keep their saved canvas layouts. */
 const FAMS=[CUSTOM.family,CUSTOM.agentic];
 const famAll=F=>typeof F.all==='string'?{label:F.all,products:[...new Set(F.areas.flatMap(a=>a.products))]}:F.all;
-const famName=(F,x)=>F.named?` data-name="${esc(x)}"`:'';
 /* the canvases the first page names (each named card's areas and all three together, each named start card) and their own places (areaPlaces), by name */
 const AREA_PLACES=Object.fromEntries([...FAMS.filter(F=>F.named).flatMap(F=>[...F.areas,famAll(F)]),...((CUSTOM&&CUSTOM.starts)||[]).filter(x=>x.named)].map(x=>[x.name||x.label,x.places]));
 /* a saved canvas keeps its name only while the first page still opens a canvas by that name */
@@ -1215,12 +1223,7 @@ if(st.area&&!(play()&&play().custom&&Object.hasOwn(AREA_PLACES,st.area)))delete 
 const playCard=p=>`<button class="pc-card${p.badge?' pc-new':''}" data-play="${p.id}">${p.badge?`<span class="pc-badge">${esc(p.badge)}</span>`:''}<b>${esc(p.label)}</b><span class="s">${esc(p.sub)}</span><span class="chips">${p.custom?`<span class="cchip">${PLUSR}${p.products.filter(id=>id!=='aemsites'||!p.products.includes('eds')).length} products to choose from</span>`:p.products.map(id=>`<span>${esc(short(id))}</span>`).join('')}</span></button>`;
 const playRow=ids=>{const n=ids.reduce((k,id)=>k+1+startsBy('before',id).length+startsBy('after',id).length,0);
   return `<div class="grid" style="--cols:${Math.max(4,n)}">`+ids.map(id=>startCards('before',id)+playCard(PLAYS[id])+startCards('after',id)).join('')+'</div>';};
-/* an area is a button that holds its products' chips, and a product's i (infoI) is a button of its own inside it */
-const famCard=k=>{const F=CUSTOM[k],w=famAll(F);return `<div class="pc-fam" data-card="${k}">${F.label?`<b>${esc(F.label)}</b>`:''}${F.sub?`<span class="s">${esc(F.sub)}</span>`:''}<div class="fam-areas">`+
-    F.areas.map(a=>`<div class="fam-area" role="button" tabindex="0" data-start="${a.products.join(',')}"${famName(F,a.label)}><b>${esc(a.label)}</b>${a.line?`<span class="s">${esc(a.line)}</span>`:''}<span class="chips">${a.products.map(id=>`<span>${esc(P[id].name)}${infoI(id)}</span>`).join('')}</span></div>`).join('')+
-    `</div><button class="fam-all" data-start="${w.products.join(',')}"${famName(F,w.name)}>${esc(w.label)}</button></div>`;};
-$('picker-list').innerHTML=CAT.rows.map(r=>`<div class="sh">${esc(r.head)}</div>`+(r.card?famCard(r.card):playRow(r.plays))).join('');
-$('picker-list').addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('.fam-area')){e.preventDefault();e.target.click();}});
+$('picker-list').innerHTML=CAT.rows.map(r=>`<div class="sh">${esc(r.head)}</div>`+playRow(r.plays)).join('');
 
 /* ---------- cards ---------- */
 /* Product cards use a desktop double-click. Touch, keyboard and connection bolts each need one activation. */
@@ -1495,7 +1498,7 @@ $('card').addEventListener('click',e=>{e.stopPropagation();
   const sm=e.target.closest('summary');if(sm){const d=sm.parentElement,box=$('card'),y=box.scrollTop;setTimeout(()=>{moreOpen[d.dataset.more]=d.open;const L0=box.style.left;placeCard();if(compactCanvas())box.style.left=L0;
     /* Get your team ready: the card stays where it was, then scrolls just far enough to show the opened box without losing its heading */
     if(d.classList.contains('ready')){box.scrollTop=y;const c=box.getBoundingClientRect(),r=d.getBoundingClientRect();if(d.open&&r.bottom>c.bottom)box.scrollTop+=Math.min(r.top-c.top-8,r.bottom-c.bottom+8);}},0);pinned=true;}});
-function pick(e){e.stopPropagation();const b=e.target.closest('[data-play],[data-start]');if(!b)return;st.play=b.dataset.play||CUSTOM.id;st.on=b.dataset.start?b.dataset.start.split(','):[];st.out=startOut(PLAYS[st.play],st.on,b.dataset.assistant);if(b.dataset.name)st.area=b.dataset.name;else delete st.area;st.decisions=CanvasScope.newDecisions();st.serviceDefaults=true;st.ls={};st.keep={};st.fresh=true;st.pubSig=null;moreOpen={};render();if(play().custom&&!st.on.length&&document.documentElement.clientWidth>900)openAdd(true);}
+function pick(e){e.stopPropagation();const b=e.target.closest('[data-play],[data-start]');if(!b)return;clearQuestion();delete st.questionOrigin;reviewingQuestion=false;st.play=b.dataset.play||CUSTOM.id;st.on=b.dataset.start?b.dataset.start.split(','):[];st.out=startOut(PLAYS[st.play],st.on,b.dataset.assistant);if(b.dataset.name)st.area=b.dataset.name;else delete st.area;st.decisions=CanvasScope.newDecisions();st.serviceDefaults=true;st.ls={};st.keep={};st.fresh=true;st.pubSig=null;moreOpen={};render();if(play().custom&&!st.on.length&&document.documentElement.clientWidth>900)openAdd(true);}
 /* ---------- The Add product menu (every play; Create your own play starts with it) ---------- */
 /* step 63: the menu's groups, under the headings of Adobe's own product menu and in its order; a product not listed falls under More products */
 const GROUPS=[['AI & agents',['bv','bc','cw','brandintel']],['Content & workflows',['aemsites','aemassets','eds','so','aemforms','commerce','aco','workfront','gspm','frameio','planning']],['Creativity & design',['creativecloud','express','fireflycp','fireflycm']],['Data & analytics',['rtcdp','cja','aa','ca','mmm','collab','cintel']],['Campaign management',['ajo','ajob2b','xa','marketo','moptimizer','mqualifier','mmeasure','target']],['Document productivity',['acrobat','acrobatsign']]];
@@ -1818,9 +1821,11 @@ for(const k in VIDEOS)for(const b of ['-play','-watch'])$(k+b).addEventListener(
    No AI: the partner's words are matched to the problems in problems.json (keywords first, then shared words), and the
    answer comes from the catalog: the play, its products and connections, and its starting services priced with the canvas's own math */
 const PROBS=/*PROBLEMS*/null;
-for(const area of CUSTOM.agentic.areas){
-  PROBS.push({id:area.id,chip:area.question,problem:area.label,group:'growth',keywords:area.keywords,requires:area.keywords,
-    play:CUSTOM.id,products:area.products,why:area.line,refine:[],area});
+for(const [group,familyKey] of [['growth','agentic'],['genstudio','family']]){
+  for(const area of CUSTOM[familyKey].areas){
+    PROBS.push({id:area.id,chip:area.question,problem:area.label,group,keywords:area.keywords,requires:area.keywords,
+      play:CUSTOM.id,products:area.products,why:area.line,refine:[],familyKey,area});
+  }
 }
 const BP_STOP=new Set('a about an and are as at be by can cant client clients do does doesnt dont for from get gets has have how i in is isnt it its just my no not of on or our people so that the their them they this to too us very want wants we what when which who why with wont'.split(' '));
 /* step 41: plurals, endings, verb forms and spelling variants match too: the question and every keyword are reduced to the same word stems */
@@ -1855,7 +1860,8 @@ const OWNED_OFF={eds:['A04','A01','A02','A03','A05','SI01','SI02','SI04','SI05',
   marketo:['MK01','MK02','MK03','MK04','MK05'],workfront:['WF01','WF02','WF03','WF04','WF05'],ajo:['JO01','JO02','JO04','JO05'],bc:['F02'],target:['TG01','TG02'],rtcdp:['RT01','RT02','RT03','RT05'],cw:['CW02'],bv:['L02']};
 const bpOff=(s,r)=>[...new Set([...(s.off||[]),...(r.owned||[]).flatMap(id=>OWNED_OFF[id]||[])])];
 const bpLc=s=>/^[A-Z][a-z]/.test(s)?s[0].toLowerCase()+s.slice(1):s;
-let bp={view:'start',asked:'',hits:[],i:0,pair:null,setup:null,steps:[],near:[]};
+const emptyQuestion=()=>({view:'start',listView:'start',asked:'',hits:[],i:0,pair:null,setup:null,steps:[],near:[]});
+let bp=emptyQuestion();
 /* a problem's setup: its play, the Adobe products and the outside systems the problem names that the play offers. Nov 18 2026: the canvas it opens
    also starts with every system the rule above puts on (bpStart), so its fee counts their services */
 function bpBase(p){const pl=PLAYS[p.play];return{play:p.play,prods:p.products.filter(id=>!P[id].outside),out:[...new Set(p.products.filter(id=>P[id].outside&&(pl.outside||[]).includes(id)))],off:[...new Set([...(p.owned||[]).flatMap(id=>OWNED_OFF[id]||[]),...(p.off||[])])]};}
@@ -1889,7 +1895,7 @@ const bpVoice=s=>s.replace(/\b([Tt])he client\b(?![-\w'])/g,(m,t)=>(t==='T'?'You
 const bpHrs=n=>(Math.round(n*10)/10).toLocaleString('en-US');
 const bpChip=(i,cls)=>`<button type="button" class="bp-chip${cls||''}" data-bpp="${i}">${esc(PROBS[i].chip)}</button>`;
 /* step 77: See all problems lists them by use case, in each group's own order (problems.json gives every problem its group) */
-const BP_GROUPS=[['growth','Revenue growth goals'],['found','Get found in AI and search'],['site','Website and online store'],['leads','Leads and sales'],['messages','Customer messages and data'],['team','Content and team productivity']];
+const BP_GROUPS=[['growth','Revenue growth goals'],['genstudio','GenStudio'],['found','Get found in AI and search'],['site','Website and online store'],['leads','Leads and sales'],['messages','Customer messages and data'],['team','Content and team productivity']];
 const BP_ORDER=['ai-answers-missing','ai-traffic-revenue','organic-traffic-falling','seo-fix-backlog','product-pages-ai','slow-website','storefront-hard-to-update','site-visitors-cant-find-answers','same-site-for-everyone','fsi-complex-questions','b2b-leads-go-cold','reps-email-by-hand','chats-never-reach-sales','same-nurture-path','ad-audiences-stale','disconnected-messages','abandoned-carts','customer-data-silos','cant-see-what-works','content-too-slow','off-brand-assets','team-busywork','slow-reporting'];
 const bpRank=i=>{const k=BP_ORDER.indexOf(PROBS[i].id);return k<0?BP_ORDER.length+i:k;};
 const bpGrouped=ids=>{const known=new Set(BP_GROUPS.map(g=>g[0]));return [...BP_GROUPS,['','More problems']].map(([g,h])=>[h,ids.filter(i=>g?PROBS[i].group===g:!known.has(PROBS[i].group)).sort((a,b)=>bpRank(a)-bpRank(b))]).filter(x=>x[1].length);};
@@ -1903,10 +1909,10 @@ function bpStartHTML(){
 function bpAnswerHTML(){const p=PROBS[bp.hits[bp.i]],s=bp.setup,pl=PLAYS[s.play],ids=[...s.prods,...s.out],last=bp.steps[bp.steps.length-1];
   /* the boxes the canvas will draw: beside Edge Delivery Services, AEM Sites is part of the one "AEM Sites with Edge Delivery Services"
      box (its AEM authoring), as on the canvas (combinesSites), so it is not shown as a box of its own */
-  const boxes=ids.filter(id=>!(id==='aemsites'&&ids.includes('eds'))).map(id=>`<span class="bp-p${P[id].outside?' out':''}">${esc(P[id].name)}${P[id].outside?' (outside system)':''}</span>`).join('');
-  if(p.area)return `<div class="bp-ans"><h3 class="bp-t" id="bp-goal-title" tabindex="-1">${esc(p.area.label)}</h3>
+  const boxes=ids.filter(id=>!(id==='aemsites'&&ids.includes('eds'))).map(id=>`<span class="bp-p${P[id].outside?' out':''}">${esc(P[id].name)}${P[id].outside?' (outside system)':''}${p.familyKey==='family'?infoI(id):''}</span>`).join('');
+  if(p.area)return `<div class="bp-ans"><h3 class="bp-t" id="bp-goal-title" tabindex="-1">${p.familyKey==='family'?'GenStudio · ':''}${esc(p.area.label)}</h3>
 <p class="bp-heard">${esc(p.area.line)}</p><div class="bp-prods">${boxes}</div>
-<div class="bp-row"><button type="button" class="bp-build" data-bpa="build">Open this play</button><button type="button" class="bp-alt" data-bpa="goals">Back to questions</button><button type="button" class="bp-alt" data-bpa="build-all">${esc(CUSTOM.agentic.all.label)}</button></div></div>`;
+<div class="bp-row"><button type="button" class="bp-build" data-bpa="build">${p.familyKey==='family'?'Build this':'Open this play'}</button><button type="button" class="bp-alt" data-bpa="goals">Back to questions</button><button type="button" class="bp-alt" data-bpa="build-all">${esc(famAll(CUSTOM[p.familyKey]).label)}</button></div></div>`;
   let heard;
   if(last)heard=`<b>Updated:</b> ${esc(bpYou(last.chip))}.${last.note?' '+esc(last.note):''}`;
   else if(bp.pair&&bp.i===0)heard=`<b>Two problems here:</b> ${esc(bpYou(PROBS[bp.pair[0]].chip))}, and ${esc(bpYou(PROBS[bp.pair[1]].chip))}. Here's the setup you can offer for both.`;
@@ -1927,9 +1933,11 @@ ${links?`<h3 class="bp-lbl">How they connect</h3><div class="bp-cxs">${links}</d
 <h3 class="bp-lbl">Why they work together</h3><ul>${why.map(w=>`<li>${esc(w)}</li>`).join('')}</ul>
 <h3 class="bp-lbl">What you deliver</h3><div class="bp-del">${del}</div>
 ${refs.length?`<h3 class="bp-lbl">Refine</h3><div class="bp-chips" style="margin-top:4px">${refs.map(([r,k])=>`<button type="button" class="bp-chip" data-bpr="${k}">${esc(r.chip)}</button>`).join('')}</div>`:''}
-<div class="bp-row"><button type="button" class="bp-build" data-bpa="build">Build this</button>${bp.hits.length>1?'<button type="button" class="bp-alt" data-bpa="another">Show another setup</button>':''}<button type="button" class="bp-alt" data-bpa="again">Ask about another problem</button></div>
+<div class="bp-row"><button type="button" class="bp-build" data-bpa="build">Build this</button>${bp.hits.length>1?'<button type="button" class="bp-alt" data-bpa="another">Show another setup</button>':''}<button type="button" class="bp-alt" data-bpa="again">Back to questions</button></div>
 <div class="bp-note">Matched from a list of common client problems, using Adobe's documentation. Edit anything on the next screen, where each connection says whether Adobe documents it or a partner designs it.</div></div>`;}
 function bpRender(){const v=bp.view,talk=v==='working'||v==='answer';$('bp-form').hidden=talk;
+  $('bp-clear').hidden=v==='start'&&!$('bp-q').value;
+  $('bp-resume').hidden=!reviewingQuestion;
   const bubbles=talk?[bp.asked,...bp.steps.map(x=>x.chip)].map(t=>`<div class="bp-ask"><div>${esc(t)}</div></div>`).join(''):'';
   if(v==='working')$('bp-body').innerHTML=bubbles+'<div class="bp-work">Matching your client\'s problem <i></i><i></i><i></i></div>';
   else if(v==='answer')$('bp-body').innerHTML=bubbles+bpAnswerHTML();
@@ -1939,7 +1947,7 @@ let bpT=0;
 const bpWait=ms=>matchMedia('(prefers-reduced-motion: reduce)').matches?150:ms;
 function bpShow(ms){
   clearTimeout(bpT);
-  const reveal=()=>{bp.view='answer';bpRender();const a=$('bp-body').querySelector('.bp-ans');if(a.getBoundingClientRect().top<0)a.scrollIntoView({block:'start'});};
+  const reveal=()=>{bp.view='answer';bpRender();const a=$('bp-body').querySelector('.bp-ans');if(a&&a.getBoundingClientRect().top<0)a.scrollIntoView({block:'start'});};
   if(PROBS[bp.hits[bp.i]].area){reveal();$('bp-goal-title').focus({preventScroll:true});return;}
   bp.view='working';bpRender();bpT=setTimeout(reveal,bpWait(ms));
 }
@@ -1965,29 +1973,102 @@ function bpAsk(text,forced){const {t,sc,hits}=bpMatch(text,forced);bp.listView=b
   const seen=new Set([bpKey(bpBase(PROBS[lead]))]);bp.hits=[lead];
   for(const [i] of hits){const k=bpKey(bpBase(PROBS[i]));if(seen.has(k))continue;seen.add(k);bp.hits.push(i);if(bp.hits.length>=3)break;}
   bp.setup=bpBase(PROBS[bp.hits[bp.i]]);bpShow(900);}
-$('bp-form').addEventListener('submit',e=>{e.preventDefault();const q=$('bp-q').value.trim();if(!q){$('bp-q').focus();return;}bpAsk(q);});
-$('bp').addEventListener('click',e=>{const pc=e.target.closest('[data-bpp]');if(pc){const i=Number(pc.dataset.bpp);bpAsk(PROBS[i].chip,i);return;}
-  const rc=e.target.closest('[data-bpr]');if(rc){const r=PROBS[bp.hits[bp.i]].refine[Number(rc.dataset.bpr)],was=bp.setup,n=bpNext(was,r);if(!n)return;
+function applyRefinement(r){
+  const was=bp.setup,n=bpNext(was,r);if(!n)return false;
     const lost=was.out.filter(id=>!n.out.includes(id)),notes=[];if(n.play!==was.play)notes.push('That moves the setup to '+PLAYS[n.play].label+'.');if(r.note)notes.push(r.note);
     const inSet=bpSim({...n,off:[]}).ids,offNew=n.off.filter(l=>!(was.off||[]).includes(l)&&inSet.includes(l));if(offNew.length)notes.push('Your client already has '+andList((r.owned||[]).filter(id=>(OWNED_OFF[id]||[]).some(l=>offNew.includes(l))).map(id=>id==='storefront'?'a Commerce storefront on Edge':id==='commerce-media'?'its product images in AEM Assets':P[id].name))+', so '+(offNew.length>1?'these services start':'this service starts')+' off: '+offNew.map(l=>LN[l].name).join('; ')+'. Turn '+(offNew.length>1?'any':'it')+' back on with the check on the canvas.');
     const built=r.add.filter(id=>!(r.owned||[]).includes(id)&&!was.prods.includes(id)&&(P[id].lines||[]).some(l=>(OWNED_OFF[id]||[]).includes(l)&&inSet.includes(l)));if(built.length)notes.push('This adds standing up '+andList(built.map(id=>P[id].name))+': '+built.flatMap(id=>P[id].lines.filter(l=>OWNED_OFF[id].includes(l)&&inSet.includes(l))).map(l=>LN[l].name).join('; ')+'. If your client already has '+(built.length>1?'them':'it')+', take '+(built.flatMap(id=>P[id].lines.filter(l=>OWNED_OFF[id].includes(l)&&inSet.includes(l))).length>1?'those':'it')+' out with X on the canvas.');
     if(lost.length)notes.push((lost.length>1?"This play doesn't offer them, so ":"This play doesn't offer it, so ")+andList(lost.map(id=>'the '+bpLc(P[id].name)+' box'))+(lost.length>1?' leave':' leaves')+' the setup.'+(lost.includes('cdn')&&n.prods.includes('bv')?" Brand Visibility still needs your client's CDN, which you set up with them outside this tool.":''));
     if(lost.includes('cdn'))for(let i=0;i<notes.length-1;i++)notes[i]=notes[i].replace(/\.\s+/g,'.\n').split('\n').filter(x=>!/CDN logs/.test(x)).join(' ');
-    bp.steps.push({chip:r.chip,note:notes.join(' ')});bp.setup=n;bpShow(500);return;}
+    bp.steps.push({chip:r.chip,note:notes.join(' ')});bp.setup=n;return true;
+}
+$('bp-form').addEventListener('submit',e=>{e.preventDefault();const q=$('bp-q').value.trim();if(!q){$('bp-q').focus();return;}bpAsk(q);});
+$('bp-q').addEventListener('input',()=>{$('bp-clear').hidden=bp.view==='start'&&!$('bp-q').value;});
+$('bp').addEventListener('click',e=>{const pc=e.target.closest('[data-bpp]');if(pc){const i=Number(pc.dataset.bpp);bpAsk(PROBS[i].chip,i);return;}
+  const rc=e.target.closest('[data-bpr]');if(rc){const r=PROBS[bp.hits[bp.i]].refine[Number(rc.dataset.bpr)];if(r&&applyRefinement(r))bpShow(500);return;}
   const a=e.target.closest('[data-bpa]');if(!a)return;const k=a.dataset.bpa;
   if(k==='all'||k==='fewer'){bp.view=k==='all'?'all':'start';bpRender();return;}
-  if(k==='goals'){bp.view=bp.listView;$('bp-q').value='';bpRender();$('bp-body').querySelector('[data-bpp="'+bp.hits[bp.i]+'"]').focus();return;}
-  if(k==='again'){clearTimeout(bpT);bp.view='start';bpRender();$('bp-q').value='';$('bp-q').focus();return;}
+  if(k==='goals'||k==='again'){backToQuestions();return;}
   if(k==='another'){bp.i=(bp.i+1)%bp.hits.length;bp.steps=[];bp.setup=bpBase(PROBS[bp.hits[bp.i]]);bpShow(500);return;}
-  if(k==='build'||k==='build-all'){
-    const p=PROBS[bp.hits[bp.i]],combined=k==='build-all',area=combined?CUSTOM.agentic.all:p.area;
-    const s=combined?{play:CUSTOM.id,prods:area.products,out:[]}:bp.setup;
-    clearTimeout(bpT);
-    if(combined)delete st.goal;else st.goal=p.id;
-    if(area)st.area=area.name||area.label;else delete st.area;
-    st.play=s.play;st.decisions=setupDecisions(s);st.serviceDefaults=true;st.on=PLAYS[s.play].custom?s.prods.slice():[];st.out=bpStart(s);st.ls=Object.fromEntries((s.off||[]).map(l=>[l,false]));st.keep={};st.fresh=true;st.pubSig=null;moreOpen={};
-    bp.view='start';$('bp-q').value='';bpRender();render();}});
-$('confirm-yes').addEventListener('click',()=>setTimeout(()=>{if(!play()&&bp.view==='answer')bpRender();},0));
+  if(k==='build'||k==='build-all')chooseQuestionCanvas(k==='build-all');
+});
+
+/* The saved answer contains question IDs and the partner's refinements. Rebuild the preview from the catalog,
+   keeping edited canvas services and estimates in their existing state until a replacement is confirmed. */
+function clearQuestion(view='start'){
+  clearTimeout(bpT);bp=emptyQuestion();bp.view=view;
+  $('bp-q').value='';bpRender();
+}
+function backToQuestions(){
+  const index=bp.hits[bp.i],view=bp.listView;
+  clearQuestion(view);
+  const button=$('bp-body').querySelector('[data-bpp="'+index+'"]');
+  (button||$('bp-q')).focus();
+}
+function answerRecipe(combined,signature){
+  return {key:Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,9),signature,combined,
+    id:PROBS[bp.hits[bp.i]].id,asked:bp.asked,listView:bp.listView,hits:bp.hits.map(i=>PROBS[i].id),
+    pair:bp.pair&&bp.pair.map(i=>PROBS[i].id),refinements:bp.steps.map(x=>x.chip)};
+}
+function restoreQuestion(){
+  const origin=st.questionOrigin;
+  if(!origin||!play())return false;
+  const index=id=>PROBS.findIndex(q=>q.id===id),current=index(origin.id);
+  if(current<0)return false;
+  clearTimeout(bpT);
+  const indices=ids=>(Array.isArray(ids)?ids:[]).map(index).filter(i=>i>=0);
+  const hits=indices(origin.hits);if(!hits.includes(current))hits.unshift(current);
+  const pair=indices(origin.pair),p=PROBS[current];
+  bp={...emptyQuestion(),view:'answer',listView:origin.listView==='all'?'all':'start',asked:typeof origin.asked==='string'?origin.asked:p.chip,
+    hits,i:hits.indexOf(current),pair:pair.length===2?pair:null,setup:bpBase(p)};
+  for(const chip of Array.isArray(origin.refinements)?origin.refinements:[]){
+    const r=p.refine.find(item=>item.chip===chip);
+    if(r&&bpOk(bp.setup,r))applyRefinement(r);
+  }
+  return true;
+}
+function questionHistory(view,push){
+  const origin=st.questionOrigin;if(!origin)return;
+  try{const next={...history.state,sowQuestion:{key:origin.key,view}};
+    if(push)history.pushState(next,'');else history.replaceState(next,'');
+  }catch{}
+}
+function showQuestionView(review,record=true){
+  if(!play()||!st.questionOrigin||(review&&!restoreQuestion()))return;
+  reviewingQuestion=review;
+  hideCard(true);openAdd(false);openOut(false);infoHide();
+  if(review)bpRender();else clearQuestion();
+  if(record)questionHistory(review?'answer':'canvas',true);
+  render();
+  const target=review?$('bp-heading'):$('back-to-answer');
+  target.focus({preventScroll:true});target.scrollIntoView({block:review?'start':'nearest'});
+}
+window.addEventListener('popstate',e=>{
+  const entry=e.state&&e.state.sowQuestion;
+  if(entry&&entry.key===st.questionOrigin?.key)showQuestionView(entry.view==='answer',false);
+});
+$('back-to-answer').addEventListener('click',()=>showQuestionView(true));
+$('bp-resume').addEventListener('click',()=>showQuestionView(false));
+$('bp-clear').addEventListener('click',()=>{clearQuestion();$('bp-q').focus();});
+let replaceAll=false;
+function chooseQuestionCanvas(combined,confirmed=false){
+  const p=PROBS[bp.hits[bp.i]],family=p.familyKey&&CUSTOM[p.familyKey];
+  if(combined&&!family)return;
+  const area=combined?famAll(family):p.area,s=combined?{play:CUSTOM.id,prods:area.products,out:[]}:bp.setup;
+  const signature=JSON.stringify([p.id,combined,bpKey(s)]);
+  if(reviewingQuestion&&st.questionOrigin?.signature===signature){showQuestionView(false);return;}
+  if(reviewingQuestion&&!confirmed){replaceAll=combined;ask('replace');return;}
+  const origin=answerRecipe(combined,signature);
+  if(combined)delete st.goal;else st.goal=p.id;
+  if(family?.named)st.area=area.name||area.label;else delete st.area;
+  st.play=s.play;st.decisions=setupDecisions(s);st.serviceDefaults=true;st.on=PLAYS[s.play].custom?s.prods.slice():[];
+  st.out=bpStart(s);st.ls=Object.fromEntries((s.off||[]).map(l=>[l,false]));st.keep={};st.fresh=true;st.pubSig=null;moreOpen={};
+  st.questionOrigin=origin;
+  questionHistory('answer',false);questionHistory('canvas',true);
+  reviewingQuestion=false;clearQuestion();render();
+  $('back-to-answer').focus({preventScroll:true});
+}
+if(history.state?.sowQuestion?.view==='answer'&&history.state.sowQuestion.key===st.questionOrigin?.key)reviewingQuestion=restoreQuestion();
 bpRender();
 $('picker').addEventListener('click',pick);
 document.addEventListener('click',()=>{openAdd(false);openOut(false);if(pinned)hideCard(true);});
@@ -1997,7 +2078,7 @@ $('scroller').addEventListener('scroll',()=>{if(card)placeCard(true);},{passive:
 $('rate').addEventListener('input',e=>{let v=e.target.value.replace(/[^0-9.]/g,'');const i=v.indexOf('.');if(i>=0)v=v.slice(0,i+1)+v.slice(i+1).replace(/[.]/g,'').slice(0,2);v=v.slice(0,7);e.target.value=v;const n=parseFloat(v);st.rate=Number.isFinite(n)&&n>0?n:0;save();totalsUI();refreshCard();});
 $('size').addEventListener('click',e=>{const b=e.target.closest('[data-size]');if(!b)return;st.size=b.dataset.size;save();totalsUI();refreshCard();});
 /* Start over and Change play both clear the play, the goal and every service choice; rate and size stay */
-const ASK={over:['Start over?','This clears the play, every service choice and the Scope details. Your rate and size stay.','Clear everything'],
+const ASK={replace:['Build this play instead?','This replaces your current canvas and its service selections with the setup in this answer. Your rate and delivery size stay.','Replace canvas'],over:['Start over?','This clears the play, every service choice and the Scope details. Your rate and size stay.','Clear everything'],
   change:['Change the play?','One play per statement of work, so this clears the canvas and every service choice and edit. Your rate, size, client and partner details stay. Scope details are kept for each play, so the new play\'s Scope starts fresh and this play\'s come back if you return to it.','Choose another play']};
 function ask(k){ask.k=k;const [t,p,y]=ASK[k];$('confirm-title').textContent=t;$('confirm-text').textContent=p;$('confirm-yes').textContent=y;$('confirm').hidden=false;$('confirm-yes').focus();}
 $('start-over').addEventListener('click',e=>{e.stopPropagation();ask('over');});
@@ -2016,7 +2097,7 @@ try{const m=sessionStorage.getItem('abv-sow-draft-msg');if(m){sessionStorage.rem
 $('change-play').addEventListener('click',e=>{e.stopPropagation();ask('change');});
 $('confirm-no').addEventListener('click',()=>{$('confirm').hidden=true;});
 $('confirm').addEventListener('click',e=>{if(e.target===e.currentTarget)$('confirm').hidden=true;});
-$('confirm-yes').addEventListener('click',()=>{$('confirm').hidden=true;hideCard(true);openAdd(false);if(ask.k==='over'){try{localStorage.removeItem(TOOL_KEY);localStorage.removeItem('partner-services-focused-v2');localStorage.removeItem(HANDOFF);}catch(e){}st.eff=null;st.cur='USD';st.def=null;st.months=12;}st.pubSig=null;st.play=null;st.on=[];delete st.goal;delete st.area;st.out=[];st.ls={};st.keep={};moreOpen={};render();});
+$('confirm-yes').addEventListener('click',()=>{$('confirm').hidden=true;if(ask.k==='replace'){chooseQuestionCanvas(replaceAll,true);return;}hideCard(true);openAdd(false);if(ask.k==='over'){try{localStorage.removeItem(TOOL_KEY);localStorage.removeItem('partner-services-focused-v2');localStorage.removeItem(HANDOFF);}catch(e){}st.eff=null;st.cur='USD';st.def=null;st.months=12;}st.pubSig=null;st.play=null;st.on=[];delete st.goal;delete st.area;delete st.questionOrigin;reviewingQuestion=false;st.out=[];st.ls={};st.keep={};moreOpen={};clearQuestion();render();$('bp-q').focus({preventScroll:true});$('picker').scrollTop=0;});
 let toastT=0;function toast(m){const t=$('toast');t.textContent=m;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>{t.hidden=true;},4200);}
 /* the next steps: hand the play, size, rate and every service line on the canvas to the Scope, Services and Statement of work steps at sow/ */
 /* the hand-over: the play, size, rate and every line (on, or waiting for a product with the partner's choice kept); a ready-made play also names the products added to it (the boxes, in the order added), when there are any, and a canvas with a goal names it */

@@ -154,7 +154,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   ok(await p.isVisible('#picker') && (await nodes(p)).length === 0, 'opens on the play picker, with nothing on the canvas');
   ok((await p.$$('#picker .pc-card')).length === 12, 'the picker shows twelve cards: seven plays and the five that open Your own play with products placed (Nov 19 2026: the three AI assistant cards joined)');
   const secs0 = await p.$$eval('#picker-list .sh', x => x.map(y => y.textContent.trim()));
-  ok(secs0.join('|') === 'Brand Visibility plays|Adobe agentic lineup|Adobe GenStudio lineup|Build your own play', 'in four rows, in Adam\'s order (Nov 19 2026): Brand Visibility plays; Adobe agentic lineup; Adobe GenStudio lineup; Build your own play', secs0.join('|'));
+  ok(secs0.join('|') === 'Brand Visibility plays|Adobe agentic lineup|Build your own play', 'in three rows, in Adam\'s order (Nov 19 2026): Brand Visibility plays; Adobe agentic lineup; Build your own play', secs0.join('|'));
   ok((await p.textContent('#picker [data-play="custom"]')).includes('Create your own play') && (await p.textContent('#picker [data-play="custom"] .cchip')).trim() === `${N} products to choose from`,
     `the last card is Create your own play, with ${N} products to choose from`);
   ok((await p.textContent('#picker')).includes('One play per statement of work. To quote a second play, start a second SOW.'), 'the picker says one play per statement of work');

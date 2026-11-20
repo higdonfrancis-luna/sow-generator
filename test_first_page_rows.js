@@ -20,7 +20,6 @@ const BRAND_OUTCOMES = ["Attract new customers through SEO and AI search, and gi
 const ROWS = [
   ['Brand Visibility plays', ['Brand Visibility + Customer Journey Analytics', 'Brand Visibility + Adobe Commerce', 'Brand Visibility + Sites Optimizer and Edge Delivery Services', 'Brand Visibility + Brand Concierge']],
   ['Adobe agentic lineup', ['Adobe Coworker', 'Adobe Brand Visibility', 'Adobe Brand Concierge', 'Adobe Brand Intelligence']],
-  ['Adobe GenStudio lineup', ['Adobe GenStudio']],
   ['Build your own play', ['Create your own play', 'Adobe in Claude', 'Adobe in ChatGPT', 'Adobe in Microsoft Copilot']]];
 // the Client KBO plays: each area's sentence, products and the outside systems its canvas starts with (the rule: every system that connects to one of them)
 const GOAL_QUESTIONS = ['My client wants to win new customers', 'My client is losing customers', 'My client wants existing customers to buy more'];
@@ -53,8 +52,8 @@ const COPILOT_STUDIO = 'https://experienceleague.adobe.com/en/docs/experience-ma
 
 // ============ 1. the catalog: the rows, the cards, the line types, Copilot's steps and the Creative Cloud note ============
 { ok(same(CAT.rows.map(r => [r.head, r.plays || r.card]), [['Brand Visibility plays', ['cja', 'commerce', 'aem', 'fsi']], ['Adobe agentic lineup', ['coworker', 'abv']],
-      ['Adobe GenStudio lineup', 'family'], ['Build your own play', ['custom']]]) && CAT.plays.every(p => !('section' in p)),
-    '1. the first page\'s rows are data, top to bottom: the four Brand Visibility plays, the agentic lineup (Coworker, then Brand Visibility), the GenStudio card and Build your own play; no play keeps a heading of its own',
+      ['Build your own play', ['custom']]]) && CAT.plays.every(p => !('section' in p)),
+    '1. the first page\'s rows are data, top to bottom: the four Brand Visibility plays, the agentic lineup (Coworker, then Brand Visibility), and Build your own play; no play keeps a heading of its own',
     JSON.stringify(CAT.rows));
   ok(same(CUSTOM.starts.map(x => [x.label, x.after]), [['Adobe Brand Concierge', 'abv'], ['Adobe Brand Intelligence', 'abv'], ['Adobe in Claude', 'custom'], ['Adobe in ChatGPT', 'custom'], ['Adobe in Microsoft Copilot', 'custom']]),
     '1. Adobe Brand Concierge and Adobe Brand Intelligence sit after Adobe Brand Visibility, and the three assistant cards after Create your own play', JSON.stringify(CUSTOM.starts.map(x => [x.label, x.after])));
@@ -126,15 +125,15 @@ const COPILOT_STUDIO = 'https://experienceleague.adobe.com/en/docs/experience-ma
       const kids = [...document.querySelector('#picker .in').children].map(e => e.id || e.className || e.tagName);
       const sizes = [...document.querySelectorAll('#picker-list .grid')].map(g => new Set([...g.children].map(c => { const r = c.getBoundingClientRect(); return [Math.round(r.top), Math.round(r.width), Math.round(r.height)].join(); })).size);
       return {rows: out, kids, sizes, badge: [...document.querySelectorAll('#picker-list .pc-badge')].map(x => x.closest('[data-play]').dataset.play + ':' + x.textContent)}; });
-    ok(same(f.rows, ROWS), '2. the four standalone play rows retain their titles and products',
+    ok(same(f.rows, ROWS), '2. the three standalone play rows retain their titles and products',
       JSON.stringify(f.rows));
     ok(f.sizes.every(s => s === 1) && f.badge.join() === 'abv:New', '2. every row of plays is level with its cards the same size, and Adobe Brand Visibility keeps its New badge in the agentic lineup', JSON.stringify(f));
     ok(same(f.kids.slice(0, 5), ['vids', 'bp', 'H2', 'lead', 'picker-list']),
       '2. the videos and problem finder are followed by Choose a play to start and its rows', JSON.stringify(f.kids));
-    const gs = await p.evaluate(() => { const x = document.querySelector('#picker-list .pc-fam[data-card="family"]'); return {label: x.querySelector(':scope>b').textContent, sub: x.querySelector(':scope>.s').textContent,
-      areas: [...x.querySelectorAll('.fam-area')].map(a => a.querySelector('b').textContent + ':' + [...a.querySelectorAll('.chips span')].map(s => s.textContent).join('|')), all: x.querySelector('.fam-all').textContent}; });
-    ok(gs.label === 'Adobe GenStudio' && gs.sub === 'Choose the content problem your client needs to solve.' && gs.areas.length === 6 &&
-        gs.areas[1] === 'Creative foundations:Creative Cloud|Frame.io' && gs.all === 'Or open the whole family together', '2. the GenStudio family introduces its six client problems', JSON.stringify(gs));
+    const genstudio = await p.locator('#bp .bp-gh').filter({hasText:'GenStudio'}).evaluate(h =>
+      [...h.nextElementSibling.querySelectorAll('[data-bpp]')].map(b=>b.textContent));
+    ok(same(genstudio, CUSTOM.family.areas.map(a=>a.question)) && genstudio.every(q=>q.endsWith('?')),
+      '2. GenStudio offers its six client questions within the finder', JSON.stringify(genstudio));
     const questions = await p.locator('#bp .bp-gh').first().evaluate(h => ({
       heading: h.textContent, chips: [...h.nextElementSibling.querySelectorAll('button')].map(b => b.textContent)
     }));
@@ -301,15 +300,17 @@ const COPILOT_STUDIO = 'https://experienceleague.adobe.com/en/docs/experience-ma
 
   // ============ 8. the i on Creative Cloud: opens and closes by mouse, keyboard and touch, on the first page and on the canvas ============
   { const p = await page(1440, 900), tip = () => p.evaluate(() => { const t = document.getElementById('info-tip'); return t.hidden ? null : t.textContent; });
-    const icons = await p.evaluate(() => [...document.querySelectorAll('#picker-list .info-i')].map(b => [b.dataset.info, b.closest('.chips > span').textContent, b.getAttribute('aria-label'), b.closest('.fam-area').querySelector('b').textContent]));
-    ok(same(icons, [['creativecloud', 'Creative Cloud', 'What Creative Cloud means here', 'Creative foundations']]), '8. the first page shows one i, on the Creative Cloud chip of GenStudio\'s Creative foundations; the chip still reads Creative Cloud', JSON.stringify(icons));
-    const i = '#picker-list .info-i[data-info="creativecloud"]';
+    const creative = page => page.getByRole('button',{name:CUSTOM.family.areas[1].question,exact:true}).click();
+    await creative(p);
+    const icons = await p.evaluate(() => [...document.querySelectorAll('#bp .info-i')].map(b => [b.dataset.info, b.closest('.bp-p').textContent, b.getAttribute('aria-label'), b.closest('.bp-ans').querySelector('h3').textContent]));
+    ok(same(icons, [['creativecloud', 'Creative Cloud', 'What Creative Cloud means here', 'GenStudio · Creative foundations']]), '8. the first page shows one i, on the Creative Cloud chip of GenStudio\'s Creative foundations; the chip still reads Creative Cloud', JSON.stringify(icons));
+    const i = '#bp .info-i[data-info="creativecloud"]';
     await p.hover(i); await p.waitForTimeout(150); const m1 = await tip(); await p.mouse.move(5, 5); await p.waitForTimeout(150); const m2 = await tip();
     await p.click(i); await p.waitForTimeout(150); const m3 = await tip(); await p.mouse.move(5, 5); await p.waitForTimeout(150); const m4 = await tip();
     const m5 = await p.evaluate(() => st.play); await p.mouse.click(700, 60); await p.waitForTimeout(150); const m6 = await tip();
     ok(m1 === CC_NOTE && m2 === null && m3 === CC_NOTE && m4 === CC_NOTE && m5 === null && m6 === null,
       '8. by mouse: hovering the i shows the note and moving away hides it; a click keeps it open (and opens no canvas) until a click elsewhere', JSON.stringify([m1, m2, m3, m4, m5, m6]));
-    await p.focus('#picker-list .fam-area:has(.info-i)'); await p.keyboard.press('Tab'); await p.waitForTimeout(150);
+    await p.focus('#bp-goal-title'); await p.keyboard.press('Tab'); await p.waitForTimeout(150);
     const k1 = [await tip(), await p.evaluate(() => document.activeElement.dataset.info)]; await p.keyboard.press('Escape'); await p.waitForTimeout(100);
     const k2 = [await tip(), await p.evaluate(() => document.activeElement.dataset.info)]; await p.keyboard.press('Enter'); await p.waitForTimeout(150);
     const k3 = [await tip(), await p.evaluate(i => [st.play, document.querySelector(i).getAttribute('aria-expanded')], i)]; await p.keyboard.press('Escape'); await p.waitForTimeout(100); const k4 = await tip();
@@ -317,12 +318,13 @@ const COPILOT_STUDIO = 'https://experienceleague.adobe.com/en/docs/experience-ma
       '8. by keyboard: Tab to the i shows the note, Escape closes it and keeps the focus there, Enter opens it again without opening the canvas, and Escape closes it', JSON.stringify([k1, k2, k3, k4]));
     await p.context().close();
     const t = await page(390, 844, {isMobile: true, hasTouch: true}), ttip = () => t.evaluate(() => { const x = document.getElementById('info-tip'); return x.hidden ? null : [x.textContent, x.getBoundingClientRect().right <= innerWidth, x.getBoundingClientRect().left >= 0]; });
+    await creative(t);
     await t.evaluate(sel => document.querySelector(sel).scrollIntoView({block: 'center'}), i); await t.waitForTimeout(200);
     await t.tap(i); await t.waitForTimeout(200); const t1 = await ttip(); const t2 = await t.evaluate(() => st.play); await t.tap('#picker-list .pc-card[data-play="cja"] .s'); await t.waitForTimeout(250);
     const t3 = await t.evaluate(() => ({tip: !document.getElementById('info-tip').hidden, play: st.play}));
     ok(t1 && t1[0] === CC_NOTE && t1[1] && t1[2] && t2 === null && !t3.tip, '8. by touch: a tap on the i opens the note inside the phone\'s width (and opens no canvas); a tap elsewhere closes it', JSON.stringify({t1, t2, t3}));
     await t.context().close();
-    const c = await page(1440, 900); await clickIn(c, '#picker-list .pc-fam[data-card="family"] .fam-area:has(.info-i)'); await c.keyboard.press('Escape'); await c.waitForTimeout(300);
+    const c = await page(1440, 900); await creative(c); await c.locator('#bp [data-bpa="build"]').click(); await c.keyboard.press('Escape'); await c.waitForTimeout(300);
     const box = '#stage .node[data-p="creativecloud"] .info-i';
     await c.click(box); await c.waitForTimeout(200); const b1 = await c.evaluate(() => [document.getElementById('info-tip').hidden ? null : document.getElementById('info-tip').textContent, document.getElementById('card').hidden]);
     await c.keyboard.press('Escape'); await c.waitForTimeout(150); const b2 = await c.evaluate(() => document.getElementById('info-tip').hidden);
@@ -334,7 +336,7 @@ const COPILOT_STUDIO = 'https://experienceleague.adobe.com/en/docs/experience-ma
     ok(ck1[0] === CC_NOTE && ck1[1] === 'creativecloud' && ck2[0] === null && ck2[1] === 'creativecloud' && ck3[0] === CC_NOTE && ck3[2] === true,
       '8. on the canvas by keyboard: Tab from the box to its i shows the note, Escape closes it, and Enter opens it again without opening the box\'s card', JSON.stringify([ck1, ck2, ck3]));
     await c.context().close();
-    const ct = await page(390, 844, {isMobile: true, hasTouch: true}); await clickIn(ct, '#picker-list .pc-fam[data-card="family"] .fam-area:has(.info-i)'); await ct.keyboard.press('Escape'); await ct.waitForTimeout(300);
+    const ct = await page(390, 844, {isMobile: true, hasTouch: true}); await creative(ct); await ct.locator('#bp [data-bpa="build"]').click(); await ct.keyboard.press('Escape'); await ct.waitForTimeout(300);
     await ct.evaluate(s => document.querySelector(s).scrollIntoView({block: 'center'}), box); await ct.waitForTimeout(200); await ct.tap(box); await ct.waitForTimeout(250);
     const ct1 = await ct.evaluate(() => ({tip: document.getElementById('info-tip').hidden ? null : document.getElementById('info-tip').textContent, card: !document.getElementById('card').hidden}));
     await ct.tap('#play-label'); await ct.waitForTimeout(200); const ct2 = await ct.evaluate(() => document.getElementById('info-tip').hidden);
