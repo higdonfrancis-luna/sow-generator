@@ -2,13 +2,23 @@
 
 Read this first in the new chat. Everything below is on GitHub, so a new account with access to the repository can pick it up.
 
-## PICK UP HERE (updated Friday, November 20, 2026)
+## PICK UP HERE (Saturday, November 21, 2026)
 
-**State.** The Friday scope, the seven approved edition pickers, the full-connection canvas and the product map are built on `claude/sow-generator-handoff-517tq8`. Make the Adobe Proto upload with `git archive --format=zip -o <file>.zip HEAD:site` (index.html at the root). The data owner signs off on the ranked Add product list before anything goes to main, and main needs Adam's go.
+Resume on `claude/sow-generator-handoff-517tq8`. The working branch contains the Friday v9 release and Saturday's [partner-readiness audit](../../audit_2026-11-21/FINDINGS.md), [training menus and certification levels](https://github.com/higdonfrancis-luna/sow-generator/commit/1ee8a1c4742f3da1e1ff9de50cb2d2f9260fd8f4), and [cross-sell and citation updates](https://github.com/higdonfrancis-luna/sow-generator/commit/cb883fcaba9a40f247cb7801e7cc862b039b1fa0). The audit describes v9 before those two updates. The data owner reviews the ranked Add product list before a release to `main`, and Adam approves that release.
+
+**Work saved November 19–21**
+
+- Product coverage, Commerce evidence and the service backlog are in the [product review](PRODUCT_COVERAGE.md) and [Experience League sweep](EXPERIENCE_LEAGUE_SWEEP.md). Commerce deployment and product edition choices drive the applicable services. The SOW identifies the selected Commerce deployment.
+- The Build canvas shows every connection among the items on it. The opening directory draws the Adobe product network. Selecting a product reveals its outside systems. The RFI entry is beside Open draft, and the two video cards and the questions box align with the play grid.
+- Six GenStudio questions and three revenue goals now lead to full answers with product connections, scope, estimates and refinements. Partners can return to their question after building a play or start over. The Coworker assistant pilot is optional.
+- Friday's Brand Concierge card shows the implementation scope and seven optional services. The Commerce Add product menu can rank products for a client's goal. See the [Brand Concierge services](v9-pictures/brand-concierge-services.png) and [Commerce recommendation example](v9-pictures/commerce-ranked-products.png).
+- Saturday's source adds “Get your team ready” menus and training levels. On a new Brand Visibility cross-sell, CJA or Commerce outside systems stay visible and the partner can choose their services. Saved quotes retain their previous selections. The evidence update refreshed or added 87 Adobe quotes.
+
+**Next review with Adam.** Open the [Experience Platform services mockup](experience-platform-services-preview.html) to review event forwarding, data protection, federated audiences, Data Distiller and the two Copilot connections. Review the separate [RFI-to-SOW estimate issue](#open-rfi-estimate-issue) before relying on the affected Edge Delivery workflow. The new products and the remaining service gaps are listed below.
 
 **How to work (binding, from Adam).** Use plain words. Start product research at [Adobe Experience League](https://experienceleague.adobe.com/en/home). Keep the existing design and take major changes to Adam for approval. Show pictures before building visible changes. Keep changes surgical. Leave release labels, dates and editorial caveats out of the tool. Every service and connection needs an Adobe quote, matched word for word using `evidence_page/tools/verify.py` and its `found()` function. Use the text Adam pastes for business.adobe.com. Skip partners.adobe.com. Generate the site with `python3 canvas/build.py` followed by `python3 build_site.py`, twice. Run the test suites one at a time. Keep `combinedDefaultsVersion` unchanged so saved quotes reopen as saved.
 
-**Current Proto download (version 9).** [sow-generator-proto-nov20-v9.zip](https://raw.githubusercontent.com/higdonfrancis-luna/sow-generator/7cd944936fee09f5e40bb4431fa6c3b3f8dddb65/proto/sow-generator-proto-nov20-v9.zip) contains the 10 verified site files with `index.html` at the root. [Build, browser and download checks](https://github.com/higdonfrancis-luna/sow-generator/actions/runs/44869277101).
+**Friday’s verified Proto download (version 9).** The [archive on this working branch](../../proto/sow-generator-proto-nov20-v9.zip) contains Friday’s build. Saturday’s training and cross-sell changes are in the newer source. To package the checked-out source, run `git archive --format=zip -o sow-generator-proto.zip HEAD:site`. The [original v9 download](https://raw.githubusercontent.com/higdonfrancis-luna/sow-generator/7cd944936fee09f5e40bb4431fa6c3b3f8dddb65/proto/sow-generator-proto-nov20-v9.zip) contains the 10 verified site files with `index.html` at the root. [Build, browser and download checks](https://github.com/higdonfrancis-luna/sow-generator/actions/runs/44869277101).
 
 **Brand Concierge services.** Double-click Brand Concierge and open “What the implementation includes” to see the scope for the selected size. Typical covers up to three product lines, 15 approved sources, three journeys, one handoff, 150 test conversations and ten site pages. It starts at 640 one-time partner hours. The seven available services cover ongoing answer and source review plus six new options: a second language, product cards from a small catalog outside Adobe Commerce, website analytics events, chat customization, monthly engagement reporting and operating-team access across sandboxes. The new services each have an Adobe Experience League reference and an RFI answer. Their hours are partner planning estimates. Partners can add them separately. All 32 question previews retained their previous selected services and estimates at all three sizes. A saved quote with only monthly answer review still opens at 32 hours per month.
 
@@ -46,15 +56,15 @@ Adobe references for the card descriptions include [Workfront approvals](https:/
 
 **RFI and Coworker checks.** The header, RFI round trip, drafts, play rows and first-page video passed their browser checks. In the Proto package, selecting the pilot on one of the three assistant cards took the Coworker play from six to seven services and included a single 16-hour line in the SOW. Two older assistant checks produce the same failures on the previous and updated builds. One expects the Copilot service on AEM Sites before choosing an AEM deployment. The other expects a different service list from a Claude Design email question about Journey Optimizer in the RFI Builder.
 
-**Friday's changes.**
+**Friday's changes (v9 defaults).**
 
 - Fresh canvases select the main setup services. The Brand Visibility cross-sell plays leave the existing CJA or Adobe Commerce product's own work open for manual selection and select connection work. The ERP, PIM, order management and warehouse management boxes and their main services start selected on the Commerce play.
 - Main Figma and AI assistant services start selected where they apply. B2B setup, the move to Commerce as a Cloud Service, multi-store work and specialized back-office webhooks and admin screens remain optional.
 - Workfront starts on “Bought after March 12, 2026.” Selecting the earlier purchase brings back the Workfront Proof services. The Commerce picker captures the client's current deployment and the statement of work names it under Scope and coverage.
 - The Commerce Optimizer + Edge Delivery Services connection includes the storefront launch checklist and storefront events to Experience Platform for a third-party commerce backend. The events service also requires an Experience Platform application on the canvas. Both services have RFI methods and Adobe sources.
-- Saved canvases and drafts retain their original starting services and selections. The new defaults have their own saved flag and leave the earlier restore rules in place. The catalog has 217 connections and 610 services.
+- Saved canvases and drafts retain their original starting services and selections. The new defaults have their own saved flag and leave the earlier restore rules in place. At this checkpoint the catalog had 217 connections and 610 services.
 
-**Edition pickers.** The approved round adds Journey Optimizer, AEM Assets, AEM Sites, Adobe Target, Frame.io, Marketo Engage and Workfront Workflow. The site uses the existing layout and controls. Shared work starts selected for a new quote, and each package or deployment changes the relevant services. Previously saved quotes retain their scope. The catalog now has 217 connections and 626 services. Journey Optimizer covers Select, Prime, Ultimate and Ultimate Starter. The separate Campaigns and Journeys packaging can be reviewed when a request calls for it.
+**Edition pickers.** The approved round adds Journey Optimizer, AEM Assets, AEM Sites, Adobe Target, Frame.io, Marketo Engage and Workfront Workflow. The site uses the existing layout and controls. Shared work starts selected for a new quote, and each package or deployment changes the relevant services. Previously saved quotes retain their scope. At the edition-picker checkpoint the catalog had 217 connections and 626 services. The November 21 audit counted 632 service lines. Journey Optimizer covers Select, Prime, Ultimate and Ultimate Starter. The separate Campaigns and Journeys packaging can be reviewed when a request calls for it.
 
 **Build canvas.** Each play opens with every catalog connection between the items on its canvas. The count and a short instruction sit above the boxes. Double-click a product to open its services and any available removal action. Tap once on touchscreens, or focus the product and press Enter or Space. The lightning bolts still open connection services with one click. Follow “map below” and select a product to explore its direct connections. The view buttons have been removed.
 
@@ -64,9 +74,9 @@ Adobe references for the card descriptions include [Workfront approvals](https:/
 
 **Checks.** All 69 Commerce and Workfront checks, eight product edition scenarios, 144 SOW smoke checks, the site and draft suites, and the RFI export suite passed. The packaged Build canvas opens the Brand Visibility + CJA play with all 11 lines and bolts. Removing its data warehouse leaves ten. The previous and updated packages produced identical selected services, hours and fees across 446 named-play and product-pair scenarios using current and legacy defaults. The desktop AEM canvas now stays in place when a saved play reopens. The Proto archive contains both entry pages and the first-look video.
 
-**Open RFI estimate issue.** On both the previous and current Proto builds, an AEM as a Cloud Service quote using Universal Editor and Edge Delivery Services can gain the standalone AEM assistant rollout (XT03) when an RFI answer is sent to the SOW. The Large test at 185 per hour adds 40 hours, or $7,400, when the partner approves an unrelated Sites Optimizer write-back answer. The Build canvas excludes that rollout for Edge Delivery. Reproduce with the “RFI write-back under Universal Editor” case in `test_canvas_authoring.js`. Review the RFI handoff separately.
+### Open RFI estimate issue
 
-**Next review.** Adam has the mockup for the Experience Platform services and the two Copilot connections, all on existing cards. Check the proposed work with him before building the round.
+On both the previous and current Proto builds, an AEM as a Cloud Service quote using Universal Editor and Edge Delivery Services can gain the standalone AEM assistant rollout (XT03) when an RFI answer is sent to the SOW. The Large test at 185 per hour adds 40 hours, or $7,400, when the partner approves an unrelated Sites Optimizer write-back answer. The Build canvas excludes that rollout for Edge Delivery. Reproduce with the “RFI write-back under Universal Editor” case in `test_canvas_authoring.js`. Review the RFI handoff separately.
 
 **Then, in this order (from `PRODUCT_COVERAGE.md` and `EXPERIENCE_LEAGUE_SWEEP.md`, both in this folder, every finding with proven Adobe quotes):**
 1. Experience Platform additions: event forwarding (a Real-Time CDP line), Privacy/Healthcare Shields, Federated Audience Composition, Data Distiller, the Marketing Agent for Microsoft 365 Copilot (copilot-rtcdp, copilot-ajo).
@@ -79,9 +89,9 @@ Adobe references for the card descriptions include [Workfront approvals](https:/
 ## Where everything is
 
 - **Repository:** `higdonfrancis-luna/sow-generator`
-- **Branch:** `claude/zealous-edison-oko1nm`. All the work is here. `main` is untouched.
-- **Draft pull request:** https://github.com/higdonfrancis-luna/sow-generator/pull/1. It stays a draft. Merge only when Adam says go.
-- **How to start the new chat:** pick the repository above, then say: *"Read handoff/2026-11-17/HANDOFF.md on branch claude/zealous-edison-oko1nm and continue from there."* The new session may be given its own branch name. Fetch this branch and build on it.
+- Resume branch `claude/sow-generator-handoff-517tq8`. The November 21 source checkpoint incorporates [the Saturday development branch](https://github.com/higdonfrancis-luna/sow-generator/tree/claude/great-lovelace-z309ti) through `cb883fc`.
+- To resume in a new chat, say “Read handoff/2026-11-17/HANDOFF.md on claude/sow-generator-handoff-517tq8 and pick up from the November 21 checkpoint.”
+- [Draft pull request #1](https://github.com/higdonfrancis-luna/sow-generator/pull/1) belongs to the earlier November 17 branch.
 
 ## How Adam works (follow these)
 
