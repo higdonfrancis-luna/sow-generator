@@ -123,7 +123,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
       flush: Math.abs(document.getElementById('canvas').getBoundingClientRect().top - mast.getBoundingClientRect().bottom) < 1,
       actionsTogether: Math.abs(draft.top - rfi.top) < 1 && rfi.left >= draft.right,
       menu: ['play-btn', 'play-menu', 'choose'].filter(id => document.getElementById(id))};
-    r.ok = r.picker && !r.other.length && r.mast === 'Adobe|Partner services statement of work|Get your team ready|Open draft|Have an RFI?' && r.flush;
+    r.ok = r.picker && !r.other.length && r.mast === 'Adobe|Partner services statement of work|Get trained and certified|Open draft|Have an RFI?' && r.flush;
     return r;
   });
 
@@ -509,7 +509,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   const first = await kb.$eval('#picker [data-play]', e => e.dataset.play);
   // step 40: the question box sits above the play boxes, so the first Tab lands in it; Tab then walks its visible
   // button and chips to the first play box, and nothing hidden takes focus on the way
-  ok(await kb.evaluate(() => document.activeElement.id) === 'tr-btn', 'from the keyboard, the first Tab lands on Get your team ready in the top bar (Nov 21 2026)');
+  ok(await kb.evaluate(() => document.activeElement.id) === 'tr-btn', 'from the keyboard, the first Tab lands on Get trained and certified in the top bar (Nov 21 2026)');
   await kb.keyboard.press('Tab');
   ok(await kb.evaluate(() => document.activeElement.id) === 'open-draft', 'the next Tab lands on Open draft beside it (step 43)');
   await kb.keyboard.press('Tab');

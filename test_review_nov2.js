@@ -1327,7 +1327,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     await p.click('[data-step="document"]'); await p.waitForTimeout(250);
     const doc = await p.$$eval('.document-actions .top-actions button', b => b.map(x => x.textContent.trim()));
     const gone = await p.evaluate(() => !document.getElementById('download-tool') && !document.querySelector('details.more') && typeof CLEAN_HTML === 'undefined' && !document.documentElement.outerHTML.includes('Download template'));
-    ok(JSON.stringify(top) === JSON.stringify(['Get your team ready', 'Save draft', 'Open draft', 'Start over']) && JSON.stringify(doc) === JSON.stringify(['Edit services', 'Services CSV', 'Print / Save PDF']) && gone,
+    ok(JSON.stringify(top) === JSON.stringify(['Get trained and certified', 'Save draft', 'Open draft', 'Start over']) && JSON.stringify(doc) === JSON.stringify(['Edit services', 'Services CSV', 'Print / Save PDF']) && gone,
       'S31: the top bar keeps Save draft, Open draft and Start over; the Statement of work step has Edit services, Services CSV and Print / Save PDF (the HTML download is gone); Download template and the More menu are gone', JSON.stringify({top, doc, gone}));
     await p.evaluate(t => { state.terms = t; state.customer = state.customer || 'Acme Co'; state.partner = state.partner || 'Partner Co'; state.timeline = state.timeline || 'Weeks 1 to 4: setup and baseline; monthly reviews from week 5.'; save(); }, TERMS); await p.click('[data-step="scope"]'); await p.waitForTimeout(150); await p.click('[data-step="document"]'); await p.waitForTimeout(250);
     const csv = parseCsv(await download(p, () => p.click('#export-csv'))), page = await sowPage(p);

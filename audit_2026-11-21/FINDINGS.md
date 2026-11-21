@@ -227,9 +227,9 @@ The Partner Experience Hub pages need a partner sign-in, so they were not opened
 
 ## 8. Making "Get your team ready" jump out
 
-Built on Adam's "go" to the pictures in `mockups/nov21_training/`.
+Built on Adam's "go" to the pictures in `mockups/nov21_training/`, then renamed **"Get trained and certified"** the same day (Adam: "Get your team ready is kind of vague. Nobody knows what that means"). The pictures drawn before the build carry the old name; the `built_` ones carry the new one.
 
-1. **A "Get your team ready" menu in the top bar of every page.** It holds the two links Adam asked for, Adobe courses on the Certification Portal and Partner on-demand trainings on the Partner Experience Hub. On a play it adds one row for each Adobe product on the canvas, which opens that product's card with its box open. The Scope, Services, Statement of work and RFI Builder page has the same button with the two links.
+1. **A "Get trained and certified" menu in the top bar of every page.** It holds the two links Adam asked for, Adobe courses on the Certification Portal and Partner on-demand trainings on the Partner Experience Hub. On a play it adds one row for each Adobe product on the canvas, which opens that product's card with its box open. The Scope, Services, Statement of work and RFI Builder page has the same button with the two links.
 2. **On each product card:** a red link under the product's name that opens the box and brings it into view, and the box itself filled and outlined in red.
 3. **Levels:** beside each certification, beside each training link where Adobe states one, in the box's heading, and the portal's three skill levels under Adobe courses.
 

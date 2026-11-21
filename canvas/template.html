@@ -678,7 +678,8 @@ button.rk-add:focus-visible,.rk-how:focus-visible,.rk-link:focus-visible,.rk-opt
 .key-item{display:inline-flex;align-items:center;gap:6px}.key-item i{width:24px;border-top:2px solid var(--ink)}
 .key-item.gone i{border-top:2px dashed var(--ink2);opacity:.45}.key-item.platform i{border-top-style:dotted}.key-item.partner i{border-top-style:dashed}.key-item.assistant i{border-top:1.5px solid var(--ai)}
 .key-item.extension i{border:0;height:2px;background:repeating-linear-gradient(90deg,var(--ink) 0 8px,transparent 8px 11px,var(--ink) 11px 13px,transparent 13px 16px)}
-/* Nov 21 2026 (Adam: "I need it to jump out more"): a menu in the top bar, a link under each product card's name, and the box filled and outlined in red */
+/* Nov 21 2026 (Adam: "I need it to jump out more"): a menu in the top bar, a link under each product card's name, and the box filled and outlined in red .
+   Named "Get trained and certified" the same day (Adam: "Get your team ready is kind of vague"); it was "Get your team ready" from Nov 16 */
 .trwrap{position:relative;display:inline-flex}
 #tr-btn .cap{color:var(--red);display:inline-flex}
 /* the top bar keeps its height: the button's name shortens to Training, then leaves the cap alone, as the window narrows (its full name stays for screen readers) */
@@ -731,7 +732,7 @@ body.question-review #start-over{display:inline-flex}
 </style><style id="knowledge-explorer-styles">/*KNOWLEDGE_EXPLORER_CSS*/</style></head><body class="picking">
 <div class="sow-canvas-screen">
 <div class="topline"></div>
-<header class="masthead"><img src="data:image/png;base64,{{LOGO}}" alt="Adobe"><span class="div"></span><span class="t">Partner services statement of work</span><span class="sp"></span><span class="saved" id="saved-note">Saved in this browser as you go</span><div class="trwrap" id="trwrap"><button class="btn" id="tr-btn" aria-haspopup="true" aria-expanded="false" aria-label="Get your team ready" title="Get your team ready"><span class="cap"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c3 2.5 9 2.5 12 0v-5"/></svg></span><span class="tn"><span class="tl">Get your team ready</span></span><svg class="chv" width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="addmenu" id="tr-menu" role="menu" tabindex="-1" hidden></div></div><button class="btn" id="save-draft">Save draft</button><div class="draft-actions"><button class="btn" id="open-draft">Open draft</button><a class="btn redline" id="rfi-door" href="sow/index.html#rfi" aria-label="Have an RFI? Open the RFI Builder">Have an RFI?</a></div><button class="btn redline" id="start-over">Start over</button></header><input id="draft-file" type="file" accept=".json,application/json" hidden>
+<header class="masthead"><img src="data:image/png;base64,{{LOGO}}" alt="Adobe"><span class="div"></span><span class="t">Partner services statement of work</span><span class="sp"></span><span class="saved" id="saved-note">Saved in this browser as you go</span><div class="trwrap" id="trwrap"><button class="btn" id="tr-btn" aria-haspopup="true" aria-expanded="false" aria-label="Get trained and certified" title="Get trained and certified"><span class="cap"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c3 2.5 9 2.5 12 0v-5"/></svg></span><span class="tn"><span class="tl">Get trained and certified</span></span><svg class="chv" width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="addmenu" id="tr-menu" role="menu" tabindex="-1" hidden></div></div><button class="btn" id="save-draft">Save draft</button><div class="draft-actions"><button class="btn" id="open-draft">Open draft</button><a class="btn redline" id="rfi-door" href="sow/index.html#rfi" aria-label="Have an RFI? Open the RFI Builder">Have an RFI?</a></div><button class="btn redline" id="start-over">Start over</button></header><input id="draft-file" type="file" accept=".json,application/json" hidden>
 <nav class="tabs" aria-label="Steps"><button class="on" data-tab="build">Build</button><button data-tab="scope">Scope</button><button data-tab="services">Services</button><button data-tab="sow">Statement of work</button><button data-tab="rfp">RFI Builder</button></nav>
 <div class="toolbar">
   <div class="playname" id="playname" hidden><span class="k">Play</span><b id="play-label"></b></div>
@@ -1381,7 +1382,7 @@ function hideCard(force,returnFocus=false){
   pinned=false;card=null;$('card').hidden=true;$('canvas').classList.remove('tall');$('sizer').style.paddingBottom='';applyHot();
   if(opener)(opener.querySelector?.('.offering-title')||opener).focus({preventScroll:true});
 }
-/* Get your team ready: where a partner trains and certifies on a product (canvas/training.json, checked against Adobe's pages) */
+/* Get trained and certified: where a partner trains and certifies on a product (canvas/training.json, checked against Adobe's pages) */
 const TRAIN=/*TRAINING*/{};
 const TRAIN_KIND={'learning path':'Learning path',course:'Course',playlist:'Playlist',tutorial:'Tutorial',documentation:'Guide',video:'Video','product page':'Product page'};
 const CAP='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c3 2.5 9 2.5 12 0v-5"/></svg>';
@@ -1397,7 +1398,7 @@ function readyHTML(id){const t=TRAIN.products[id];
   const cert=own?list:t.closest&&certs.length?`No certification of its own. The closest are the ${esc(P[t.closest].name)} certifications:${list}`
     :shown.length?`No certification yet. Adobe offers this instead:${list}`:'No certification yet<small>Adobe has not released one for this product.</small>';
   const key='ready:'+id,row=(label,body)=>`<div class="rr"><b>${label}</b><div>${body}</div></div>`;
-  return `<details class="ready" data-more="${key}"${moreOpen[key]?' open':''}><summary><span class="cap">${CAP}</span><span>Get your team ready</span><span class="chv" aria-hidden="true">${I.chev}</span><span class="rs">${status}, partner and public training</span></summary>`+
+  return `<details class="ready" data-more="${key}"${moreOpen[key]?' open':''}><summary><span class="cap">${CAP}</span><span>Get trained and certified</span><span class="chv" aria-hidden="true">${I.chev}</span><span class="rs">${status}, partner and public training</span></summary>`+
     (t.hub?row('Partner hub',outLink(TRAIN.hub+t.hub.slug,t.hub.name+' on the Partner Experience Hub')+(t.hubSearch?outLink(TRAIN.hubSearch+t.hubSearch,'Decks, sales plays and webinars for '+P[id].name):'')):'')+
     row('Partner training',outLink(TRAIN.catalog,'On-demand trainings')+`<small>${t.filter?'Under Products, tick '+esc(t.filter):'Search for '+esc(t.search)}</small>`)+
     row('Certification',cert)+
@@ -1407,13 +1408,13 @@ function readyHTML(id){const t=TRAIN.products[id];
 const hasReady=id=>!!TRAIN.products[id]&&!(id==='aemsites'&&combinesSites());
 const ownCerts=id=>{const t=TRAIN.products[id];return t.closest?0:t.exams.filter(e=>!e.credential).length;};
 /* the link under a product card's name: opens the box and brings it into view */
-const readyJump=id=>{const n=ownCerts(id);return `<button class="trjump" data-ready-jump>${CAP}Get your team ready <span class="n">${n?n+' certification'+(n===1?'':'s')+', ':''}courses and training</span></button>`;};
+const readyJump=id=>{const n=ownCerts(id);return `<button class="trjump" data-ready-jump>${CAP}Get trained and certified <span class="n">${n?n+' certification'+(n===1?'':'s')+', ':''}courses and training</span></button>`;};
 function openReady(){const box=$('card'),d=box.querySelector('details.ready');if(!d)return;d.open=true;moreOpen[d.dataset.more]=true;pinned=true;const L0=box.style.left;placeCard();if(compactCanvas())box.style.left=L0;
   const c=box.getBoundingClientRect(),r=d.getBoundingClientRect();box.scrollTop+=Math.min(r.top-c.top-8,Math.max(0,r.bottom-c.bottom+8));d.querySelector('summary').focus({preventScroll:true});}
 /* the menu in the top bar: Adobe's two training portals, and on a play each Adobe product on the canvas, which opens that product's box */
 function trMenuHTML(){const on=play()&&!reviewingQuestion?prods().filter(o=>!o.outside&&hasReady(o.id)):[];
   const link=(url,name,note)=>`<a class="it2" role="menuitem" href="${esc(url)}" target="_blank" rel="noopener"><span><b>${esc(name)}${I.ext.replace('<svg ','<svg role="img" aria-label="opens in a new tab" ')}</b><span class="sys">${esc(note)}</span></span></a>`;
-  return `<div class="hd"><div class="k">Get your team ready</div><p>Where your team trains and certifies on Adobe products.</p></div><div class="g">Adobe's training portals</div>`+
+  return `<div class="hd"><div class="k">Get trained and certified</div><p>Where your team trains and certifies on Adobe products.</p></div><div class="g">Adobe's training portals</div>`+
     link(TRAIN.courses.split('#')[0],'Adobe courses','Certification Portal. Filter by product and by skill level: '+TRAIN.courseLevels.join(', ')+'.')+
     link(TRAIN.catalog,'Partner on-demand trainings','Partner Experience Hub. Filter by product.')+
     (on.length?`<div class="g">For the products on this canvas</div>`+on.map(o=>{const n=ownCerts(o.id);return `<button class="it2" role="menuitem" data-tr="${o.id}"><span>${esc(o.title||o.name)}</span><span class="cnt">${n?n+' certification'+(n===1?'':'s'):'Training links'}</span></button>`;}).join(''):'');}
@@ -1553,7 +1554,7 @@ $('card').addEventListener('click',e=>{e.stopPropagation();
   const ap=e.target.closest('[data-addp]');if(ap){const id=ap.dataset.addp;if(P[id]?.outside)addOutside(id);else addProduct(id);if(card)pinned=true;refreshCard();return;}
   if(e.target.closest('[data-ready-jump]')){openReady();return;}
   const sm=e.target.closest('summary');if(sm){const d=sm.parentElement,box=$('card'),y=box.scrollTop;setTimeout(()=>{moreOpen[d.dataset.more]=d.open;const L0=box.style.left;placeCard();if(compactCanvas())box.style.left=L0;
-    /* Get your team ready: the card stays where it was, then scrolls just far enough to show the opened box without losing its heading */
+    /* Get trained and certified: the card stays where it was, then scrolls just far enough to show the opened box without losing its heading */
     if(d.classList.contains('ready')){box.scrollTop=y;const c=box.getBoundingClientRect(),r=d.getBoundingClientRect();if(d.open&&r.bottom>c.bottom)box.scrollTop+=Math.min(r.top-c.top-8,r.bottom-c.bottom+8);}},0);pinned=true;}});
 function pick(e){e.stopPropagation();const b=e.target.closest('[data-play],[data-start]');if(!b)return;clearQuestion();delete st.questionOrigin;reviewingQuestion=false;st.play=b.dataset.play||CUSTOM.id;st.on=b.dataset.start?b.dataset.start.split(','):[];st.out=startOut(PLAYS[st.play],st.on,b.dataset.assistant);if(b.dataset.name)st.area=b.dataset.name;else delete st.area;st.decisions=CanvasScope.newDecisions();st.serviceDefaults=true;st.ownedOutsideDefaults=true;st.ls={};st.keep={};st.fresh=true;st.pubSig=null;moreOpen={};render();if(play().custom&&!st.on.length&&document.documentElement.clientWidth>900)openAdd(true);}
 /* ---------- The Add product menu (every play; Create your own play starts with it) ---------- */

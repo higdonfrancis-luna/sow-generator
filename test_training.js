@@ -1,4 +1,4 @@
-// Get your team ready: the training and certification box on each product card. Run after the normal canvas/site build:
+// Get trained and certified (named "Get your team ready" until Nov 21 2026): the training and certification box on each product card. Run after the normal canvas/site build:
 //   node test_training.js
 // TRAINING_TEST_SITE points the browser checks at another built site/.
 // Nov 21 2026 (Adam: "I need it to jump out more", then "go" to mockups/nov21_training/): a menu in the top bar of both pages with Adobe's two
@@ -155,12 +155,12 @@ function expected(id) {
         box.hubLinkTops.length === 2 && box.hubLinkTops[1] <= box.hubLinkTops[0] && 'the hub search link is not on its own line under the hub page',
         box.hint !== want.hint && 'hint "' + box.hint + '"',
         box.text.includes('sign-in') && 'a sign-in note is back',
-        !box.text.startsWith('Get your team ready' + want.status) && 'heading "' + box.text.slice(0, 40) + '"',
+        !box.text.startsWith('Get trained and certified' + want.status) && 'heading "' + box.text.slice(0, 40) + '"',
         /[–—]|beta|retired|retiring/i.test(box.text) && 'a dash or a release label in the box',
         box.courseRow !== want.courseRow && 'the Adobe courses row is not its link and the portal\'s skill levels: "' + box.courseRow + '"',
         JSON.stringify(box.tags) !== JSON.stringify(want.tags) && 'level tags ' + JSON.stringify(box.tags),
         JSON.stringify(box.look) !== '["rgb(235, 16, 0)","2px","rgb(255, 244, 242)"]' && 'the box is not outlined in red with a filled heading ' + JSON.stringify(box.look),
-        !(box.jump && box.jump[1] === 'card-heading' && box.jump[0].startsWith('Get your team ready') && box.jump[0].endsWith('courses and training')) && 'no link under the product\'s name ' + JSON.stringify(box.jump),
+        !(box.jump && box.jump[1] === 'card-heading' && box.jump[0].startsWith('Get trained and certified') && box.jump[0].endsWith('courses and training')) && 'no link under the product\'s name ' + JSON.stringify(box.jump),
         box.lead !== want.lead && 'certification text "' + box.lead + '"',
         JSON.stringify(box.exams) !== JSON.stringify(want.exams) && 'certifications and their notes ' + JSON.stringify(box.exams),
         !box.foot && 'the box is not at the foot of the card, above Remove',
@@ -227,7 +227,7 @@ function expected(id) {
     const onPlay = await menu();
     ok(onPlay.open && onPlay.expanded === 'true' && JSON.stringify(onPlay.links) === JSON.stringify(PORTALS) && JSON.stringify(onPlay.rows.map(r => r[0])) === '["bv","so","eds"]' &&
       onPlay.rows[2][1] === 'AEM Sites with Edge Delivery Services' + DATA.products.eds.exams.length + ' certifications' && onPlay.rows[0][1] === 'Brand VisibilityTraining links' && onPlay.left >= 16 && onPlay.right <= onPlay.wide - 16,
-      'the Get your team ready button in the top bar opens a menu with Adobe courses and Partner on-demand trainings, each in a new tab, then one row for each Adobe product on the canvas and none for an outside system', JSON.stringify(onPlay));
+      'the Get trained and certified button in the top bar opens a menu with Adobe courses and Partner on-demand trainings, each in a new tab, then one row for each Adobe product on the canvas and none for an outside system', JSON.stringify(onPlay));
     await p.click('#tr-menu [data-tr="eds"]');
     await p.waitForTimeout(250);
     const fromMenu = await read();
@@ -246,7 +246,7 @@ function expected(id) {
     ok(heights.every(([w, [h, sideways]]) => !sideways && h === (w === 390 ? 106 : 69)), 'the top bar keeps its height from a wide screen to a phone: the button\'s name shortens to Training, then to its cap alone', JSON.stringify(heights));
     await p.click('#tr-btn');
     const small = await menu();
-    ok(small.open && small.left >= 16 && small.right <= small.wide - 16 && await p.evaluate(() => document.querySelector('#tr-btn').getAttribute('aria-label') === 'Get your team ready'), 'on a phone the menu stays inside the screen and the button keeps its name for screen readers', JSON.stringify([small.left, small.right, small.wide]));
+    ok(small.open && small.left >= 16 && small.right <= small.wide - 16 && await p.evaluate(() => document.querySelector('#tr-btn').getAttribute('aria-label') === 'Get trained and certified'), 'on a phone the menu stays inside the screen and the button keeps its name for screen readers', JSON.stringify([small.left, small.right, small.wide]));
     await p.keyboard.press('Escape');
     await p.setViewportSize({width: 1440, height: 900});
     const first = await browser.newPage({viewport: {width: 1440, height: 900}});

@@ -482,7 +482,7 @@ def main():
     marker = '/*KM_TEMPLATE_SCOPE*/{}'
     assert render_tpl.count(marker) == 1, marker
     render_tpl = render_tpl.replace(marker, json.dumps(tscope, ensure_ascii=False).replace('</', '<\\/'))
-    # Get your team ready: each Adobe product's partner hub page, certifications and training (training.json), shown on its card
+    # Get trained and certified: each Adobe product's partner hub page, certifications and training (training.json), shown on its card
     training = json.load(open(os.path.join(HERE, 'training.json'), encoding='utf-8'))
     adobe = {p['id'] for p in keep_p if not p.get('outside')}
     course_filters = json.load(open(os.path.join(HERE, 'research', 'training_2026-11-16', 'course_filters.json'), encoding='utf-8'))['filters']

@@ -1,4 +1,4 @@
-"""Get your team ready (Nov 16 2026): write canvas/training.json, the partner hub page, certifications and training shown on each
+"""Get trained and certified (Nov 16 2026): write canvas/training.json, the partner hub page, certifications and training shown on each
 product card, from the record in canvas/research/training_2026-11-16/ (research.json: every exam checked against Adobe's
 certification portal and every training link fetched; partner_hub_links.json: the hub pages the owner opened while signed in,
 and the Products filter names on the partner training catalog; owner_links.json: training links the owner supplied, which

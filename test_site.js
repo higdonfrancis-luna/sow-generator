@@ -42,7 +42,7 @@ const server = http.createServer((req, res) => {
     const r = {picker: shown(document.getElementById('picker')), other, mast: [...mast.querySelectorAll('img,.t,.saved,button,a')].filter(shown).map(e => e.alt || e.textContent.trim()).filter(Boolean).join('|'),
       flush: Math.abs(document.getElementById('canvas').getBoundingClientRect().top - mast.getBoundingClientRect().bottom) < 1,
       menu: ['play-btn', 'play-menu', 'choose'].filter(id => document.getElementById(id))};
-    r.ok = r.picker && !r.other.length && r.mast === 'Adobe|Partner services statement of work|Get your team ready|Open draft|Have an RFI?' && r.flush;
+    r.ok = r.picker && !r.other.length && r.mast === 'Adobe|Partner services statement of work|Get trained and certified|Open draft|Have an RFI?' && r.flush;
     return r;
   });
 

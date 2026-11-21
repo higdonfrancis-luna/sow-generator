@@ -9,7 +9,7 @@ Read this first in the new chat. Everything below is on GitHub, so a new account
 **The audit.** Adam asked eight questions before submitting the tool to teammates at Adobe. Read `audit_2026-11-21/FINDINGS.md`: what was checked, what was changed, what is still open.
 
 **Built on Adam's "go" (Nov 21).**
-- "Get your team ready": a menu in the top bar of both pages, a red link and a bolder box on each product card, levels beside certifications and training links.
+- "Get your team ready" is now named "Get trained and certified" (Adam: the old name was vague): a menu in the top bar of both pages, a red link and a bolder box on each product card, levels beside certifications and training links.
 - The two Brand Visibility cross-sell plays start without the owned product's outside-system services (own saved flag `ownedOutsideDefaults`; saved quotes reopen as saved). This replaces the Friday line below that says the back-office services start selected on the Commerce play: the boxes still start on the canvas, their services start unticked.
 - 87 Adobe quotes replaced or added, so every service's quote is on its page word for word.
 
