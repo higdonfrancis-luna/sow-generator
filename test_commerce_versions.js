@@ -158,15 +158,15 @@ const inPaste = q => { let at = 0; const t = norm(PASTE); return q.split('...').
 
   // ============ 4. the four back-office systems on Brand Visibility + Adobe Commerce ============
   { const p = await page(); await pick(p, 'commerce', ''); const s = await state(p);
-    ok(same(s.out, ['cdn', 'search', 'crm', 'erp', 'pim', 'oms', 'wms']) && SYSTEMS.every(x => s.lines.includes('commerce-' + x)) && s.n === 13,
-      '4. Brand Visibility + Adobe Commerce starts with the ERP, PIM, order management and warehouse management on the canvas, beside the CDN, Search data and the CRM, by the on-from-the-start rule; their four main services and the CRM integration start on', JSON.stringify(s));
+    ok(same(s.out, ['cdn', 'search', 'crm', 'erp', 'pim', 'oms', 'wms']) && SYSTEMS.every(x => s.lines.includes('commerce-' + x)) && s.n === 8,
+      '4. Brand Visibility + Adobe Commerce starts with the ERP, PIM, order management and warehouse management on the canvas, beside the CDN, Search data and the CRM, by the on-from-the-start rule; their services start unticked, because the client already runs Adobe Commerce (Nov 21 2026), and the eight Brand Visibility services start on', JSON.stringify(s));
     const clean = await p.evaluate(() => { const boxes = [...document.querySelectorAll('.node')].map(e => e.getBoundingClientRect()), dots = [...document.querySelectorAll('.ib')].map(e => e.getBoundingClientRect());
       const hit = (a, c) => a.left < c.right && c.left < a.right && a.top < c.bottom && c.top < a.bottom; return boxes.every((a, i) => boxes.every((c, j) => i === j || !hit(a, c))) && dots.every(d => boxes.every(x => !hit(d, x))); });
     ok(clean, '4. no box or bolt overlaps another on that canvas');
     for (const x of SYSTEMS) { await p.click(`.ib[data-c="commerce-${x}"]`); await p.waitForTimeout(400);
       const card = await p.evaluate(() => ({text: document.getElementById('card').innerText, rows: [...document.querySelectorAll('#card .ln')].map(r => r.dataset.l), on: [...document.querySelectorAll('#card .ln:not(.off)')].map(r => r.dataset.l)}));
-      ok(/Outside system/i.test(card.text) && /Before it works/i.test(card.text) && /starter kit/.test(card.text) && card.rows.length && card.rows.every(l => CBY['commerce-' + x].more.includes(l)) && card.on.length === 1 && !LABELS.test(card.text),
-        `4. the Adobe Commerce + ${P[x].name} card: outside system, built on Adobe's integration starter kit, what comes first, the main service selected and the specialized work optional`, JSON.stringify(card.rows));
+      ok(/Outside system/i.test(card.text) && /Before it works/i.test(card.text) && /starter kit/.test(card.text) && card.rows.length && card.rows.every(l => CBY['commerce-' + x].more.includes(l)) && card.on.length === 0 && !LABELS.test(card.text),
+        `4. the Adobe Commerce + ${P[x].name} card: outside system, built on Adobe's integration starter kit, what comes first, and every service one click away, none selected`, JSON.stringify(card.rows));
       await p.keyboard.press('Escape'); }
     const ex = await p.evaluate(() => { const c = CBY['commerce-erp']; return c.how + ' ' + c.prereqs.join(' '); });
     ok(/Adobe Exchange/.test(ex) && /SAP S\/4HANA/.test(ex) && /Dynamics 365 ERP/.test(ex) && /IBM Sterling/.test(CBY['commerce-oms'].how), '4. the ERP and order management cards name the prebuilt connectors on Adobe Exchange (SAP S/4HANA, Microsoft Dynamics 365 ERP, IBM Sterling Order Management)');
@@ -286,6 +286,29 @@ const inPaste = q => { let at = 0; const t = norm(PASTE); return q.split('...').
     const oldSow = await toSow(legacy);
     ok(oldSow.ids.includes('C06') && !oldSow.ids.includes('CJ01'), '9. opening that saved quote through Services keeps its selections');
     await legacy.context().close();
+
+    // Nov 21 2026 (Adam: the client already owns the second product; "go"): on the two cross-sell plays the owned product's outside systems stay on
+    // the canvas and their services start unticked. A canvas saved the day before, which holds the Nov 20 flag and not the new one, keeps its ticks.
+    const OUTS = {cja: ['cdn', 'dwh', 'cstore', 'crm', 'ads', 'bi', 'search', 'chatgpt', 'claude', 'copilot'], commerce: ['cdn', 'search', 'crm', 'erp', 'pim', 'oms', 'wms']};
+    const WAS = {cja: [14, 256800], commerce: [13, 303600]}, NOW = {cja: [7, 216000], commerce: [8, 225600]}, NAMES = {cja: 'Brand Visibility + Customer Journey Analytics', commerce: 'Brand Visibility + Adobe Commerce'};
+    const quote = p => p.evaluate(() => [totals().n, totals().yr, st.out.length]);
+    for (const id of ['cja', 'commerce']) {
+      const owned = CAT.serviceDefaults.ownedOutside[id];
+      const fresh = await page(); await pick(fresh, id); const f = await quote(fresh);
+      ok(f[0] === NOW[id][0] && f[1] === NOW[id][1] && f[2] === OUTS[id].length && await fresh.evaluate(owned => owned.every(l => !counted(l)), owned),
+        '9. a new ' + NAMES[id] + ' quote starts with its outside systems on the canvas and the owned product\'s outside-system services unticked: ' + NOW[id][0] + ' services, ' + NOW[id][1] + ' dollars over 12 months at 150 an hour', JSON.stringify(f));
+      await fresh.evaluate(l => { st.ls[l] = true; render(); }, owned[0]); await fresh.waitForTimeout(200);
+      ok(await fresh.evaluate(l => counted(l), owned[0]) && (await quote(fresh))[0] === NOW[id][0] + 1, '9. and each of those services is one click away on ' + NAMES[id]);
+      await fresh.context().close();
+      const saved = await page();
+      await saved.evaluate(({id, out}) => localStorage.setItem(KEY, JSON.stringify({play: id, on: [], out, ls: {}, keep: {}, decisions: CanvasScope.newDecisions(), selectionVersion: 1, combinedDefaultsVersion: 1, serviceDefaults: true, rate: 150, v: 2})), {id, out: OUTS[id]});
+      await saved.reload(); await saved.waitForFunction('window.READY===true'); const s0 = await quote(saved);
+      ok(s0[0] === WAS[id][0] && s0[1] === WAS[id][1], '9. a ' + NAMES[id] + ' canvas saved before this change reopens with the services and total it was saved with: ' + WAS[id][0] + ' services, ' + WAS[id][1] + ' dollars', JSON.stringify(s0));
+      const through = await toSow(saved);
+      await saved.click('[data-build]'); await saved.waitForFunction('window.READY===true'); await saved.waitForTimeout(600); const s1 = await quote(saved);
+      ok(s1[0] === WAS[id][0] && s1[1] === WAS[id][1], '9. and keeps them through Services and back to Build', JSON.stringify([through.ids, s1]));
+      await saved.context().close();
+    }
   }
 
   // ============ 10. Optimizer storefront on a third-party commerce backend ============

@@ -159,7 +159,8 @@ const CanvasScope = (() => {
     return {authoring: '', workfrontVersion: 'after', commerceVersion: 'saas',
       ...Object.fromEntries(Object.entries(choices).filter(([, choice]) => choice.clearable).map(([key]) => [key, '']))};
   }
-  function startingService(id, catalogDefault, play, useNewDefaults) {
+  function startingService(id, catalogDefault, play, useNewDefaults, leaveOwnedOutside) {
+    if (leaveOwnedOutside && CanvasServiceDefaults.ownedOutside[play]?.includes(id)) return false;
     if (!useNewDefaults) return catalogDefault;
     if (CanvasServiceDefaults.off[play]?.includes(id)) return false;
     return catalogDefault || CanvasServiceDefaults.on.includes(id);

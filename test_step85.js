@@ -103,7 +103,7 @@ const LABELS = new RegExp(CAVEATS.source + '|\\$\\d', 'i');   // the catalog tex
   // 4. the Commerce play still starts as it did
   p = await fresh(); await p.goto(BASE); await p.waitForTimeout(400); await p.click('#picker [data-play="commerce"]'); await p.waitForTimeout(500);
   const play = await p.evaluate(() => ({ticked: [...new Set([...prods(), ...conns()].flatMap(o => all(o)).filter(l => counted(l)))], offered: (P.commerce.more || []).length}));
-  ok(![...OWN, ...LATER].some(i => play.ticked.includes(i)) && play.ticked.includes('XR01') && play.offered === 16, 'on the Commerce cross-sell the Commerce product services are offered unchecked and the CRM connection work is selected', play.ticked.join());
+  ok(![...OWN, ...LATER].some(i => play.ticked.includes(i)) && !play.ticked.includes('XR01') && play.ticked.join() === 'L01,L02,O01,O02,C02,C07,OX1,SD1' && play.offered === 16, 'on the Commerce cross-sell the Commerce product services are offered unchecked, and so is the CRM connection work (Nov 21 2026: the client already runs Adobe Commerce); the Brand Visibility work is selected', play.ticked.join());
   await p.context().close();
 
   // 5. the RFI Builder answers Commerce questions from them

@@ -188,10 +188,12 @@ const fix = s => s.replace(/’/g, "'");
     ok(same((await state(p)).out, []), '3. Create your own play opened empty starts with no outside system, as before');
     // removing a system takes its services with it
     await home(p); await p.click('#picker [data-play="cja"]'); await p.waitForTimeout(400); await p.fill('#rate', '150'); await p.waitForTimeout(200);
+    const untouched = await p.evaluate(() => counted('OX3'));   // Nov 21 2026: the warehouse service starts unticked on this cross-sell play (the client already owns Customer Journey Analytics); tick it first
+    await p.evaluate(() => { st.ls.OX3 = true; render(); }); await p.waitForTimeout(200);
     const r0 = await p.evaluate(() => ({yr: totals().yr, ox3: counted('OX3'), fee: fee('OX3')}));
     await p.evaluate(() => removeOutside('dwh')); await p.waitForTimeout(300);
     const r1 = await p.evaluate(() => ({yr: totals().yr, ox3: [...prods(), ...conns()].some(o => all(o).includes('OX3') && counted('OX3')), out: st.out.slice()}));
-    ok(r0.ox3 && !r1.ox3 && !r1.out.includes('dwh') && Math.round(r0.yr - r1.yr) === Math.round(r0.fee), '3. removing Data warehouse from Brand Visibility + Customer Journey Analytics takes its warehouse service and its fee with it', JSON.stringify({r0, r1}));
+    ok(!untouched && r0.ox3 && !r1.ox3 && !r1.out.includes('dwh') && Math.round(r0.yr - r1.yr) === Math.round(r0.fee), '3. on Brand Visibility + Customer Journey Analytics the warehouse service starts unticked; once ticked, removing Data warehouse takes the service and its fee with it', JSON.stringify({untouched, r0, r1}));
     // on every starting canvas each service is counted once
     ok([...Object.values(seen), ...Object.values(cards), ...Object.values(gs), ...ag].every(s => new Set(s.ids).size === s.ids.length), '3. no service is counted twice on any starting canvas');
     // Nov 19 2026: and work two services share is flagged: the Experience Platform warehouse source that CJA, Real-Time CDP and Journey Optimizer each set up
@@ -242,8 +244,8 @@ const fix = s => s.replace(/’/g, "'");
     for (const id of Object.keys(START)) { const ctx = await context(), a = watch(await ctx.newPage()); await a.goto(ORIGIN + 'sow/index.html?play=' + id); await a.waitForTimeout(900); const direct = await read(a); await ctx.close();
       const c = await page(); await c.click(`#picker [data-play="${id}"]`); await c.waitForTimeout(300); await Promise.all([c.waitForURL(/\/sow\//), c.click('#save')]); await c.waitForTimeout(900);
       rows[id] = {direct, canvas: await read(c)}; await c.context().close(); }
-    ok(Object.entries(rows).every(([id, r]) => same(r.direct.out, START[id]) && JSON.stringify(r.direct) === JSON.stringify(r.canvas)) && rows.cja.direct.one === 464 && ['OX1', 'OX3', 'OX4', 'OX5', 'CANVAS-SD1', 'CANVAS-AD1'].every(l => rows.cja.direct.ids.split(',').includes(l)),
-      '5. a new engagement opened on the SOW steps at each ready-made play starts with the same outside systems, services and hours as the canvas hands over (Brand Visibility + Customer Journey Analytics 464 one-time hours)', JSON.stringify(rows).slice(0, 900)); }
+    ok(Object.entries(rows).every(([id, r]) => same(r.direct.out, START[id]) && JSON.stringify(r.direct) === JSON.stringify(r.canvas)) && rows.cja.direct.one === 192 && rows.commerce.direct.one === 256 && ['OX1', 'CANVAS-SD1'].every(l => rows.cja.direct.ids.split(',').includes(l)) && !['OX3', 'OX4', 'OX5', 'CANVAS-AD1', 'CANVAS-BI1'].some(l => rows.cja.direct.ids.split(',').includes(l)),
+      '5. a new engagement opened on the SOW steps at each ready-made play starts with the same outside systems, services and hours as the canvas hands over (Brand Visibility + Customer Journey Analytics 192 one-time hours and Brand Visibility + Adobe Commerce 256, without the owned product\'s outside-system services, Nov 21 2026)', JSON.stringify(rows).slice(0, 900)); }
   { const p = await page(); await famClick(p, AG, 1); await p.fill('#rate', '150'); await p.waitForTimeout(200);
     const c0 = await state(p); await p.reload(); await p.waitForFunction('window.READY===true'); await p.waitForTimeout(300); const c1 = await state(p);
     await Promise.all([p.waitForURL(/\/sow\//), p.click('#save')]); await p.waitForTimeout(1000);

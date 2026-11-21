@@ -51,7 +51,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
     for (const l of [...o.lines, ...o.more]) {
       const main = o.lines.includes(l) && !(pl.off || []).includes(l);
       const promoted = CAT.serviceDefaults.on.includes(l);
-      const owned = (CAT.serviceDefaults.off[playId] || []).includes(l);
+      const owned = (CAT.serviceDefaults.off[playId] || []).includes(l) || (CAT.serviceDefaults.ownedOutside[playId] || []).includes(l);   // Nov 21 2026: and the owned product's outside-system services
       const suppressed = (l === 'CS2' && on.has('eds')) || (l === 'ACO09' && on.has('commerce') && !on.has('ocp'));
       const checked = ls[l] ?? (!owned && !suppressed && (main || promoted || extra.includes(l)));
       if (checked && need(l) && !gated(l)) counted.push(l);
@@ -123,7 +123,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
       flush: Math.abs(document.getElementById('canvas').getBoundingClientRect().top - mast.getBoundingClientRect().bottom) < 1,
       actionsTogether: Math.abs(draft.top - rfi.top) < 1 && rfi.left >= draft.right,
       menu: ['play-btn', 'play-menu', 'choose'].filter(id => document.getElementById(id))};
-    r.ok = r.picker && !r.other.length && r.mast === 'Adobe|Partner services statement of work|Open draft|Have an RFI?' && r.flush;
+    r.ok = r.picker && !r.other.length && r.mast === 'Adobe|Partner services statement of work|Get your team ready|Open draft|Have an RFI?' && r.flush;
     return r;
   });
 
@@ -509,7 +509,9 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   const first = await kb.$eval('#picker [data-play]', e => e.dataset.play);
   // step 40: the question box sits above the play boxes, so the first Tab lands in it; Tab then walks its visible
   // button and chips to the first play box, and nothing hidden takes focus on the way
-  ok(await kb.evaluate(() => document.activeElement.id) === 'open-draft', 'from the keyboard, the first Tab lands on Open draft in the top bar (step 43)');
+  ok(await kb.evaluate(() => document.activeElement.id) === 'tr-btn', 'from the keyboard, the first Tab lands on Get your team ready in the top bar (Nov 21 2026)');
+  await kb.keyboard.press('Tab');
+  ok(await kb.evaluate(() => document.activeElement.id) === 'open-draft', 'the next Tab lands on Open draft beside it (step 43)');
   await kb.keyboard.press('Tab');
   ok(await kb.evaluate(() => document.activeElement.id) === 'rfi-door', 'the next Tab focuses Have an RFI? beside Open draft');
   await kb.keyboard.press('Tab');

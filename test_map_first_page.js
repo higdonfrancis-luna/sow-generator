@@ -120,10 +120,13 @@ function checkLayout(nodes) {
         picked:counted('XR02'), serviceHours:hrs('XR02'), serviceFee:fee('XR02'), oneTime:totals().one,
         hours:[...prods(),...conns()].flatMap(all).filter(counted).reduce((sum,id)=>sum+hrs(id),0)
       }));
-      const withERP=await quote();
-      assert.equal(withERP.picked,true);
+      // Nov 21 2026: on this cross-sell play the ERP service starts unticked (the client already runs Adobe Commerce); tick it, then take it off again
+      assert.equal((await quote()).picked,false);
       await page.evaluate(()=>showCard('c','commerce-erp'));
       const erpToggle=page.locator('#card [data-l="XR02"] button.tg');
+      await erpToggle.click();
+      const withERP=await quote();
+      assert.equal(withERP.picked,true);
       await erpToggle.click();
       const withoutERP=await quote();
       assert.equal(withoutERP.picked,false);

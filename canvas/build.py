@@ -73,6 +73,8 @@ def main():
                 if not os.path.basename(p).startswith(('connection_types', 'audit_classification', 'outside_systems'))]
 
     lines, warnings = {}, []
+    live_evidence = json.load(open(os.path.join(HERE, 'live_evidence.json'), encoding='utf-8'))['services']
+    assert set(live_evidence) <= set(live), sorted(set(live_evidence) - set(live))
 
     def add_live(lid):
         x = live[lid]
@@ -83,6 +85,9 @@ def main():
                       'url': x['source'], 'src': clean(x.get('sourceTitle') or x['source']), 'origin': 'sow'}
         if x.get('references'):
             lines[lid]['references'] = x['references']
+        if lid in live_evidence:   # Nov 21 2026: the Adobe sentence behind a statement-of-work service (index.html holds none); never shown on screen
+            assert live_evidence[lid]['url'] == x['source'], f'{lid}: its quote was taken from another page than the service cites'
+            lines[lid]['evidence'] = clean(live_evidence[lid]['quote'])
         if lid == 'F02':
             lines[lid]['implementation'] = {
                 size: {'quantity': x['bands'][size]['qty'],
@@ -358,6 +363,16 @@ def main():
         play_id: pby[product_id]['lines'] + pby[product_id]['more']
         for play_id, product_id in defaults['already_owned'].items()
     }}
+    # Nov 21 2026: on the same plays the owned product's outside systems start on the canvas with their services unticked
+    cby = {c['id']: c for c in keep_c}
+    assert set(defaults['owned_outside']) == set(defaults['already_owned']), 'owned_outside names a play with no already-owned product'
+    for play_id, conn_ids in defaults['owned_outside'].items():
+        starts = next(pl for pl in plays if pl['id'] == play_id)['ostart']
+        for cid in conn_ids:
+            ends = {cby[cid]['a'], cby[cid]['b']}
+            assert defaults['already_owned'][play_id] in ends and (ends - {defaults['already_owned'][play_id]}) <= set(starts) and all(pby[e].get('outside') for e in ends - {defaults['already_owned'][play_id]}), \
+                f'{play_id}: {cid} does not join the owned product to an outside system the play starts with'
+    service_defaults['ownedOutside'] = {play_id: [lid for cid in conn_ids for lid in cby[cid]['lines'] + cby[cid]['more']] for play_id, conn_ids in defaults['owned_outside'].items()}
     cat = {'checked': max([c for c in checked if c] or ['']), 'products': keep_p, 'connections': keep_c,
            'lines': used, 'plays': plays, 'ownSites': own, 'rows': rows, 'versions': versions, 'serviceDefaults': service_defaults}
     apply_catalog(cat)

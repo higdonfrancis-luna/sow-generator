@@ -271,7 +271,7 @@
       "name": "Warehouse tables into CJA",
       "unit": "one-time",
       "hours": 56,
-      "ticked": true
+      "ticked": false
      }
     ]
    },
@@ -287,7 +287,7 @@
       "name": "Cloud storage files into CJA",
       "unit": "one-time",
       "hours": 40,
-      "ticked": true
+      "ticked": false
      }
     ]
    },
@@ -303,7 +303,7 @@
       "name": "CRM data into CJA",
       "unit": "one-time",
       "hours": 40,
-      "ticked": true
+      "ticked": false
      }
     ]
    },
@@ -319,14 +319,14 @@
       "name": "Ad platform sources into CJA, with your client's ad admins",
       "unit": "one-time",
       "hours": 32,
-      "ticked": true
+      "ticked": false
      },
      {
       "id": "AD2",
       "name": "Ad spend joined to web conversions: ROAS and cost per web order",
       "unit": "one-time",
       "hours": 32,
-      "ticked": true
+      "ticked": false
      }
     ]
    },
@@ -342,14 +342,14 @@
       "name": "BI extension setup and number check",
       "unit": "one-time",
       "hours": 24,
-      "ticked": true
+      "ticked": false
      },
      {
       "id": "BI2",
       "name": "Executive dashboards in your client's BI tool",
       "unit": "one-time",
       "hours": 48,
-      "ticked": true
+      "ticked": false
      }
     ]
    },
@@ -395,12 +395,12 @@
    }
   ],
   "totals": {
-   "one": 69600,
+   "one": 28800,
    "mon": 15600,
-   "yr": 256800,
-   "n": 14,
+   "yr": 216000,
+   "n": 7,
    "productCount": 4,
-   "connectionCount": 10,
+   "connectionCount": 3,
    "x": 0,
    "miss": 0
   },
@@ -739,7 +739,7 @@
       "name": "Commerce to CRM integration",
       "unit": "one-time",
       "hours": 120,
-      "ticked": true
+      "ticked": false
      }
     ]
    },
@@ -755,7 +755,7 @@
       "name": "Commerce to ERP integration",
       "unit": "one-time",
       "hours": 120,
-      "ticked": true
+      "ticked": false
      },
      {
       "id": "XR03",
@@ -785,7 +785,7 @@
       "name": "Product data from the PIM into Commerce",
       "unit": "one-time",
       "hours": 80,
-      "ticked": true
+      "ticked": false
      }
     ]
    },
@@ -801,7 +801,7 @@
       "name": "Commerce to order management integration",
       "unit": "one-time",
       "hours": 120,
-      "ticked": true
+      "ticked": false
      },
      {
       "id": "XR07",
@@ -824,18 +824,899 @@
       "name": "Stock and shipment sync with the warehouse system",
       "unit": "one-time",
       "hours": 80,
+      "ticked": false
+     }
+    ]
+   }
+  ],
+  "totals": {
+   "one": 38400,
+   "mon": 15600,
+   "yr": 225600,
+   "n": 8,
+   "productCount": 4,
+   "connectionCount": 4,
+   "x": 0,
+   "miss": 0
+  },
+  "page_errors": []
+ },
+ "abv": {
+  "label": "Adobe Brand Visibility",
+  "size": "typical",
+  "rate": 150,
+  "products": [
+   {
+    "id": "bv",
+    "name": "Brand Visibility",
+    "outside": false,
+    "services": [
+     {
+      "id": "L01",
+      "name": "Prompt strategy and measurement plan",
+      "unit": "one-time",
+      "hours": 64,
+      "ticked": true
+     },
+     {
+      "id": "L02",
+      "name": "Brand Visibility setup and baseline",
+      "unit": "one-time",
+      "hours": 48,
+      "ticked": true
+     },
+     {
+      "id": "O01",
+      "name": "Monthly prompt and performance review",
+      "unit": "monthly",
+      "hours": 40,
+      "ticked": true
+     },
+     {
+      "id": "O02",
+      "name": "Content improvements for search and AI",
+      "unit": "monthly",
+      "hours": 64,
+      "ticked": true
+     },
+     {
+      "id": "O04",
+      "name": "Off-site authority and earned media",
+      "unit": "monthly",
+      "hours": 40,
+      "ticked": false
+     },
+     {
+      "id": "O05",
+      "name": "Conversion-path improvements",
+      "unit": "monthly",
+      "hours": 48,
+      "ticked": false
+     },
+     {
+      "id": "O06",
+      "name": "Optimization impact test",
+      "unit": "one-time",
+      "hours": 48,
+      "ticked": false
+     },
+     {
+      "id": "O07",
+      "name": "Reddit and community participation",
+      "unit": "monthly",
+      "hours": 24,
+      "ticked": false
+     },
+     {
+      "id": "O08",
+      "name": "YouTube answer-content optimization",
+      "unit": "monthly",
+      "hours": 24,
+      "ticked": false
+     },
+     {
+      "id": "O09",
+      "name": "YouTube answer-video production",
+      "unit": "one-time",
+      "hours": 40,
+      "ticked": false
+     },
+     {
+      "id": "C05",
+      "name": "Existing CMS publishing workflow",
+      "unit": "one-time",
+      "hours": 40,
+      "ticked": true
+     }
+    ]
+   },
+   {
+    "id": "cdn",
+    "name": "Existing CDN",
+    "outside": true,
+    "services": []
+   },
+   {
+    "id": "search",
+    "name": "Search data",
+    "outside": true,
+    "services": []
+   }
+  ],
+  "connections": [
+   {
+    "id": "cdn-bv",
+    "a": "Existing CDN",
+    "b": "Brand Visibility",
+    "a_outside": true,
+    "b_outside": false,
+    "services": [
+     {
+      "id": "OX1",
+      "name": "CDN log forwarding, set up by the partner",
+      "unit": "one-time",
+      "hours": 16,
+      "ticked": true
+     },
+     {
+      "id": "OX2",
+      "name": "Log export from another CDN or log store",
+      "unit": "one-time",
+      "hours": 40,
+      "ticked": false
+     }
+    ]
+   },
+   {
+    "id": "search-bv",
+    "a": "Search data",
+    "b": "Brand Visibility",
+    "a_outside": true,
+    "b_outside": false,
+    "services": [
+     {
+      "id": "SD1",
+      "name": "Search Console and GA4 connections, and prompts picked from search queries",
+      "unit": "one-time",
+      "hours": 8,
       "ticked": true
      }
     ]
    }
   ],
   "totals": {
-   "one": 116400,
+   "one": 26400,
    "mon": 15600,
-   "yr": 303600,
-   "n": 13,
-   "productCount": 4,
-   "connectionCount": 9,
+   "yr": 213600,
+   "n": 7,
+   "productCount": 5,
+   "connectionCount": 2,
+   "x": 0,
+   "miss": 0
+  },
+  "page_errors": []
+ },
+ "aem": {
+  "label": "Brand Visibility + Sites Optimizer and Edge Delivery Services",
+  "size": "typical",
+  "rate": 150,
+  "products": [
+   {
+    "id": "bv",
+    "name": "Brand Visibility",
+    "outside": false,
+    "services": [
+     {
+      "id": "L01",
+      "name": "Prompt strategy and measurement plan",
+      "unit": "one-time",
+      "hours": 64,
+      "ticked": true
+     },
+     {
+      "id": "L02",
+      "name": "Brand Visibility setup and baseline",
+      "unit": "one-time",
+      "hours": 48,
+      "ticked": true
+     },
+     {
+      "id": "O01",
+      "name": "Monthly prompt and performance review",
+      "unit": "monthly",
+      "hours": 40,
+      "ticked": true
+     },
+     {
+      "id": "O02",
+      "name": "Content improvements for search and AI",
+      "unit": "monthly",
+      "hours": 64,
+      "ticked": true
+     },
+     {
+      "id": "O04",
+      "name": "Off-site authority and earned media",
+      "unit": "monthly",
+      "hours": 40,
+      "ticked": false
+     },
+     {
+      "id": "O05",
+      "name": "Conversion-path improvements",
+      "unit": "monthly",
+      "hours": 48,
+      "ticked": false
+     },
+     {
+      "id": "O06",
+      "name": "Optimization impact test",
+      "unit": "one-time",
+      "hours": 48,
+      "ticked": false
+     },
+     {
+      "id": "O07",
+      "name": "Reddit and community participation",
+      "unit": "monthly",
+      "hours": 24,
+      "ticked": false
+     },
+     {
+      "id": "O08",
+      "name": "YouTube answer-content optimization",
+      "unit": "monthly",
+      "hours": 24,
+      "ticked": false
+     },
+     {
+      "id": "O09",
+      "name": "YouTube answer-video production",
+      "unit": "one-time",
+      "hours": 40,
+      "ticked": false
+     },
+     {
+      "id": "C05",
+      "name": "Existing CMS publishing workflow",
+      "unit": "one-time",
+      "hours": 40,
+      "ticked": false
+     }
+    ]
+   },
+   {
+    "id": "so",
+    "name": "Sites Optimizer",
+    "outside": false,
+    "services": [
+     {
+      "id": "SO2",
+      "name": "Monthly SEO fixes with Sites Optimizer",
+      "unit": "monthly",
+      "hours": 16,
+      "ticked": true
+     }
+    ]
+   },
+   {
+    "id": "eds",
+    "name": "AEM Sites with Edge Delivery Services",
+    "outside": false,
+    "services": [
+     {
+      "id": "A04",
+      "name": "Discovery and solution architecture",
+      "unit": "one-time",
+      "hours": 160,
+      "ticked": true
+     },
+     {
+      "id": "A01",
+      "name": "Implement AEM Sites on Edge Delivery",
+      "unit": "one-time",
+      "hours": 960,
+      "ticked": true
+     },
+     {
+      "id": "A02",
+      "name": "SEO-safe content migration",
+      "unit": "one-time",
+      "hours": 240,
+      "ticked": true
+     },
+     {
+      "id": "A03",
+      "name": "Launch, QA and hypercare",
+      "unit": "one-time",
+      "hours": 120,
+      "ticked": true
+     },
+     {
+      "id": "A05",
+      "name": "Governance and change management",
+      "unit": "one-time",
+      "hours": 120,
+      "ticked": true
+     }
+    ]
+   },
+   {
+    "id": "cdn",
+    "name": "Existing CDN",
+    "outside": true,
+    "services": []
+   },
+   {
+    "id": "search",
+    "name": "Search data",
+    "outside": true,
+    "services": []
+   },
+   {
+    "id": "csrc",
+    "name": "Authoring docs",
+    "outside": true,
+    "services": []
+   },
+   {
+    "id": "chatgpt",
+    "name": "ChatGPT",
+    "outside": true,
+    "services": []
+   },
+   {
+    "id": "claude",
+    "name": "Claude",
+    "outside": true,
+    "services": []
+   }
+  ],
+  "connections": [
+   {
+    "id": "bv-eds",
+    "a": "Brand Visibility",
+    "b": "AEM Sites with Edge Delivery Services",
+    "a_outside": false,
+    "b_outside": false,
+    "services": [
+     {
+      "id": "C03",
+      "name": "AEM optimization publishing workflow",
+      "unit": "one-time",
+      "hours": 56,
+      "ticked": true
+     }
+    ]
+   },
+   {
+    "id": "so-eds",
+    "a": "Sites Optimizer",
+    "b": "AEM Sites with Edge Delivery Services",
+    "a_outside": false,
+    "b_outside": false,
+    "services": [
+     {
+      "id": "SO1",
+      "name": "Sites Optimizer setup",
+      "unit": "one-time",
+      "hours": 24,
+      "ticked": true
+     }
+    ]
+   },
+   {
+    "id": "cdn-bv",
+    "a": "Existing CDN",
+    "b": "Brand Visibility",
+    "a_outside": true,
+    "b_outside": false,
+    "services": [
+     {
+      "id": "OX1",
+      "name": "CDN log forwarding, set up by the partner",
+      "unit": "one-time",
+      "hours": 16,
+      "ticked": true
+     },
+     {
+      "id": "OX2",
+      "name": "Log export from another CDN or log store",
+      "unit": "one-time",
+      "hours": 40,
+      "ticked": false
+     }
+    ]
+   },
+   {
+    "id": "search-bv",
+    "a": "Search data",
+    "b": "Brand Visibility",
+    "a_outside": true,
+    "b_outside": false,
+    "services": [
+     {
+      "id": "SD1",
+      "name": "Search Console and GA4 connections, and prompts picked from search queries",
+      "unit": "one-time",
+      "hours": 8,
+      "ticked": true
+     }
+    ]
+   },
+   {
+    "id": "search-so",
+    "a": "Search data",
+    "b": "Sites Optimizer",
+    "a_outside": true,
+    "b_outside": false,
+    "services": []
+   },
+   {
+    "id": "csrc-eds",
+    "a": "Authoring docs",
+    "b": "AEM Sites with Edge Delivery Services",
+    "a_outside": true,
+    "b_outside": false,
+    "services": [
+     {
+      "id": "CS1",
+      "name": "Document authoring setup with your client's Microsoft 365 or Google admin, and author training",
+      "unit": "one-time",
+      "hours": 16,
+      "ticked": true
+     }
+    ]
+   },
+   {
+    "id": "csrc-so",
+    "a": "Authoring docs",
+    "b": "Sites Optimizer",
+    "a_outside": true,
+    "b_outside": false,
+    "services": [
+     {
+      "id": "CS2",
+      "name": "Sites Optimizer write-back to SharePoint or Google Drive",
+      "unit": "one-time",
+      "hours": 8,
+      "ticked": false
+     }
+    ]
+   },
+   {
+    "id": "claude-eds",
+    "a": "Claude",
+    "b": "AEM Sites with Edge Delivery Services",
+    "a_outside": true,
+    "b_outside": false,
+    "services": []
+   },
+   {
+    "id": "chatgpt-eds",
+    "a": "ChatGPT",
+    "b": "AEM Sites with Edge Delivery Services",
+    "a_outside": true,
+    "b_outside": false,
+    "services": []
+   }
+  ],
+  "totals": {
+   "one": 274800,
+   "mon": 18000,
+   "yr": 490800,
+   "n": 15,
+   "productCount": 10,
+   "connectionCount": 5,
+   "x": 0,
+   "miss": 0
+  },
+  "page_errors": []
+ },
+ "fsi": {
+  "label": "Brand Visibility + Brand Concierge",
+  "size": "typical",
+  "rate": 150,
+  "products": [
+   {
+    "id": "bv",
+    "name": "Brand Visibility",
+    "outside": false,
+    "services": [
+     {
+      "id": "L01",
+      "name": "Prompt strategy and measurement plan",
+      "unit": "one-time",
+      "hours": 64,
+      "ticked": true
+     },
+     {
+      "id": "L02",
+      "name": "Brand Visibility setup and baseline",
+      "unit": "one-time",
+      "hours": 48,
+      "ticked": true
+     },
+     {
+      "id": "O01",
+      "name": "Monthly prompt and performance review",
+      "unit": "monthly",
+      "hours": 40,
+      "ticked": true
+     },
+     {
+      "id": "O02",
+      "name": "Content improvements for search and AI",
+      "unit": "monthly",
+      "hours": 64,
+      "ticked": true
+     },
+     {
+      "id": "O04",
+      "name": "Off-site authority and earned media",
+      "unit": "monthly",
+      "hours": 40,
+      "ticked": false
+     },
+     {
+      "id": "O05",
+      "name": "Conversion-path improvements",
+      "unit": "monthly",
+      "hours": 48,
+      "ticked": false
+     },
+     {
+      "id": "O06",
+      "name": "Optimization impact test",
+      "unit": "one-time",
+      "hours": 48,
+      "ticked": false
+     },
+     {
+      "id": "O07",
+      "name": "Reddit and community participation",
+      "unit": "monthly",
+      "hours": 24,
+      "ticked": false
+     },
+     {
+      "id": "O08",
+      "name": "YouTube answer-content optimization",
+      "unit": "monthly",
+      "hours": 24,
+      "ticked": false
+     },
+     {
+      "id": "O09",
+      "name": "YouTube answer-video production",
+      "unit": "one-time",
+      "hours": 40,
+      "ticked": false
+     },
+     {
+      "id": "C05",
+      "name": "Existing CMS publishing workflow",
+      "unit": "one-time",
+      "hours": 40,
+      "ticked": false
+     }
+    ]
+   },
+   {
+    "id": "bc",
+    "name": "Brand Concierge",
+    "outside": false,
+    "services": [
+     {
+      "id": "F02",
+      "name": "Implement Brand Concierge",
+      "unit": "one-time",
+      "hours": 640,
+      "ticked": true
+     },
+     {
+      "id": "FSI01",
+      "name": "Answer and source review",
+      "unit": "monthly",
+      "hours": 32,
+      "ticked": false
+     },
+     {
+      "id": "BC01",
+      "name": "Launch a concierge in a second language",
+      "unit": "one-time",
+      "hours": 32,
+      "ticked": false
+     },
+     {
+      "id": "BC02",
+      "name": "Build product cards for a small catalog",
+      "unit": "one-time",
+      "hours": 24,
+      "ticked": false
+     },
+     {
+      "id": "BC03",
+      "name": "Track concierge events in website analytics",
+      "unit": "one-time",
+      "hours": 24,
+      "ticked": false
+     },
+     {
+      "id": "BC04",
+      "name": "Customize the visitor chat experience",
+      "unit": "one-time",
+      "hours": 24,
+      "ticked": false
+     },
+     {
+      "id": "BC05",
+      "name": "Review concierge engagement each month",
+      "unit": "monthly",
+      "hours": 8,
+      "ticked": false
+     },
+     {
+      "id": "BC06",
+      "name": "Set up operating team roles and sandbox access",
+      "unit": "one-time",
+      "hours": 8,
+      "ticked": false
+     }
+    ]
+   },
+   {
+    "id": "cdn",
+    "name": "Existing CDN",
+    "outside": true,
+    "services": []
+   },
+   {
+    "id": "search",
+    "name": "Search data",
+    "outside": true,
+    "services": []
+   },
+   {
+    "id": "cms",
+    "name": "Other CMS site",
+    "outside": true,
+    "services": []
+   }
+  ],
+  "connections": [
+   {
+    "id": "bv-bc",
+    "a": "Brand Visibility",
+    "b": "Brand Concierge",
+    "a_outside": false,
+    "b_outside": false,
+    "services": [
+     {
+      "id": "C04",
+      "name": "Discovery-to-answer workflow",
+      "unit": "one-time",
+      "hours": 56,
+      "ticked": false
+     }
+    ]
+   },
+   {
+    "id": "cdn-bv",
+    "a": "Existing CDN",
+    "b": "Brand Visibility",
+    "a_outside": true,
+    "b_outside": false,
+    "services": [
+     {
+      "id": "OX1",
+      "name": "CDN log forwarding, set up by the partner",
+      "unit": "one-time",
+      "hours": 16,
+      "ticked": true
+     },
+     {
+      "id": "OX2",
+      "name": "Log export from another CDN or log store",
+      "unit": "one-time",
+      "hours": 40,
+      "ticked": false
+     }
+    ]
+   },
+   {
+    "id": "search-bv",
+    "a": "Search data",
+    "b": "Brand Visibility",
+    "a_outside": true,
+    "b_outside": false,
+    "services": [
+     {
+      "id": "SD1",
+      "name": "Search Console and GA4 connections, and prompts picked from search queries",
+      "unit": "one-time",
+      "hours": 8,
+      "ticked": true
+     }
+    ]
+   },
+   {
+    "id": "cms-bc",
+    "a": "Other CMS site",
+    "b": "Brand Concierge",
+    "a_outside": true,
+    "b_outside": false,
+    "services": [
+     {
+      "id": "CM1",
+      "name": "Brand Concierge script and surface rules through your client's tag manager",
+      "unit": "one-time",
+      "hours": 8,
+      "ticked": true
+     },
+     {
+      "id": "CM2",
+      "name": "Website Links knowledge source and refresh",
+      "unit": "one-time",
+      "hours": 4,
+      "ticked": true
+     }
+    ]
+   }
+  ],
+  "totals": {
+   "one": 118200,
+   "mon": 15600,
+   "yr": 305400,
+   "n": 9,
+   "productCount": 5,
+   "connectionCount": 4,
+   "x": 0,
+   "miss": 0
+  },
+  "page_errors": []
+ },
+ "coworker": {
+  "label": "Adobe Coworker",
+  "size": "typical",
+  "rate": 150,
+  "products": [
+   {
+    "id": "cw",
+    "name": "Coworker",
+    "outside": false,
+    "services": [
+     {
+      "id": "CW01",
+      "name": "Coworker workflow discovery",
+      "unit": "one-time",
+      "hours": 20,
+      "ticked": true
+     },
+     {
+      "id": "CW02",
+      "name": "Coworker access and business context",
+      "unit": "one-time",
+      "hours": 24,
+      "ticked": true
+     },
+     {
+      "id": "CW03",
+      "name": "Build reusable Coworker Skills",
+      "unit": "one-time",
+      "hours": 56,
+      "ticked": true
+     },
+     {
+      "id": "CW07",
+      "name": "Package Skills and connections as a plugin",
+      "unit": "one-time",
+      "hours": 32,
+      "ticked": true
+     },
+     {
+      "id": "CW05",
+      "name": "Coworker pilot, training and handover",
+      "unit": "one-time",
+      "hours": 24,
+      "ticked": true
+     },
+     {
+      "id": "CW06",
+      "name": "Coworker adoption and Skill maintenance",
+      "unit": "monthly",
+      "hours": 32,
+      "ticked": true
+     },
+     {
+      "id": "CW04",
+      "name": "Approved Coworker connection or plugin",
+      "unit": "one-time",
+      "hours": 24,
+      "ticked": false
+     },
+     {
+      "id": "CW08",
+      "name": "Coworker set up in an AI platform",
+      "unit": "one-time",
+      "hours": 16,
+      "ticked": false
+     },
+     {
+      "id": "CW09",
+      "name": "Coworker governance and access policy",
+      "unit": "one-time",
+      "hours": 32,
+      "ticked": false
+     },
+     {
+      "id": "CW10",
+      "name": "Custom MCP server for a Client system",
+      "unit": "one-time",
+      "hours": 64,
+      "ticked": false
+     },
+     {
+      "id": "CW11",
+      "name": "Coworker trial value sprint",
+      "unit": "one-time",
+      "hours": 24,
+      "ticked": false
+     }
+    ]
+   },
+   {
+    "id": "chatgpt",
+    "name": "ChatGPT",
+    "outside": true,
+    "services": []
+   },
+   {
+    "id": "claude",
+    "name": "Claude",
+    "outside": true,
+    "services": []
+   },
+   {
+    "id": "copilot",
+    "name": "Microsoft Copilot",
+    "outside": true,
+    "services": []
+   }
+  ],
+  "connections": [
+   {
+    "id": "chatgpt-cw",
+    "a": "ChatGPT",
+    "b": "Coworker",
+    "a_outside": true,
+    "b_outside": false,
+    "services": []
+   },
+   {
+    "id": "claude-cw",
+    "a": "Claude",
+    "b": "Coworker",
+    "a_outside": true,
+    "b_outside": false,
+    "services": []
+   },
+   {
+    "id": "copilot-cw",
+    "a": "Microsoft Copilot",
+    "b": "Coworker",
+    "a_outside": true,
+    "b_outside": false,
+    "services": []
+   }
+  ],
+  "totals": {
+   "one": 23400,
+   "mon": 4800,
+   "yr": 81000,
+   "n": 6,
+   "productCount": 6,
+   "connectionCount": 0,
    "x": 0,
    "miss": 0
   },
