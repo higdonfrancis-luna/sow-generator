@@ -403,32 +403,32 @@ details.more[open] summary svg{transform:rotate(180deg)}
 .chips .info-i{width:16px;height:16px;margin-left:5px;font-size:11px;vertical-align:1px}
 .info-tip{position:fixed;z-index:95;width:max-content;max-width:min(340px,calc(100vw - 24px));background:#fff;color:var(--ink);border:1.5px solid var(--ink);border-radius:10px;padding:9px 12px;font-size:15px;line-height:20px;font-weight:400;text-align:left;box-shadow:0 6px 18px rgba(0,0,0,.18)}
 /* Start from your client's problem (step 40) */
-/* step 83: the plays video opens the first page */
-.vid-card{display:flex;gap:26px;align-items:center;background:#fff;border:1.5px solid #1C1C1C;border-top:4px solid #EB1000;border-radius:8px;padding:20px 24px;margin:0 0 26px;max-width:1080px}
-.vid-box{flex:0 0 46%;min-width:0;aspect-ratio:16/9;border-radius:8px;overflow:hidden;background:#000}
+/* The opening sections share the play grid's width. Each video expands inside its own card. */
+.vids{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:0 0 18px}
+.vids:has(.playing){align-items:start}
+.vid-card{display:flex;flex-direction:column;gap:12px;background:#fff;border:1.5px solid #1C1C1C;border-top:4px solid #EB1000;border-radius:8px;padding:16px 18px}
+.vid-box{min-width:0;aspect-ratio:16/9;border-radius:8px;overflow:hidden;background:#000}
+.vid-card:not(.playing) .vid-box{width:min(100%,220px);align-self:center}
 .vid-poster{display:block;width:100%;height:100%;padding:0;border:0;background:#fff;cursor:pointer}
 .vid-poster img,.vid-box video{display:block;width:100%;height:100%;object-fit:contain}
 .vid-poster:focus-visible{outline:3px solid #1C1C1C;outline-offset:-3px}
-.vid-eye{margin:0 0 6px;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#C40000}
-.vid-t{margin:0 0 8px;font-size:26px;line-height:1.15;font-weight:700;color:#1C1C1C}
-.vid-s{margin:0 0 16px;font-size:16.5px;line-height:1.45;color:#1C1C1C}
-.vid-btn{border:0;border-radius:8px;background:#EB1000;color:#fff;font:inherit;font-size:16px;font-weight:700;padding:11px 22px;cursor:pointer}
+.vid-eye{margin:0 0 4px;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#C40000}
+.vid-card .vid-t{margin:0 0 6px;font-size:22px;line-height:1.18;font-weight:700;color:#1C1C1C}
+.vid-s{margin:0 0 10px;font-size:16px;line-height:1.4;color:#1C1C1C}
+.vid-btn{border:0;border-radius:8px;background:#EB1000;color:#fff;font:inherit;font-size:16px;font-weight:700;padding:8px 16px;cursor:pointer}
 .vid-btn:hover{background:#C40000}
 .vid-fail{margin:12px 0 0;font-size:15px;color:#1C1C1C}.vid-fail a{color:#C40000;font-weight:700}
-@media(max-width:760px){.vid-card{flex-direction:column;align-items:stretch}.vid-box{flex:none}}
-/* Nov 19 2026 (Adam: "at the top we need two videos"): the plays video and the first look side by side, each picture over its words, one above the other
-   on a phone. Adam, Nov 19: a video that plays stays in its own half of the row, beside the other card ("maybe 50% of the width on the screen so they'd
-   be next to each other"): the player takes the picture's place and the card keeps its headline and sentence under it */
-.vids{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;max-width:1080px;margin:0 0 26px}
-.vids .vid-card{flex-direction:column;align-items:stretch;gap:18px;margin:0;max-width:none}
-.vids .vid-box{flex:none}
-.vids .vid-card.playing{gap:18px}
-.vids .vid-card.playing .vid-copy>:not(.vid-fail):not(.vid-btn){display:revert}
-@media(max-width:760px){.vids{grid-template-columns:1fr}}
-/* step 84: once it plays, the video takes the card's width, and carries Jump to, Next and full screen as on the video page */
-.vid-card.playing{flex-direction:column;align-items:stretch;gap:0}
-.vid-card.playing .vid-box{flex:none}
-.vid-card.playing .vid-copy>:not(.vid-fail){display:none}
+.vid-card.playing{gap:18px}
+@media(min-width:1100px){
+  .vid-card:not(.playing){display:grid;grid-template-columns:36% minmax(0,1fr);align-items:center;gap:16px}
+  .vid-card:not(.playing) .vid-box{width:100%}
+  .vid-card:not(.playing) .vid-copy{display:flex;flex-direction:column;align-items:flex-start;align-self:stretch}
+  .vid-card:not(.playing) .vid-btn{margin-top:auto}
+}
+@media(max-width:760px){
+  .vids{grid-template-columns:1fr;gap:12px}
+  .vid-card:not(.playing) .vid-box{width:min(100%,200px)}
+}
 .vid-pl{position:relative;width:100%;height:100%;background:#000}
 .vid-pl:fullscreen,.vid-pl:-webkit-full-screen{background:#000}
 .vid-pl video::-webkit-media-controls-fullscreen-button{display:none}
@@ -460,9 +460,9 @@ details.more[open] summary svg{transform:rotate(180deg)}
 .jump.small .fsb svg{width:15px;height:15px}
 .jump.small .nxt{right:8px;bottom:52px;gap:6px;padding:6px 10px 6px 12px;font-size:13px}
 .jump.small .jpan{position:fixed;z-index:10;top:auto;left:12px;right:12px;bottom:12px;width:auto;max-height:70vh;box-shadow:0 8px 40px rgba(0,0,0,.4)}
-.bp{background:#fff;border:1.5px solid #1C1C1C;border-top:4px solid #EB1000;border-radius:8px;padding:22px 24px;margin:0 0 26px;max-width:1080px}
+.bp{background:#fff;border:1.5px solid #1C1C1C;border-top:4px solid #EB1000;border-radius:8px;padding:16px 18px;margin:0 0 18px}
 .bp .bp-t{display:flex;gap:10px;align-items:center;font-weight:700;font-size:20px;color:#1C1C1C;margin:0}
-.bp .bp-s{margin:6px 0 14px;font-size:15px;color:#3A3A3A}
+.bp .bp-s{margin:4px 0 10px;font-size:15px;color:#3A3A3A}
 .bp-box{display:flex;gap:10px;align-items:center;border:1.5px solid #1C1C1C;border-radius:8px;padding:6px 6px 6px 14px;background:#fff}
 .bp-box[hidden]{display:none}
 .bp-box:focus-within{outline:2px solid #EB1000;outline-offset:1px}
@@ -473,8 +473,14 @@ details.more[open] summary svg{transform:rotate(180deg)}
 .bp-chip{border:1.5px solid #1C1C1C;border-radius:18px;padding:7px 13px;font:inherit;font-size:14px;font-weight:600;color:#1C1C1C;background:#fff;cursor:pointer;text-align:left}
 .bp-chip:hover{border-color:#EB1000}
 .bp-chip.red{border-color:#EB1000;color:#C40000}
-.bp-gh{margin:18px 0 0;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#C40000}
-.bp-gh+.bp-chips{margin-top:8px}
+.bp-gh{margin:12px 0 0;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#C40000}
+.bp-gh+.bp-chips{margin-top:6px;gap:6px}
+@media(min-width:1250px){
+  #bp-body:has(>.bp-gh){display:grid;grid-template-columns:10rem minmax(0,1fr);align-items:start;gap:10px 12px;margin-top:14px}
+  #bp-body>.bp-gh{margin:0;padding-top:7px}
+  #bp-body>.bp-gh+.bp-chips{margin:0}
+  #bp-body>.bp-chips+.bp-chips{grid-column:2}
+}
 .bp-ask{display:flex;justify-content:flex-end;margin:4px 0 10px}
 .bp-ask div{background:#1C1C1C;color:#fff;border-radius:14px 14px 4px 14px;padding:11px 15px;font-size:15px;max-width:640px;overflow-wrap:anywhere}
 .bp-work{display:flex;gap:6px;align-items:center;font-size:15px;color:#1C1C1C;padding:4px 0 4px 20px;border-left:4px solid #EB1000}
@@ -500,7 +506,7 @@ details.more[open] summary svg{transform:rotate(180deg)}
 .bp-build{background:#EB1000;color:#fff;font:inherit;font-weight:700;border:0;border-radius:6px;padding:11px 18px;font-size:15px;cursor:pointer}
 .bp-alt{background:#fff;color:#1C1C1C;font:inherit;font-weight:600;border:1.5px solid #1C1C1C;border-radius:6px;padding:10px 16px;font-size:15px;cursor:pointer}
 .bp-note{font-size:13.5px;color:#3A3A3A;margin-top:10px}
-@media (max-width:600px){.bp{padding:18px 16px}.bp .bp-t{font-size:18px}}
+@media (max-width:600px){.bp .bp-t{font-size:18px}}
 .picker .one{display:flex;align-items:center;gap:10px;font-size:16.5px;font-weight:600;margin:22px 0 0}
 .pc-card .chips span.cchip{display:inline-flex;align-items:center;gap:6px;border-color:var(--red);color:var(--red)}
 /* ---------- Create your own play: the Add product menu, the empty canvas, Remove from canvas ---------- */

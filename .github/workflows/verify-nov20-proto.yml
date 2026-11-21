@@ -1,4 +1,4 @@
-name: Verify November 20 GenStudio answers and Proto package
+name: Verify compact home layout and Proto package
 on:
   push:
     branches:
@@ -20,12 +20,12 @@ jobs:
           python3 canvas/build.py
           python3 build_site.py
           git diff --exit-code --stat
-          git archive --format=zip -o "$RUNNER_TEMP/sow-generator-proto-nov20-v6.zip" HEAD:site
-          unzip -tq "$RUNNER_TEMP/sow-generator-proto-nov20-v6.zip"
+          git archive --format=zip -o "$RUNNER_TEMP/sow-generator-proto-nov20-v7.zip" HEAD:site
+          unzip -tq "$RUNNER_TEMP/sow-generator-proto-nov20-v7.zip"
       - name: Package Adobe Proto with index.html at the root
         uses: actions/upload-artifact@v4
         with:
-          name: sow-generator-proto-nov20-v6
+          name: sow-generator-proto-nov20-v7
           path: site/
           if-no-files-found: error
           include-hidden-files: true
@@ -48,6 +48,8 @@ jobs:
         run: node --require "$RUNNER_TEMP/proto-chrome.cjs" test_map_first_page.js
       - name: Check opening older drafts
         run: node --require "$RUNNER_TEMP/proto-chrome.cjs" test_drafts.js
+      - name: Check compact video posters, chapters, controls and mobile fallback
+        run: node --require "$RUNNER_TEMP/proto-chrome.cjs" test_step83.js
       - name: Check the first page and its MP4 players in Google Chrome
         run: node --require "$RUNNER_TEMP/proto-chrome.cjs" test_first_page_rows.js
   download:
@@ -61,22 +63,22 @@ jobs:
           ref: codex/verify-genstudio-questions-nov20
       - name: Save the verified Proto ZIP for download
         env:
-          VERIFIED_SITE_TREE: 3efef0bdfa56e76229a4ae0eafcf4ddd9f96bfd0
+          VERIFIED_SITE_TREE: d5a79fc3e3141b40ec6e9abf9491f61c64b8d9b2
         run: |
           test "$(git rev-parse HEAD:site)" = "$VERIFIED_SITE_TREE"
           mkdir -p proto
-          git archive --format=zip -o proto/sow-generator-proto-nov20-v6.zip HEAD:site
+          git archive --format=zip -o proto/sow-generator-proto-nov20-v7.zip HEAD:site
           python3 - <<'PY'
           import hashlib, pathlib, zipfile
           folder = pathlib.Path('site')
           expected = {p.relative_to(folder).as_posix() for p in folder.rglob('*') if p.is_file()}
-          with zipfile.ZipFile('proto/sow-generator-proto-nov20-v6.zip') as archive:
+          with zipfile.ZipFile('proto/sow-generator-proto-nov20-v7.zip') as archive:
               assert archive.testzip() is None
               assert {f.filename for f in archive.infolist() if not f.is_dir()} == expected
               for name in expected:
                   assert archive.read(name) == (folder / name).read_bytes(), name
           print(len(expected), 'files verified with index.html at the archive root')
           PY
-          git add -f proto/sow-generator-proto-nov20-v6.zip
+          git add -f proto/sow-generator-proto-nov20-v7.zip
           git -c user.name=github-actions -c user.email=github-actions@users.noreply.github.com commit -m "Save the verified Adobe Proto download [skip ci] [skip netlify]"
           git push origin HEAD:refs/heads/codex/verify-genstudio-questions-nov20
