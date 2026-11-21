@@ -1,21 +1,21 @@
 # Audit before the hand-over to Adobe teammates: November 21, 2026
 
-Adam asked eight questions before he submits the tool. This is the record: what was checked, how, what it found, and what waits for his call. Nothing in the tool was changed. The build checked is the one on Adobe Proto (version 9, branch `claude/sow-generator-handoff-517tq8`); the site rebuilt from source byte for byte before the checks.
+Adam asked eight questions before he submits the tool. This is the record: what was checked, how, what it found, what was changed the same day, and what waits for his call. The build audited is the one on Adobe Proto (version 9, branch `claude/sow-generator-handoff-517tq8`); the site rebuilt from source byte for byte before the checks. The changes are on branch `claude/great-lovelace-z309ti`. Nothing has gone to Proto or to `main`.
 
-The catalog today: **36 Adobe products, 18 outside systems, 217 connections, 632 services** (308 on product cards, 324 on connections).
+The catalog: **36 Adobe products, 18 outside systems, 217 connections, 632 services** (308 on product cards, 324 on connections). None of these counts changed today.
 
 ## The short answers
 
-| # | Question | Answer |
-|---|---|---|
-| 1 | Missing products, and levels | No product a partner sells today is missing by accident. Six names on Adobe's partner and certification portals are not in the tool, all known and left out or queued. Levels are not shown anywhere, and the training links lean beginner. |
-| 2 | Smaller packages and add-ons | Handled three ways: 9 pickers on 8 products, 85 services tagged with the package they need, 2 notes. About 20 add-ons from the Nov 19 list are still not in. |
-| 3 | Missing connections | See section 3. |
-| 4 | Full list of services | Every product and 169 of 217 connections have services. The Nov 19 list of about 120 service gaps is mostly still open. |
-| 5 | The two cross-sell plays | The owned product's own services start unticked, as intended. Its outside-system services start ticked: 272 hours on the Customer Journey Analytics play, 520 hours on the Adobe Commerce play. Needs Adam's call. |
-| 6 | Citation links | Every service and connection has an Adobe link, and no link is dead. 543 of 573 stored quotes still match the live page word for word; 28 need a look; 59 older services have a link and no stored quote. |
-| 7 | Training links | All 36 products have the box. Every certification Adobe offers for these products is listed. 141 of 143 public training links are live. Three products have no Partner Experience Hub page link. |
-| 8 | Make "Get your team ready" jump out | Pictures drawn, waiting for Adam's yes: `mockups/nov21_training/`. |
+| # | Question | Answer | Changed today |
+|---|---|---|---|
+| 1 | Missing products, and levels | No product a partner sells today is missing by accident. Six names on Adobe's partner and certification portals are not in the tool, all known and left out or queued. Levels were not shown anywhere. | Levels now show beside every certification and, where Adobe states one, every training link |
+| 2 | Smaller packages and add-ons | Handled three ways: 9 pickers on 8 products, 85 services tagged with the package they need, 2 notes. About 20 add-ons from the Nov 19 list are still not in. | Nothing; list below |
+| 3 | Missing connections | 103 pairs Adobe documents that the tool does not draw: 16 worth real partner work, 39 medium, 48 small. | Nothing; proposals in section 3 |
+| 4 | Full list of services | Every product and 169 of 217 connections have services. The Nov 19 list of about 120 service gaps is mostly still open. | Nothing; list below |
+| 5 | The two cross-sell plays | The owned product's own services started unticked, as intended. Its outside-system services started ticked: 272 hours on the Customer Journey Analytics play, 520 on the Adobe Commerce play. | Adam: "go". They now start unticked, one click to add. Saved quotes keep their totals |
+| 6 | Citation links | Every service and connection has an Adobe link, and no link is dead. 28 stored quotes were no longer on their page and 59 older services had no stored quote. | 87 quotes replaced or added. 630 of 632 services now hold a quote that is on its page word for word; the other 2 sit on pages only Adam's pastes can check |
+| 7 | Training links | All 36 products have the box. Every certification Adobe offers for these products is listed. 141 of 143 public training links are live. | Commerce Optimizer and Commerce Intelligence now link the Adobe Commerce hub page; a broken build step for the training data is repaired |
+| 8 | Make "Get your team ready" jump out | Built from the pictures in `mockups/nov21_training/` after Adam's "go". | A menu in the top bar of both pages, a red link on each product card, the box filled and outlined in red |
 
 ---
 
@@ -41,23 +41,22 @@ Everything else on the product descriptions page that is not in the tool is eith
 
 **Decided by Adam, Nov 21:** Semrush stays out. It will be folded into Brand Visibility.
 
-**Levels.** Adobe uses three ladders, and the tool shows none of them as a label:
+**Levels.** Adobe uses three ladders:
 
-| Where | Adobe's levels | In the tool today |
+| Where | Adobe's levels | In the tool since today |
 |---|---|---|
-| Courses on the Certification Portal | Foundations, Professional, Expert | One link per product to its courses; no level named |
-| Certifications | Professional, Expert, Master (and Qualified Credentials) | Listed in level order; the level is only inside the long name |
-| Experience League training | Beginner, Intermediate, Experienced | Not shown |
+| Courses on the Certification Portal | Foundations, Professional, Expert | Named under each product's Adobe courses link and in the top-bar menu |
+| Certifications | Professional, Expert, Master (and Qualified Credentials) | A tag beside each certification, and in the box's heading: "6 certifications (Professional, Expert, Master)" |
+| Experience League training | Beginner, Intermediate, Experienced | A tag beside each training link where Adobe states a level (70 of 143) |
 
 - Full ladders (Professional, Expert and Master): AEM Sites, Adobe Analytics, Adobe Commerce, Marketo Engage. Two rungs: Customer Journey Analytics, Real-Time CDP, Journey Optimizer, Target, Workfront. One: AEM Assets, Journey Optimizer B2B Edition, Acrobat, Acrobat Sign.
-- Adobe states a level on 70 of the 143 public training links. 60 of them cover Beginner, 27 Intermediate, 8 Experienced. For 14 products every link with a stated level is Beginner only, among them Real-Time CDP, Journey Optimizer, Customer Journey Analytics, Adobe Analytics, Marketo Engage and Workfront. A delivery team needs more than the beginner path, so these are worth a second pick each.
-- The mockup in section 8 shows the level beside each certification and training link.
+- **The training picks lean beginner.** Of the 70 links with a stated level, 60 cover Beginner, 27 Intermediate, 8 Experienced. For 14 products every link with a stated level is Beginner only, among them Real-Time CDP, Journey Optimizer, Customer Journey Analytics, Adobe Analytics, Marketo Engage and Workfront. A delivery team needs more than the beginner path, so these are worth a second pick each. Not changed today.
 
 Not read: the course cards on the Certification Portal (which courses exist at which level for each product). They load separately from the public page. Adam's paste of that page with "Show 60" would settle it.
 
 ## 2. Smaller packages, add-ons and components
 
-**How the tool handles them today.**
+**How the tool handles them.**
 
 - **Pickers (9, on 8 products):** Adobe Commerce (on-premises, on Cloud, Cloud Service), Workfront (bought before or after March 12, 2026; and the Workflow package), Journey Optimizer, AEM Assets, AEM Sites, Target, Frame.io, Marketo Engage.
 - **Tags on services (85 of 632):** the package or add-on a service needs, for example "Needs Customer Journey Analytics Select or higher" (12 services), "Needs the PDF Services API" (10), the Brand Intelligence add-ons (11), "Needs the Forms Communications add-on" (4).
@@ -79,15 +78,58 @@ Not read: the course cards on the Certification Portal (which courses exist at w
 
 **Products with editions and no picker or note:** Real-Time CDP (Prime or Ultimate; B2C, B2B, B2P: only 9 connection services are tagged), Adobe Analytics (Foundation to Ultimate: nothing tagged), AEM Forms (the AEM Sites picker for Cloud Service or 6.5 does not reach the Forms card), Marketo Measure (Tier 1, Tier 2, Ultimate), Real-Time CDP Collaboration (Starter).
 
-Built since Nov 19, for the record: the Commerce version picker, Commerce Optimizer, Commerce Intelligence, the four back-office systems, the move to Commerce as a Cloud Service, the seven other pickers, the upgrade to AEM 6.5 LTS, Workfront environment promotion, financial setup and Data Connect, and six Brand Concierge services.
+Built between Nov 19 and Nov 20, for the record: the Commerce version picker, Commerce Optimizer, Commerce Intelligence, the four back-office systems, the move to Commerce as a Cloud Service, the seven other pickers, the upgrade to AEM 6.5 LTS, Workfront environment promotion, financial setup and Data Connect, and six Brand Concierge services.
 
 ## 3. Connections
 
 **What the tool has.** 143 connections between Adobe products and 74 to outside systems. Every one has an Adobe source, and each of its data flows has one too.
 
-**The search for missing connections is not finished.** Three research passes were reading Experience League for documented connections the tool does not draw (data and journeys; content, creative and documents; AI and Commerce). They stopped on a usage limit after about 360 pages, before writing their results. This section is filled in when they resume.
+**How it was checked.** Three research passes read about 230 pages of Experience League and Adobe's developer and help sites for connections the tool does not draw (data and journeys; content, creative and documents; AI and Commerce). Each finding carries an Adobe sentence, and all 144 sentences were matched on their pages a second time with `found()` after the passes finished. Result: `data/connection_gaps.json`. Proposals only: none is in the tool, and each needs its services, hours and Adam's yes.
 
-Known from earlier notes, and already decided: Adobe Analytics + Brand Visibility stays out (Adam, Nov 10); Marketing Campaign Analytics + Content Analytics stays out; no Adobe page pairs Coworker with Brand Visibility (checked Nov 18, being re-checked).
+**103 documented pairs the tool does not draw:** 16 with real partner work behind them, 39 medium, 48 small. 33 more pairs are documented and already priced another way (a service on a product card or on another connection), and 69 pairs were checked and found not documented.
+
+**The 16 that carry real partner work.**
+
+| Pair | What Adobe documents | Source |
+|---|---|---|
+| AEM Sites + the client's own CDN | The client keeps its own CDN or firewall in front of AEM as a Cloud Service and points it at Adobe's CDN | [Adobe page](https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/content-delivery/cdn) |
+| Edge Delivery Services + the client's own CDN | An Edge Delivery site served through the client's CDN, with Adobe's guides for Cloudflare, Akamai, Fastly and CloudFront | [Adobe page](https://www.aem.live/docs/byo-cdn-setup) |
+| Real-Time CDP + CRM | Salesforce or Dynamics data into Experience Platform, and audiences back to the CRM. The CRM has a line to Customer Journey Analytics today, not to Real-Time CDP | [Adobe page](https://experienceleague.adobe.com/en/docs/experience-platform/sources/home) |
+| Real-Time CDP + Cloud storage | Files from S3, Azure, Google Cloud Storage or SFTP into Experience Platform, and audiences and datasets back out | [Adobe page](https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/cloud-storage/overview) |
+| Customer Journey Analytics + Search data | Google Analytics 4 history and live data into Customer Journey Analytics: a migration project | [Adobe page](https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-usecases/third-party/ga/overview) |
+| Marketo Engage + Ad platforms | Lists to Facebook, LinkedIn and Google; leads in from LinkedIn and Facebook lead forms; offline conversions | [Adobe page](https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/demand-generation/ad-network-integrations/understanding-ad-network-integrations) |
+| Coworker + Journey Optimizer B2B Edition | Coworker builds account and person journeys and answers questions about live ones | [Adobe page](https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/ai-capabilities/coworker-skills/journey-agent) |
+| AEM Forms + CRM | Forms that read from and write to Dynamics 365 or Salesforce through Adobe's ready-made configurations | [Adobe page](https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/use-form-data-model/configure-msdynamics) |
+| Acrobat Sign + CRM | Acrobat Sign inside Microsoft Dynamics 365. The Salesforce package is a service on the card today with no line to the CRM box | [Adobe page](https://helpx.adobe.com/sign/web/integrations/microsoft-dynamics/microsoft-dynamics-install.html) |
+| Workfront + CRM | Requests, projects and status exchanged with Salesforce through Workfront Fusion | [Adobe page](https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/third-party-app-connectors/salesforce-modules) |
+| AEM Sites + Other commerce platform | AEM Sites showing a non-Adobe catalog through the Commerce Integration Framework | [Adobe page](https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/content-and-commerce/cif-storefront/integrations/third-party) |
+| Frame.io + Cloud storage | Frame.io storing media in the client's own S3 bucket | [Adobe page](https://help.frame.io/en/articles/9179936-storage-connect-for-frame-io) |
+| Brand Concierge + the client's mobile app (new box) | Brand Concierge inside iOS and Android apps through Adobe's mobile SDK | [Adobe page](https://developer.adobe.com/client-sdks/edge/adobe-brand-concierge/) |
+| Marketo Engage + Webinar and event platforms (new box) | Registrations out to Zoom, ON24, Webex or GoToWebinar and attendance back | [Adobe page](https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/demand-generation/events/understanding-events/event-partners) |
+| Adobe Commerce + Payment gateway (new box) | Adobe's checkout starter kit for an outside payment gateway | [Adobe page](https://developer.adobe.com/commerce/extensibility/starter-kit/checkout/payment-use-cases) |
+| Workfront + Jira (new box) | Tasks and issues synced with Jira through Fusion | [Adobe page](https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/third-party-app-connectors/jira-modules-new) |
+
+**Around the three lead products.**
+
+- **Brand Visibility + Coworker: Adobe now documents it, as a manual hand-off.** Three Brand Visibility opportunity pages (YouTube, Reddit, cited web sources), each last updated Nov 20, say a person downloads the Brand Visibility brief and attaches it in Coworker Chat to draft the deliverable. There is still no Coworker skill, plugin or connector for Brand Visibility. This overturns the Nov 18 finding that no Adobe page pairs the two. It would be a dashed line (a partner workflow), not a native one. [Adobe page](https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/opportunities/youtube-sentiment-analysis)
+- **Brand Visibility:** nothing documented with Sites Optimizer, AEM Assets, Target, Journey Optimizer, Real-Time CDP, GenStudio, Marketo Engage, Workfront, Content Analytics or Commerce Optimizer. The tool is complete here.
+- **Coworker:** documented and not drawn: Journey Optimizer B2B Edition, Experimentation Accelerator and Marketing Campaign Analytics. Nothing for Commerce, Sites Optimizer, Express, Frame.io, Creative Cloud, Firefly, Acrobat or Marketo Measure.
+- **Brand Concierge:** the mobile app is the only gap. No contact-centre platform is documented; live chat runs through Marketo Qualifier, which the tool has.
+
+**Medium, between boxes the tool already has (24):** AEM Assets, AEM Forms and Edge Delivery Services each with another CMS; Acrobat Sign + ERP (NetSuite); Adobe Analytics + Ad platforms and + CRM; Commerce Optimizer + ERP; Coworker + Experimentation Accelerator and + Marketing Campaign Analytics; Creative Cloud + GenStudio for Performance Marketing (the Photoshop plugin); GenStudio for Performance Marketing + AEM Sites and + CRM; Journey Optimizer + Cloud storage (direct mail files); Journey Optimizer B2B Edition + CRM; Marketing Campaign Analytics + Adobe Analytics; Marketo Optimizer + Customer Journey Analytics; Microsoft Copilot + Marketo Engage; Other commerce platform + Real-Time CDP; Real-Time CDP Collaboration + Ad platforms (Amazon Marketing Cloud); Sites Optimizer + AEM Forms.
+
+**Outside systems Adobe documents that have no box (the medium ones):** Microsoft Power Automate (AEM Forms, Acrobat Sign); Microsoft 365 (Acrobat); an identity provider and a log and monitoring platform (AEM Sites); ServiceNow and an HR system (Acrobat Sign); tax provider and shipping carrier (Adobe Commerce); SMS providers, the client's mobile app (Journey Optimizer); consent platforms and other marketing platforms (Real-Time CDP); document storage such as Box, Dropbox and Google Drive (Workfront). Small ones include Slack and Google Gemini.
+
+**Decided earlier, so not counted as gaps:** ChatGPT, Claude and Microsoft Copilot with Adobe Analytics (Adam, Nov 18: Customer Journey Analytics only); Adobe Analytics + Brand Visibility (Nov 10); Marketing Campaign Analytics + Content Analytics. AEM Sites + Adobe Campaign waits on Adobe Campaign itself.
+
+**Worth knowing before any of these is built.**
+
+- Workfront's packaged apps for Salesforce, Jira, Outlook and Google Workspace are withdrawn: Adobe's pages say each "is no longer available" and point to Fusion. Any new Workfront line to those systems is a Fusion line.
+- Adobe's pages disagree on the AI assistants. The general connector page shows Journey Optimizer in ChatGPT and says its Copilot Studio steps apply to any Adobe connector; the Journey Optimizer page lists Claude only, and the Target page lists Claude and ChatGPT only. The tool follows the product pages.
+- Two existing lines price one direction only: Data warehouse + Real-Time CDP prices data coming in (Adobe also documents Snowflake and Databricks as destinations), and Cloud storage + Customer Journey Analytics prices files coming in (Adobe also documents exports).
+- One existing connection quote can no longer be proven: AEM Assets + Firefly Creative Production cites a Firefly help page that Adobe folded into its Creative Production overview, which no longer mentions AEM. The connection needs a new source page.
+
+Not reached: Adobe's AI registry listing (a script-driven page), the remaining Acrobat Sign connectors, Express social and ad add-ons, and the individual Fusion connector pages beyond Salesforce and Jira.
 
 ## 4. Services
 
@@ -104,6 +146,7 @@ Known from earlier notes, and already decided: Adobe Analytics + Brand Visibilit
 - **Journey Optimizer:** Decisioning on its own card, transactional campaigns from the client's order system, app work for push and in-app, migration from another platform.
 - **Target:** the move from at.js to Web SDK, server-side Target, Auto-Target.
 - **Marketo Engage and Workfront:** the add-ons in section 2, workspaces, custom objects, resource management, document integrations.
+- **GenStudio for Performance Marketing:** its five App Builder extension points (asset source, template, translation, compliance, content fragment) have no service.
 
 ## 5. The two cross-sell plays
 
@@ -111,22 +154,28 @@ Known from earlier notes, and already decided: Adobe Analytics + Brand Visibilit
 
 **How it was checked.** Each play was opened in the built site on a fresh browser at Typical size and $150 an hour, and every service was read as ticked or not (`tools/play_defaults.js`, result in `data/play_defaults.json`).
 
-**What holds.** Customer Journey Analytics starts with 0 of its 8 services ticked. Adobe Commerce starts with 0 of its 16. Brand Visibility starts with its 4, and the Brand Visibility connection, CDN and search data services are ticked.
+**What held.** Customer Journey Analytics started with 0 of its 8 services ticked, Adobe Commerce with 0 of its 16. Brand Visibility started with its 4, and the Brand Visibility connection, CDN and search data services were ticked.
 
-**What does not fit the rule.** The outside systems that belong to the owned product start on the canvas with their services ticked, since the Nov 18 "outside systems on from the start" rule and the Nov 20 defaults:
+**What did not fit the rule.** The outside systems of the owned product started with their services ticked:
 
-| Play | Starts at (one-time) | Brand Visibility work | The owned product's outside-system work, ticked |
+| Play | Before (one-time) | The owned product's outside-system work that was ticked | Now (one-time) |
 |---|---|---|---|
-| Brand Visibility + Customer Journey Analytics | 464 hours, $69,600 | 192 hours, $28,800 | **272 hours, $40,800**: Warehouse tables into CJA (56), Cloud storage files into CJA (40), CRM data into CJA (40), Ad platform sources into CJA (32), Ad spend joined to web conversions (32), BI extension setup (24), Executive dashboards in the BI tool (48) |
-| Brand Visibility + Adobe Commerce | 776 hours, $116,400 | 256 hours, $38,400 | **520 hours, $78,000**: Commerce to CRM integration (120), Commerce to ERP integration (120), Product data from the PIM into Commerce (80), Commerce to order management integration (120), Stock and shipment sync with the warehouse system (80) |
+| Brand Visibility + Customer Journey Analytics | 464 hours, $69,600 | 272 hours, $40,800: Warehouse tables into CJA (56), Cloud storage files into CJA (40), CRM data into CJA (40), Ad platform sources into CJA (32), Ad spend joined to web conversions (32), BI extension setup (24), Executive dashboards in the BI tool (48) | **192 hours, $28,800** |
+| Brand Visibility + Adobe Commerce | 776 hours, $116,400 | 520 hours, $78,000: Commerce to CRM integration (120), Commerce to ERP integration (120), Product data from the PIM into Commerce (80), Commerce to order management integration (120), Stock and shipment sync with the warehouse system (80) | **256 hours, $38,400** |
 
-A client who already runs Adobe Commerce already has its ERP and order system connected, and a client who already owns Customer Journey Analytics already has its data sources in. So two thirds of the Commerce play's starting estimate, and more than half of the Customer Journey Analytics play's, is work the rule says the play does not need.
+Monthly work is unchanged at 104 hours, $15,600. Over 12 months the plays open at $216,000 (was $256,800) and $225,600 (was $303,600).
 
-**Proposed, waiting for Adam:** on these two plays only, keep those outside systems on the canvas (the art of the possible) and start their services unticked, one click to add. The plays would open at $28,800 and $38,400 one-time, plus the same $15,600 a month. Saved quotes keep their totals: this needs a saved-defaults flag of its own, and `combinedDefaultsVersion` stays as it is.
+**Changed today, on Adam's "go".**
+
+- On these two plays only, the outside systems stay on the canvas from the start and their services to the owned product start unticked, one click to add. Every other play, and Create your own play, is as it was.
+- A quote saved before today reopens with the services and total it was saved with, on Build, through Services and back. The change has its own saved flag (`ownedOutsideDefaults`); `combinedDefaultsVersion` is still 1.
+- A client question that names one of those systems still ticks its service: the chips "closes deals in a CRM", "revenue data sits in Snowflake" and "offline results arrive as files" on "My client can't tie AI traffic to revenue".
+- The rule's data is `owned_outside` in `canvas/catalog_map.json`; the rule is `startingService` in `canvas/scope-choices.js`.
+- Proof: `node test_commerce_versions.js`, section 9 (eight new checks), and the totals in `canvas/test_canvas.js`.
 
 ## 6. Citation links
 
-**How it was checked.** Every distinct address in the catalog, the training data, the problem finder and the RFI knowledge base (979) was fetched live on Nov 21 with a plain request (`tools/fetch_all.py`, result in `data/link_check.json`). Every stored quote was then matched against its page with the project's own matcher, `found()` (`tools/verify_quotes.py`, result in `data/quote_check.json`).
+**How it was checked.** Every distinct address in the catalog, the training data, the problem finder and the RFI knowledge base (979) was fetched live on Nov 21 with a plain request (`tools/fetch_all.py`, result in `data/link_check.json`). Every stored quote was then matched against its page with the project's own matcher, `found()` (`tools/verify_quotes.py`; the result before today's fixes is `data/quote_check_before.json`, after is `data/quote_check.json`).
 
 **Links.**
 
@@ -134,70 +183,73 @@ A client who already runs Adobe Commerce already has its ERP and order system co
 - 948 of 979 addresses answer. **None is dead.**
 - 16 certification pages send a visitor who is not signed in to Adobe's sign-in page. They open for a signed-in partner.
 - 15 could not be tested: 7 on business.adobe.com (Adam's pastes only), 4 on www.adobe.com (not reachable from this session), 3 on partners.adobe.com, 1 on YouTube.
-- 14 addresses redirect. 13 land on the same page at a new address. One lands on a general page because its own page is gone: the Commerce cloud regions page in the RFI knowledge base (`commerce-operations/implementation-playbook/infrastructure/cloud/regions`). Two services cite a Firefly page that Adobe folded into its Creative Production overview (below).
+- 14 addresses redirect. 13 land on the same page at a new address. One lands on a general page because its own page is gone: the Commerce cloud regions page in the RFI knowledge base (`commerce-operations/implementation-playbook/infrastructure/cloud/regions`). Not changed today, since a link is something a partner sees.
 
-**Quotes behind the services** (573 services hold one):
+**Quotes behind the services.**
 
-- **543 match the live page word for word.**
-- **7 are the same sentence with a small difference** (capital letters, a full stop where Adobe's sentence runs on, an invisible character): Checkout, payment, tax and delivery settings; B2B buyer and purchasing setup; Access levels and layout templates; Marketo source connector into Platform; Marketo data in CJA reporting; Commerce to CRM integration; Approved assets from review to AEM Assets.
-- **21 are not on the page today.** Adobe reworded or moved the page, or the stored sentence was a summary. The link still opens on the right topic; the sentence needs replacing with one that is on the page:
-  - Customer Journey Analytics: Analysis Workspace projects
-  - Marketo Engage: CRM sync and field mapping
-  - Firefly Creative Production: Creative Production access, roles and API credentials; Bulk presets
-  - Real-Time CDP + Customer Journey Analytics: Journey audiences from CJA for activation
-  - Target + Customer Journey Analytics: A4T to CJA reporting transition (Adobe's page now says "This integration is not the same as Adobe Analytics for Target (A4T)", so the service's wording deserves a read too)
-  - AEM Sites + Target: Content Fragment offers for headless apps
-  - AEM Sites + Sites Optimizer: Connect Sites Optimizer to AEM author
-  - Brand Concierge + Edge Delivery Services: Brand Concierge block on Edge Delivery (Adobe's deployment page now describes an installed script and page rules, not a custom block, so the service's scope deserves a read too); Site content as concierge knowledge source
-  - Adobe Commerce + Customer Journey Analytics: Commerce data in CJA reports
-  - Target + Edge Delivery Services: Target personalization on Edge Delivery
-  - Coworker + Real-Time CDP, + Journey Optimizer, + Target: the three Partner-written Coworker Skills services
-  - Edge Delivery Services + Customer Journey Analytics: Measure Edge Delivery page and block interactions
-  - Marketo Engage + Real-Time CDP: Real-Time CDP audiences to Marketo lists
-  - Marketo Engage + Target: Share Marketo lists with Target
-  - Marketo Engage + Brand Concierge: Brand Concierge activity in Marketo programs
-  - Marketo Qualifier + Marketo Engage: Marketing Highlights setup; Automatic enrollment from live Marketo activity
-- **2 sit on business.adobe.com** and can only be checked against Adam's pastes.
-- **59 older services have a link and no stored quote.** These are the original statement-of-work services and the first outside-system services, among them all 11 Brand Visibility services, all 11 Coworker services and the 5 Edge Delivery services. Their links were reviewed in the Nov 6 citation audit. Because these are the services the four lead plays open with, they are the first ones a reviewer will click.
+| | Before | After today |
+|---|---|---|
+| On the page word for word | 543 | **630** |
+| Not on the page | 28 | 0 |
+| No quote stored | 59 | 0 |
+| On business.adobe.com, checked against Adam's pastes only | 2 | 2 |
 
-**Quotes behind the connections:** 1,110 of the 1,123 that can be checked match word for word. The 13 that do not are on Adobe Commerce + CRM (3, capital letters), AEM Assets + Firefly Creative Production (2, the folded Firefly page), Marketo Qualifier + Marketo Engage (2), Microsoft Copilot + Coworker (2), and one each on Coworker's lines to Customer Journey Analytics, Journey Optimizer, Marketo Engage and Content Analytics. 103 are on paste-only pages.
+- The 28: fourteen held a sentence from the service's earlier page (the link was corrected on Nov 7 and the sentence was not), seven differed from Adobe's sentence only in capitals or punctuation, and seven sat on pages Adobe has since reworded. Two of them, "Connect Sites Optimizer to AEM author" and "Measure Edge Delivery page and block interactions", held a summary, not Adobe's words.
+- The 59 were the original statement-of-work services and the first outside-system services, among them all 11 Brand Visibility services, all 11 Coworker services and the 5 Edge Delivery services: the ones the lead plays open with.
+- How each new sentence was chosen: one reader picked it from the page saved that day, a second reader checked it independently, and `found()` proved it a third time before it was written (`data/quote_picks.json`, `tools/apply_quotes.py`). 59 of the 99 state the capability or step itself; 38 back part of the service; each is marked.
+- The quotes are never shown on screen. The 46 for the statement-of-work services live in the new `canvas/live_evidence.json`, because `index.html`, where those services are defined, holds no quotes.
+
+**Two services whose Adobe page now says something different. For Adam: the wording a partner reads may need a change.**
+
+- **Brand Concierge block on Edge Delivery** (Brand Concierge + Edge Delivery Services). Adobe's deployment page now describes an installed script and page rules that decide where the concierge appears, not a custom block.
+- **A4T to CJA reporting transition** (Target + Customer Journey Analytics). Adobe's page now says "This integration is not the same as Adobe Analytics for Target (A4T). The implementation and supported activity types are different."
+
+**Quotes behind the connections:** 1,122 of the 1,123 that can be checked are on their page (1,110 before; 12 replaced today). The one left is AEM Assets + Firefly Creative Production (section 3). 103 are on paste-only pages.
 
 Not checked: the quotes inside the RFI knowledge base (its links were).
 
 ## 7. Training links
 
-**How it was checked.** The training data (`canvas/training.json`) was read for all 36 products; every public link was fetched; the certifications were compared with Adobe's public list of the certifications it offers (https://certification.adobe.com/certifications/learn-more, read Nov 21). Result in `data/training_check.json`. The project's own suite passes: `node test_training.js`, 23 checks.
+**How it was checked.** The training data (`canvas/training.json`) was read for all 36 products; every public link was fetched; the certifications were compared with Adobe's public list of the certifications it offers (https://certification.adobe.com/certifications/learn-more, read Nov 21). Result in `data/training_check.json`, as found before today's changes.
 
 | Row in the box | Coverage |
 |---|---|
-| Partner hub page | 33 of 36. None for Brand Intelligence (Adobe has no page), Commerce Optimizer and Commerce Intelligence (added on Nov 20, after the training round; the Adobe Commerce page Adam confirmed would fit both) |
-| Decks, sales plays and webinars (hub search) | 31 of 36. None for Customer Journey Analytics, Content Analytics and the three above |
+| Partner hub page | 33 of 36 before; **35 today**: Commerce Optimizer and Commerce Intelligence, added on Nov 20 after the training round, now link the Adobe Commerce page Adam confirmed. Brand Intelligence has none (Adobe has no page) |
+| Decks, sales plays and webinars (hub search) | 31 of 36. None for Customer Journey Analytics, Content Analytics, Brand Intelligence, Commerce Optimizer and Commerce Intelligence |
 | Partner training | 36 of 36: 18 say which product to tick, 18 say what to search for. The catalog's "Adobe Experience Platform" filter is not used; it would fit Real-Time CDP and Real-Time CDP Collaboration |
 | Certification | **Complete.** Adobe offers 47; the 38 for products in the tool are all listed, and nothing listed is off Adobe's list. The 9 not listed are Advertising (2), Campaign Classic (2), Captivate, ColdFusion and three Japanese-language versions |
 | Adobe courses | 20 of 36. The portal has five filters the tool does not use; two would add a row: Adobe Experience Platform (for Real-Time CDP, Journey Optimizer and Customer Journey Analytics) and Adobe GenStudio |
 | Public training | 143 links, 4 a product on most. 141 are live; 2 cannot be tested (a YouTube video and a business.adobe.com page, both on Brand Intelligence) |
 
+**Found and repaired:** `python3 canvas/data_training.py`, the step that writes the training data from its record, had stopped working when the two Commerce products were added on Nov 19. It runs again and writes the same data as before, plus today's additions.
+
 The Partner Experience Hub pages need a partner sign-in, so they were not opened. Adam confirmed each one while signed in on Nov 16. Open with Adam: his paste of the partner training catalog's full filter list (his screenshot stops at Learning Manager).
 
 ## 8. Making "Get your team ready" jump out
 
-Pictures only, drawn on the real built page by `mockups/nov21_training/training_mock.js`. Nothing is built.
+Built on Adam's "go" to the pictures in `mockups/nov21_training/`.
 
-1. **A "Get your team ready" menu in the top bar of every page** (`1_top_bar_menu_open.png`, first page `4_first_page_menu_open.png`, phone `5_phone_menu_open.png`). It holds the two links Adam asked for, Adobe courses on the Certification Portal and Partner on-demand trainings on the Partner Experience Hub, and on a play one row for each product on the canvas, which opens that product's box.
-2. **On each product card** (`2b_card_today_vs_proposed.png`): a red link under the product's name that jumps to the box and opens it, and the box itself filled and outlined in red.
-3. **Levels** (`3_box_open_with_levels.png`): the level beside each certification and each training link where Adobe states one, and the portal's skill levels under Adobe courses.
+1. **A "Get your team ready" menu in the top bar of every page.** It holds the two links Adam asked for, Adobe courses on the Certification Portal and Partner on-demand trainings on the Partner Experience Hub. On a play it adds one row for each Adobe product on the canvas, which opens that product's card with its box open. The Scope, Services, Statement of work and RFI Builder page has the same button with the two links.
+2. **On each product card:** a red link under the product's name that opens the box and brings it into view, and the box itself filled and outlined in red.
+3. **Levels:** beside each certification, beside each training link where Adobe states one, in the box's heading, and the portal's three skill levels under Adobe courses.
 
-To build after Adam's yes: the menu on both pages (the canvas and the statement-of-work steps share the top bar's look, not its code), the card link and box in `canvas/template.html`, the levels in `canvas/data_training.py` from the record, and checks in `test_training.js`.
+Two things differ from the pictures:
+
+- **The button shortens so the top bar keeps its height.** Its full name shows from 1280 pixels wide; below that it reads "Training", and below 1180 pixels (900 on the statement-of-work page) it is the graduation cap alone, with its full name kept for screen readers. On a few phone and tablet widths the bar is 5 to 9 pixels taller than before; at a handful of single widths (near 620 and 700 pixels) it wraps to a second row.
+- **"Saved in this browser as you go" now hides below 1100 pixels wide** (it was 900), to make room.
+
+Checks: `node test_training.js`, 33 checks (23 before).
 
 ---
 
-## What is worth doing before the hand-over, in order
+## Still open, in order
 
-1. **Adam's call on section 5.** It changes the first number a teammate sees on two of the four lead plays.
-2. **The 21 quotes that are not on their page, and the two services whose Adobe page changed its meaning** (Brand Concierge block on Edge Delivery; A4T to CJA reporting transition).
-3. **Quotes for the 59 older services,** starting with Brand Visibility and Coworker.
-4. **"Get your team ready"** once the pictures have a yes, with the Adobe Commerce hub page on Commerce Optimizer and Commerce Intelligence.
-5. **A line ready for "where is Adobe Campaign?"**, or the paste that unblocks it.
+1. **Adam's wording call on the two services in section 6** (Brand Concierge block on Edge Delivery; A4T to CJA reporting transition).
+2. **Which of the 16 connections in section 3 to build**, and whether Brand Visibility + Coworker goes in as a partner workflow line.
+3. **A line ready for "where is Adobe Campaign?"**, or the paste that unblocks it.
+4. **Intermediate and advanced training picks** for the 14 products whose links stop at Beginner.
+5. **The Nov 19 lists** of add-ons and service gaps (sections 2 and 4).
+6. **A new Proto package.** `site/` no longer matches the version 9 zip.
 
 ## How to run the checks again
 

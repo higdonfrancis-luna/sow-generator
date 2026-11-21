@@ -2,7 +2,26 @@
 
 Read this first in the new chat. Everything below is on GitHub, so a new account with access to the repository can pick it up.
 
-## PICK UP HERE (updated Friday, November 20, 2026)
+## PICK UP HERE: the Nov 21 audit comes first
+
+**Branch.** `claude/great-lovelace-z309ti`, built on `claude/sow-generator-handoff-517tq8`. Nothing from it is on Proto or `main`. `site/` no longer matches the version 9 Proto zip; make a new package with `git archive --format=zip -o <file>.zip HEAD:site` when Adam asks.
+
+**The audit.** Adam asked eight questions before submitting the tool to teammates at Adobe. Read `audit_2026-11-21/FINDINGS.md`: what was checked, what was changed, what is still open.
+
+**Built on Adam's "go" (Nov 21).**
+- "Get your team ready": a menu in the top bar of both pages, a red link and a bolder box on each product card, levels beside certifications and training links.
+- The two Brand Visibility cross-sell plays start without the owned product's outside-system services (own saved flag `ownedOutsideDefaults`; saved quotes reopen as saved). This replaces the Friday line below that says the back-office services start selected on the Commerce play: the boxes still start on the canvas, their services start unticked.
+- 87 Adobe quotes replaced or added, so every service's quote is on its page word for word.
+
+**Decided by Adam (Nov 21).** Semrush stays out of the tool: it will be folded into Brand Visibility.
+
+**Waiting for Adam.** The wording of two services whose Adobe page changed (Brand Concierge block on Edge Delivery; A4T to CJA reporting transition). Which of the 16 high-value connections in section 3 of the findings to build, and whether Brand Visibility + Coworker goes in as a partner workflow line now that Adobe documents the hand-off. His paste of the Certification Portal's course list ("Show 60") and of the partner training catalog's full filter list.
+
+**Network.** On this account the personal cloud environment `sow-generator` (made Nov 21) allows experienceleague.adobe.com, helpx.adobe.com, developer.adobe.com, www.adobe.com, news.adobe.com, www.aem.live, help.frame.io and certification.adobe.com. A session started on the Default environment reaches none of them.
+
+**Useful.** Experience League lists a whole guide's pages at `https://experienceleague.adobe.com/en/toc/<id>.plain.html`; the id is in each page's `<meta name="toc">`.
+
+## Earlier: Friday, November 20, 2026
 
 **State.** The Friday scope, the seven approved edition pickers, the full-connection canvas and the product map are built on `claude/sow-generator-handoff-517tq8`. Make the Adobe Proto upload with `git archive --format=zip -o <file>.zip HEAD:site` (index.html at the root). The data owner signs off on the ranked Add product list before anything goes to main, and main needs Adam's go.
 

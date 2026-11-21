@@ -309,6 +309,19 @@ const inPaste = q => { let at = 0; const t = norm(PASTE); return q.split('...').
       ok(s1[0] === WAS[id][0] && s1[1] === WAS[id][1], '9. and keeps them through Services and back to Build', JSON.stringify([through.ids, s1]));
       await saved.context().close();
     }
+    // a client question that names one of those systems still starts that system's service ticked, and its preview quotes the same fee as its canvas
+    const asked = {};
+    for (const [chip, service] of [[null, null], [0, 'OX5'], [1, 'OX3'], [2, 'OX4']]) {
+      const q = await page(); const at = await q.evaluate(() => PROBS.findIndex(x => x.id === 'ai-traffic-revenue'));
+      await q.click('[data-bpa="all"]'); await q.click(`[data-bpp="${at}"]`); await q.waitForTimeout(600);
+      if (chip !== null) { await q.click(`[data-bpr="${chip}"]`); await q.waitForTimeout(600); }
+      const low = await q.evaluate(() => Number(((document.querySelector('#bp').innerText.match(/\$[\d,]+/) || ['0'])[0]).replace(/[$,]/g, '')));
+      await q.click('[data-bpa="build"]'); await q.locator('#stage').waitFor(); await q.waitForTimeout(400); await q.fill('#rate', '100'); await q.waitForTimeout(200);
+      asked[chip === null ? 'none' : service] = await q.evaluate(({service, low}) => ({play: st.play, ticked: CanvasServiceDefaults.ownedOutside.cja.filter(l => counted(l)), want: service ? [service] : [], same: !low || totals().yr === low}), {service, low});
+      await q.context().close();
+    }
+    ok(Object.values(asked).every(a => a.play === 'cja' && same(a.ticked, a.want) && a.same),
+      '9. "My client can\'t tie AI traffic to revenue" opens the cross-sell play without the owned product\'s outside-system services; its CRM, warehouse and file-drop chips each tick that system\'s service, and the preview quotes the canvas\'s fee', JSON.stringify(asked));
   }
 
   // ============ 10. Optimizer storefront on a third-party commerce backend ============
