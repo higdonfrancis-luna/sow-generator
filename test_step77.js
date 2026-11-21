@@ -75,7 +75,7 @@ const same = (a, b) => [...a].sort().join() === [...b].sort().join();
     ['My client wants to grow share of wallet', 'Grow share of wallet']
   ]) {
     await page.fill('#bp-q', query); await page.press('#bp-q', 'Enter');
-    ok(await page.locator('#bp-goal-title').innerText() === name && await page.evaluate(() => !st.play && document.activeElement.id === 'bp-goal-title'),
+    ok(await page.locator('#bp-goal-title').textContent() === 'Recommended: ' + name && await page.evaluate(() => !st.play && document.activeElement.id === 'bp-goal-title'),
       'Typing a goal previews ' + name + ' and moves focus to the play name');
     await page.getByRole('button', {name:'Back to questions'}).click();
     ok(await page.locator('[data-bpp]').count() === 32 && await page.evaluate(() => document.activeElement.hasAttribute('data-bpp')),

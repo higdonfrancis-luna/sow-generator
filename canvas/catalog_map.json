@@ -1545,6 +1545,45 @@
        "attract first-time buyers"
       ],
       "line": "Reach new buyers in ad and media channels, and show up when they ask AI.",
+      "why": "GenStudio for Performance Marketing can use an audience definition from Real-Time CDP to help the creative team tailor ads to the buyers your client wants to reach. Brand Visibility shows where the brand appears in AI answers, while Customer Journey Analytics uses the site's referral and order data to show which AI-referred visits led to a first purchase. The team can ask Coworker to break down acquisition results by channel in its Customer Journey Analytics data view.",
+      "deliverable": "Define who counts as a new customer, set up an acquisition audience and prepare ad variants for a connected channel. Give the client a report that separates first purchases from repeat orders and shows how many new buyers arrived through paid ads or AI referrals.",
+      "refine": [
+       {
+        "chip": "My client wants to follow up when a prospect signs up",
+        "add": [
+         "ajo"
+        ],
+        "note": "Use the sign-up event and the prospect's contact preferences to start a welcome journey."
+       },
+       {
+        "chip": "My client already keeps campaign images in AEM Assets",
+        "add": [
+         "aemassets"
+        ],
+        "owned": [
+         "aemassets"
+        ],
+        "note": "Connect the approved Content Hub library so the creative team can reuse its images in GenStudio."
+       }
+      ],
+      "references": [
+       {
+        "title": "Use Real-Time CDP audiences when creating content in GenStudio",
+        "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/guidelines/add-guidelines#add-audiences"
+       },
+       {
+        "title": "Prepare approved ads for paid channels",
+        "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/activation/overview"
+       },
+       {
+        "title": "Measure AI referrals and conversions with Brand Visibility and Customer Journey Analytics",
+        "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/integrations/bv/bv"
+       },
+       {
+        "title": "Explore audience, journey and analytics data in Coworker",
+        "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows"
+       }
+      ],
       "products": [
        "rtcdp",
        "gspm",
@@ -1640,6 +1679,45 @@
        "customers are leaving"
       ],
       "line": "Journeys that keep customers coming back, and answers when they ask.",
+      "why": "Journey Optimizer can remind customers before a renewal and stop the reminders when a renewal event arrives. Brand Concierge can answer common renewal questions on the site using content the client approves. With renewal events connected, Customer Journey Analytics can show where customers stopped in the journey and how many renewed. The team can ask Coworker to investigate a drop before changing the message or its timing.",
+      "deliverable": "Build a renewal reminder and test it with a customer who renews and one who lets the renewal lapse. Check the concierge's answers against the client's renewal policy and give the team a report showing renewal rates for the customers who entered the journey.",
+      "refine": [
+       {
+        "chip": "My client needs to identify customers at risk of leaving",
+        "add": [
+         "rtcdp"
+        ],
+        "note": "Agree on a signal such as missed orders, build the audience in Real-Time CDP and make it available to Journey Optimizer."
+       },
+       {
+        "chip": "My client keeps renewal guidance in AEM Sites as a Cloud Service",
+        "add": [
+         "aemsites"
+        ],
+        "owned": [
+         "aemsites"
+        ],
+        "note": "With Content AI enabled, Brand Concierge can use the client's AEM Sites content index to answer renewal questions."
+       }
+      ],
+      "references": [
+       {
+        "title": "Set the rules for entering and leaving a journey",
+        "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/orchestrate-journeys/journey-use-cases/entry-exit-criteria-guide"
+       },
+       {
+        "title": "Choose the content Brand Concierge uses to answer questions",
+        "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/knowledge-sources/knowledge-sources"
+       },
+       {
+        "title": "Analyze Journey Optimizer data in Customer Journey Analytics",
+        "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/integrations/ajo"
+       },
+       {
+        "title": "Explore audience, journey and analytics data in Coworker",
+        "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows"
+       }
+      ],
       "products": [
        "ajo",
        "bc",
@@ -1718,6 +1796,45 @@
        "increase repeat purchases"
       ],
       "line": "The right offer for each customer on the site, and journeys that cross-sell.",
+      "why": "Target can test a second-product offer on the site, and Journey Optimizer can follow up with eligible customers who have yet to buy. To serve a Journey Optimizer offer decision directly in a Target activity, the client needs the Experience Platform Web SDK and either Journey Optimizer Ultimate with Offer Decisioning or the Offer Decisioning add-on. With order data connected, Customer Journey Analytics can compare purchases and revenue across test groups, and the team can use Coworker to explore the results.",
+      "deliverable": "Pick one pair of products. Build a test for customers who own the first, exclude those who already own the second, and check that follow-up stops after purchase. Give the client a report comparing second-product purchases and revenue per eligible customer with a control group.",
+      "refine": [
+       {
+        "chip": "My client sells the second product through Adobe Commerce",
+        "add": [
+         "commerce"
+        ],
+        "owned": [
+         "commerce"
+        ],
+        "note": "Map the storefront's product and order events so the team can check whether the customer purchased after seeing the offer."
+       },
+       {
+        "chip": "My client needs audiences based on what customers already own",
+        "add": [
+         "rtcdp"
+        ],
+        "note": "Build product-ownership audiences in Real-Time CDP and share them with Target and Journey Optimizer."
+       }
+      ],
+      "references": [
+       {
+        "title": "Analyze Target tests in Customer Journey Analytics",
+        "url": "https://experienceleague.adobe.com/en/docs/target/using/integrate/cja/target-reporting-in-cja"
+       },
+       {
+        "title": "Set the rules for entering and leaving a journey",
+        "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/orchestrate-journeys/journey-use-cases/entry-exit-criteria-guide"
+       },
+       {
+        "title": "Check the requirements for Journey Optimizer offer decisions in Target",
+        "url": "https://experienceleague.adobe.com/en/docs/target/using/integrate/ajo/offer-decision"
+       },
+       {
+        "title": "Explore audience, journey and analytics data in Coworker",
+        "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows"
+       }
+      ],
       "products": [
        "target",
        "ajo",
