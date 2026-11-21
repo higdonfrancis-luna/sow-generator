@@ -124,7 +124,7 @@ const server = http.createServer((req, res) => {
     ok(ad.tag === 'Needs CJA Select or higher' && ad.t.includes('Sending CJA audiences back out to ad platforms needs Real-Time CDP'), 'the ad platforms card: the join needs CJA Select, and audiences out need Real-Time CDP', ad.t.slice(0, 300));
     await p.click('#card [data-close]'); await p.waitForTimeout(200);
     const t0 = await canvasTotal(p); await toServices(p); const t1 = await toolTotal(p);
-    ok(t0 === '$243,600' && t1 === t0, 'CJA with the CDN, ad platforms, BI tools and search data: $243,600 on both pages ($222,000 + $9,600 + $10,800 + $1,200)', JSON.stringify({t0, t1}));
+    ok(t0 === '$216,000' && t1 === t0, 'CJA with the CDN, ad platforms, BI tools and search data: $216,000 on both pages (Nov 21 2026: on this cross-sell play the ad platform and BI services start unticked, so the systems add nothing until a service is ticked)', JSON.stringify({t0, t1}));
     await back(p); ok((await boxes(p)) === 'ads,bi,bv,cdn,cja,search', 'back on Build every system is still there', await boxes(p));
     await p.context().close(); }
 
@@ -148,7 +148,7 @@ const server = http.createServer((req, res) => {
   // 7. no "the customer" in what step 45 wrote, and no dashes
   { const cat = JSON.parse(fs.readFileSync(path.join(__dirname, 'canvas', 'catalog.json'), 'utf8')), ids = ['ads', 'bi', 'search', 'csrc', 'cms'];
     const NEWC = ['ads-cja', 'ads-rtcdp', 'cja-bi', 'search-bv', 'search-so', 'csrc-eds', 'csrc-so', 'cms-bc', 'crm-marketo', 'crm-target', 'dwh-rtcdp', 'dwh-ajo'];
-    const text = JSON.stringify([cat.products.filter(p => ids.includes(p.id) || p.rec), cat.connections.filter(c => NEWC.includes(c.id)), NEWC.flatMap(id => cat.connections.find(c => c.id === id).lines.map(l => cat.lines[l]))]);
+    const text = JSON.stringify([cat.products.filter(p => ids.includes(p.id) || p.rec), cat.connections.filter(c => NEWC.includes(c.id)), NEWC.flatMap(id => cat.connections.find(c => c.id === id).lines.map(l => ({...cat.lines[l], evidence: ''})))]);   // Nov 21 2026: the stored Adobe quote is Adobe's own wording and is never shown
     ok(!/\bthe customer\b(?! ID| Attributes| Journey)|\bcustomer's\b/i.test(text) && !/[–—]/.test(text) && cat.connections.filter(c => NEWC.includes(c.id)).length === 12,
       'the twelve new connections, their services and the five systems say your client, never the customer (a customer ID and Adobe product names stay), with no dashes', (text.match(/.{40}customer.{40}/i) || [''])[0]); }
 

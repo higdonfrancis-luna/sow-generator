@@ -423,8 +423,8 @@ function redoLine(line) { const v = s => Number(s.replace(/,/g, ''));
     ok(/^ok {4}the real file/.test(checkerRun) && /\n0 failed\s*$/.test(checkerRun) && !/FAIL/.test(checkerRun), '10. python3 canvas/next_product_check.py passes: the real file, and every kind of bad table refused', checkerRun.split('\n').filter(x => /FAIL/.test(x)).join(' | ').slice(0, 300));
     let inCanvas = []; try { inCanvas = execFileSync('git', ['ls-files', '--cached', '--others', '--exclude-standard', 'canvas'], {cwd: ROOT, encoding: 'utf8'}).split('\n').filter(Boolean); } catch (e) { inCanvas = ['canvas/git ls-files did not run.csv']; }
     const sheets = inCanvas.filter(f => /\.(xlsx?|xlsm|csv|tsv|parquet)$/i.test(f)), data = inCanvas.filter(f => /^canvas\/[^/]+\.json$/.test(f)).sort();
-    ok(inCanvas.length > 10 && !sheets.length && same(data, ['canvas/catalog.json', 'canvas/catalog_map.json', 'canvas/never_suggest.json', 'canvas/next_product_counts.json', 'canvas/problems.json', 'canvas/training.json']),
-      '10. canvas/ holds no spreadsheet, and beside canvas/next_product_counts.json its only data files are the catalog, its map, the problems, the never-go-backwards rules and the training links (saved or not)', sheets.concat(data).join()); }
+    ok(inCanvas.length > 10 && !sheets.length && same(data, ['canvas/catalog.json', 'canvas/catalog_map.json', 'canvas/live_evidence.json', 'canvas/never_suggest.json', 'canvas/next_product_counts.json', 'canvas/problems.json', 'canvas/training.json']),
+      '10. canvas/ holds no spreadsheet, and beside canvas/next_product_counts.json its only data files are the catalog, its map, the Adobe quotes behind the statement-of-work services (Nov 21 2026), the problems, the never-go-backwards rules and the training links (saved or not)', sheets.concat(data).join()); }
 
   // ============ 11. words ============
   { const texts = []; let one = '';
