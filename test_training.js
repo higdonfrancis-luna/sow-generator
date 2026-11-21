@@ -28,7 +28,7 @@ function expected(id) {
   const own = !t.closest && certs.length, levels = own ? [...new Set(certs.map(e => e.level))] : [];
   return {
     courseRow: t.courses ? t.courses + ' courses on the Certification PortalSkill levels on the portal: ' + DATA.courseLevels.join(', ') : '',
-    tags: [...shown.map(e => e.credential ? '' : e.level), ...t.training.map(x => (x.level || []).join(' to '))],
+    tags: [...shown.map(e => e.credential ? '' : e.level), ...t.training.map(x => !x.level ? '' : x.level.length > 1 ? x.level[0] + ' to ' + x.level[x.level.length - 1] : x.level[0])],
     status: (own ? own + ' certification' + (own === 1 ? '' : 's') + ' (' + levels.join(', ') + ')' : t.closest && certs.length ? 'No certification of its own' : 'No certification yet') + ', partner and public training',
     rows: [...(t.hub ? ['Partner hub'] : []), 'Partner training', 'Certification', ...(t.courses ? ['Adobe courses'] : []), 'Public training'],
     hubLinks: [...(t.hub ? [[DATA.hub + t.hub.slug, t.hub.name + ' on the Partner Experience Hub']] : []), ...(t.hubSearch ? [[DATA.hubSearch + t.hubSearch, 'Decks, sales plays and webinars for ' + NAME[id]]] : [])],
@@ -242,8 +242,9 @@ function expected(id) {
     await p.keyboard.press('Escape');
     const heights = [];
     for (const width of [1440, 1280, 1180, 1024, 900, 768, 390]) { await p.setViewportSize({width, height: 844}); await p.waitForTimeout(350);
-      heights.push([width, await p.evaluate(() => [Math.round(document.querySelector('.masthead').getBoundingClientRect().height), document.documentElement.scrollWidth > innerWidth + 1])]); }
-    ok(heights.every(([w, [h, sideways]]) => !sideways && h === (w === 390 ? 106 : 69)), 'the top bar keeps its height from a wide screen to a phone: the button\'s name shortens to Training, then to its cap alone', JSON.stringify(heights));
+      heights.push([width, await p.evaluate(() => [Math.round(document.querySelector('.masthead').getBoundingClientRect().height), document.documentElement.scrollWidth > innerWidth + 1,
+        getComputedStyle(document.querySelector('#tr-btn .tn')).display === 'none' ? 'cap' : getComputedStyle(document.querySelector('#tr-btn .tl')).display === 'none' ? getComputedStyle(document.querySelector('#tr-btn .tn'), '::after').content : 'full'])]); }
+    ok(heights.every(([w, [h, sideways, name]]) => !sideways && h === (w === 390 ? 106 : 69) && name === (w >= 1280 ? 'full' : w >= 1180 ? '"Training"' : 'cap')), 'the top bar keeps its height from a wide screen to a phone: the button\'s name shortens to Training, then to its cap alone', JSON.stringify(heights));
     await p.click('#tr-btn');
     const small = await menu();
     ok(small.open && small.left >= 16 && small.right <= small.wide - 16 && await p.evaluate(() => document.querySelector('#tr-btn').getAttribute('aria-label') === 'Get trained and certified'), 'on a phone the menu stays inside the screen and the button keeps its name for screen readers', JSON.stringify([small.left, small.right, small.wide]));

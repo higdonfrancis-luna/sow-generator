@@ -216,7 +216,7 @@ const CanvasScope = (() => {
     versionReason, commerceNames, trackingOverlap, trackingNote, authoringText};
 })();
 const CanvasPresets = {"abv": {"products": ["bv"], "startingOutside": ["cdn", "search"], "startingLines": [{"id": "SD1", "name": "Search Console and GA4 connections, and prompts picked from search queries", "stage": "Connect", "unit": "one-time", "low": 4, "base": 8, "high": 16}]}, "cja": {"products": ["bv", "cja"], "startingOutside": ["cdn", "dwh", "cstore", "crm", "ads", "bi", "search", "chatgpt", "claude", "copilot"], "startingLines": [{"id": "AD1", "name": "Ad platform sources into CJA, with your client's ad admins", "stage": "Connect", "unit": "one-time", "low": 16, "base": 32, "high": 56}, {"id": "AD2", "name": "Ad spend joined to web conversions: ROAS and cost per web order", "stage": "Connect", "unit": "one-time", "low": 16, "base": 32, "high": 56}, {"id": "BI1", "name": "BI extension setup and number check", "stage": "Connect", "unit": "one-time", "low": 16, "base": 24, "high": 48}, {"id": "BI2", "name": "Executive dashboards in your client's BI tool", "stage": "Connect", "unit": "one-time", "low": 24, "base": 48, "high": 96}, {"id": "SD1", "name": "Search Console and GA4 connections, and prompts picked from search queries", "stage": "Connect", "unit": "one-time", "low": 4, "base": 8, "high": 16}]}, "commerce": {"products": ["bv", "commerce"], "startingOutside": ["cdn", "search", "crm", "erp", "pim", "oms", "wms"], "startingLines": [{"id": "SD1", "name": "Search Console and GA4 connections, and prompts picked from search queries", "stage": "Connect", "unit": "one-time", "low": 4, "base": 8, "high": 16}, {"id": "XR01", "name": "Commerce to CRM integration", "stage": "Connect", "unit": "one-time", "low": 60, "base": 120, "high": 240}, {"id": "XR02", "name": "Commerce to ERP integration", "stage": "Connect", "unit": "one-time", "low": 60, "base": 120, "high": 240}, {"id": "XR05", "name": "Product data from the PIM into Commerce", "stage": "Connect", "unit": "one-time", "low": 40, "base": 80, "high": 160}, {"id": "XR06", "name": "Commerce to order management integration", "stage": "Connect", "unit": "one-time", "low": 60, "base": 120, "high": 240}, {"id": "XR08", "name": "Stock and shipment sync with the warehouse system", "stage": "Connect", "unit": "one-time", "low": 40, "base": 80, "high": 160}]}, "aem": {"products": ["bv", "so", "eds"], "startingOutside": ["cdn", "search", "csrc", "chatgpt", "claude"], "startingLines": [{"id": "SD1", "name": "Search Console and GA4 connections, and prompts picked from search queries", "stage": "Connect", "unit": "one-time", "low": 4, "base": 8, "high": 16}, {"id": "CS1", "name": "Document authoring setup with your client's Microsoft 365 or Google admin, and author training", "stage": "Connect", "unit": "one-time", "low": 8, "base": 16, "high": 32}, {"id": "CS2", "name": "Sites Optimizer write-back to SharePoint or Google Drive", "stage": "Connect", "unit": "one-time", "low": 4, "base": 8, "high": 16}]}, "fsi": {"products": ["bv", "bc"], "startingOutside": ["cdn", "search", "cms"], "startingLines": [{"id": "SD1", "name": "Search Console and GA4 connections, and prompts picked from search queries", "stage": "Connect", "unit": "one-time", "low": 4, "base": 8, "high": 16}, {"id": "CM1", "name": "Brand Concierge script and surface rules through your client's tag manager", "stage": "Connect", "unit": "one-time", "low": 4, "base": 8, "high": 16}, {"id": "CM2", "name": "Website Links knowledge source and refresh", "stage": "Connect", "unit": "one-time", "low": 2, "base": 4, "high": 8}]}, "coworker": {"products": ["cw"], "startingOutside": ["chatgpt", "claude", "copilot"], "startingLines": []}};
-const CanvasServiceDefaults = {"on": ["CJ01", "CJ02", "CJ04", "CJ05", "CE01", "CE02", "CE03", "CE04", "CE05", "CE07", "CE14", "CE16", "XR01", "XR02", "XR05", "XR06", "XR08", "XF01", "XF02", "XF03", "XF04", "XF05", "XF06", "XK16", "XT01", "XT03", "XT04", "XT05", "XT06", "XT07", "ACO01", "ACO02", "ACO03", "ACO04", "ACO06", "ACO07", "ACO08", "ACO09", "ACO10", "ACO11", "ACO12", "MBI01", "MBI02", "MBI03", "MBI06", "MBI07"], "off": {"cja": ["C06", "CJ01", "CJ02", "CJ03", "CJ04", "CJ05", "CJ06", "XT01"], "commerce": ["CE01", "CE02", "CE03", "CE04", "CE05", "CE06", "CE07", "CE08", "CE09", "CE10", "CE11", "CE12", "CE13", "CE14", "CE15", "CE16"]}, "ownedOutside": {"cja": ["OX3", "OX4", "OX5", "AD1", "AD2", "BI1", "BI2"], "commerce": ["XR01", "XR02", "XR03", "XR04", "XR05", "XR06", "XR07", "XR08"]}};
+const CanvasServiceDefaults = {"on": ["CJ01", "CJ02", "CJ04", "CJ05", "CE01", "CE02", "CE03", "CE04", "CE05", "CE07", "CE14", "CE16", "XR01", "XR02", "XR05", "XR06", "XR08", "XF01", "XF02", "XF03", "XF04", "XF05", "XF06", "XK16", "XT01", "XT03", "XT04", "XT05", "XT06", "XT07", "ACO01", "ACO02", "ACO03", "ACO04", "ACO06", "ACO07", "ACO08", "ACO09", "ACO10", "ACO11", "ACO12", "MBI01", "MBI02", "MBI03", "MBI06", "MBI07"], "off": {"cja": ["C06", "CJ01", "CJ02", "CJ03", "CJ04", "CJ05", "CJ06", "XT01"], "commerce": ["CE01", "CE02", "CE03", "CE04", "CE05", "CE06", "CE07", "CE08", "CE09", "CE10", "CE11", "CE12", "CE13", "CE14", "CE15", "CE16"]}, "ownedOutside": {"cja": ["OX3", "OX4", "OX5", "AD1", "AD2", "BI1", "BI2"], "commerce": ["XR01", "XR02", "XR03", "XR04", "XR05", "XR06", "XR07", "XR08"]}, "ownedOutsideBySystem": {"cja": {"dwh": ["OX3"], "cstore": ["OX4"], "crm": ["OX5"], "ads": ["AD1", "AD2"], "bi": ["BI1", "BI2"]}, "commerce": {"crm": ["XR01"], "erp": ["XR02", "XR03", "XR04"], "pim": ["XR05"], "oms": ["XR06", "XR07"], "wms": ["XR08"]}}};
 const CanvasOutside = ["cdn", "dwh", "cstore", "crm", "ads", "bi", "search", "csrc", "cms", "figma", "chatgpt", "claude", "copilot", "erp", "pim", "oms", "wms", "ocp"];
 </script>
 <script id="capability-references-runtime">
@@ -1403,7 +1403,7 @@ function readyHTML(id){const t=TRAIN.products[id];
     row('Partner training',outLink(TRAIN.catalog,'On-demand trainings')+`<small>${t.filter?'Under Products, tick '+esc(t.filter):'Search for '+esc(t.search)}</small>`)+
     row('Certification',cert)+
     (t.courses?row('Adobe courses',outLink(TRAIN.courses+encodeURIComponent(t.courses),t.courses+' courses on the Certification Portal')+`<small>Skill levels on the portal: ${esc(TRAIN.courseLevels.join(', '))}</small>`):'')+
-    row('Public training','<ul>'+t.training.map(x=>'<li>'+lvTag((x.level||[]).join(' to '))+outLink(x.url,TRAIN_KIND[x.kind]+': '+x.title)+'</li>').join('')+'</ul>')+'</details>';}
+    row('Public training','<ul>'+t.training.map(x=>'<li>'+lvTag(x.level&&x.level.length>1?x.level[0]+' to '+x.level[x.level.length-1]:(x.level||[])[0])+outLink(x.url,TRAIN_KIND[x.kind]+': '+x.title)+'</li>').join('')+'</ul>')+'</details>';}
 /* which product cards carry the box (the AEM Sites card leaves it to the Edge Delivery card when the two are one offering) */
 const hasReady=id=>!!TRAIN.products[id]&&!(id==='aemsites'&&combinesSites());
 const ownCerts=id=>{const t=TRAIN.products[id];return t.closest?0:t.exams.filter(e=>!e.credential).length;};
@@ -1797,7 +1797,7 @@ function menuClick(t){const d=t.dataset;
   else if('goalBack' in d){goalAsk=goalAll=false;goalHits=null;}
   else allView=d.allView==='1';
   drawAdd();fit();focusAdd(to);}
-$('add-btn').addEventListener('click',e=>{e.stopPropagation();openTrain(false);openAdd($('add-menu').hidden);});
+$('add-btn').addEventListener('click',e=>{e.stopPropagation();openAdd($('add-menu').hidden);});
 $('empty-add').addEventListener('click',e=>{e.stopPropagation();openAdd(true);});
 $('add-menu').addEventListener('click',e=>{e.stopPropagation();const a=e.target.closest('[data-add]');if(a){if(e.detail>1)return;   /* the second click of a double-click adds nothing: the list has moved up under the pointer */
   const ranked=addView()==='ranked';addProduct(a.dataset.add);if(ranked)focusAdd('[data-add]');return;}
@@ -1810,7 +1810,7 @@ $('add-menu').addEventListener('submit',e=>{e.preventDefault();goalText=$('goal-
   goalHits=m.hits.length?{hit:true,ids:m.hits.slice(0,3).map(([i])=>i)}:{hit:false,ids:near.length?near:PROBS.map((p,i)=>i).filter(i=>PROBS[i].starter)};drawAdd();fit();focusAdd('[data-goal]');});
 $('add-menu').addEventListener('mouseover',e=>{const it=e.target.closest('[data-add]');preview(it?it.dataset.add:null);});
 $('add-menu').addEventListener('mouseleave',()=>preview(null));
-$('out-btn').addEventListener('click',e=>{e.stopPropagation();openTrain(false);openOut($('out-menu').hidden);});
+$('out-btn').addEventListener('click',e=>{e.stopPropagation();openOut($('out-menu').hidden);});
 $('tr-btn').addEventListener('click',e=>{e.stopPropagation();openTrain($('tr-menu').hidden);});
 $('tr-menu').addEventListener('click',e=>{e.stopPropagation();const r=e.target.closest('[data-tr]');if(e.target.closest('a')){openTrain(false);return;}if(!r)return;
   const id=r.dataset.tr;openTrain(false);moreOpen['ready:'+id]=true;showCard('p',id,'#tr-btn');openReady();});
@@ -2098,7 +2098,7 @@ function questionHistory(view,push){
 function showQuestionView(review,record=true){
   if(!play()||!st.questionOrigin||(review&&!restoreQuestion()))return;
   reviewingQuestion=review;
-  hideCard(true);openAdd(false);openOut(false);infoHide();
+  hideCard(true);openAdd(false);openOut(false);openTrain(false);infoHide();
   if(review)bpRender();else clearQuestion();
   if(record)questionHistory(review?'answer':'canvas',true);
   render();
@@ -2134,7 +2134,9 @@ function chooseQuestionCanvas(combined,confirmed=false){
 if(history.state?.sowQuestion?.view==='answer'&&history.state.sowQuestion.key===st.questionOrigin?.key)reviewingQuestion=restoreQuestion();
 bpRender();
 $('picker').addEventListener('click',pick);
-document.addEventListener('click',()=>{openAdd(false);openOut(false);openTrain(false);if(pinned)hideCard(true);});
+document.addEventListener('click',()=>{openAdd(false);openOut(false);if(pinned)hideCard(true);});
+/* the training menu closes on a click anywhere outside it, also where another handler stops the click (the first page, a box, a bolt) */
+document.addEventListener('click',e=>{if(!$('trwrap').contains(e.target))openTrain(false);},true);
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){const outOpen=!$('out-menu').hidden,trOpen=!$('tr-menu').hidden;openAdd(false);openOut(false);openTrain(false);if(outOpen)$('out-btn').focus({preventScroll:true});if(trOpen)$('tr-btn').focus({preventScroll:true});hideCard(true,true);$('confirm').hidden=true;}});
 /* a card follows its anchor while the canvas scrolls on a phone or tablet */
 $('scroller').addEventListener('scroll',()=>{if(card)placeCard(true);},{passive:true});

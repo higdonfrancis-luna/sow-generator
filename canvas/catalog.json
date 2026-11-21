@@ -17399,7 +17399,7 @@
   },
   "TC03": {
    "id": "TC03",
-   "name": "A4T to CJA reporting transition",
+   "name": "Target reporting moved from A4T to CJA, where supported",
    "unit": "one-time",
    "low": 16,
    "base": 24,
@@ -17407,7 +17407,7 @@
    "url": "https://experienceleague.adobe.com/en/docs/target/using/integrate/cja/target-reporting-in-cja",
    "src": "Experience League: Target reporting in Adobe Customer Journey Analytics",
    "origin": "research",
-   "scope": "Where your client is on Analytics for Target today, choose which activity types move to CJA reporting, set the reporting source per activity or account wide, and give Target users the Experience Platform role they need.",
+   "scope": "Where your client reports Target activities in Adobe Analytics (Analytics for Target) today, check which activity types CJA reporting supports, move those by setting the reporting source per activity or account wide, and give Target users the Experience Platform role they need. Activities CJA reporting does not support stay on Analytics for Target.",
    "evidence": "This integration is not the same as Adobe Analytics for Target (A4T). The implementation and supported activity types are different.",
    "references": []
   },
@@ -18714,15 +18714,15 @@
   },
   "XA11": {
    "id": "XA11",
-   "name": "Brand Concierge block on Edge Delivery",
+   "name": "Brand Concierge installed on Edge Delivery pages",
    "unit": "one-time",
-   "low": 16,
-   "base": 32,
-   "high": 64,
+   "low": 8,
+   "base": 16,
+   "high": 32,
    "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/deployment/deployment",
    "src": "Experience League: Deploy a Brand Concierge",
    "origin": "research",
-   "scope": "Build a block that loads the Brand Concierge script, place it on the agreed pages and navigation, and set the surface rules for where the concierge appears.",
+   "scope": "Get the datastream ID from your client's analytics team, add it in Brand Concierge, and install Adobe's ready-made snippet on the Edge Delivery site (in a block or through the tag manager) or host its ready-made full page. Set the domain and page rules for where the concierge appears, and check it shows only on those pages.",
    "evidence": "After the script is installed, surface configuration controls the pages where the concierge appears. For example, you can configure the concierge to appear on product pages but not on a careers page."
   },
   "XA12": {
@@ -23976,6 +23976,47 @@
     "XR07",
     "XR08"
    ]
+  },
+  "ownedOutsideBySystem": {
+   "cja": {
+    "dwh": [
+     "OX3"
+    ],
+    "cstore": [
+     "OX4"
+    ],
+    "crm": [
+     "OX5"
+    ],
+    "ads": [
+     "AD1",
+     "AD2"
+    ],
+    "bi": [
+     "BI1",
+     "BI2"
+    ]
+   },
+   "commerce": {
+    "crm": [
+     "XR01"
+    ],
+    "erp": [
+     "XR02",
+     "XR03",
+     "XR04"
+    ],
+    "pim": [
+     "XR05"
+    ],
+    "oms": [
+     "XR06",
+     "XR07"
+    ],
+    "wms": [
+     "XR08"
+    ]
+   }
   }
  }
 }

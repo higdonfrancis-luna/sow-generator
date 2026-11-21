@@ -373,6 +373,9 @@ def main():
             assert defaults['already_owned'][play_id] in ends and (ends - {defaults['already_owned'][play_id]}) <= set(starts) and all(pby[e].get('outside') for e in ends - {defaults['already_owned'][play_id]}), \
                 f'{play_id}: {cid} does not join the owned product to an outside system the play starts with'
     service_defaults['ownedOutside'] = {play_id: [lid for cid in conn_ids for lid in cby[cid]['lines'] + cby[cid]['more']] for play_id, conn_ids in defaults['owned_outside'].items()}
+    # the same services by outside system, so the statement of work names a system's duties only while one of its services is in the quote
+    service_defaults['ownedOutsideBySystem'] = {play_id: {next(e for e in (cby[cid]['a'], cby[cid]['b']) if e != defaults['already_owned'][play_id]): cby[cid]['lines'] + cby[cid]['more'] for cid in conn_ids}
+                                                for play_id, conn_ids in defaults['owned_outside'].items()}
     cat = {'checked': max([c for c in checked if c] or ['']), 'products': keep_p, 'connections': keep_c,
            'lines': used, 'plays': plays, 'ownSites': own, 'rows': rows, 'versions': versions, 'serviceDefaults': service_defaults}
     apply_catalog(cat)
