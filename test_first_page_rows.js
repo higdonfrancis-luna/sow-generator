@@ -220,7 +220,9 @@ const COPILOT_STUDIO = 'https://experienceleague.adobe.com/en/docs/experience-ma
         eye: c.querySelector('.vid-eye').textContent, title: c.querySelector('.vid-t').textContent, line: c.querySelector('.vid-s').textContent, btn: c.querySelector('.vid-btn').textContent,
         poster: c.querySelector('.vid-poster img').src.slice(0, 23), pw: c.querySelector('.vid-poster img').naturalWidth, ph: c.querySelector('.vid-poster img').naturalHeight,
         fail: c.querySelector('.vid-fail').textContent, href: c.querySelector('.vid-fail a').getAttribute('href'), video: !!c.querySelector('video')}; };
-      return {vid: card('vid-card'), look: card('look-card'), bp: document.getElementById('bp').getBoundingClientRect().width}; });
+      const bounds = selector => document.querySelector(selector).getBoundingClientRect().toJSON();
+      return {vid: card('vid-card'), look: card('look-card'), bp: bounds('#bp'), grid: bounds('#picker-list .grid'),
+        row: bounds('.vids'), thumbnail: bounds('#look-box'), copy: bounds('#look-card .vid-copy')}; });
     const poster = fs.readFileSync(path.join(ROOT, 'video_poster.jpg')).toString('base64');
     ok(v.vid.eye === 'Start here' && v.vid.title === 'Watch the four Brand Visibility partner plays' && v.vid.line === 'Five minutes on what each play sells, who it is for and the services partners deliver. Then pick a play below and build its statement of work.' &&
         v.vid.btn === 'Watch the video' && v.vid.href === 'https://abvfirefly.netlify.app/' && await p.evaluate(s => document.querySelector('#vid-play img').src.endsWith(s), poster.slice(-200)),
@@ -228,8 +230,11 @@ const COPILOT_STUDIO = 'https://experienceleague.adobe.com/en/docs/experience-ma
     ok(v.look.eye === LOOK.eye && v.look.title === LOOK.title && v.look.line === LOOK.line && v.look.btn === 'Watch the video' && v.look.poster === 'data:image/jpeg;base64,' && v.look.pw === 1120 && v.look.ph === 630 &&
         v.look.href === LOOK.file && v.look.fail === 'The video could not play here. Open the video' && !v.look.video,
       '5. beside it, the first look: "A first look", its title and its 72-second line, Watch the video, its poster built into the page like the first one\'s, and the same fallback, pointing at its own file', JSON.stringify(v.look));
-    ok(v.vid.y === v.look.y && v.vid.w === v.look.w && v.look.x > v.vid.x + v.vid.w && Math.abs(v.look.x + v.look.w - v.vid.x - v.bp) < 2 && !asked.some(u => /\.mp4$/.test(u)),
-      '5. the two cards sit side by side across the width of the problem finder, and no video is fetched before it is played', JSON.stringify([v.vid, v.look, v.bp]));
+    ok(v.vid.y === v.look.y && v.vid.w === v.look.w && v.look.x > v.vid.x + v.vid.w && Math.abs(v.vid.x - v.grid.left) < 2 &&
+        Math.abs(v.look.x + v.look.w - v.grid.right) < 2 && Math.abs(v.bp.left - v.grid.left) < 2 && Math.abs(v.bp.right - v.grid.right) < 2 && !asked.some(u => /\.mp4$/.test(u)),
+      '5. the two videos share one row, and the videos and question box meet both edges of the four-play grid before playback', JSON.stringify([v.vid.x, v.look.x + v.look.w, v.bp, v.grid]));
+    ok(v.thumbnail.right <= v.copy.left && v.thumbnail.width > 0 && v.row.height < 380,
+      '5. the resting video uses a compact landscape row with the thumbnail beside its description', JSON.stringify([v.thumbnail, v.copy, v.row.height]));
     await p.click('#look-watch'); await p.waitForTimeout(2200);
     const play = await p.evaluate(() => { const x = document.querySelector('#look-box video'), r = x.getBoundingClientRect(), c = document.getElementById('look-card').getBoundingClientRect(), o = document.getElementById('vid-card').getBoundingClientRect();
       return {src: x.getAttribute('src'), controls: x.controls, poster: x.poster.slice(0, 23), t: x.currentTime, paused: x.paused, w: Math.round(r.width), cardW: Math.round(c.width), cardX: Math.round(c.left), other: [Math.round(o.top), Math.round(c.top)],
@@ -237,7 +242,7 @@ const COPILOT_STUDIO = 'https://experienceleague.adobe.com/en/docs/experience-ma
     ok(play.src === LOOK.file && asked.includes('/' + LOOK.file) && play.controls && play.poster === 'data:image/jpeg;base64,' && play.t > 0.3 && !play.paused && !play.fail && play.watch,
       '5. Watch the video plays the first look in place, from the site\'s own copy of the file, with the player\'s controls', JSON.stringify(play));
     // Nov 19 2026 (Adam: "maybe 50% of the width on the screen so they'd be next to each other"): a playing video stays in its own half of the row
-    ok(play.w > 400 && play.w < play.cardW && play.cardW === v.look.w && play.cardX === v.look.x && play.other[0] === play.other[1] && !play.jump && play.fs,
+    ok(play.w > v.thumbnail.width * 1.5 && play.w > play.cardW * 0.85 && play.w < play.cardW && play.cardW === v.look.w && play.cardX === v.look.x && play.other[0] === play.other[1] && !play.jump && play.fs,
       '5. while it plays it stays in its own half of the row, beside the plays video card, with the full screen button and no Jump to list (the first look has no parts)', JSON.stringify(play));
     // the plays video is played from Adam's video site; here any file that plays stands in for it
     await p.route('https://abvfirefly.netlify.app/**', r => r.fulfill({path: path.join(ROOT, LOOK.file), contentType: 'video/mp4'}));
@@ -257,7 +262,8 @@ const COPILOT_STUDIO = 'https://experienceleague.adobe.com/en/docs/experience-ma
     const ph = await page(390, 844, {isMobile: true, hasTouch: true});
     const pv = await ph.evaluate(() => { const r = id => document.getElementById(id).getBoundingClientRect(); return {vid: r('vid-card'), look: r('look-card'), box: r('look-box'), copy: document.querySelector('#look-card .vid-copy').getBoundingClientRect(),
       sideways: document.scrollingElement.scrollWidth > document.scrollingElement.clientWidth + 1}; });
-    ok(pv.look.top >= pv.vid.bottom && pv.copy.top >= pv.box.bottom && !pv.sideways && Math.abs(pv.box.width / pv.box.height - 16 / 9) < 0.02, '5. on a phone the two cards stack, each picture over its words, and nothing runs off the side', JSON.stringify(pv));
+    ok(pv.look.top >= pv.vid.bottom && pv.copy.top >= pv.box.bottom && !pv.sideways && pv.box.width > 0 && pv.box.width <= 205 && Math.abs(pv.box.width / pv.box.height - 16 / 9) < 0.02,
+      '5. on a phone the two cards stack, each compact thumbnail sits above its words, and nothing runs off the side', JSON.stringify(pv));
     await ph.context().close(); }
 
   // ============ 6. the assistant lines' own look: thinner and grey, with a key entry only when one is on the canvas ============
