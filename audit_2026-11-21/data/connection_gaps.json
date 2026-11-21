@@ -1,0 +1,4746 @@
+{
+ "checked": "2026-11-21",
+ "note": "Three research passes over Experience League and Adobe developer and help pages. Every quote was matched again with found() after the passes finished. Proposals only: nothing is in the tool.",
+ "missing": [
+  {
+   "pair": [
+    "aemforms",
+    "crm"
+   ],
+   "names": [
+    "AEM Forms",
+    "CRM"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "high",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/use-form-data-model/configure-msdynamics",
+   "quote": "Adobe Experience Manager Forms Data Integration provides a cloud service configuration to integrate forms with Microsoft Dynamics server.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Adaptive forms prefill from and write to Dynamics 365 or Salesforce through Adobe-supplied cloud service configurations and Form Data Models.",
+   "partner_work": [
+    "App registration in Salesforce or Microsoft Entra and the AEM cloud service configuration",
+    "Form Data Model on CRM entities for prefill and write-back",
+    "Test of create and update from a submitted form"
+   ],
+   "note": "Salesforce twin page: https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/use-form-data-model/configure-salesforce ('Experience Manager Forms Data Integration provides Salesforce Cloud Services to integrate Adaptive Forms with OOTB Form Data Model (FDM).'). Overlaps card service AF04 (generic Form Data Model); reuse AF04 hours on the line rather than add new ones.",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "aemsites",
+    "cdn"
+   ],
+   "names": [
+    "AEM Sites",
+    "Existing CDN"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "high",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/content-delivery/cdn",
+   "quote": "If a customer must use its existing CDN (or any kind of reverse proxy, for example a loadbalancer or a WAF), they can manage it and point it to the AEM-managed CDN",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Your client keeps its own CDN or WAF in front of AEM as a Cloud Service and points it at Adobe's CDN.",
+   "partner_work": [
+    "Client CDN in front of AEM: origin, Host and X-Forwarded-Host headers and the X-AEM-Edge-Key set through a config pipeline",
+    "Cache, geolocation-header and IP allow list rules agreed with the CDN team",
+    "Load test and cutover before production"
+   ],
+   "note": "The cdn box is linked only to Brand Visibility. SI04 names 'CDN, SSL and DNS' as a checklist item only. Adobe's conditions on the page: the client manages the CDN, has CDN engineers on call and passes a load test; publish and preview tiers only.",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "aemsites",
+    "ocp"
+   ],
+   "names": [
+    "AEM Sites",
+    "Other commerce platform"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "high",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/content-and-commerce/cif-storefront/integrations/third-party",
+   "quote": "The integration of non-Adobe Commerce solution is a common scenario for CIF. Third-party solutions with different APIs and schemas get connected via an integration layer.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "AEM Sites shows catalog data from a non-Adobe commerce platform through the Commerce Integration Framework and an integration layer.",
+   "partner_work": [
+    "Integration layer on Adobe Developer Runtime mapping the platform APIs to the Adobe Commerce GraphQL schema",
+    "CIF components and product pickers on the mapped catalog",
+    "Catalog cache where the platform has no real-time API"
+   ],
+   "note": "Page names partner-built connectors for SAP Commerce and commercetools and says they are 'not plug-n-play'. The ocp box is linked only to Commerce Optimizer today.",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "eds",
+    "cdn"
+   ],
+   "names": [
+    "AEM Sites with Edge Delivery Services",
+    "Existing CDN"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "high",
+   "url": "https://www.aem.live/docs/byo-cdn-setup",
+   "quote": "Customers may use their own CDN to deliver AEM content under their own domain",
+   "quote_found_on_recheck": true,
+   "what_it_does": "An Edge Delivery site is served through your client's own CDN, with Adobe's vendor guides for Cloudflare, Akamai, Fastly and CloudFront.",
+   "partner_work": [
+    "BYO CDN set-up for Edge Delivery: origin, forwarded host header, cache key and compression",
+    "Push invalidation so publishing purges the client CDN",
+    "Validation on stage before the production switch"
+   ],
+   "note": "Vendor guides exist for Cloudflare Worker, Akamai, Fastly and CloudFront (linked from the same page).",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "acrobatsign",
+    "crm"
+   ],
+   "names": [
+    "Acrobat Sign",
+    "CRM"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "high",
+   "url": "https://helpx.adobe.com/sign/web/integrations/microsoft-dynamics/microsoft-dynamics-install.html",
+   "quote": "Acrobat Sign offers a plug-and-play integration solution with Microsoft Dynamics CRM",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Acrobat Sign installs into Microsoft Dynamics 365 so agreements are sent, tracked and filled from CRM records; the Salesforce package works the same way.",
+   "partner_work": [
+    "Acrobat Sign for Microsoft Dynamics 365: install, security roles and connection",
+    "Agreement templates with data mapping from Dynamics entities",
+    "Move SG10 (Acrobat Sign for Salesforce) onto this line so the CRM box is connected"
+   ],
+   "note": "Salesforce half is already priced as card service SG10; Dynamics 365 is priced nowhere and no line reaches the crm box.",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "cw",
+    "ajob2b"
+   ],
+   "names": [
+    "Coworker",
+    "Journey Optimizer B2B Edition"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "high",
+   "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/ai-capabilities/coworker-skills/journey-agent",
+   "quote": "In CX Enterprise Coworker chat, the journey skills help you design, execute, optimize, and monitor Adobe Journey Optimizer B2B Edition journeys through natural language.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Coworker builds account and person journeys in Journey Optimizer B2B Edition from a plain request and answers questions about how accounts move through live journeys.",
+   "partner_work": [
+    "Coworker rollout and prompt playbook for B2B journey teams",
+    "Partner-written Coworker Skills for account journeys",
+    "Review and finishing of Coworker-built journeys before publishing"
+   ],
+   "note": "Also listed in Coworker Chat's compatible applications and on Adobe's MCP servers page (Journey Optimizer B2B Edition: Via Coworker).",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "cja",
+    "search"
+   ],
+   "names": [
+    "Customer Journey Analytics",
+    "Search data"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "high",
+   "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-usecases/third-party/ga/overview",
+   "quote": "You can follow these overarching steps to move that data into Adobe Experience Platform, allowing you to view reports in Customer Journey Analytics.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Google Analytics 4 history (through a BigQuery export) and live GA data are brought into Experience Platform so CJA reports on them.",
+   "partner_work": [
+    "GA4 BigQuery export and historical backfill into an Experience Platform dataset",
+    "Live GA data layer streamed to Edge Network alongside the existing tags",
+    "GA4 report equivalents and data views in CJA, with analyst handover"
+   ],
+   "note": "The search box already names Google Analytics 4. The existing dwh + cja line is about Data Mirror, not this migration path.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "frameio",
+    "cstore"
+   ],
+   "names": [
+    "Frame.io",
+    "Cloud storage"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "high",
+   "url": "https://help.frame.io/en/articles/9179936-storage-connect-for-frame-io",
+   "quote": "Storage Connect allows Frame.io’s Enterprise customers to use their own cloud storage endpoint as the backing storage of Frame.io.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Frame.io stores and serves media from your client's own Amazon S3 bucket instead of Frame.io's.",
+   "partner_work": [
+    "S3 bucket, IAM OIDC identity provider and role for Storage Connect",
+    "One-time migration of existing media, coordinated with Frame.io",
+    "Registering assets that already sit in the bucket"
+   ],
+   "note": "Enterprise plan on Frame.io V4; Amazon S3 only on this page.",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "marketo",
+    "ads"
+   ],
+   "names": [
+    "Marketo Engage",
+    "Ad platforms"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "high",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/demand-generation/ad-network-integrations/understanding-ad-network-integrations",
+   "quote": "Ad network integrations connect Marketo's unique audience data to your paid media systems so you can run more targeted, personalized digital ad campaigns. These integrations currently work with Facebook, LinkedIn, and Google.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Marketo Engage sends lists to Facebook, LinkedIn and Google audiences, takes in leads from LinkedIn Lead Gen Forms and Facebook Lead Ads, and uploads offline conversions.",
+   "partner_work": [
+    "LaunchPoint services for LinkedIn, Facebook and Google with ad-account access",
+    "Lead Gen Form and Lead Ads field mapping, triggers and routing campaigns",
+    "Audience lists and offline conversion uploads for paid media"
+   ],
+   "note": "",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "rtcdp",
+    "crm"
+   ],
+   "names": [
+    "Real-Time CDP",
+    "CRM"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "high",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/home",
+   "quote": "Experience Platform provides support for ingesting CRM data from Microsoft Dynamics 365 and Salesforce.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Salesforce or Dynamics objects load into Experience Platform for profiles and audiences, and audiences and attributes can be written back to the CRM through the Salesforce CRM and Dynamics 365 destinations.",
+   "partner_work": [
+    "CRM source account, object selection and field mapping to XDM",
+    "B2B or person identity alignment between CRM IDs and profiles",
+    "Salesforce CRM or Dynamics 365 destination with connected app and custom fields"
+   ],
+   "note": "The card service 'Data sources and ingestion setup' names CRM as an example, but the tool gives the warehouse and ad platform boxes their own lines to Real-Time CDP and gives CRM a line to CJA, so this line is the odd one out.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "rtcdp",
+    "cstore"
+   ],
+   "names": [
+    "Real-Time CDP",
+    "Cloud storage"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "high",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/cloud-storage/overview",
+   "quote": "Adobe Experience Platform can deliver your audiences as data files to your cloud storage locations.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Files in Amazon S3, Azure, Google Cloud Storage or SFTP load into Experience Platform on a schedule, and audiences and datasets are exported back to the same kinds of storage.",
+   "partner_work": [
+    "Cloud storage source: credentials, file format, mapping and schedule",
+    "Batch audience export: file naming, attributes, schedule and allowlisted IPs",
+    "Dataset export for the client's data team"
+   ],
+   "note": "Same reasoning as rtcdp + crm: the card prices sources and destinations in general, but cstore has a line to CJA and to Adobe Analytics and none to Real-Time CDP.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "workfront",
+    "crm"
+   ],
+   "names": [
+    "Workfront",
+    "CRM"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "high",
+   "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/third-party-app-connectors/salesforce-modules",
+   "quote": "In an Adobe Workfront Fusion scenario, you can automate workflows that use Salesforce",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Workfront exchanges requests, projects and status with Salesforce (and Microsoft Dynamics) through Workfront Fusion scenarios.",
+   "partner_work": [
+    "Fusion scenarios that create Workfront requests or projects from Salesforce records",
+    "Status and field sync back to the CRM",
+    "Rebuild of flows that ran on the retired Workfront for Salesforce app"
+   ],
+   "note": "The packaged app is retired: 'the Workfront for Salesforce integration is no longer available' (https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-integrations/workfront-for-salesforce/install-workfront-for-salesforce). Fusion also lists Microsoft Dynamics and Hubspot CRM modules. Fits the tool's existing 'extension' (Fusion) line type.",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "commerce",
+    "psp"
+   ],
+   "names": [
+    "Adobe Commerce",
+    "psp"
+   ],
+   "new_box": [
+    "psp"
+   ],
+   "verdict": "missing connection",
+   "value": "high",
+   "url": "https://developer.adobe.com/commerce/extensibility/starter-kit/checkout/payment-use-cases",
+   "quote": "The Adobe Commerce checkout starter kit supports several integration patterns with payment gateways based on a few key components that can be combined and adapted as needed.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Adobe's checkout starter kit connects Commerce to an outside payment gateway through an App Builder app, webhooks and a checkout widget.",
+   "partner_work": [
+    "Payment gateway integration with the checkout starter kit",
+    "Payment validation webhook before order placement",
+    "Gateway sandbox test plan and go-live check"
+   ],
+   "note": "The Commerce card's 'Checkout, payment, tax and delivery settings' covers Admin settings only, not building a gateway integration. Adobe says the payment use cases are for headless storefronts only.",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "bc",
+    "app"
+   ],
+   "names": [
+    "Brand Concierge",
+    "app"
+   ],
+   "new_box": [
+    "app"
+   ],
+   "verdict": "missing connection",
+   "value": "high",
+   "url": "https://developer.adobe.com/client-sdks/edge/adobe-brand-concierge/",
+   "quote": "The Brand Concierge extension provides an in-app conversational UI (a chat surface) that can be embedded into a host app with minimal UI wiring.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Brand Concierge runs inside the client's iOS and Android apps through Adobe's mobile SDK extension, with implementation guides, API reference and style guides.",
+   "partner_work": [
+    "Brand Concierge in the client's iOS and Android app (SDK install, configuration, sign-in token)",
+    "Chat theme matched to the app's design",
+    "Test and app-store release support"
+   ],
+   "note": "The tool has no mobile app box; cms + bc covers websites only. Brand Concierge release notes also describe the Mobile SDK (text, voice and image).",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "marketo",
+    "webinar"
+   ],
+   "names": [
+    "Marketo Engage",
+    "Webinar and event platforms (Zoom, ON24, Webex, GoToWebinar, Adobe Connect)"
+   ],
+   "new_box": [
+    "webinar"
+   ],
+   "verdict": "missing connection",
+   "value": "high",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/demand-generation/events/understanding-events/event-partners",
+   "quote": "Connect Marketo to an Event Partner to automate your online events.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Marketo Engage pushes registrations to the webinar platform and pulls attendance back into event programs.",
+   "partner_work": [
+    "LaunchPoint service for the webinar platform",
+    "Webinar program template with registration and follow-up campaigns"
+   ],
+   "note": "No box for this category today.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "workfront",
+    "jira"
+   ],
+   "names": [
+    "Workfront",
+    "Jira"
+   ],
+   "new_box": [
+    "jira"
+   ],
+   "verdict": "missing connection",
+   "value": "high",
+   "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/third-party-app-connectors/jira-modules-new",
+   "quote": "In an Adobe Workfront Fusion scenario, you can automate workflows that use Jira, as well as connect it to multiple third-party applications and services.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Workfront tasks and issues are linked and synced with Jira issues through Fusion scenarios.",
+   "partner_work": [
+    "Fusion scenarios that create and link Jira issues from Workfront",
+    "Two-way status, comment and field sync",
+    "Move off the retired Workfront for Jira add-on"
+   ],
+   "note": "Native add-on retired: 'the Workfront for Jira integration is no longer available' (https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-integrations/workfront-for-jira/configure-workfront-for-jira). Sites Optimizer also creates Jira tickets (release notes: 'Create Jira tickets for selected pages').",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "aemassets",
+    "cms"
+   ],
+   "names": [
+    "AEM Assets",
+    "Other CMS site"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "medium",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/content-advisor/integrate-adobe-non-adobe-applications",
+   "quote": "Content Advisor is also available for integration with non-Adobe (third-party) applications, extending intelligent asset discovery beyond Adobe applications.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Authors in your client's other CMS or application pick approved AEM assets and use their delivery URLs.",
+   "partner_work": [
+    "Content Advisor embedded in the client application with IMS sign-in",
+    "Dynamic Media with OpenAPI delivery URLs for the chosen assets",
+    "Approved-asset rules and filters for those authors"
+   ],
+   "note": "Companion page: https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/dynamicmedia/dynamic-media-open-apis/integrate-dynamic-media-open-apis.",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "aemforms",
+    "cms"
+   ],
+   "names": [
+    "AEM Forms",
+    "Other CMS site"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "medium",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/services/embed-adaptive-form-core-components-external-web-page",
+   "quote": "You can embed adaptive forms in an AEM Sites page or a web page hosted outside AEM.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "An adaptive form published on AEM is shown and submitted inside a page of your client's non-AEM site.",
+   "partner_work": [
+    "Embed script on the external page",
+    "Cross-domain settings so AEM serves the form to that site",
+    "Submission and prefill test from the external page"
+   ],
+   "note": "",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "eds",
+    "cms"
+   ],
+   "names": [
+    "AEM Sites with Edge Delivery Services",
+    "Other CMS site"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "medium",
+   "url": "https://www.aem.live/developer/byom",
+   "quote": "you could provide your own content source and publish the content from a repository you already have to AEM without having to migrate the content first",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Edge Delivery publishes pages whose content comes from your client's existing CMS or repository through the Bring Your Own Markup API.",
+   "partner_work": [
+    "BYOM service that returns each page as Edge Delivery semantic HTML",
+    "Block mapping for the source content types",
+    "Preview and publish wiring and image access checks"
+   ],
+   "note": "",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "acrobatsign",
+    "erp"
+   ],
+   "names": [
+    "Acrobat Sign",
+    "ERP"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "medium",
+   "url": "https://helpx.adobe.com/sign/web/integrations/netsuite/netsuite-installation-guide.html",
+   "quote": "Adobe Acrobat Sign for NetSuite provides a complete e-signature integration with NetSuite.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Agreements are sent from NetSuite records and the signed copy and status are stored back on the record.",
+   "partner_work": [
+    "Bundle install and OAuth in a NetSuite sandbox, then production",
+    "Agreement buttons and field mapping on the agreed record types",
+    "Sender training"
+   ],
+   "note": "",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "aa",
+    "ads"
+   ],
+   "names": [
+    "Adobe Analytics",
+    "Ad platforms"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "medium",
+   "url": "https://experienceleague.adobe.com/en/docs/analytics/integration/advertising-analytics/overview",
+   "quote": "Advertising Analytics lets you see all your Google Ads and Microsoft Advertising paid search data side by side within Adobe Analytics.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Paid search impressions, clicks and cost from Google Ads and Microsoft Advertising appear next to site behaviour in Analysis Workspace.",
+   "partner_work": [
+    "Report suite enablement and ad account connections",
+    "Tracking mode and tracking template on ad URLs",
+    "Paid Search Performance project in Analysis Workspace"
+   ],
+   "note": "Microsoft Advertising is not named in the ads box today.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "aa",
+    "crm"
+   ],
+   "names": [
+    "Adobe Analytics",
+    "CRM"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "medium",
+   "url": "https://experienceleague.adobe.com/en/docs/core-services/interface/services/customer-attributes/attributes",
+   "quote": "You can upload the data into a Customer Attributes data source in CX Enterprise, then use the data in Adobe Analytics and Adobe Target.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "A CRM file keyed on the customer ID is uploaded as Customer Attributes and used to break down and segment Analytics reports.",
+   "partner_work": [
+    "Customer Attributes source subscribed to Analytics",
+    "Customer ID alignment and recurring file feed"
+   ],
+   "note": "Same feature as the existing crm + target line; one upload can serve both.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "bv",
+    "cw"
+   ],
+   "names": [
+    "Brand Visibility",
+    "Coworker"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "medium",
+   "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/opportunities/youtube-sentiment-analysis",
+   "quote": "If you have access to Coworker, you can provide the brief as context in a chat. ... This is a manual handoff: uploading a brief does not by itself carry out the work or update its status in Brand Visibility.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "A person downloads a Brand Visibility brief (YouTube, Reddit or cited web sources) and attaches it in Coworker Chat so Coworker drafts the deliverable; there is no connector, skill or MCP server.",
+   "partner_work": [
+    "Coworker Skill that turns Brand Visibility briefs into drafts (video outline, community reply, publisher outreach)",
+    "Brief-to-draft working practice with review and status tracking in Brand Visibility"
+   ],
+   "note": "New since the 18 Nov check: the same FAQ sits on three Brand Visibility pages (YouTube, Reddit, cited web sources), all last updated 20 Nov 2026. A Coworker walkthrough page (Plan a digital campaign launch, 5 Oct 2026) also names Brand Visibility as a market-data source. Coworker's own workflow catalogue lists no Brand Visibility skill, and the 'Brand Visibility' section in the Coworker guide's menu holds six AEM Sites and Assets pages, not the product.",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "chatgpt",
+    "aa"
+   ],
+   "names": [
+    "ChatGPT",
+    "Adobe Analytics"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "medium",
+   "url": "https://developer.adobe.com/analytics-mcp/docs/guides/chatgpt",
+   "quote": "Add the Adobe Analytics MCP server manually using Developer mode.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "People ask for Adobe Analytics report suite data in plain words from the AI assistant, through Adobe's Analytics connection.",
+   "partner_work": [
+    "MCP read-only or full permission in product profiles",
+    "Connector set-up for pilot users and answers checked against Workspace",
+    "Starter questions and a one-page guide"
+   ],
+   "note": "The tool has this line for CJA only; the same Adobe page covers Adobe Analytics. The Adobe Analytics card has no matching service.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "claude",
+    "aa"
+   ],
+   "names": [
+    "Claude",
+    "Adobe Analytics"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "medium",
+   "url": "https://developer.adobe.com/analytics-mcp/docs/guides/claude",
+   "quote": "Add the Adobe Analytics MCP server manually as a custom connector.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "People ask for Adobe Analytics report suite data in plain words from the AI assistant, through Adobe's Analytics connection.",
+   "partner_work": [
+    "MCP read-only or full permission in product profiles",
+    "Connector set-up for pilot users and answers checked against Workspace",
+    "Starter questions and a one-page guide"
+   ],
+   "note": "The tool has this line for CJA only; the same Adobe page covers Adobe Analytics. The Adobe Analytics card has no matching service.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "aco",
+    "erp"
+   ],
+   "names": [
+    "Commerce Optimizer",
+    "ERP"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "medium",
+   "url": "https://experienceleague.adobe.com/en/docs/commerce/optimizer/overview",
+   "quote": "Third-party catalog ingestion - Ingest catalog data from any third-party source (your existing Commerce catalog, PIM, ERP, and so on).",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Commerce Optimizer takes catalog and price data straight from an ERP, the same way the tool already draws it from a PIM.",
+   "partner_work": [
+    "Prices and price books from the ERP into Commerce Optimizer",
+    "Data sync monitoring and error handling"
+   ],
+   "note": "Same ingestion route as the existing aco + pim line.",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "cw",
+    "xa"
+   ],
+   "names": [
+    "Coworker",
+    "Experimentation Accelerator"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "medium",
+   "url": "https://experienceleague.adobe.com/en/docs/cx-enterprise-agentic-tools/using/tools/mcp-servers",
+   "quote": "Experimentation ... Via Coworker ... A/B, MVT, and MAB experiment reporting, metrics, insights, opportunities, and sample size planning",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Coworker reports on experiments and surfaces Experimentation Accelerator insights and opportunities, and plans the next tests.",
+   "partner_work": [
+    "Partner-written Coworker Skills for experiment readouts",
+    "Monthly experiment review run through Coworker"
+   ],
+   "note": "Coworker's workflow page lists experiment-explorer, experiment-analysis and experiment-strategist under 'Adobe Target / Adobe Journey Optimizer'. Adobe's Experimentation Agent page ties the agent to the paid Experimentation Accelerator license.",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "cw",
+    "mmm"
+   ],
+   "names": [
+    "Coworker",
+    "Marketing Campaign Analytics"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "medium",
+   "url": "https://developer.adobe.com/analytics-mcp/docs/mca/",
+   "quote": "The Marketing Campaign Analytics (formerly known as Adobe Mix Modeler) MCP server lets Adobe Coworker interact with your components and data in Marketing Campaign Analytics.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Coworker Chat answers questions on channel contribution, saturation and budget scenarios from the client's trained campaign models.",
+   "partner_work": [
+    "Coworker access and first questions checked against model insights",
+    "Prompt playbook for budget and channel questions"
+   ],
+   "note": "Adobe's Coworker page for this use case still carries the placeholder text '[Product and setup requirements to be confirmed.]'.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "creativecloud",
+    "gspm"
+   ],
+   "names": [
+    "Creative Cloud",
+    "GenStudio for Performance Marketing"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "medium",
+   "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/integrations/photoshop-plugin",
+   "quote": "GenStudio Photoshop adds a panel to Adobe Photoshop that lets you generate on-brand content.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Designers build GenStudio-ready templates in Photoshop, generate on-brand variants there and export them to GenStudio as experiences.",
+   "partner_work": [
+    "GenStudio Photoshop plugin in the Creative Cloud packages",
+    "Photoshop templates with layers named for each channel field",
+    "Designer training on generating and exporting experiences"
+   ],
+   "note": "Part of this is priced under figma + gspm ('Figma frames converted for GenStudio Photoshop') but there is no Creative Cloud + GenStudio line.",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "gspm",
+    "aemsites"
+   ],
+   "names": [
+    "GenStudio for Performance Marketing",
+    "AEM Sites"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "medium",
+   "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/create/email-experiences",
+   "quote": "Teams that store modular content in Adobe Experience Manager can find and swap that content to use in email experiences without leaving GenStudio for Performance Marketing.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "GenStudio email authors swap in approved content fragments (disclaimers, claims, offers) kept in AEM.",
+   "partner_work": [
+    "Content Fragment extension built and deployed with App Builder",
+    "Fragment models and metadata for approved legal and product copy",
+    "Repository and permission set-up with the compliance team"
+   ],
+   "note": "Set-up is on https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/ext-guide/apps/deploy-app (Content Fragment extension). The same page lists DAM, Template, Translation and Compliance extension points; none is a service on the GenStudio card.",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "gspm",
+    "crm"
+   ],
+   "names": [
+    "GenStudio for Performance Marketing",
+    "CRM"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "medium",
+   "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/ext-guide/third-party-extensions/experience-selector-salesforce",
+   "quote": "This topic explains how customers and implementers can deploy and run the GenStudio for Performance Marketing Experience Selector micro frontend (MFE) in a Salesforce org.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Salesforce users pick an approved GenStudio experience inside Salesforce and can save it as an email template.",
+   "partner_work": [
+    "Deploy the Lightning Web Component and Apex class with Salesforce CLI",
+    "IMS organization, client ID and Content Security Policy settings",
+    "Email template folder permissions and a test of template creation"
+   ],
+   "note": "",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "ajo",
+    "cstore"
+   ],
+   "names": [
+    "Journey Optimizer",
+    "Cloud storage"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "medium",
+   "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/channels/direct-mail/direct-mail-configuration",
+   "quote": "Currently Amazon S3, SFTP, Azure, and Data Landing Zone are supported in Journey Optimizer.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Journey Optimizer writes direct mail extraction files to the client's cloud storage for the mail house to collect, and exports its datasets to cloud storage for reporting and archive.",
+   "partner_work": [
+    "File routing and direct mail configuration with the mail provider's file layout",
+    "Scheduled export of Journey Optimizer datasets to the client's storage",
+    "Encryption keys and storage access with the client's IT team"
+   ],
+   "note": "",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "ajob2b",
+    "crm"
+   ],
+   "names": [
+    "Journey Optimizer B2B Edition",
+    "CRM"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "medium",
+   "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/accounts/buying-groups/incrm-insights",
+   "quote": "In-CRM Insights is a web-base application that integrates into Salesforce and Microsoft Dynamics 365, giving you access to Journey Optimizer B2B Edition buying groups directly within your CRM.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Sales teams see buying groups and account and person detail pages from Journey Optimizer B2B Edition inside Salesforce or Dynamics 365.",
+   "partner_work": [
+    "In-CRM Insights package install with roles and user groups",
+    "Links to account and person detail pages on CRM layouts",
+    "External action that updates a CRM record from a journey"
+   ],
+   "note": "",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "mmm",
+    "aa"
+   ],
+   "names": [
+    "Marketing Campaign Analytics",
+    "Adobe Analytics"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "medium",
+   "url": "https://experienceleague.adobe.com/en/docs/marketing-campaign-analytics/using/ingest-data/overview",
+   "quote": "Data collected using the Adobe Analytics source connector.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Report suite data brought in by the Analytics source connector is used as event data for campaign models.",
+   "partner_work": [
+    "Analytics source connector and schema check for model use",
+    "Dataset rules that map Analytics fields to harmonized touchpoints and conversions"
+   ],
+   "note": "The card service 'Marketing data ingestion and schemas' prices ingestion in general; the tool already has the equivalent line for CJA.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "moptimizer",
+    "cja"
+   ],
+   "names": [
+    "Marketo Optimizer",
+    "Customer Journey Analytics"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "medium",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/reports/reports-overview",
+   "quote": "Select Analyze in CJA on any report section to open it in Adobe Customer Journey Analytics Workspace, where you can create custom visualizations in addition to what's available in the embedded report.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Marketo Optimizer's reports are built on CJA, and a client licensed for CJA opens any report section in Workspace on the system-managed connection.",
+   "partner_work": [
+    "CJA product profile access for marketing analysts",
+    "Custom Workspace projects on Marketo Optimizer journey and email data"
+   ],
+   "note": "",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "copilot",
+    "aa"
+   ],
+   "names": [
+    "Microsoft Copilot",
+    "Adobe Analytics"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "medium",
+   "url": "https://developer.adobe.com/analytics-mcp/docs/guides/copilot",
+   "quote": "You can request Adobe Analytics and Customer Journey Analytics data using Copilot Studio.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "People ask for Adobe Analytics report suite data in plain words from the AI assistant, through Adobe's Analytics connection.",
+   "partner_work": [
+    "MCP read-only or full permission in product profiles",
+    "Connector set-up for pilot users and answers checked against Workspace",
+    "Starter questions and a one-page guide"
+   ],
+   "note": "The tool has this line for CJA only; the same Adobe page covers Adobe Analytics. The Adobe Analytics card has no matching service.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "copilot",
+    "marketo"
+   ],
+   "names": [
+    "Microsoft Copilot",
+    "Marketo Engage"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "medium",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-developer/marketo/mcp-server",
+   "quote": "Copilot Studio Copilot Studio Turn on generative orchestration for your agent before adding MCP tools. Use a custom connector to define all three required Marketo headers.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "An agent built in Copilot Studio looks up and changes Marketo Engage programs, campaigns, forms and people through Adobe's hosted connection.",
+   "partner_work": [
+    "API-only user and custom connector in Power Apps",
+    "Copilot Studio agent, sandbox test and rules on allowed changes"
+   ],
+   "note": "The tool has this line for Claude only. The same page also covers Cursor, Codex, Gemini CLI and VS Code.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "ocp",
+    "rtcdp"
+   ],
+   "names": [
+    "Other commerce platform",
+    "Real-Time CDP"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "medium",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/home",
+   "quote": "You can use the following sources to ingest e-commerce data to Experience Platform. ... SAP Commerce ... Shopify",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Experience Platform has ready-made source connectors for SAP Commerce and Shopify, so another commerce platform's data reaches Real-Time CDP profiles.",
+   "partner_work": [
+    "Shopify or SAP Commerce source connection, field mapping and identity check"
+   ],
+   "note": "Could also sit under the Real-Time CDP card's 'Data sources and ingestion setup'. The same catalogue lists Oracle NetSuite, Stripe and Square.",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "collab",
+    "ads"
+   ],
+   "names": [
+    "Real-Time CDP Collaboration",
+    "Ad platforms"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "medium",
+   "url": "https://experienceleague.adobe.com/en/docs/real-time-cdp-collaboration/using/collaborate/overview",
+   "quote": "Currently, the only available advertising platform in Real-Time CDP Collaboration is Amazon Marketing Cloud (AMC).",
+   "quote_found_on_recheck": true,
+   "what_it_does": "An advertiser connects Collaboration to Amazon Marketing Cloud, Amazon's clean room, to run projects and measurement reports on Amazon advertising data.",
+   "partner_work": [
+    "Amazon Marketing Cloud connection with the client's Amazon Ads account",
+    "First project and AMC measurement reports"
+   ],
+   "note": "Amazon Ads is not named in the ads box today.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "so",
+    "aemforms"
+   ],
+   "names": [
+    "Sites Optimizer",
+    "AEM Forms"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "medium",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-sites-optimizer/content/opportunity-types/form-optimization",
+   "quote": "Forms Optimization opportunities enable organizations to improve user interactions systematically and increase form conversions.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Sites Optimizer finds forms with low views, low conversions or accessibility issues and deploys fixes to AEM.",
+   "partner_work": [
+    "Monthly review of form opportunities and suggested variations",
+    "Deploying approved form fixes to AEM Author and checking the form",
+    "Form accessibility fixes from the Sites Optimizer list"
+   ],
+   "note": "Release notes (https://experienceleague.adobe.com/en/docs/experience-manager-sites-optimizer/content/documentation/release-notes): 'Forms opportunity fixes can now be deployed directly to AEM Author.' Early access programme per the page.",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "aemforms",
+    "powerautomate"
+   ],
+   "names": [
+    "AEM Forms",
+    "Microsoft Power Automate"
+   ],
+   "new_box": [
+    "powerautomate"
+   ],
+   "verdict": "missing connection",
+   "value": "medium",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/forms-microsoft-power-automate-integration",
+   "quote": "You can configure an Adaptive Form to run a Microsoft® Power Automate Cloud Flow on submission.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "A submitted adaptive form starts a Power Automate flow with its data, attachments and record PDF.",
+   "partner_work": [
+    "Connect the Forms instance to Power Automate",
+    "Flow with the HTTP request trigger and the submit action on each form"
+   ],
+   "note": "AF05 lists submit actions but not this one. Acrobat already has AB10 for Power Automate.",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "aemsites",
+    "campaign"
+   ],
+   "names": [
+    "AEM Sites",
+    "Adobe Campaign"
+   ],
+   "new_box": [
+    "campaign"
+   ],
+   "verdict": "missing connection",
+   "value": "medium",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/sites/integrations/campaign",
+   "quote": "Campaign Web User Interface ... Supported",
+   "quote_found_on_recheck": true,
+   "what_it_does": "AEM content is used for Adobe Campaign emails; on Cloud Service only the Campaign Web User Interface is supported.",
+   "partner_work": [
+    "AEM and Campaign Web UI connection and email templates"
+   ],
+   "note": "Adobe Campaign is not in the tool and not on the 19 Nov to-do list. Same page: Campaign Classic v7, v8 client console and Campaign Standard are unsupported with Cloud Service. Fusion also has Adobe Campaign modules.",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "aemsites",
+    "idp"
+   ],
+   "names": [
+    "AEM Sites",
+    "Identity provider (Microsoft Entra ID, Okta or another SAML 2.0 provider)"
+   ],
+   "new_box": [
+    "idp"
+   ],
+   "verdict": "missing connection",
+   "value": "medium",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/authentication/saml-2-0",
+   "quote": "SAML 2.0 integration with AEM Publish (or Preview), allows end users of an AEM-based web experience to authenticate to a non-Adobe IDP (Identity Provider), and access AEM as a named, authorized user.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Site visitors sign in to protected AEM pages with your client's identity provider.",
+   "partner_work": [
+    "SAML handler, certificates and Dispatcher rules on AEM Publish",
+    "User attribute and group sync for protected areas",
+    "Sign-in test on each environment"
+   ],
+   "note": "Staff single sign-on to Adobe products through the Admin Console is a different job; cards AB01 and SG01 mention it.",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "aemsites",
+    "logs"
+   ],
+   "names": [
+    "AEM Sites",
+    "Log and monitoring platform (Splunk, Datadog, Elasticsearch, New Relic, Dynatrace, Sumo Logic)"
+   ],
+   "new_box": [
+    "logs"
+   ],
+   "verdict": "missing connection",
+   "value": "medium",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/developing/log-forwarding",
+   "quote": "Customers with a license with a logging vendor or who host a logging product can have AEM logs (including Apache/Dispatcher) and CDN logs forwarded to the associated logging destination.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "AEM and CDN logs are sent to your client's Splunk, Datadog, Elasticsearch, New Relic, Dynatrace or Sumo Logic, or to Amazon S3 or Azure Blob Storage.",
+   "partner_work": [
+    "Log forwarding configuration in Git and a config pipeline",
+    "Network route and credentials for the destination",
+    "Dashboards or alerts agreed with the operations team"
+   ],
+   "note": "S3 and Azure Blob destinations could instead be a line to the existing cstore box.",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "acrobatsign",
+    "hr"
+   ],
+   "names": [
+    "Acrobat Sign",
+    "HR system (Workday, SAP SuccessFactors)"
+   ],
+   "new_box": [
+    "hr"
+   ],
+   "verdict": "missing connection",
+   "value": "medium",
+   "url": "https://helpx.adobe.com/sign/web/integrations/sap-successfactors/sap-successfactors-cloudfoundry-install.html",
+   "quote": "Install and configure Adobe Acrobat Sign for SAP SuccessFactors in the SAP BTP Cloud Foundry environment.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "HR documents are sent for signature from SAP SuccessFactors.",
+   "partner_work": [
+    "SAP BTP services, single sign-on and deployment",
+    "Connection to Acrobat Sign and a recruiting pilot"
+   ],
+   "note": "Workday is already card service SG12; SuccessFactors is priced nowhere.",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "acrobatsign",
+    "powerautomate"
+   ],
+   "names": [
+    "Acrobat Sign",
+    "Microsoft Power Automate"
+   ],
+   "new_box": [
+    "powerautomate"
+   ],
+   "verdict": "missing connection",
+   "value": "medium",
+   "url": "https://helpx.adobe.com/sign/web/integrations/microsoft-power-automate/microsoft-powerapps-flow.html",
+   "quote": "Adobe Acrobat Sign can be integrated with Microsoft Power Automate and the PowerApps environment to provide you with a smooth digital signature experience.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Power Automate flows send agreements, read status and archive signed documents.",
+   "partner_work": [
+    "Acrobat Sign connector and connection",
+    "Flows for send, status and archive of signed copies"
+   ],
+   "note": "",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "acrobatsign",
+    "servicenow"
+   ],
+   "names": [
+    "Acrobat Sign",
+    "ServiceNow"
+   ],
+   "new_box": [
+    "servicenow"
+   ],
+   "verdict": "missing connection",
+   "value": "medium",
+   "url": "https://helpx.adobe.com/sign/web/integrations/servicenow/servicenow-installation-guide.html",
+   "quote": "The Adobe Acrobat Sign for ServiceNow application allows you to send documents for signature using the native functionality of the ServiceNow platform.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Documents are sent for signature from ServiceNow records and the signed copy and form data come back to the record.",
+   "partner_work": [
+    "Install and connect the Acrobat Sign application in ServiceNow",
+    "Document templates filled from ServiceNow records",
+    "Roles and a pilot on one request type"
+   ],
+   "note": "Workfront also reaches ServiceNow through Fusion (https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/third-party-app-connectors/servicenow-modules).",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "acrobat",
+    "m365"
+   ],
+   "names": [
+    "Acrobat and Acrobat Services",
+    "Microsoft 365 (Teams, Outlook, Office apps, SharePoint, OneDrive)"
+   ],
+   "new_box": [
+    "m365"
+   ],
+   "verdict": "missing connection",
+   "value": "medium",
+   "url": "https://helpx.adobe.com/acrobat/web/use-acrobat-extensions/acrobat-for-microsoft-365/enterprise-admins-deploy.html",
+   "quote": "Learn how enterprise admins can install Acrobat for Microsoft 365.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Acrobat tools run inside Teams, SharePoint, OneDrive, Outlook and Office apps for all staff.",
+   "partner_work": [
+    "Deployment from the Microsoft 365 admin center and consent",
+    "Acrobat admin settings for the Microsoft integrations",
+    "Default PDF handling and user guide"
+   ],
+   "note": "Acrobat Sign for Microsoft 365 is already card service SG11.",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "commerce",
+    "ship"
+   ],
+   "names": [
+    "Adobe Commerce",
+    "ship"
+   ],
+   "new_box": [
+    "ship"
+   ],
+   "verdict": "missing connection",
+   "value": "medium",
+   "url": "https://developer.adobe.com/commerce/extensibility/starter-kit/checkout/shipping-use-cases",
+   "quote": "After the webhook is registered, every time a shopping cart is requested, a synchronous call is dispatched to the App Builder application implementing the shipping method to calculate the shipping cost and provide the available shipping methods.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Adobe's checkout starter kit gets live shipping methods and rates from an outside carrier or rating service through an App Builder app.",
+   "partner_work": [
+    "Shipping carrier and rates integration with the checkout starter kit",
+    "Carrier setup and rate test cases"
+   ],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "commerce",
+    "tax"
+   ],
+   "names": [
+    "Adobe Commerce",
+    "tax"
+   ],
+   "new_box": [
+    "tax"
+   ],
+   "verdict": "missing connection",
+   "value": "medium",
+   "url": "https://developer.adobe.com/commerce/extensibility/starter-kit/checkout/tax-use-cases",
+   "quote": "When the quote is recalculated, such as during a cart update or at checkout, a synchronous call is dispatched to the App Builder application that handles tax calculation.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Adobe's checkout starter kit calls an outside tax service from Commerce at cart and checkout through an App Builder app.",
+   "partner_work": [
+    "Tax provider integration with the checkout starter kit",
+    "Tax class mapping and test cases by region"
+   ],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "ajo",
+    "sms"
+   ],
+   "names": [
+    "Journey Optimizer",
+    "SMS providers (Sinch, Twilio, Infobip)"
+   ],
+   "new_box": [
+    "sms"
+   ],
+   "verdict": "missing connection",
+   "value": "medium",
+   "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/admin/channels/configure-channels-sms",
+   "quote": "Supported providers for text messaging are Sinch, Twilio, and Infobip.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Journey Optimizer and its B2B Edition send text messages through the client's account with an SMS provider.",
+   "partner_work": [
+    "Provider credentials, webhooks and opt-out keywords",
+    "SMS channel configuration and first messages"
+   ],
+   "note": "Quote is from the B2B Edition page; Journey Optimizer's guide has the same three provider pages. Marketo Engage uses Vibes. No box today.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "ajo",
+    "mobileapp"
+   ],
+   "names": [
+    "Journey Optimizer",
+    "The client's mobile app (Adobe Experience Platform Mobile SDK)"
+   ],
+   "new_box": [
+    "mobileapp"
+   ],
+   "verdict": "missing connection",
+   "value": "medium",
+   "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/channels/push/push-config/push-configuration",
+   "quote": "Before beginning to send push notifications with Journey Optimizer, you need to ensure configurations and integrations are in place on the mobile app and for tags in Adobe Experience Platform.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "The client's app carries the Mobile SDK so Journey Optimizer can send push, in-app messages and content cards.",
+   "partner_work": [
+    "Push credentials and app surface",
+    "Mobile SDK set-up with the app developers and test sends"
+   ],
+   "note": "No box today.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "rtcdp",
+    "cmp"
+   ],
+   "names": [
+    "Real-Time CDP",
+    "Consent management platforms (OneTrust, Didomi)"
+   ],
+   "new_box": [
+    "cmp"
+   ],
+   "verdict": "missing connection",
+   "value": "medium",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/home",
+   "quote": "You can use the following sources to ingest consent and preferences data to Experience Platform.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Consent choices collected by the client's consent platform reach profiles so activation respects them.",
+   "partner_work": [
+    "Consent source and consent field mapping",
+    "Consent policy check on activations"
+   ],
+   "note": "No box today.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "rtcdp",
+    "martech"
+   ],
+   "names": [
+    "Real-Time CDP",
+    "Other marketing and email platforms (Salesforce Marketing Cloud, Oracle Eloqua, HubSpot, Braze, Mailchimp)"
+   ],
+   "new_box": [
+    "martech"
+   ],
+   "verdict": "missing connection",
+   "value": "medium",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/home",
+   "quote": "You can use the following sources to ingest marketing automation data to Experience Platform.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Experience Platform reads from, and sends audiences to, the client's non-Adobe email and marketing automation platforms.",
+   "partner_work": [
+    "Source or destination account with the platform's admin",
+    "Audience and field mapping"
+   ],
+   "note": "No box today.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "workfront",
+    "docstore"
+   ],
+   "names": [
+    "Workfront",
+    "Document storage (Box, Dropbox, Google Drive, OneDrive, SharePoint)"
+   ],
+   "new_box": [
+    "docstore"
+   ],
+   "verdict": "missing connection",
+   "value": "medium",
+   "url": "https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/configure-integrations/configure-document-integrations",
+   "quote": "As an Adobe Workfront administrator, you can configure document integrations to manage documents in Workfront.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Workfront users link documents and folders that live in Box, Dropbox, Google Drive, OneDrive or SharePoint, and can proof them.",
+   "partner_work": [
+    "Enable the cloud providers and the SharePoint integration",
+    "Decide whether documents may be stored in Workfront at all",
+    "Custom document integration through the Document Webhooks API where needed"
+   ],
+   "note": "Same systems as the csrc box, but that box is described as authoring docs for Edge Delivery.",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "aemassets",
+    "acrobat"
+   ],
+   "names": [
+    "AEM Assets",
+    "Acrobat and Acrobat Services"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/manage/manage-pdf-documents",
+   "quote": "Experience Manager Assets integrates with the Document Cloud PDF Viewer seamlessly, which lets you preview multiple pages of a PDF document.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "PDFs in AEM Assets open in the Acrobat (Document Cloud) viewer with annotations, search and bookmarks.",
+   "partner_work": [
+    "None: built in"
+   ],
+   "note": "A no-service line at most.",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "aemsites",
+    "crm"
+   ],
+   "names": [
+    "AEM Sites",
+    "CRM"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-65/content/sites/administering/integration/salesforce",
+   "quote": "You can configure AEM to post leads to Salesforce and create components that access data directly from Salesforce.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "AEM 6.5 Sites posts site users to Salesforce as leads and shows Salesforce data in components.",
+   "partner_work": [
+    "Salesforce remote access app and AEM cloud service configuration",
+    "Lead workflow and a Salesforce data component"
+   ],
+   "note": "AEM 6.5 only; the Cloud Service integrations section has no Salesforce page.",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "aemsites",
+    "cms"
+   ],
+   "names": [
+    "AEM Sites",
+    "Other CMS site"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/headless/content-fragment-selector/integrate-non-adobe-application",
+   "quote": "The Content Fragment Selector allows you to integrate with various non-Adobe or third party applications to enable them to work together seamlessly.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "A non-Adobe application lets its users pick AEM content fragments.",
+   "partner_work": [
+    "Support ticket for provisioning, IMS properties and selector embed in the client application"
+   ],
+   "note": "Migration from another CMS is already card service SI10.",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "aa",
+    "bi"
+   ],
+   "names": [
+    "Adobe Analytics",
+    "BI tools"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/analytics/analyze/report-builder/rb-overview",
+   "quote": "Report Builder for Adobe Analytics is a Microsoft Excel add-in.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Analysts pull Adobe Analytics data into Excel workbooks with the Report Builder add-in.",
+   "partner_work": [
+    "Add-in roll-out through the client's Microsoft 365 admin",
+    "Legacy workbooks converted and scheduled workbooks rebuilt"
+   ],
+   "note": "The bi box already says 'Excel through Report Builder'. Power BI publishing was part of the legacy Report Builder, which Adobe's page says reached end of life in June 2026, so Excel is the only route.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "commerce",
+    "ads"
+   ],
+   "names": [
+    "Adobe Commerce",
+    "Ad platforms"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/commerce-admin/marketing/google-tools/google-tools",
+   "quote": "Google AdWords - Create a Google AdWords campaign and track conversions for your store.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Commerce Admin has a built-in Google Ads conversion tracking setting.",
+   "partner_work": [
+    "Google Ads conversion tracking on the storefront"
+   ],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "commerce",
+    "cstore"
+   ],
+   "names": [
+    "Adobe Commerce",
+    "Cloud storage"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/commerce-operations/configuration-guide/storage/remote-storage/remote-storage",
+   "quote": "The Remote Storage module provides the option to store media files and schedule imports and exports in a persistent, remote storage container using a storage service, such as AWS S3.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Adobe Commerce keeps media and import and export files in the client's cloud storage instead of the application's file system.",
+   "partner_work": [
+    "Remote storage driver configuration and media sync"
+   ],
+   "note": "Outside my product list; found because cstore is in my area.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "commerce",
+    "search"
+   ],
+   "names": [
+    "Adobe Commerce",
+    "Search data"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/commerce-admin/marketing/google-tools/google-tools",
+   "quote": "Your store configuration is integrated with the following Google tools to help optimize your content, analyze your traffic, and connect your catalog to shopping aggregators and marketplaces.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Commerce Admin has built-in settings for Google Analytics and Google Tag Manager on the storefront.",
+   "partner_work": [
+    "Google Analytics and Tag Manager settings with privacy options"
+   ],
+   "note": "The page names Google Universal Analytics and the GTag APIs, not Search Console.",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "express",
+    "ads"
+   ],
+   "names": [
+    "Adobe Express",
+    "Ad platforms"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://helpx.adobe.com/express/web/add-ons-and-integrations/create-publish-google-ads.html",
+   "quote": "Adobe Express offers a Google Ads add-on that allows you to create and publish Google Ads directly from one platform.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Express designs are published straight into Google Ads; sibling add-ons do the same for LinkedIn, Amazon and TikTok ads.",
+   "partner_work": [
+    "Allow the ad add-ons for the right people and connect the ad accounts",
+    "Ad-sized locked templates for each platform"
+   ],
+   "note": "LinkedIn page fetched too: https://helpx.adobe.com/express/web/add-ons-and-integrations/linkedin-ads.html. Amazon and TikTok Ads Manager pages are in the same help section (not fetched).",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "express",
+    "cms"
+   ],
+   "names": [
+    "Adobe Express",
+    "Other CMS site"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://developer.adobe.com/express/embed-sdk/",
+   "quote": "Embed Adobe Express editing and AI capabilities into your website or app",
+   "quote_found_on_recheck": true,
+   "what_it_does": "The Express editor runs inside your client's own website or application through the Embed SDK.",
+   "partner_work": [
+    "Embed SDK integration in the client application",
+    "Template and brand kit set-up for embedded users"
+   ],
+   "note": "",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "chatgpt",
+    "ajo"
+   ],
+   "names": [
+    "ChatGPT",
+    "Journey Optimizer"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/cx-enterprise-agentic-tools/using/tools/mcp-servers",
+   "quote": "For example, https://mcp.adobeaemcloud.com/adobe/mcp/aem for AEM, or https://ajo-mcp.adobe.io/mcp for Adobe Journey Optimizer.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "A person adds Adobe's Journey Optimizer address in ChatGPT and looks into campaigns, journeys and channel settings in plain words.",
+   "partner_work": [
+    "ChatGPT set-up for pilot users and a starter question list"
+   ],
+   "note": "Adobe's two pages disagree: this page gives Journey Optimizer as its ChatGPT example, while the Journey Optimizer page says the connection is available in Claude and Cursor only.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "claude",
+    "express"
+   ],
+   "names": [
+    "Claude",
+    "Adobe Express"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/adobe-connectors/adobe-for-claude.html",
+   "quote": "Adobe for Claude connects Claude with capabilities from Acrobat, Adobe Express, Photoshop, Lightroom, Illustrator, Firefly, Premiere, InDesign, and Adobe Stock.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Staff use Express templates from inside Claude through the Adobe connector.",
+   "partner_work": [
+    "None beyond enabling the connector"
+   ],
+   "note": "Tool has chatgpt + express but not claude + express.",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "cintel",
+    "aa"
+   ],
+   "names": [
+    "Commerce Intelligence",
+    "Adobe Analytics"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/commerce-business-intelligence/mbi/analyze/saas/adobe-analytics",
+   "quote": "The Adobe Analytics integration for Adobe Commerce Intelligence enables you to bring together the end-to-end customer journey focus of Adobe Analytics and the eCommerce focus you rely on from Commerce Intelligence.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Commerce Intelligence copies up to 25 metrics and dimensions from one Adobe Analytics report suite into its data warehouse.",
+   "partner_work": [
+    "Adobe Analytics data into Commerce Intelligence, joined to orders"
+   ],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "cintel",
+    "ocp"
+   ],
+   "names": [
+    "Commerce Intelligence",
+    "Other commerce platform"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/commerce-business-intelligence/mbi/analyze/saas/woocommerce",
+   "quote": "The WooCommerce database is based on MySQL, you can connect it to Commerce Intelligence through a direct connection , cPanel , or via an SSH tunnel .",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Commerce Intelligence connects to another shop platform's database (WooCommerce; PrestaShop and Spree have pages too).",
+   "partner_work": [
+    "Other shop database connection for Commerce Intelligence"
+   ],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "cintel",
+    "search"
+   ],
+   "names": [
+    "Commerce Intelligence",
+    "Search data"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/commerce-business-intelligence/mbi/analyze/saas/google-analytics",
+   "quote": "Get started by entering your Google Analytics credentials into Commerce Intelligence:",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Commerce Intelligence connects to a Google Analytics account and syncs chosen profiles.",
+   "partner_work": [
+    "Google Analytics data into Commerce Intelligence"
+   ],
+   "note": "The page speaks of profile IDs and does not name GA4.",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "fireflycm",
+    "gspm"
+   ],
+   "names": [
+    "Firefly Custom Models",
+    "GenStudio for Performance Marketing"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://helpx.adobe.com/firefly/web/custom-models/get-started-with-custom-models/custom-models-overview.html",
+   "quote": "Custom models can be used to generate content in supported Adobe apps, including Photoshop, Illustrator, Adobe Express, Firefly, and GenStudio.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Your client's trained Firefly custom models are used for image generation in GenStudio.",
+   "partner_work": [
+    "Share the published models with GenStudio creators",
+    "Prompt guide for GenStudio users"
+   ],
+   "note": "Same sentence the tool already relies on for express + fireflycm. Adobe writes 'GenStudio' without the full product name.",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "ajob2b",
+    "gspm"
+   ],
+   "names": [
+    "Journey Optimizer B2B Edition",
+    "GenStudio for Performance Marketing"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/journey-content/email-channel/genstudio-email-workflow",
+   "quote": "To enhance workflow efficiency and maintain brand consistency, you can combine GenStudio for Performance Marketing experiences with Adobe Journey Optimizer B2B Edition email orchestration.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Email HTML exported from the B2B Edition becomes a GenStudio template, and GenStudio email content comes back into account journeys.",
+   "partner_work": [
+    "Email templates exported and prepared for GenStudio",
+    "Working practice between the GenStudio creator and the B2B marketer"
+   ],
+   "note": "The tool has this line for Journey Optimizer and Marketo Engage only.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "mmm",
+    "bi"
+   ],
+   "names": [
+    "Marketing Campaign Analytics",
+    "BI tools"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/marketing-campaign-analytics/using/use-cases",
+   "quote": "Export incremental touchpoint scores into Customer Journey Analytics or external BI tools.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Model scores are stored in Experience Platform datasets that the client's BI tool can read for its own dashboards.",
+   "partner_work": [
+    "Scoring datasets exposed to the client's BI tool",
+    "Incrementality dashboard in the BI tool"
+   ],
+   "note": "",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "mqualifier",
+    "moptimizer"
+   ],
+   "names": [
+    "Marketo Qualifier",
+    "Marketo Optimizer"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/prospects",
+   "quote": "AI person summaries are available on instances running Marketo Optimizer Prime or Ultimate.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Marketo Qualifier shows an AI-written summary of each lead only where the client also runs Marketo Optimizer.",
+   "partner_work": [
+    "None beyond checking the client's package"
+   ],
+   "note": "A dependency more than an integration; a line with no services would do.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "copilot",
+    "express"
+   ],
+   "names": [
+    "Microsoft Copilot",
+    "Adobe Express"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://helpx.adobe.com/express/web/add-ons-and-integrations/adobe-express-agent-for-copilot.html",
+   "quote": "The Adobe Express agent brings Adobe's template-driven design capabilities into Microsoft 365.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Staff create and edit Express designs from Microsoft 365 Copilot.",
+   "partner_work": [
+    "Admin install of the Adobe Express agent in Microsoft 365"
+   ],
+   "note": "Same kind of no-service line as copilot + creativecloud and copilot + acrobat.",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "copilot",
+    "ajo"
+   ],
+   "names": [
+    "Microsoft Copilot",
+    "Journey Optimizer"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/cx-enterprise-agentic-tools/using/tools/mcp-servers",
+   "quote": "The same process applies to any Adobe MCP server: swap in the endpoint URL for the server you want to connect.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "The client adds Adobe's product address as a tool in Copilot Studio and builds a small agent on it.",
+   "partner_work": [
+    "Copilot Studio tool and agent for pilot users"
+   ],
+   "note": "Documented only on Adobe's general MCP page, which has a Copilot Studio tab. Journey Optimizer's own page lists Claude and Cursor only. The older 'Adobe Marketing Agent for Microsoft 365 Copilot' page also covers Real-Time CDP and Journey Optimizer, and overlaps the existing copilot + cw line.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "copilot",
+    "rtcdp"
+   ],
+   "names": [
+    "Microsoft Copilot",
+    "Real-Time CDP"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/cx-enterprise-agentic-tools/using/tools/mcp-servers",
+   "quote": "The same process applies to any Adobe MCP server: swap in the endpoint URL for the server you want to connect.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "The client adds Adobe's product address as a tool in Copilot Studio and builds a small agent on it.",
+   "partner_work": [
+    "Copilot Studio tool and agent for pilot users"
+   ],
+   "note": "Documented only on Adobe's general MCP page, which has a Copilot Studio tab. The Real-Time CDP page says its connection works with any client that supports remote MCP servers. The older 'Adobe Marketing Agent for Microsoft 365 Copilot' page also covers Real-Time CDP and Journey Optimizer, and overlaps the existing copilot + cw line.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "copilot",
+    "target"
+   ],
+   "names": [
+    "Microsoft Copilot",
+    "Target"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/cx-enterprise-agentic-tools/using/tools/mcp-servers",
+   "quote": "The same process applies to any Adobe MCP server: swap in the endpoint URL for the server you want to connect.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "The client adds Adobe's product address as a tool in Copilot Studio and builds a small agent on it.",
+   "partner_work": [
+    "Copilot Studio tool and agent for pilot users"
+   ],
+   "note": "Documented only on Adobe's general MCP page, which has a Copilot Studio tab. Target's own page lists Claude, Cursor and ChatGPT only. The older 'Adobe Marketing Agent for Microsoft 365 Copilot' page also covers Real-Time CDP and Journey Optimizer, and overlaps the existing copilot + cw line.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "cms",
+    "ajo"
+   ],
+   "names": [
+    "Other CMS site",
+    "Journey Optimizer"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/combine/integrations/vendors/vendor-integration",
+   "quote": "Contentful is a headless CMS for structured entries and assets over REST or GraphQL, so Journey Optimizer can pull content at send or open time.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Journey Optimizer's Integrations feature pulls content from another CMS (Adobe shows Contentful, Sitecore, Contentstack and Magnolia) into messages at send time.",
+   "partner_work": [
+    "Integration configuration: endpoint, authentication and response mapping",
+    "Email blocks that use the CMS content with fallbacks"
+   ],
+   "note": "The same page shows product data from Salsify and Akeneo, which would be a pim + ajo line, plus loyalty, review and consent vendors.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "rtcdp",
+    "bi"
+   ],
+   "names": [
+    "Real-Time CDP",
+    "BI tools"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-platform/query/clients/overview",
+   "quote": "Instructions are provided for the following clients: Aqua Data Studio DbVisualizer Looker Postico (Mac) Power BI (PC) PSQL RStudio Tableau",
+   "quote_found_on_recheck": true,
+   "what_it_does": "BI tools connect to Experience Platform Query Service to read datasets with SQL.",
+   "partner_work": [
+    "Query Service credentials and BI tool connection",
+    "Audience and data quality dashboard"
+   ],
+   "note": "Overlaps the Data Distiller item on the known to-do list; best decided together with it.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "so",
+    "gspm"
+   ],
+   "names": [
+    "Sites Optimizer",
+    "GenStudio for Performance Marketing"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-sites-optimizer/content/documentation/release-notes",
+   "quote": "Select an Adobe GenStudio brand for on-brand content generation and share relevant optimization updates with a configured Slack channel.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Sites Optimizer uses a GenStudio brand when it generates content suggestions.",
+   "partner_work": [
+    "Pick the brand in Sites Optimizer settings and review generated copy against it"
+   ],
+   "note": "Release-note evidence only; no set-up page in the Sites Optimizer guide.",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "workfront",
+    "erp"
+   ],
+   "names": [
+    "Workfront",
+    "ERP"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/apps-and-modules-toc",
+   "quote": "Fusion offers connectors for many third-party applications. ... Microsoft Dynamics Finance and Operations modules ... NetSuite modules",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Fusion scenarios exchange cost, project or order data between Workfront and NetSuite or Dynamics Finance and Operations.",
+   "partner_work": [
+    "Fusion scenario for project cost or purchase data to the ERP"
+   ],
+   "note": "Same index page lists AWS S3 modules (workfront + cstore) and PowerBI modules (workfront + bi, otherwise covered by WF09).",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "workfront",
+    "figma"
+   ],
+   "names": [
+    "Workfront",
+    "Figma"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/third-party-app-connectors/figma-modules",
+   "quote": "With the Adobe Workfront Fusion Figma modules, you can retrieve lists of comments, files, file versions, or projects.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Fusion scenarios read Figma files and comments and post comments from Workfront.",
+   "partner_work": [
+    "Fusion scenario linking Figma file versions and comments to Workfront tasks"
+   ],
+   "note": "",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "workfront",
+    "target"
+   ],
+   "names": [
+    "Workfront",
+    "Target"
+   ],
+   "new_box": [],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-target-modules",
+   "quote": "In an Adobe Workfront Fusion scenario, you can automate workflows that use Adobe Target, as well as connect it to multiple third-party applications and services.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Workfront Fusion's Adobe Target modules create, read and update Target records from a scenario; this needs a Fusion license.",
+   "partner_work": [
+    "Target connection in Fusion and one scenario from approved test brief to Target record"
+   ],
+   "note": "Same pattern as the existing workfront + ajo line. Adobe's module list has no Adobe Analytics, CJA or Real-Time CDP modules.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "aemforms",
+    "docusign"
+   ],
+   "names": [
+    "AEM Forms",
+    "DocuSign"
+   ],
+   "new_box": [
+    "docusign"
+   ],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/services/integrate-docusign-adaptive-forms",
+   "quote": "AEM Forms as a Cloud Service provides a custom submit action for DocuSign",
+   "quote_found_on_recheck": true,
+   "what_it_does": "An adaptive form is sent for signature through DocuSign instead of Acrobat Sign.",
+   "partner_work": [
+    "DocuSign app, cloud configuration and submit action"
+   ],
+   "note": "",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "acrobatsign",
+    "veeva"
+   ],
+   "names": [
+    "Acrobat Sign",
+    "Veeva Vault"
+   ],
+   "new_box": [
+    "veeva"
+   ],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://helpx.adobe.com/sign/web/integrations/veevavault/veeva-vault-install.html",
+   "quote": "This document explains how to establish integration of Adobe Acrobat Sign with the Veeva Vault platform.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Life-sciences documents in Veeva Vault are sent for signature and the signed rendition returns to the Vault.",
+   "partner_work": [
+    "Vault objects, security profile and document lifecycle changes",
+    "Acrobat Sign group and connection"
+   ],
+   "note": "Adobe's Sign integrations navigation also lists SugarCRM, Coupa and Zapier (not fetched).",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "express",
+    "slack"
+   ],
+   "names": [
+    "Adobe Express",
+    "Slack"
+   ],
+   "new_box": [
+    "slack"
+   ],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://helpx.adobe.com/express/web/add-ons-and-integrations/install-express-slack.html",
+   "quote": "Learn how to install the Adobe Express app for Slack and turn on app approvals so your team can smoothly install and use the Adobe Express app for Slack.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Teams generate and edit Express content from Slack.",
+   "partner_work": [
+    "Slack app approval and install"
+   ],
+   "note": "",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "cw",
+    "chat"
+   ],
+   "names": [
+    "Coworker",
+    "Slack and Microsoft Teams"
+   ],
+   "new_box": [
+    "chat"
+   ],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/notifications/notification-skills",
+   "quote": "To receive notifications in Slack, your organization must have a connected Slack workspace.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Coworker sends notifications to Slack; Workfront has its own Slack and Microsoft Teams apps.",
+   "partner_work": [
+    "Slack workspace connection and notification preferences"
+   ],
+   "note": "No box today.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "cw",
+    "aiplat"
+   ],
+   "names": [
+    "Coworker",
+    "aiplat"
+   ],
+   "new_box": [
+    "aiplat"
+   ],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/coworker/content/ai-platforms",
+   "quote": "Use Coworker to get marketing insights in AWS Quick. ... Use Coworker to get marketing insights in IBM watsonx Orchestrate. ... Use Coworker to get marketing insights in Databricks Genie One.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Adobe documents set-up steps for Coworker in AWS Quick, IBM watsonx Orchestrate and Databricks Genie One.",
+   "partner_work": [
+    "Covered by the existing 'Coworker set up in an AI platform' service"
+   ],
+   "note": "These need OAuth client settings and MCP registration, more work than ChatGPT or Claude. Adobe's news release says Snowflake will follow.",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "cw",
+    "gemini"
+   ],
+   "names": [
+    "Coworker",
+    "gemini"
+   ],
+   "new_box": [
+    "gemini"
+   ],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/coworker/content/ai-platforms",
+   "quote": "Use Coworker to get marketing insights in Gemini Enterprise.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Adobe publishes Coworker as an agent in Google's Gemini Enterprise, set up by the Gemini administrator through a no-cost private offer.",
+   "partner_work": [
+    "Covered by the existing 'Coworker set up in an AI platform' service"
+   ],
+   "note": "The hours are already priced on the Coworker card; what is missing is a Gemini box and its line.",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "cw",
+    "slack"
+   ],
+   "names": [
+    "Coworker",
+    "slack"
+   ],
+   "new_box": [
+    "slack"
+   ],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/notifications/notification-skills",
+   "quote": "To receive notifications in Slack, your organization must have a connected Slack workspace.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Coworker's Notification Skills switch Slack delivery of Adobe notifications on and off; Coworker itself does not run in Slack.",
+   "partner_work": [
+    "Slack workspace connection and notification preferences"
+   ],
+   "note": "Adobe also documents an 'Adobe for Slack' connector for Creative Cloud and Acrobat tools.",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "creativecloud",
+    "gemini"
+   ],
+   "names": [
+    "Creative Cloud",
+    "Google Gemini"
+   ],
+   "new_box": [
+    "gemini"
+   ],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/adobe-connectors/adobe-for-gemini.html",
+   "quote": "Adobe for Google Gemini allows you to access capabilities across Photoshop, Lightroom, Express, and Firefly directly within Google Gemini through conversation.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Staff use Photoshop, Lightroom, Express and Firefly tools from Google Gemini.",
+   "partner_work": [
+    "None beyond enabling the connector"
+   ],
+   "note": "Tool has ChatGPT, Claude and Copilot boxes but none for Gemini; the same line would serve Express.",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "creativecloud",
+    "m365"
+   ],
+   "names": [
+    "Creative Cloud",
+    "Microsoft 365 (Teams, Outlook, Office apps, SharePoint, OneDrive)"
+   ],
+   "new_box": [
+    "m365"
+   ],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/work-with-microsoft-applications/get-creative-cloud-for-microsoft-teams.html",
+   "quote": "Learn how to install Creative Cloud for Microsoft Teams.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Creative Cloud assets and libraries are shared inside Teams, Word and PowerPoint.",
+   "partner_work": [
+    "App and add-in install"
+   ],
+   "note": "",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "creativecloud",
+    "slack"
+   ],
+   "names": [
+    "Creative Cloud",
+    "Slack"
+   ],
+   "new_box": [
+    "slack"
+   ],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/adobe-connectors/adobe-for-slack.html",
+   "quote": "Adobe for Slack is an Adobe MCP (Model Context Protocol) connector that integrates Adobe’s creativity and productivity tools within the Slackbot",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Staff use Creative Cloud and Acrobat tools from Slack conversations.",
+   "partner_work": [
+    "None beyond enabling the connector"
+   ],
+   "note": "Also covers Acrobat.",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "cja",
+    "replay"
+   ],
+   "names": [
+    "Customer Journey Analytics",
+    "Session replay tools (Quantum Metric)"
+   ],
+   "new_box": [
+    "replay"
+   ],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-usecases/third-party/qm/qm-overview",
+   "quote": "This page illustrates how to tie Customer Journey Analytics (CJA) and Quantum Metric together, to get the most out of both products working together.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Quantum Metric session replays, friction events and heatmaps are tied to CJA data.",
+   "partner_work": [
+    "Session ID and friction events added to CJA data"
+   ],
+   "note": "No box today.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "frameio",
+    "automation"
+   ],
+   "names": [
+    "Frame.io",
+    "Automation platform (Zapier, Make)"
+   ],
+   "new_box": [
+    "automation"
+   ],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://help.frame.io/en/articles/11870181-build-workflows-with-zapier",
+   "quote": "The Frame.io V4 Zapier app allows you to build custom workflows connected with thousands of other apps.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Frame.io events trigger actions in Slack, Google Drive, Airtable and other apps through Zapier (Make is documented too).",
+   "partner_work": [
+    "Zaps for comment alerts and approved-asset copies"
+   ],
+   "note": "",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "frameio",
+    "nle"
+   ],
+   "names": [
+    "Frame.io",
+    "Non-Adobe editing tools (Avid Media Composer, DaVinci Resolve)"
+   ],
+   "new_box": [
+    "nle"
+   ],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://help.frame.io/en/articles/14501766-mounted-storage-optimization-hub",
+   "quote": "Mounted folders appear as standard OS paths, so creative apps can read/write directly.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Editors in Avid Media Composer or DaVinci Resolve work on Frame.io media through Frame.io Drive.",
+   "partner_work": [
+    "Frame.io Drive rollout and cache settings for edit suites"
+   ],
+   "note": "No V4 article for Final Cut Pro in the help index.",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "rtcdp",
+    "support"
+   ],
+   "names": [
+    "Real-Time CDP",
+    "Customer support systems (Zendesk, ServiceNow, Salesforce Service Cloud)"
+   ],
+   "new_box": [
+    "support"
+   ],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/home",
+   "quote": "You can use the following sources to ingest customer success data to Experience Platform.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Support cases load into Experience Platform for profiles, audiences and CJA.",
+   "partner_work": [
+    "Support system source and mapping"
+   ],
+   "note": "CJA also documents call center data and Conversation Insights. No box today.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "rtcdp",
+    "idp"
+   ],
+   "names": [
+    "Real-Time CDP",
+    "Identity providers for single sign-on (Microsoft Entra, Google, Okta)"
+   ],
+   "new_box": [
+    "idp"
+   ],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://helpx.adobe.com/enterprise/using/set-up-identity.html",
+   "quote": "Configure Okta for use with Adobe SSO",
+   "quote_found_on_recheck": true,
+   "what_it_does": "The client's identity provider signs people in to every Adobe product through the Admin Console.",
+   "partner_work": [
+    "Directory, domain claim and SSO set-up with the client's IT team"
+   ],
+   "note": "Applies to every product, not only Real-Time CDP. No box today.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "rtcdp",
+    "loyalty"
+   ],
+   "names": [
+    "Real-Time CDP",
+    "Loyalty platforms (Capillary, Kobie, Talon.One)"
+   ],
+   "new_box": [
+    "loyalty"
+   ],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/home",
+   "quote": "You can use the following sources to ingest loyalty data to Experience Platform.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Loyalty events and balances load into Experience Platform.",
+   "partner_work": [
+    "Loyalty source and mapping"
+   ],
+   "note": "No box today.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "workfront",
+    "anaplan"
+   ],
+   "names": [
+    "Workfront",
+    "Anaplan"
+   ],
+   "new_box": [
+    "anaplan"
+   ],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-integrations/workfront-with-anaplan/anaplan-integration",
+   "quote": "Adobe Workfront Fusion allows you to integrate Workfront with your Anaplan account.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Budgets and campaign items in Anaplan are linked to Workfront projects, and costs and hours flow back.",
+   "partner_work": [
+    "Anaplan and Workfront objects and fields",
+    "Adobe Fusion templates configured for the chosen workflows"
+   ],
+   "note": "",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "workfront",
+    "m365"
+   ],
+   "names": [
+    "Workfront",
+    "Microsoft 365 (Teams, Outlook, Office apps, SharePoint, OneDrive)"
+   ],
+   "new_box": [
+    "m365"
+   ],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-integrations/workfront-for-microsoft-teams/install-workfront-ms-teams",
+   "quote": "The updated Workfront integration is now available and fully compatible with the New Teams experience.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "People get Workfront notifications, approve and create tasks from Microsoft Teams.",
+   "partner_work": [
+    "Teams app install per team and sign-in"
+   ],
+   "note": "Adobe's built-in integrations overview (updated April 2026) still says the Teams integration 'will not be supported'; the install page (September 2026) says the opposite. The Outlook add-in is gone.",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "workfront",
+    "slack"
+   ],
+   "names": [
+    "Workfront",
+    "Slack"
+   ],
+   "new_box": [
+    "slack"
+   ],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-integrations/workfront-for-slack/configure-workfront-for-slack",
+   "quote": "When you integrate your Slack instance with Workfront users can use Workfront while collaborating within their Slack channels.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "People get Workfront notifications, approve work and create tasks from Slack.",
+   "partner_work": [
+    "Slack admin approval and app install",
+    "User guide for approvals and task creation in Slack"
+   ],
+   "note": "",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "gemini",
+    "express"
+   ],
+   "names": [
+    "gemini",
+    "Adobe Express"
+   ],
+   "new_box": [
+    "gemini"
+   ],
+   "verdict": "missing connection",
+   "value": "low",
+   "url": "https://helpx.adobe.com/creative-cloud/apps/integration-with-other-apps/adobe-connectors/adobe-for-gemini.html",
+   "quote": "Adobe for Google Gemini allows you to access capabilities across Photoshop, Lightroom, Express, and Firefly directly within Google Gemini through conversation.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "The same Adobe connector brings Adobe Express templates into Google Gemini.",
+   "partner_work": [
+    "None: each person switches the connector on"
+   ],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  }
+ ],
+ "covered_another_way": [
+  {
+   "pair": [
+    "mmm",
+    "ads"
+   ],
+   "names": [
+    "Marketing Campaign Analytics",
+    "Ad platforms"
+   ],
+   "new_box": [],
+   "verdict": "covered another way",
+   "value": "medium",
+   "url": "https://experienceleague.adobe.com/en/docs/marketing-campaign-analytics/using/ingest-data/overview",
+   "quote": "Aggregate or summary data from walled gardens (like Facebook, YouTube), traffic sources or offline advertising data.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Ad platform spend and impressions are loaded as summary data for models.",
+   "partner_work": [],
+   "note": "Priced by the card service 'Marketing data ingestion and schemas'. Adobe names no specific connector, so no new line is needed; the same holds for mmm + dwh and mmm + cstore.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "collab",
+    "cstore"
+   ],
+   "names": [
+    "Real-Time CDP Collaboration",
+    "Cloud storage"
+   ],
+   "new_box": [],
+   "verdict": "covered another way",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/real-time-cdp-collaboration/using/destinations/manage-destinations",
+   "quote": "When you configure a destination, you connect a cloud storage account to Real-Time CDP Collaboration and define how audience data is exported to it.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Collaboration sources audiences from, and exports them to, cloud storage and warehouses.",
+   "partner_work": [],
+   "note": "Sourcing is priced by the card service 'Audience sourcing from cloud data sources' (also covers collab + dwh). Its text does not mention the cloud storage destination, which a publisher client needs.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "ajob2b",
+    "ads"
+   ],
+   "names": [
+    "Journey Optimizer B2B Edition",
+    "Ad platforms"
+   ],
+   "new_box": [],
+   "verdict": "covered another way",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/journeys/journey-nodes/action-nodes",
+   "quote": "Starting with the 2025.10 release, LinkedIn is the first supported destination type.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Account journeys activate audiences to LinkedIn.",
+   "partner_work": [],
+   "note": "Priced by 'Journey audiences for paid media destinations' on ajob2b + rtcdp.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "dwh",
+    "cw"
+   ],
+   "names": [
+    "Data warehouse",
+    "Coworker"
+   ],
+   "new_box": [],
+   "verdict": "covered another way",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/coworker/content/ai-platforms",
+   "quote": "Use Coworker to get marketing insights in Databricks Genie One.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Coworker is installed in Databricks from its marketplace.",
+   "partner_work": [],
+   "note": "Priced by the card service 'Coworker set up in an AI platform'. The same page also lists Gemini Enterprise, AWS Quick and IBM watsonx Orchestrate, which have no box.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "mmeasure",
+    "crm"
+   ],
+   "names": [
+    "Marketo Measure",
+    "CRM"
+   ],
+   "new_box": [],
+   "verdict": "covered another way",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "Already priced.",
+   "partner_work": [],
+   "note": "Priced by 'CRM package and connection' on the Marketo Measure card. Judged from Adobe's guide contents and the tool's service text; no quote taken.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "mmeasure",
+    "ads"
+   ],
+   "names": [
+    "Marketo Measure",
+    "Ad platforms"
+   ],
+   "new_box": [],
+   "verdict": "covered another way",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "Already priced.",
+   "partner_work": [],
+   "note": "Priced by 'Ad platform connections and spend data' on the Marketo Measure card. Judged from Adobe's guide contents and the tool's service text; no quote taken.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "mmeasure",
+    "dwh"
+   ],
+   "names": [
+    "Marketo Measure",
+    "Data warehouse"
+   ],
+   "new_box": [],
+   "verdict": "covered another way",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "Already priced.",
+   "partner_work": [],
+   "note": "Priced by 'Data warehouse access and BI report template' on the Marketo Measure card. Judged from Adobe's guide contents and the tool's service text; no quote taken.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "mmeasure",
+    "bi"
+   ],
+   "names": [
+    "Marketo Measure",
+    "BI tools"
+   ],
+   "new_box": [],
+   "verdict": "covered another way",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "Already priced.",
+   "partner_work": [],
+   "note": "Priced by 'Data warehouse access and BI report template' on the Marketo Measure card. Judged from Adobe's guide contents and the tool's service text; no quote taken.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "xa",
+    "cja"
+   ],
+   "names": [
+    "Experimentation Accelerator",
+    "Customer Journey Analytics"
+   ],
+   "new_box": [],
+   "verdict": "covered another way",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "Already priced.",
+   "partner_work": [],
+   "note": "Priced by 'Primary metrics from CJA or Adobe Analytics' on the Experimentation Accelerator card. Judged from Adobe's guide contents and the tool's service text; no quote taken.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "xa",
+    "aa"
+   ],
+   "names": [
+    "Experimentation Accelerator",
+    "Adobe Analytics"
+   ],
+   "new_box": [],
+   "verdict": "covered another way",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "Already priced.",
+   "partner_work": [],
+   "note": "Priced by 'Primary metrics from CJA or Adobe Analytics' on the Experimentation Accelerator card. Judged from Adobe's guide contents and the tool's service text; no quote taken.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "ca",
+    "ads"
+   ],
+   "names": [
+    "Content Analytics",
+    "Ad platforms"
+   ],
+   "new_box": [],
+   "verdict": "covered another way",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "Already priced.",
+   "partner_work": [],
+   "note": "Priced by 'Paid media channel setup' on the Content Analytics card. Judged from Adobe's guide contents and the tool's service text; no quote taken.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "cstore",
+    "aemassets"
+   ],
+   "names": [
+    "Cloud storage",
+    "AEM Assets"
+   ],
+   "new_box": [],
+   "verdict": "covered another way",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "Already priced.",
+   "partner_work": [],
+   "note": "Priced by 'Asset and metadata migration' on the AEM Assets card. Judged from Adobe's guide contents and the tool's service text; no quote taken.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "cstore",
+    "aemforms"
+   ],
+   "names": [
+    "Cloud storage",
+    "AEM Forms"
+   ],
+   "new_box": [],
+   "verdict": "covered another way",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "Already priced.",
+   "partner_work": [],
+   "note": "Priced by 'Submit actions and server-side validation' on the AEM Forms card. Judged from Adobe's guide contents and the tool's service text; no quote taken.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "crm",
+    "aemforms"
+   ],
+   "names": [
+    "CRM",
+    "AEM Forms"
+   ],
+   "new_box": [],
+   "verdict": "covered another way",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "Already priced.",
+   "partner_work": [],
+   "note": "Priced by 'Form Data Model for back-end systems' on the AEM Forms card. Judged from Adobe's guide contents and the tool's service text; no quote taken.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "crm",
+    "acrobatsign"
+   ],
+   "names": [
+    "CRM",
+    "Acrobat Sign"
+   ],
+   "new_box": [],
+   "verdict": "covered another way",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "Already priced.",
+   "partner_work": [],
+   "note": "Priced by 'Acrobat Sign for Salesforce' on the Acrobat Sign card. Judged from Adobe's guide contents and the tool's service text; no quote taken.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "target",
+    "pim"
+   ],
+   "names": [
+    "Target",
+    "PIM"
+   ],
+   "new_box": [],
+   "verdict": "covered another way",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "Already priced.",
+   "partner_work": [],
+   "note": "Priced by 'Recommendations catalog and setup' on the Target card. Judged from Adobe's guide contents and the tool's service text; no quote taken.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "aa",
+    "bc"
+   ],
+   "names": [
+    "Adobe Analytics",
+    "Brand Concierge"
+   ],
+   "new_box": [],
+   "verdict": "covered another way",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "Already priced.",
+   "partner_work": [],
+   "note": "Priced by 'Track concierge events in website analytics' on the Brand Concierge card. Judged from Adobe's guide contents and the tool's service text; no quote taken.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "aemassets",
+    "cstore"
+   ],
+   "names": [
+    "AEM Assets",
+    "Cloud storage"
+   ],
+   "new_box": [],
+   "verdict": "covered another way",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/assets-view/bulk-import-assets-view",
+   "quote": "import large numbers of assets directly from an external data source into AEM Assets in a single, streamlined operation",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Bulk import of a library from Azure, AWS, Google Cloud, Dropbox or OneDrive.",
+   "partner_work": [
+    "Already AS03 Asset and metadata migration"
+   ],
+   "note": "Priced as card service AS03.",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "aemforms",
+    "cstore"
+   ],
+   "names": [
+    "AEM Forms",
+    "Cloud storage"
+   ],
+   "new_box": [],
+   "verdict": "covered another way",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/aem-forms-submit-action",
+   "quote": "A submit action is triggered when a user clicks the Submit button on an Adaptive Form. Forms as a Cloud Service provides several submit actions out of the box.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Form submissions land in Azure Blob Storage, SharePoint or OneDrive.",
+   "partner_work": [
+    "Already AF05 Submit actions and server-side validation"
+   ],
+   "note": "Priced as card service AF05 (names SharePoint and Azure Blob Storage). Also covers aemforms + csrc.",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "aemsites",
+    "translation"
+   ],
+   "names": [
+    "AEM Sites",
+    "Translation service"
+   ],
+   "new_box": [
+    "translation"
+   ],
+   "verdict": "covered another way",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/sites/administering/reusing-content/translation/integration-framework",
+   "quote": "The Translation Integration Framework integrates with third-party translation services to orchestrate the translation of AEM content.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "AEM sends pages to Microsoft Translator or a translation vendor's connector.",
+   "partner_work": [
+    "Already SI08 Language copies and local corrections across markets"
+   ],
+   "note": "Priced in SI08; the tool has no translation vendor box.",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "acrobatsign",
+    "m365"
+   ],
+   "names": [
+    "Acrobat Sign",
+    "Microsoft 365 (Teams, Outlook, Office apps, SharePoint, OneDrive)"
+   ],
+   "new_box": [
+    "m365"
+   ],
+   "verdict": "covered another way",
+   "value": "low",
+   "url": "https://helpx.adobe.com/sign/web/integrations/microsoft-office/microsoft-365.html",
+   "quote": "Adobe Acrobat Sign for Microsoft 365 enables Microsoft Admins to deploy all three apps simultaneously through the Microsoft admin center or directly from the Microsoft AppSource.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Acrobat Sign add-ins in Teams, Outlook, Word and PowerPoint.",
+   "partner_work": [
+    "Already SG11"
+   ],
+   "note": "Priced as card service SG11.",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "acrobat",
+    "cstore"
+   ],
+   "names": [
+    "Acrobat and Acrobat Services",
+    "Cloud storage"
+   ],
+   "new_box": [],
+   "verdict": "covered another way",
+   "value": "low",
+   "url": "https://developer.adobe.com/document-services/docs/overview/pdf-services-api/howtos/pdf-external-storage-sol",
+   "quote": "Adobe PDF Services APIs have added support for accessing files from the external storage of the client directly.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "PDF Services reads and writes files in your client's S3, Azure Blob, Dropbox or SharePoint through signed URLs.",
+   "partner_work": [
+    "Already AB04 PDF Services API document automation"
+   ],
+   "note": "AB04 scope already says files are read from and written to the client storage.",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "fireflycp",
+    "cstore"
+   ],
+   "names": [
+    "Firefly Creative Production",
+    "Cloud storage"
+   ],
+   "new_box": [],
+   "verdict": "covered another way",
+   "value": "low",
+   "url": "https://developer.adobe.com/firefly-services/docs/photoshop/getting-started/storage-solutions/",
+   "quote": "You'll need some form of user-owned storage (like Amazon S3 buckets) to use with the Photoshop API.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Firefly Services jobs read inputs and write outputs through pre-signed URLs on client storage.",
+   "partner_work": [
+    "Already FP05 and FP06"
+   ],
+   "note": "FP05 scope covers pre-signed URLs and where finished files are stored.",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "workfront",
+    "bi"
+   ],
+   "names": [
+    "Workfront",
+    "BI tools"
+   ],
+   "new_box": [],
+   "verdict": "covered another way",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/workfront/using/reporting/data-lake/share-data-externally",
+   "quote": "Then, you must add any required IPs to the allowlist",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Workfront data is read by your client's reporting tool through Workfront Data Connect.",
+   "partner_work": [
+    "Already WF09 Workfront Data Connect reporting setup"
+   ],
+   "note": "Also covers workfront + dwh. Data Connect as its own box is on the to-do list.",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "aemsites",
+    "git"
+   ],
+   "names": [
+    "AEM Sites",
+    "Git host (GitHub, GitLab, Bitbucket, Azure DevOps)"
+   ],
+   "new_box": [
+    "git"
+   ],
+   "verdict": "covered another way",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/using-cloud-manager/managing-code/external-repositories",
+   "quote": "Cloud Manager supports integration with GitHub Enterprise Server, GitLab, Bitbucket, and Azure DevOps repositories.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Cloud Manager builds from your client's own Git host.",
+   "partner_work": [
+    "Already SI01 Cloud Manager program, pipelines and access"
+   ],
+   "note": "Git access is in SI01 and in the aemsites + so service for code fixes; the tool has no Git host box.",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "acrobat",
+    "idp"
+   ],
+   "names": [
+    "Acrobat and Acrobat Services",
+    "Identity provider (Microsoft Entra ID, Okta or another SAML 2.0 provider)"
+   ],
+   "new_box": [
+    "idp"
+   ],
+   "verdict": "covered another way",
+   "value": "low",
+   "url": "https://helpx.adobe.com/business/enterprise/identity-sso/set-up-identity/set-up-identity-with-sso.html",
+   "quote": "Single Sign-On (SSO) allows your users to access Adobe products using the same credentials they use for other organizational applications.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Staff sign in to Adobe products with your client's identity provider through the Admin Console.",
+   "partner_work": [
+    "Already AB01 and SG01 (single sign-on in scope)"
+   ],
+   "note": "No identity provider box. The Creative Cloud, Frame.io and Express cards do not mention single sign-on in their scopes.",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "cw",
+    "ads"
+   ],
+   "names": [
+    "Coworker",
+    "Ad platforms"
+   ],
+   "new_box": [],
+   "verdict": "covered another way",
+   "value": "low",
+   "url": "https://news.adobe.com/news/2026/11/adobe-integrates-agentic-cx-enterprise-coworker-into-ai-platforms",
+   "quote": "Adobe also launched new connectors for CX Enterprise Coworker, which offer pre-built MCP server integrations with ecosystem technology partners, including Amazon Ads, Databricks Genie, Demandbase, ads MCP server for Meta campaigns, Microsoft Work IQ, RainFocus, Snowflake Cortex AI and more",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Coworker has ready-made connectors to Amazon Ads and Meta campaigns.",
+   "partner_work": [
+    "Priced by 'Approved Coworker connection or plugin' on the Coworker card"
+   ],
+   "note": "News release only; no set-up page found. A line could still be drawn for visibility.",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "cw",
+    "dwh"
+   ],
+   "names": [
+    "Coworker",
+    "Data warehouse"
+   ],
+   "new_box": [],
+   "verdict": "covered another way",
+   "value": "low",
+   "url": "https://news.adobe.com/news/2026/11/adobe-integrates-agentic-cx-enterprise-coworker-into-ai-platforms",
+   "quote": "Adobe also launched new connectors for CX Enterprise Coworker, which offer pre-built MCP server integrations with ecosystem technology partners, including Amazon Ads, Databricks Genie, Demandbase, ads MCP server for Meta campaigns, Microsoft Work IQ, RainFocus, Snowflake Cortex AI and more",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Coworker has ready-made connectors to Databricks Genie and Snowflake Cortex AI.",
+   "partner_work": [
+    "Priced by 'Approved Coworker connection or plugin' on the Coworker card"
+   ],
+   "note": "The same release names Demandbase, RainFocus and Microsoft Work IQ, which have no box.",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "bv",
+    "cms"
+   ],
+   "names": [
+    "Brand Visibility",
+    "Other CMS site"
+   ],
+   "new_box": [],
+   "verdict": "covered another way",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/overview",
+   "quote": "CDN and CMS-agnostic: Works with any CDN configuration and front-end setup regardless of the Content Management System.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Brand Visibility's edge fixes work on a site built on any CMS, because they are served at the CDN.",
+   "partner_work": [
+    "Priced by cdn + bv and by 'Existing CMS publishing workflow' on the Brand Visibility card"
+   ],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "bc",
+    "aa"
+   ],
+   "names": [
+    "Brand Concierge",
+    "Adobe Analytics"
+   ],
+   "new_box": [],
+   "verdict": "covered another way",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/release-notes/current",
+   "quote": "Register a single callback to observe Web Client lifecycle events, user interactions, responses, feedback, and errors in real time, for use in sending engagement data to Adobe Analytics, Google Analytics, or other third-party systems.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Concierge events can be sent to Adobe Analytics or Google Analytics through a client-side callback.",
+   "partner_work": [
+    "Priced by 'Track concierge events in website analytics' on the Brand Concierge card"
+   ],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "bc",
+    "crm"
+   ],
+   "names": [
+    "Brand Concierge",
+    "CRM"
+   ],
+   "new_box": [],
+   "verdict": "covered another way",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/release-notes/current",
+   "quote": "so it can drive lead scoring, retargeting, personalization, and CRM handoff",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Concierge leads reach the CRM through Marketo Engage and Marketo Qualifier, not through a direct connector.",
+   "partner_work": [
+    "Priced by marketo + bc, mqualifier + bc and crm + mqualifier"
+   ],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "cw",
+    "figma"
+   ],
+   "names": [
+    "Coworker",
+    "Figma"
+   ],
+   "new_box": [],
+   "verdict": "covered another way",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows",
+   "quote": "Import designs directly from Figma into Adobe Experience Manager using natural language.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "A Coworker skill turns a Figma design into an AEM Visual Content Fragment.",
+   "partner_work": [
+    "Priced by 'Visual Content Fragments from Figma' on aemsites + cw"
+   ],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "claude",
+    "commerce"
+   ],
+   "names": [
+    "Claude",
+    "Adobe Commerce"
+   ],
+   "new_box": [],
+   "verdict": "covered another way",
+   "value": "low",
+   "url": "https://developer.adobe.com/commerce/extensibility/developer-agent/coding-tools",
+   "quote": "Any coding agent that supports agent skills , such as: ... Cursor ... Claude Code ... GitHub Copilot",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Adobe's Commerce development tools and skills run in coding agents such as Claude Code to build App Builder apps; they are for developers, not for running the store from a chat.",
+   "partner_work": [
+    "Priced by 'Custom code rebuilt as App Builder apps for Cloud Service' on the Commerce card"
+   ],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  }
+ ],
+ "not_documented": [
+  {
+   "pair": [
+    "workfront",
+    "crm"
+   ],
+   "names": [
+    "Workfront",
+    "CRM"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-integrations/workfront-for-salesforce/workfront-for-salesforce-overview",
+   "quote": "As part of this transition process, the Workfront for Salesforce integration is no longer available .",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Adobe has withdrawn the native Workfront for Salesforce app and points to Workfront Fusion's Salesforce modules.",
+   "partner_work": [],
+   "note": "Do not add as a native line; it belongs with the Workfront Fusion to-do item.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "moptimizer",
+    "crm"
+   ],
+   "names": [
+    "Marketo Optimizer",
+    "CRM"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/data-foundation/marketo-interoperability",
+   "quote": "Marketo Optimizer has no direct CRM integration.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Leads reach the CRM through Marketo Engage.",
+   "partner_work": [],
+   "note": "",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "moptimizer",
+    "rtcdp"
+   ],
+   "names": [
+    "Marketo Optimizer",
+    "Real-Time CDP"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/data-foundation/data-architecture",
+   "quote": "Marketo Optimizer does not require Real-Time Customer Data Platform, Real-Time Customer Profile, or segmentation.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Experience Platform services run in the background only.",
+   "partner_work": [],
+   "note": "",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "moptimizer",
+    "aemassets"
+   ],
+   "names": [
+    "Marketo Optimizer",
+    "AEM Assets"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/content/assets/digital-asset-management",
+   "quote": "Import of assets from external systems and access to a pre-populated asset library are not yet available.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Images are uploaded to Marketo Optimizer's own library.",
+   "partner_work": [],
+   "note": "",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "mmeasure",
+    "target"
+   ],
+   "names": [
+    "Marketo Measure",
+    "Target"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/advanced-marketo-measure-features/a-b-testing/configuring-the-marketo-measure-a-b-test-integration",
+   "quote": "Marketo Measure A/B Test integration allows you to track the revenue impact of your Optimizely and VWO site experiments.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "The A/B test integration covers Optimizely and VWO, not Adobe Target.",
+   "partner_work": [],
+   "note": "",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "chatgpt",
+    "mmm"
+   ],
+   "names": [
+    "ChatGPT",
+    "Marketing Campaign Analytics"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "https://developer.adobe.com/analytics-mcp/docs/mca/",
+   "quote": "Currently, the Marketing Campaign Analytics MCP server is only available through Adobe CX Enterprise Coworker.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "No direct connection from ChatGPT, Claude or Copilot; Coworker only.",
+   "partner_work": [],
+   "note": "Same for claude + mmm and copilot + mmm.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "marketo",
+    "aemsites"
+   ],
+   "names": [
+    "Marketo Engage",
+    "AEM Sites"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found.",
+   "partner_work": [],
+   "note": "Neither the Marketo Engage guide nor the AEM as a Cloud Service guide lists a Sites integration; Marketo connects to AEM Assets and AEM Forms only. Judged from guide contents; a missing page is not proof.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "ajo",
+    "ads"
+   ],
+   "names": [
+    "Journey Optimizer",
+    "Ad platforms"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found.",
+   "partner_work": [],
+   "note": "The Journey Optimizer guide has no ad platform or destination page; ad platforms are reached through Real-Time CDP. Judged from guide contents; a missing page is not proof.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "ajo",
+    "crm"
+   ],
+   "names": [
+    "Journey Optimizer",
+    "CRM"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found.",
+   "partner_work": [],
+   "note": "The Journey Optimizer guide has no CRM connector page. Judged from guide contents; a missing page is not proof.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "chatgpt",
+    "marketo"
+   ],
+   "names": [
+    "ChatGPT",
+    "Marketo Engage"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found.",
+   "partner_work": [],
+   "note": "Marketo's connection page covers Claude, Cursor, Codex, Gemini CLI, VS Code and Copilot Studio, not ChatGPT. Judged from guide contents; a missing page is not proof.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "ajob2b",
+    "workfront"
+   ],
+   "names": [
+    "Journey Optimizer B2B Edition",
+    "Workfront"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found.",
+   "partner_work": [],
+   "note": "The B2B Edition's email collaboration tools are its own comments, not Workfront. Judged from guide contents; a missing page is not proof.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "ajob2b",
+    "cja"
+   ],
+   "names": [
+    "Journey Optimizer B2B Edition",
+    "Customer Journey Analytics"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found.",
+   "partner_work": [],
+   "note": "The dashboard page checked has no CJA hand-off; CJA B2B Edition is already on the to-do list. Judged from guide contents; a missing page is not proof.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "ca",
+    "aemassets"
+   ],
+   "names": [
+    "Content Analytics",
+    "AEM Assets"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found.",
+   "partner_work": [],
+   "note": "Content Analytics pages in the cache and the AEM guide contents show no AEM-specific integration; same for ca + aemsites. Judged from guide contents; a missing page is not proof.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "target",
+    "cdn"
+   ],
+   "names": [
+    "Target",
+    "Existing CDN"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found.",
+   "partner_work": [],
+   "note": "The Target developer guide contents list no CDN or edge worker page. Judged from guide contents; a missing page is not proof.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "xa",
+    "rtcdp"
+   ],
+   "names": [
+    "Experimentation Accelerator",
+    "Real-Time CDP"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found.",
+   "partner_work": [],
+   "note": "The Experimentation Accelerator guide has nine pages and covers Target and Journey Optimizer only. Judged from guide contents; a missing page is not proof.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "cw",
+    "collab"
+   ],
+   "names": [
+    "Coworker",
+    "Real-Time CDP Collaboration"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found.",
+   "partner_work": [],
+   "note": "Coworker's list of compatible applications does not name Collaboration, Marketo Measure or Marketo Qualifier. Judged from guide contents; a missing page is not proof.",
+   "area": "A",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "workfront",
+    "gws"
+   ],
+   "names": [
+    "Workfront",
+    "Google Workspace"
+   ],
+   "new_box": [
+    "gws"
+   ],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-integrations/workfront-for-g-suite/install-workfront-for-gsuite",
+   "quote": "We recommend using Workfront Automation and Integration for your organization’s integration needs with Google Workspace.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "The Workfront add-on for Gmail and Google Calendar has been withdrawn; Adobe points to Fusion modules.",
+   "partner_work": [],
+   "note": "Do not add a native line. Google Drive document links still work (see workfront + docstore).",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "workfront",
+    "outlook"
+   ],
+   "names": [
+    "Workfront",
+    "Microsoft Outlook"
+   ],
+   "new_box": [
+    "outlook"
+   ],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-integrations/workfront-for-outlook/workfront-for-outlook",
+   "quote": "Because Microsoft has disabled these tokens, the Workfront for Microsoft Outlook integration is no longer available.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "The Workfront Outlook add-in no longer exists.",
+   "partner_work": [],
+   "note": "",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "aemforms",
+    "target"
+   ],
+   "names": [
+    "AEM Forms",
+    "Target"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-65/content/forms/integrate-aem-forms-with-experience-cloud-solutions/ab-testing-adaptive-forms",
+   "quote": "AEM Forms integrates with Adobe Target, an Adobe Experience Cloud solution, to deliver personalized and engaging customer experiences across multiple digital channels.",
+   "quote_found_on_recheck": true,
+   "what_it_does": "A/B tests on adaptive forms with Target exist only in AEM 6.5 and the page is badged Discontinued.",
+   "partner_work": [],
+   "note": "Not a gap.",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "so",
+    "cms"
+   ],
+   "names": [
+    "Sites Optimizer",
+    "Other CMS site"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-sites-optimizer/content/documentation/settings",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "Nothing documented on the pages checked.",
+   "partner_work": [],
+   "note": "Sites Optimizer settings and trial pages cover Edge Delivery, AEM Cloud Service and AEM Managed Services sites only; no page for a non-AEM CMS. (No quote: this records an absence on the page checked.)",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "brandintel",
+    "express"
+   ],
+   "names": [
+    "Brand Intelligence",
+    "Adobe Express"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "https://helpx.adobe.com/firefly/web/adobe-brand-intelligence/adobe-brand-intelligence-overview.html",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "Nothing documented on the pages checked.",
+   "partner_work": [],
+   "note": "Brand Intelligence help names Workfront, Frame.io and Figma only; Express brand check is its own feature. Same result for brandintel + gspm and brandintel + aemassets. (No quote: this records an absence on the page checked.)",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "planning",
+    "frameio"
+   ],
+   "names": [
+    "Workfront Planning",
+    "Frame.io"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-planning/adobe-workfront-planning-architecture/connect-record-types-overview",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "Nothing documented on the pages checked.",
+   "partner_work": [],
+   "note": "Planning connects only to Workfront objects, AEM Assets (images, folders, content fragments) and GenStudio Brands, all already in the tool. (No quote: this records an absence on the page checked.)",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "express",
+    "csrc"
+   ],
+   "names": [
+    "Adobe Express",
+    "Authoring docs"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "https://helpx.adobe.com/express/web/bring-in-assets-from-other-apps/import-files-from-other-apps/import-files.html",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "Nothing documented on the pages checked.",
+   "partner_work": [],
+   "note": "Express import takes files from the device; no Google Drive, Dropbox or OneDrive connector page in the Express help navigation. (No quote: this records an absence on the page checked.)",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "eds",
+    "copilot"
+   ],
+   "names": [
+    "AEM Sites with Edge Delivery Services",
+    "Microsoft Copilot"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "https://www.aem.live/docs/ew/authoring/mcp",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "Nothing documented on the pages checked.",
+   "partner_work": [],
+   "note": "Page names Claude and ChatGPT only. Frame.io MCP page likewise (Claude, ChatGPT); Firefly Run-Workflow MCP lists Claude Code, Claude Desktop and Cursor. (No quote: this records an absence on the page checked.)",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "acrobatsign",
+    "jira"
+   ],
+   "names": [
+    "Acrobat Sign",
+    "jira"
+   ],
+   "new_box": [
+    "jira"
+   ],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "https://helpx.adobe.com/sign/web/integrations/home.html",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "Nothing documented on the pages checked.",
+   "partner_work": [],
+   "note": "No Jira entry in the Acrobat Sign integrations navigation; no SharePoint guide there either. (No quote: this records an absence on the page checked.)",
+   "area": "B",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "commerce",
+    "marketplace"
+   ],
+   "names": [
+    "Adobe Commerce",
+    "marketplace"
+   ],
+   "new_box": [
+    "marketplace"
+   ],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "https://experienceleague.adobe.com/en/docs/commerce-channels/amazon/guide-overview",
+   "quote": "Adobe has discontinued the following sales channel extensions for Adobe Commerce: ... Amazon Sales Channel ... Channel Manager",
+   "quote_found_on_recheck": true,
+   "what_it_does": "Adobe's Amazon and Walmart sales channel extensions are discontinued, so there is no Adobe marketplace connector to draw.",
+   "partner_work": [],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "bv",
+    "so"
+   ],
+   "names": [
+    "Brand Visibility",
+    "Sites Optimizer"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found that documents this pair in the Brand Visibility, Brand Concierge, Coworker, Commerce or central MCP documentation checked.",
+   "partner_work": [],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "bv",
+    "aemassets"
+   ],
+   "names": [
+    "Brand Visibility",
+    "AEM Assets"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found that documents this pair in the Brand Visibility, Brand Concierge, Coworker, Commerce or central MCP documentation checked.",
+   "partner_work": [],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "bv",
+    "target"
+   ],
+   "names": [
+    "Brand Visibility",
+    "Target"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found that documents this pair in the Brand Visibility, Brand Concierge, Coworker, Commerce or central MCP documentation checked.",
+   "partner_work": [],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "bv",
+    "ajo"
+   ],
+   "names": [
+    "Brand Visibility",
+    "Journey Optimizer"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found that documents this pair in the Brand Visibility, Brand Concierge, Coworker, Commerce or central MCP documentation checked.",
+   "partner_work": [],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "bv",
+    "rtcdp"
+   ],
+   "names": [
+    "Brand Visibility",
+    "Real-Time CDP"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found that documents this pair in the Brand Visibility, Brand Concierge, Coworker, Commerce or central MCP documentation checked.",
+   "partner_work": [],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "bv",
+    "gspm"
+   ],
+   "names": [
+    "Brand Visibility",
+    "GenStudio for Performance Marketing"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found that documents this pair in the Brand Visibility, Brand Concierge, Coworker, Commerce or central MCP documentation checked.",
+   "partner_work": [],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "bv",
+    "marketo"
+   ],
+   "names": [
+    "Brand Visibility",
+    "Marketo Engage"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found that documents this pair in the Brand Visibility, Brand Concierge, Coworker, Commerce or central MCP documentation checked.",
+   "partner_work": [],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "bv",
+    "workfront"
+   ],
+   "names": [
+    "Brand Visibility",
+    "Workfront"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found that documents this pair in the Brand Visibility, Brand Concierge, Coworker, Commerce or central MCP documentation checked.",
+   "partner_work": [],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "bv",
+    "ca"
+   ],
+   "names": [
+    "Brand Visibility",
+    "Content Analytics"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found that documents this pair in the Brand Visibility, Brand Concierge, Coworker, Commerce or central MCP documentation checked.",
+   "partner_work": [],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "bv",
+    "aco"
+   ],
+   "names": [
+    "Brand Visibility",
+    "Commerce Optimizer"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found that documents this pair in the Brand Visibility, Brand Concierge, Coworker, Commerce or central MCP documentation checked.",
+   "partner_work": [],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "bv",
+    "chatgpt"
+   ],
+   "names": [
+    "Brand Visibility",
+    "ChatGPT"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found that documents this pair in the Brand Visibility, Brand Concierge, Coworker, Commerce or central MCP documentation checked.",
+   "partner_work": [],
+   "note": "These assistants are engines Brand Visibility measures; no connector for staff.",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "bv",
+    "claude"
+   ],
+   "names": [
+    "Brand Visibility",
+    "Claude"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found that documents this pair in the Brand Visibility, Brand Concierge, Coworker, Commerce or central MCP documentation checked.",
+   "partner_work": [],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "bv",
+    "copilot"
+   ],
+   "names": [
+    "Brand Visibility",
+    "Microsoft Copilot"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found that documents this pair in the Brand Visibility, Brand Concierge, Coworker, Commerce or central MCP documentation checked.",
+   "partner_work": [],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "cw",
+    "commerce"
+   ],
+   "names": [
+    "Coworker",
+    "Adobe Commerce"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found that documents this pair in the Brand Visibility, Brand Concierge, Coworker, Commerce or central MCP documentation checked.",
+   "partner_work": [],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "cw",
+    "aco"
+   ],
+   "names": [
+    "Coworker",
+    "Commerce Optimizer"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found that documents this pair in the Brand Visibility, Brand Concierge, Coworker, Commerce or central MCP documentation checked.",
+   "partner_work": [],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "cw",
+    "cintel"
+   ],
+   "names": [
+    "Coworker",
+    "Commerce Intelligence"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found that documents this pair in the Brand Visibility, Brand Concierge, Coworker, Commerce or central MCP documentation checked.",
+   "partner_work": [],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "cw",
+    "so"
+   ],
+   "names": [
+    "Coworker",
+    "Sites Optimizer"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found that documents this pair in the Brand Visibility, Brand Concierge, Coworker, Commerce or central MCP documentation checked.",
+   "partner_work": [],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "cw",
+    "collab"
+   ],
+   "names": [
+    "Coworker",
+    "Real-Time CDP Collaboration"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found that documents this pair in the Brand Visibility, Brand Concierge, Coworker, Commerce or central MCP documentation checked.",
+   "partner_work": [],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "cw",
+    "express"
+   ],
+   "names": [
+    "Coworker",
+    "Adobe Express"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found that documents this pair in the Brand Visibility, Brand Concierge, Coworker, Commerce or central MCP documentation checked.",
+   "partner_work": [],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "cw",
+    "frameio"
+   ],
+   "names": [
+    "Coworker",
+    "Frame.io"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found that documents this pair in the Brand Visibility, Brand Concierge, Coworker, Commerce or central MCP documentation checked.",
+   "partner_work": [],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "cw",
+    "creativecloud"
+   ],
+   "names": [
+    "Coworker",
+    "Creative Cloud"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found that documents this pair in the Brand Visibility, Brand Concierge, Coworker, Commerce or central MCP documentation checked.",
+   "partner_work": [],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "cw",
+    "fireflycp"
+   ],
+   "names": [
+    "Coworker",
+    "Firefly Creative Production"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found that documents this pair in the Brand Visibility, Brand Concierge, Coworker, Commerce or central MCP documentation checked.",
+   "partner_work": [],
+   "note": "Coworker has a Firefly image generation skill, but no page ties it to Creative Production.",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "cw",
+    "fireflycm"
+   ],
+   "names": [
+    "Coworker",
+    "Firefly Custom Models"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found that documents this pair in the Brand Visibility, Brand Concierge, Coworker, Commerce or central MCP documentation checked.",
+   "partner_work": [],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "cw",
+    "acrobat"
+   ],
+   "names": [
+    "Coworker",
+    "Acrobat and Acrobat Services"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found that documents this pair in the Brand Visibility, Brand Concierge, Coworker, Commerce or central MCP documentation checked.",
+   "partner_work": [],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "cw",
+    "acrobatsign"
+   ],
+   "names": [
+    "Coworker",
+    "Acrobat Sign"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found that documents this pair in the Brand Visibility, Brand Concierge, Coworker, Commerce or central MCP documentation checked.",
+   "partner_work": [],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "cw",
+    "mmeasure"
+   ],
+   "names": [
+    "Coworker",
+    "Marketo Measure"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found that documents this pair in the Brand Visibility, Brand Concierge, Coworker, Commerce or central MCP documentation checked.",
+   "partner_work": [],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "cw",
+    "mqualifier"
+   ],
+   "names": [
+    "Coworker",
+    "Marketo Qualifier"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found that documents this pair in the Brand Visibility, Brand Concierge, Coworker, Commerce or central MCP documentation checked.",
+   "partner_work": [],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "bc",
+    "aemassets"
+   ],
+   "names": [
+    "Brand Concierge",
+    "AEM Assets"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found that documents this pair in the Brand Visibility, Brand Concierge, Coworker, Commerce or central MCP documentation checked.",
+   "partner_work": [],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "bc",
+    "target"
+   ],
+   "names": [
+    "Brand Concierge",
+    "Target"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found that documents this pair in the Brand Visibility, Brand Concierge, Coworker, Commerce or central MCP documentation checked.",
+   "partner_work": [],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "bc",
+    "aco"
+   ],
+   "names": [
+    "Brand Concierge",
+    "Commerce Optimizer"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found that documents this pair in the Brand Visibility, Brand Concierge, Coworker, Commerce or central MCP documentation checked.",
+   "partner_work": [],
+   "note": "The Commerce MCP integration is described for Adobe Commerce with Live Search only.",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "bc",
+    "gspm"
+   ],
+   "names": [
+    "Brand Concierge",
+    "GenStudio for Performance Marketing"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found that documents this pair in the Brand Visibility, Brand Concierge, Coworker, Commerce or central MCP documentation checked.",
+   "partner_work": [],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "commerce",
+    "marketo"
+   ],
+   "names": [
+    "Adobe Commerce",
+    "Marketo Engage"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found that documents this pair in the Brand Visibility, Brand Concierge, Coworker, Commerce or central MCP documentation checked.",
+   "partner_work": [],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "commerce",
+    "workfront"
+   ],
+   "names": [
+    "Adobe Commerce",
+    "Workfront"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found that documents this pair in the Brand Visibility, Brand Concierge, Coworker, Commerce or central MCP documentation checked.",
+   "partner_work": [],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "commerce",
+    "gspm"
+   ],
+   "names": [
+    "Adobe Commerce",
+    "GenStudio for Performance Marketing"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found that documents this pair in the Brand Visibility, Brand Concierge, Coworker, Commerce or central MCP documentation checked.",
+   "partner_work": [],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "commerce",
+    "express"
+   ],
+   "names": [
+    "Adobe Commerce",
+    "Adobe Express"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found that documents this pair in the Brand Visibility, Brand Concierge, Coworker, Commerce or central MCP documentation checked.",
+   "partner_work": [],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "commerce",
+    "so"
+   ],
+   "names": [
+    "Adobe Commerce",
+    "Sites Optimizer"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found that documents this pair in the Brand Visibility, Brand Concierge, Coworker, Commerce or central MCP documentation checked.",
+   "partner_work": [],
+   "note": "Sites Optimizer is documented with Commerce Optimizer only (existing aco + so line).",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "commerce",
+    "dwh"
+   ],
+   "names": [
+    "Adobe Commerce",
+    "Data warehouse"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found that documents this pair in the Brand Visibility, Brand Concierge, Coworker, Commerce or central MCP documentation checked.",
+   "partner_work": [],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "commerce",
+    "bi"
+   ],
+   "names": [
+    "Adobe Commerce",
+    "BI tools"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found that documents this pair in the Brand Visibility, Brand Concierge, Coworker, Commerce or central MCP documentation checked.",
+   "partner_work": [],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "chatgpt",
+    "commerce"
+   ],
+   "names": [
+    "ChatGPT",
+    "Adobe Commerce"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found that documents this pair in the Brand Visibility, Brand Concierge, Coworker, Commerce or central MCP documentation checked.",
+   "partner_work": [],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "copilot",
+    "commerce"
+   ],
+   "names": [
+    "Microsoft Copilot",
+    "Adobe Commerce"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found that documents this pair in the Brand Visibility, Brand Concierge, Coworker, Commerce or central MCP documentation checked.",
+   "partner_work": [],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "chatgpt",
+    "bc"
+   ],
+   "names": [
+    "ChatGPT",
+    "Brand Concierge"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found that documents this pair in the Brand Visibility, Brand Concierge, Coworker, Commerce or central MCP documentation checked.",
+   "partner_work": [],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "claude",
+    "bc"
+   ],
+   "names": [
+    "Claude",
+    "Brand Concierge"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found that documents this pair in the Brand Visibility, Brand Concierge, Coworker, Commerce or central MCP documentation checked.",
+   "partner_work": [],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  },
+  {
+   "pair": [
+    "copilot",
+    "bc"
+   ],
+   "names": [
+    "Microsoft Copilot",
+    "Brand Concierge"
+   ],
+   "new_box": [],
+   "verdict": "not documented",
+   "value": "low",
+   "url": "",
+   "quote": "",
+   "quote_found_on_recheck": null,
+   "what_it_does": "No Adobe page found that documents this pair in the Brand Visibility, Brand Concierge, Coworker, Commerce or central MCP documentation checked.",
+   "partner_work": [],
+   "note": "",
+   "area": "C",
+   "already_in_tool": false
+  }
+ ]
+}

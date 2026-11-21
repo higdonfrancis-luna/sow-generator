@@ -285,7 +285,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 body.picking #save-draft,body.picking #saved-note,body.picking #start-over,body:not(.picking) #rfi-door{display:none}
 .masthead .draft-actions{display:flex;gap:inherit}
 #rfi-door{text-decoration:none}
-@media (max-width:900px){.masthead .saved{display:none}}
+@media (max-width:1099px){.masthead .saved{display:none}}
 .btn{border:1.5px solid var(--ink);border-radius:4px;background:#fff;padding:8px 14px;font-weight:600;font-size:15px;white-space:nowrap;display:inline-flex;align-items:center;gap:8px}
 .btn.redline{border-color:var(--red);color:var(--red)}
 .tabs{display:flex;gap:36px;padding:0 30px;border-bottom:1px solid var(--line);flex:none}
@@ -295,6 +295,7 @@ body.picking #save-draft,body.picking #saved-note,body.picking #start-over,body:
 .add{background:var(--red);color:#fff;border:0;border-radius:4px;font-weight:700;font-size:16px;padding:11px 17px;display:flex;align-items:center;gap:8px}
 body.picking .tabs,body.picking .toolbar{display:none}
 @media (max-width:520px){body.picking .masthead .t{flex:1}body.picking .masthead .sp{display:none}}
+@media (max-width:600px){body.picking .masthead .t{flex-basis:calc(100% - 110px)}}   /* the name fills the first row beside the logo, so the buttons share the second */
 .rate{display:flex;align-items:center;gap:9px;font-weight:600;font-size:16px}
 .rate input{width:84px;border:1.5px solid var(--ink);border-radius:4px;padding:6px 10px;font:inherit;font-weight:700;color:var(--ink)}
 .seg{display:inline-flex;border:1.5px solid var(--ink);border-radius:4px;overflow:hidden}
@@ -676,15 +677,33 @@ button.rk-add:focus-visible,.rk-how:focus-visible,.rk-link:focus-visible,.rk-opt
 .key-item{display:inline-flex;align-items:center;gap:6px}.key-item i{width:24px;border-top:2px solid var(--ink)}
 .key-item.gone i{border-top:2px dashed var(--ink2);opacity:.45}.key-item.platform i{border-top-style:dotted}.key-item.partner i{border-top-style:dashed}.key-item.assistant i{border-top:1.5px solid var(--ai)}
 .key-item.extension i{border:0;height:2px;background:repeating-linear-gradient(90deg,var(--ink) 0 8px,transparent 8px 11px,var(--ink) 11px 13px,transparent 13px 16px)}
-.card details.ready{margin:12px 0 4px;border:1.5px solid var(--ink);border-radius:10px;padding:9px 12px}
-.card details.ready>summary{display:grid;grid-template-columns:auto minmax(0,1fr) auto;column-gap:8px;align-items:center;cursor:pointer;list-style:none;font-weight:700;font-size:16px;line-height:22px}
+/* Nov 21 2026 (Adam: "I need it to jump out more"): a menu in the top bar, a link under each product card's name, and the box filled and outlined in red */
+.trwrap{position:relative;display:inline-flex}
+#tr-btn .cap{color:var(--red);display:inline-flex}
+#tr-btn .ts{display:none}
+/* the top bar keeps its height: the button's name shortens, then leaves the cap alone, as the window narrows */
+@media (max-width:1279px){#tr-btn .tl{display:none}#tr-btn .ts{display:inline}}
+@media (max-width:1179px){#tr-btn .ts,#tr-btn .chv{display:none}}
+@media (max-width:600px){#tr-btn{padding:6px 10px}}
+#tr-menu{left:auto;right:0;width:min(430px,calc(100vw - 32px));max-height:min(640px,calc(100vh - 90px))}
+#tr-menu:focus{outline:none}
+#tr-menu .it2{text-decoration:none;cursor:pointer;padding:7px 18px}
+#tr-menu .it2:hover,#tr-menu .it2:focus-visible{background:var(--soft)}
+#tr-menu .it2 b svg{margin-left:5px;vertical-align:-1px}
+#tr-menu .it2 .sys{grid-column:1/-1;display:block;font-size:14.5px;line-height:19px;color:var(--ink2);margin-top:1px}
+#tr-menu .it2 .cnt{font-size:13.5px;color:var(--ink2);white-space:nowrap}
+.card .trjump{display:inline-flex;align-items:center;gap:7px;margin:0 0 9px;border:1.5px solid var(--red);background:#FFF4F2;color:var(--dred);border-radius:999px;padding:4px 12px 4px 9px;font-weight:700;font-size:14.5px;line-height:20px;text-align:left}
+.card .trjump:hover,.card .trjump:focus-visible{background:#FFE8E3;border-color:var(--dred)}
+.card .trjump .n{font-weight:400;color:var(--ink)}
+.card .lv{display:inline-block;font-size:11.5px;line-height:16px;font-weight:700;letter-spacing:.3px;color:var(--ink);background:#fff;border:1.5px solid var(--ink);border-radius:999px;padding:0 7px;margin:0 7px 2px 0;vertical-align:1px;white-space:nowrap}
+.card details.ready{margin:12px 0 4px;border:2px solid var(--red);border-radius:10px;overflow:hidden}
+.card details.ready>summary{display:grid;grid-template-columns:auto minmax(0,1fr) auto;column-gap:10px;align-items:center;cursor:pointer;list-style:none;font-weight:700;font-size:17px;line-height:22px;background:#FFF4F2;padding:10px 12px}
 .card details.ready>summary::-webkit-details-marker{display:none}
-.card details.ready>summary:focus-visible{outline:2px solid var(--red);outline-offset:3px;border-radius:6px}
-.card details.ready>summary .cap{color:var(--red);display:flex}
-.card details.ready>summary .rs{grid-column:2;font-weight:400;font-size:13.5px;line-height:18px;color:var(--ink2)}
+.card details.ready>summary:focus-visible{outline:2px solid var(--ink);outline-offset:-4px;border-radius:8px}
+.card details.ready>summary .cap{background:var(--red);color:#fff;border-radius:999px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;grid-row:1/3}
+.card details.ready>summary .rs{grid-column:2;font-weight:400;font-size:14px;line-height:18px;color:var(--ink)}
 .card details.ready[open]>summary .chv{transform:rotate(180deg)}
-.card details.ready .rr{display:grid;grid-template-columns:112px minmax(0,1fr);gap:10px;padding:8px 0;border-top:1px solid var(--line);font-size:14.5px;line-height:20px}
-.card details.ready .rr:first-of-type{margin-top:9px}
+.card details.ready .rr{display:grid;grid-template-columns:112px minmax(0,1fr);gap:10px;padding:8px 12px;border-top:1px solid var(--line);font-size:14.5px;line-height:20px}
 .card details.ready .rr ul{list-style:none;margin:0;padding:0;display:grid;gap:5px}
 .card details.ready .rr small{display:block;color:var(--ink2);font-size:13px;line-height:18px}
 .card details.ready a.out{color:var(--ink);text-decoration:underline;text-underline-offset:3px;overflow-wrap:anywhere}
@@ -711,7 +730,7 @@ body.question-review #start-over{display:inline-flex}
 </style><style id="knowledge-explorer-styles">/*KNOWLEDGE_EXPLORER_CSS*/</style></head><body class="picking">
 <div class="sow-canvas-screen">
 <div class="topline"></div>
-<header class="masthead"><img src="data:image/png;base64,{{LOGO}}" alt="Adobe"><span class="div"></span><span class="t">Partner services statement of work</span><span class="sp"></span><span class="saved" id="saved-note">Saved in this browser as you go</span><button class="btn" id="save-draft">Save draft</button><div class="draft-actions"><button class="btn" id="open-draft">Open draft</button><a class="btn redline" id="rfi-door" href="sow/index.html#rfi" aria-label="Have an RFI? Open the RFI Builder">Have an RFI?</a></div><button class="btn redline" id="start-over">Start over</button></header><input id="draft-file" type="file" accept=".json,application/json" hidden>
+<header class="masthead"><img src="data:image/png;base64,{{LOGO}}" alt="Adobe"><span class="div"></span><span class="t">Partner services statement of work</span><span class="sp"></span><span class="saved" id="saved-note">Saved in this browser as you go</span><div class="trwrap" id="trwrap"><button class="btn" id="tr-btn" aria-haspopup="true" aria-expanded="false" aria-label="Get your team ready" title="Get your team ready"><span class="cap"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c3 2.5 9 2.5 12 0v-5"/></svg></span><span class="tl">Get your team ready</span><span class="ts">Training</span><svg class="chv" width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="addmenu" id="tr-menu" role="menu" tabindex="-1" hidden></div></div><button class="btn" id="save-draft">Save draft</button><div class="draft-actions"><button class="btn" id="open-draft">Open draft</button><a class="btn redline" id="rfi-door" href="sow/index.html#rfi" aria-label="Have an RFI? Open the RFI Builder">Have an RFI?</a></div><button class="btn redline" id="start-over">Start over</button></header><input id="draft-file" type="file" accept=".json,application/json" hidden>
 <nav class="tabs" aria-label="Steps"><button class="on" data-tab="build">Build</button><button data-tab="scope">Scope</button><button data-tab="services">Services</button><button data-tab="sow">Statement of work</button><button data-tab="rfp">RFI Builder</button></nav>
 <div class="toolbar">
   <div class="playname" id="playname" hidden><span class="k">Play</span><b id="play-label"></b></div>
@@ -1364,10 +1383,12 @@ const TRAIN_KIND={'learning path':'Learning path',course:'Course',playlist:'Play
 const CAP='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c3 2.5 9 2.5 12 0v-5"/></svg>';
 /* a link that opens in a new tab; its icon stays on the line with the last word */
 const outLink=(url,text)=>{const at=text.lastIndexOf(' ');return `<a class="out" href="${esc(url)}" target="_blank" rel="noopener">${esc(text.slice(0,at+1))}<span class="nw">${esc(text.slice(at+1))}${I.ext.replace('<svg ','<svg role="img" aria-label="opens in a new tab" ')}</span></a>`;};
-const examItem=e=>`<li>${outLink(e.url,e.title+(e.id?' ('+e.id+')':''))}${e.credential?'<small>A Qualified Credential, which Adobe does not count as a certification</small>':''}${e.partner===false?'<small>Adobe says this one does not count toward partner requirements</small>':''}</li>`;
+const lvTag=l=>l?`<span class="lv">${esc(l)}</span>`:'';
+const examItem=e=>`<li>${lvTag(e.level)}${outLink(e.url,e.title+(e.id?' ('+e.id+')':''))}${e.credential?'<small>A Qualified Credential, which Adobe does not count as a certification</small>':''}${e.partner===false?'<small>Adobe says this one does not count toward partner requirements</small>':''}</li>`;
 function readyHTML(id){const t=TRAIN.products[id];
   const shown=t.closest?TRAIN.products[t.closest].exams:t.exams,certs=shown.filter(e=>!e.credential),own=!t.closest&&certs.length;
-  const status=own?own+' certification'+(own===1?'':'s'):t.closest&&certs.length?'No certification of its own':'No certification yet';
+  const levels=own?[...new Set(certs.map(e=>e.level).filter(Boolean))]:[];
+  const status=own?own+' certification'+(own===1?'':'s')+(levels.length?' ('+levels.join(', ')+')':''):t.closest&&certs.length?'No certification of its own':'No certification yet';
   const list=shown.length?'<ul>'+shown.map(examItem).join('')+'</ul>':'';
   const cert=own?list:t.closest&&certs.length?`No certification of its own. The closest are the ${esc(P[t.closest].name)} certifications:${list}`
     :shown.length?`No certification yet. Adobe offers this instead:${list}`:'No certification yet<small>Adobe has not released one for this product.</small>';
@@ -1376,8 +1397,24 @@ function readyHTML(id){const t=TRAIN.products[id];
     (t.hub?row('Partner hub',outLink(TRAIN.hub+t.hub.slug,t.hub.name+' on the Partner Experience Hub')+(t.hubSearch?outLink(TRAIN.hubSearch+t.hubSearch,'Decks, sales plays and webinars for '+P[id].name):'')):'')+
     row('Partner training',outLink(TRAIN.catalog,'On-demand trainings')+`<small>${t.filter?'Under Products, tick '+esc(t.filter):'Search for '+esc(t.search)}</small>`)+
     row('Certification',cert)+
-    (t.courses?row('Adobe courses',outLink(TRAIN.courses+encodeURIComponent(t.courses),t.courses+' courses on the Certification Portal')):'')+
-    row('Public training','<ul>'+t.training.map(x=>'<li>'+outLink(x.url,TRAIN_KIND[x.kind]+': '+x.title)+'</li>').join('')+'</ul>')+'</details>';}
+    (t.courses?row('Adobe courses',outLink(TRAIN.courses+encodeURIComponent(t.courses),t.courses+' courses on the Certification Portal')+`<small>Skill levels on the portal: ${esc(TRAIN.courseLevels.join(', '))}</small>`):'')+
+    row('Public training','<ul>'+t.training.map(x=>'<li>'+lvTag((x.level||[]).join(' to '))+outLink(x.url,TRAIN_KIND[x.kind]+': '+x.title)+'</li>').join('')+'</ul>')+'</details>';}
+/* which product cards carry the box (the AEM Sites card leaves it to the Edge Delivery card when the two are one offering) */
+const hasReady=id=>!!TRAIN.products[id]&&!(id==='aemsites'&&combinesSites());
+const ownCerts=id=>{const t=TRAIN.products[id];return t.closest?0:t.exams.filter(e=>!e.credential).length;};
+/* the link under a product card's name: opens the box and brings it into view */
+const readyJump=id=>{const n=ownCerts(id);return `<button class="trjump" data-ready-jump>${CAP}Get your team ready <span class="n">${n?n+' certification'+(n===1?'':'s')+', ':''}courses and training</span></button>`;};
+function openReady(){const box=$('card'),d=box.querySelector('details.ready');if(!d)return;d.open=true;moreOpen[d.dataset.more]=true;pinned=true;const L0=box.style.left;placeCard();if(compactCanvas())box.style.left=L0;
+  const c=box.getBoundingClientRect(),r=d.getBoundingClientRect();box.scrollTop+=Math.min(r.top-c.top-8,Math.max(0,r.bottom-c.bottom+8));d.querySelector('summary').focus({preventScroll:true});}
+/* the menu in the top bar: Adobe's two training portals, and on a play each Adobe product on the canvas, which opens that product's box */
+function trMenuHTML(){const on=play()?prods().filter(o=>!o.outside&&hasReady(o.id)):[];
+  const link=(url,name,note)=>`<a class="it2" role="menuitem" href="${esc(url)}" target="_blank" rel="noopener"><span><b>${esc(name)}${I.ext.replace('<svg ','<svg role="img" aria-label="opens in a new tab" ')}</b><span class="sys">${esc(note)}</span></span></a>`;
+  return `<div class="hd"><div class="k">Get your team ready</div><p>Where your team trains and certifies on Adobe products.</p></div><div class="g">Adobe's training portals</div>`+
+    link(TRAIN.courses.split('#')[0],'Adobe courses','Certification Portal. Filter by product and by skill level: '+TRAIN.courseLevels.join(', ')+'.')+
+    link(TRAIN.catalog,'Partner on-demand trainings','Partner Experience Hub. Filter by product.')+
+    (on.length?`<div class="g">For the products on this canvas</div>`+on.map(o=>{const n=ownCerts(o.id);return `<button class="it2" role="menuitem" data-tr="${o.id}"><span>${esc(o.title||o.name)}</span><span class="cnt">${n?n+' certification'+(n===1?'':'s'):'Training links'}</span></button>`;}).join(''):'');}
+function openTrain(on){const m=$('tr-menu'),b=$('tr-btn');if(on){openAdd(false);openOut(false);hideCard(true);m.innerHTML=trMenuHTML();}m.hidden=!on;b.setAttribute('aria-expanded',on?'true':'false');
+  if(on){m.style.right='';const r=m.getBoundingClientRect();if(r.left<16)m.style.right=(r.left-16)+'px';}}   /* under its button, moved right when it would leave the window */
 /* when a service that depends on what the client owns belongs in the quote: shown by the i beside it */
 const TIPS={
   XA18:['Your client has Adobe Commerce as a Cloud Service or Adobe Commerce Optimizer.','Your client only has Commerce PaaS or on-premises. The storefront drop-ins don\'t come with those.'],
@@ -1413,6 +1450,7 @@ function cardHTML(k,id){if(k==='p'&&P[id].outside)return outCardHTML(id);
   const {n,fees}=ownerTotal(o),availableOpen=key in moreOpen?moreOpen[key]:!listed.length;
   let h=`<div class="k"><span>${k==='p'?'Product services':'Connection'}</span><button class="close" data-close aria-label="Close">${I.x}</button></div>`;
   h+=`<h4 id="card-heading">${esc(k==='p'?(id==='aemsites'&&combinesSites()?'Cloud Manager and author training':o.title):id==='aemsites-eds'?'AEM authoring for Edge Delivery':id==='csrc-eds'&&!actualHas('csrc')?'Document authoring for Edge Delivery':P[offeringId(o.a)].name+' + '+P[offeringId(o.b)].name)}</h4>`;
+  if(k==='p'&&hasReady(id))h+=readyJump(id);
   /* Nov 18 2026: an AI assistant's line opens with a question your client's team would ask it, for the partner only (never in what the client reads) */
   if(k==='c'&&o.ask)h+=`<p class="ask"><b>Ask it:</b> "${esc(o.ask)}"</p>`;
   if(k==='c'&&gateOf(id))h+=`<p class="gone-why">${esc(gateOf(id))}</p>`;
@@ -1476,7 +1514,7 @@ function cardHTML(k,id){if(k==='p'&&P[id].outside)return outCardHTML(id);
   if(extra.length)h+=`<details class="more" data-more="${key}"${availableOpen?' open':''}><summary>Available services (${extra.length}) ${I.chev}</summary>${extra.map(serviceRow).join('')}</details>`;
   if(listed.length||extra.length)h+=`<div class="ft"><span>${n?`${n} ${k==='p'?'product':'connection'} service${n===1?'':'s'} selected`:`No ${k==='p'?'product':'connection'} services selected`}</span><span>${st.rate?fees:''}</span></div>`;
   if(k==='p'&&linksOf(id).length)h+='<p class="how connection-note">Connection services are shown separately on the lines between products.</p>';
-  if(k==='p'&&!(id==='aemsites'&&combinesSites()))h+=readyHTML(id);
+  if(k==='p'&&hasReady(id))h+=readyHTML(id);
   if(k==='p'&&id==='eds'&&st.on.includes('eds')){
     h+='<button class="rm" data-switch-publish>Switch to traditional AEM Publish</button>';
     h+=`<button class="rm" data-remove-sites>${I.x}Remove AEM Sites from canvas</button>`;
@@ -1509,6 +1547,7 @@ $('card').addEventListener('click',e=>{e.stopPropagation();
   const rm=e.target.closest('[data-rm]');if(rm){removeProduct(rm.dataset.rm);return;}
   if(e.target.closest('[data-focus-authoring]')){hideCard(true);$('stage').querySelector('select[data-choice="authoring"]')?.focus();return;}
   const ap=e.target.closest('[data-addp]');if(ap){const id=ap.dataset.addp;if(P[id]?.outside)addOutside(id);else addProduct(id);if(card)pinned=true;refreshCard();return;}
+  if(e.target.closest('[data-ready-jump]')){openReady();return;}
   const sm=e.target.closest('summary');if(sm){const d=sm.parentElement,box=$('card'),y=box.scrollTop;setTimeout(()=>{moreOpen[d.dataset.more]=d.open;const L0=box.style.left;placeCard();if(compactCanvas())box.style.left=L0;
     /* Get your team ready: the card stays where it was, then scrolls just far enough to show the opened box without losing its heading */
     if(d.classList.contains('ready')){box.scrollTop=y;const c=box.getBoundingClientRect(),r=d.getBoundingClientRect();if(d.open&&r.bottom>c.bottom)box.scrollTop+=Math.min(r.top-c.top-8,r.bottom-c.bottom+8);}},0);pinned=true;}});
@@ -1753,7 +1792,7 @@ function menuClick(t){const d=t.dataset;
   else if('goalBack' in d){goalAsk=goalAll=false;goalHits=null;}
   else allView=d.allView==='1';
   drawAdd();fit();focusAdd(to);}
-$('add-btn').addEventListener('click',e=>{e.stopPropagation();openAdd($('add-menu').hidden);});
+$('add-btn').addEventListener('click',e=>{e.stopPropagation();openTrain(false);openAdd($('add-menu').hidden);});
 $('empty-add').addEventListener('click',e=>{e.stopPropagation();openAdd(true);});
 $('add-menu').addEventListener('click',e=>{e.stopPropagation();const a=e.target.closest('[data-add]');if(a){if(e.detail>1)return;   /* the second click of a double-click adds nothing: the list has moved up under the pointer */
   const ranked=addView()==='ranked';addProduct(a.dataset.add);if(ranked)focusAdd('[data-add]');return;}
@@ -1766,7 +1805,11 @@ $('add-menu').addEventListener('submit',e=>{e.preventDefault();goalText=$('goal-
   goalHits=m.hits.length?{hit:true,ids:m.hits.slice(0,3).map(([i])=>i)}:{hit:false,ids:near.length?near:PROBS.map((p,i)=>i).filter(i=>PROBS[i].starter)};drawAdd();fit();focusAdd('[data-goal]');});
 $('add-menu').addEventListener('mouseover',e=>{const it=e.target.closest('[data-add]');preview(it?it.dataset.add:null);});
 $('add-menu').addEventListener('mouseleave',()=>preview(null));
-$('out-btn').addEventListener('click',e=>{e.stopPropagation();openOut($('out-menu').hidden);});
+$('out-btn').addEventListener('click',e=>{e.stopPropagation();openTrain(false);openOut($('out-menu').hidden);});
+$('tr-btn').addEventListener('click',e=>{e.stopPropagation();openTrain($('tr-menu').hidden);});
+$('tr-menu').addEventListener('click',e=>{e.stopPropagation();const r=e.target.closest('[data-tr]');if(e.target.closest('a')){openTrain(false);return;}if(!r)return;
+  const id=r.dataset.tr;openTrain(false);moreOpen['ready:'+id]=true;showCard('p',id,'#tr-btn');openReady();});
+$('trwrap').addEventListener('focusout',e=>{if(e.relatedTarget&&!$('tr-menu').hidden&&!$('trwrap').contains(e.relatedTarget))openTrain(false);});
 $('out-menu').addEventListener('click',e=>{e.stopPropagation();const a=e.target.closest('[data-out]');if(a)addOutside(a.dataset.out);});
 /* a press inside the menu or on its button is not the focus leaving (Safari and Firefox on a Mac clear the focus on a press) */
 let outDown=false;$('outwrap').addEventListener('pointerdown',()=>{outDown=true;});
@@ -2086,8 +2129,8 @@ function chooseQuestionCanvas(combined,confirmed=false){
 if(history.state?.sowQuestion?.view==='answer'&&history.state.sowQuestion.key===st.questionOrigin?.key)reviewingQuestion=restoreQuestion();
 bpRender();
 $('picker').addEventListener('click',pick);
-document.addEventListener('click',()=>{openAdd(false);openOut(false);if(pinned)hideCard(true);});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){const outOpen=!$('out-menu').hidden;openAdd(false);openOut(false);if(outOpen)$('out-btn').focus({preventScroll:true});hideCard(true,true);$('confirm').hidden=true;}});
+document.addEventListener('click',()=>{openAdd(false);openOut(false);openTrain(false);if(pinned)hideCard(true);});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){const outOpen=!$('out-menu').hidden,trOpen=!$('tr-menu').hidden;openAdd(false);openOut(false);openTrain(false);if(outOpen)$('out-btn').focus({preventScroll:true});if(trOpen)$('tr-btn').focus({preventScroll:true});hideCard(true,true);$('confirm').hidden=true;}});
 /* a card follows its anchor while the canvas scrolls on a phone or tablet */
 $('scroller').addEventListener('scroll',()=>{if(card)placeCard(true);},{passive:true});
 $('rate').addEventListener('input',e=>{let v=e.target.value.replace(/[^0-9.]/g,'');const i=v.indexOf('.');if(i>=0)v=v.slice(0,i+1)+v.slice(i+1).replace(/[.]/g,'').slice(0,2);v=v.slice(0,7);e.target.value=v;const n=parseFloat(v);st.rate=Number.isFinite(n)&&n>0?n:0;save();totalsUI();refreshCard();});

@@ -3,7 +3,9 @@ product card, from the record in canvas/research/training_2026-11-16/ (research.
 certification portal and every training link fetched; partner_hub_links.json: the hub pages the owner opened while signed in,
 and the Products filter names on the partner training catalog; owner_links.json: training links the owner supplied, which
 replace a product's Public training row; course_filters.json: the product filters on the Certification Portal's course catalog;
-hub_search_links.json: the hub searches the owner opened and marked as showing the right results).
+hub_search_links.json: the hub searches the owner opened and marked as showing the right results), and from
+canvas/research/training_2026-11-21/levels.json (Nov 21 2026: the level Adobe states on a training page, the course catalog's skill levels, and the
+family hub page for the two Commerce products added after the owner's check). A certification's level comes from research.json.
 
     python3 canvas/data_training.py     # then python3 canvas/build.py and python3 build_site.py
 """
@@ -16,6 +18,7 @@ hub = json.load(open(os.path.join(RECORD, 'partner_hub_links.json'), encoding='u
 owner = json.load(open(os.path.join(RECORD, 'owner_links.json'), encoding='utf-8'))
 catalog = json.load(open(os.path.join(RECORD, 'course_filters.json'), encoding='utf-8'))
 finds = json.load(open(os.path.join(RECORD, 'hub_search_links.json'), encoding='utf-8'))
+levels = json.load(open(os.path.join(HERE, 'research', 'training_2026-11-21', 'levels.json'), encoding='utf-8'))
 R = {p['id']: p for p in research['products']}
 
 HUB_NAMES = {
@@ -27,7 +30,8 @@ HUB_NAMES = {
     'firefly': 'Adobe Firefly', 'cx-enterprise-coworker': 'CX Enterprise Coworker', 'target': 'Adobe Target', 'mix-modeler': 'Adobe Mix Modeler',
     'experience-manager/sites-optimizer': 'Adobe Experience Manager Sites Optimizer',
 }
-slugs = hub['confirmed']
+assert not set(levels['family_hub_pages']) & set(hub['confirmed']) and set(levels['family_hub_pages'].values()) <= set(hub['confirmed'].values()), levels['family_hub_pages']
+slugs = {**hub['confirmed'], **levels['family_hub_pages']}
 
 # the Products filter on the partner training catalog, only where the filter is named for the product or its family
 FILTER = {
@@ -40,13 +44,14 @@ SEARCH = {
     'so': 'Sites Optimizer', 'ca': 'Content Analytics', 'rtcdp': 'Real-Time CDP', 'collab': 'Real-Time CDP Collaboration', 'xa': 'Experimentation Accelerator',
     'mmeasure': 'Marketo Measure', 'mqualifier': 'Marketo Qualifier', 'moptimizer': 'Marketo Optimizer', 'planning': 'Workfront Planning', 'express': 'Adobe Express',
     'frameio': 'Frame.io', 'creativecloud': 'Creative Cloud', 'bv': 'Brand Visibility', 'bc': 'Brand Concierge', 'cw': 'Coworker', 'brandintel': 'Brand Intelligence',
+    'aco': 'Commerce Optimizer', 'cintel': 'Commerce Intelligence',   # the Commerce round (Nov 19 2026)
 }
 # the products with no certification of their own that show another product's list (its certifications as the closest, or its
 # Qualified Credential); the record must name the same product (asserted below)
 # the tool presents AEM Sites and Edge Delivery Services as one offering, so that offering carries the AEM Sites certifications as its own
 SAME = {'eds': 'aemsites'}
 CLOSEST = {'aemforms': 'aemsites', 'so': 'aemsites', 'collab': 'rtcdp', 'planning': 'workfront', 'ca': 'cja',
-           'mmeasure': 'marketo', 'mqualifier': 'marketo', 'moptimizer': 'marketo', 'fireflycm': 'fireflycp'}
+           'mmeasure': 'marketo', 'mqualifier': 'marketo', 'moptimizer': 'marketo', 'fireflycm': 'fireflycp', 'aco': 'commerce', 'cintel': 'commerce'}
 # the course catalog filter that shows a product's Adobe courses, only where the catalog has one for the product or its family
 COURSES = {
     'so': 'AEM Sites Optimizer', 'aa': 'Adobe Analytics', 'bc': 'Adobe Brand Concierge', 'commerce': 'Adobe Commerce', 'ca': 'Adobe Content Analytics',
@@ -59,10 +64,12 @@ assert set(FILTER.values()) <= set(hub['training_catalog_filters']), set(FILTER.
 assert set(COURSES) <= set(R), set(COURSES) - set(R)
 assert set(COURSES.values()) <= set(catalog['filters']), set(COURSES.values()) - set(catalog['filters'])
 LEVELS = ['Professional', 'Expert', 'Master', 'Qualified']   # certifications by level, then Qualified Credentials
+TRAINING_LEVELS = ['Beginner', 'Intermediate', 'Experienced']   # Experience League's own words
+assert set(levels['training_levels']) <= set(R), set(levels['training_levels']) - set(R)
 KINDS = {'learning path', 'course', 'playlist', 'tutorial', 'documentation', 'video', 'product page'}
 
 out = {'hub': 'https://partners.adobe.com/digitalexperience/products/',
-       'catalog': hub['training_catalog'], 'courses': catalog['catalog'] + '#filters=', 'hubSearch': finds['search'], 'products': {}}
+       'catalog': hub['training_catalog'], 'courses': catalog['catalog'] + '#filters=', 'courseLevels': levels['course_skill_levels'], 'hubSearch': finds['search'], 'products': {}}
 for pid, p in R.items():
     exams = []
     for e in sorted(p['exams'], key=lambda e: LEVELS.index(e['level'])):
@@ -71,6 +78,8 @@ for pid, p in R.items():
             item['id'] = e['exam_id']
         if e.get('credential_type') == 'qualified credential':
             item['credential'] = True
+        else:
+            item['level'] = e['level']   # shown beside the certification
         if e.get('counts_toward_partner_requirements') == 'no':
             item['partner'] = False
         assert item['url'].startswith('https://certification.adobe.com/certification/'), item
@@ -85,6 +94,12 @@ for pid, p in R.items():
         assert all(x['kind'] in KINDS and x['url'].startswith('https://') for x in training), pid
     if pid in owner['courses_found']:
         training.insert(0, dict(owner['courses_found'][pid]))
+    stated = levels['training_levels'].get(pid, {})
+    assert set(stated) <= {t['url'] for t in training}, (pid, set(stated) - {t['url'] for t in training})
+    for t in training:   # the level Adobe states on the page, where it states one
+        if t['url'] in stated:
+            assert stated[t['url']] and stated[t['url']] == [l for l in TRAINING_LEVELS if l in stated[t['url']]], (pid, t['url'])
+            t['level'] = stated[t['url']]
     entry = {}
     if pid in slugs:
         entry['hub'] = {'slug': slugs[pid], 'name': HUB_NAMES[slugs[pid]]}

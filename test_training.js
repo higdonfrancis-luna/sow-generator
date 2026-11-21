@@ -1,10 +1,14 @@
 // Get your team ready: the training and certification box on each product card. Run after the normal canvas/site build:
 //   node test_training.js
 // TRAINING_TEST_SITE points the browser checks at another built site/.
+// Nov 21 2026 (Adam: "I need it to jump out more", then "go" to mockups/nov21_training/): a menu in the top bar of both pages with Adobe's two
+// training portals and, on a play, the canvas's products; a link under each product card's name; the box filled and outlined in red; and the level
+// Adobe states beside each certification and training link (canvas/research/training_2026-11-21/levels.json). Sections 5 and 6 check them.
 const {chromium} = require('playwright');
 const http = require('http'), fs = require('fs'), path = require('path');
 const SITE = path.resolve(process.env.TRAINING_TEST_SITE || path.join(__dirname, 'site'));
 const DATA = JSON.parse(fs.readFileSync(path.join(__dirname, 'canvas', 'training.json'), 'utf8'));
+const NOV21 = JSON.parse(fs.readFileSync(path.join(__dirname, 'canvas', 'research', 'training_2026-11-21', 'levels.json'), 'utf8'));
 const CAT = JSON.parse(fs.readFileSync(path.join(__dirname, 'canvas', 'catalog.json'), 'utf8'));
 let fails = 0;
 const ok = (yes, message, detail = '') => { console.log((yes ? '✅ ' : '❌ ') + message + (yes || !detail ? '' : ': ' + detail)); if (!yes) fails++; };
@@ -21,9 +25,11 @@ const clean = title => title.replace(/\s*[–—]\s*/g, ', ').trim();
 const NAME = Object.fromEntries(CAT.products.map(p => [p.id, p.name]));
 function expected(id) {
   const t = DATA.products[id], shown = t.closest ? DATA.products[t.closest].exams : t.exams, certs = shown.filter(e => !e.credential);
-  const own = !t.closest && certs.length;
+  const own = !t.closest && certs.length, levels = own ? [...new Set(certs.map(e => e.level))] : [];
   return {
-    status: (own ? own + ' certification' + (own === 1 ? '' : 's') : t.closest && certs.length ? 'No certification of its own' : 'No certification yet') + ', partner and public training',
+    courseRow: t.courses ? t.courses + ' courses on the Certification PortalSkill levels on the portal: ' + DATA.courseLevels.join(', ') : '',
+    tags: [...shown.map(e => e.credential ? '' : e.level), ...t.training.map(x => (x.level || []).join(' to '))],
+    status: (own ? own + ' certification' + (own === 1 ? '' : 's') + ' (' + levels.join(', ') + ')' : t.closest && certs.length ? 'No certification of its own' : 'No certification yet') + ', partner and public training',
     rows: [...(t.hub ? ['Partner hub'] : []), 'Partner training', 'Certification', ...(t.courses ? ['Adobe courses'] : []), 'Public training'],
     hubLinks: [...(t.hub ? [[DATA.hub + t.hub.slug, t.hub.name + ' on the Partner Experience Hub']] : []), ...(t.hubSearch ? [[DATA.hubSearch + t.hubSearch, 'Decks, sales plays and webinars for ' + NAME[id]]] : [])],
     links: [...(t.hub ? [[DATA.hub + t.hub.slug, t.hub.name + ' on the Partner Experience Hub']] : []), ...(t.hubSearch ? [[DATA.hubSearch + t.hubSearch, 'Decks, sales plays and webinars for ' + NAME[id]]] : []), [DATA.catalog, 'On-demand trainings'],
@@ -47,7 +53,7 @@ function expected(id) {
   const bad = [];
   for (const [id, t] of Object.entries(DATA.products)) {
     if (('filter' in t) === ('search' in t)) bad.push(id + ': exactly one of filter or search');
-    if ((t.hub ? t.hub.slug : undefined) !== HUB.confirmed[id]) bad.push(id + ': hub page is not the one the owner confirmed');
+    if ((t.hub ? t.hub.slug : undefined) !== (HUB.confirmed[id] || NOV21.family_hub_pages[id])) bad.push(id + ': hub page is not the one the owner confirmed, or its family\'s');
     if ('filter' in t && !HUB.training_catalog_filters.includes(t.filter)) bad.push(id + ': "' + t.filter + '" is not a Products filter on the training catalog');
     if (t.closest && (t.exams.length || !DATA.products[t.closest] || !DATA.products[t.closest].exams.length)) bad.push(id + ': closest must name a product with a certification or credential, and replace none of its own');
     if (t.training.length < 2 || t.training.length > 5) bad.push(id + ': 2 to 5 training links');
@@ -55,11 +61,14 @@ function expected(id) {
     if (t.hubSearch !== HUB_SEARCH.confirmed[id] || ('hubSearch' in t) === (id in HUB_SEARCH.none)) bad.push(id + ': hub search "' + t.hubSearch + '" is not the one the owner confirmed');
     if (t.hubSearch && (!t.hub || !/^(filters=yes&products=caas:products\/[a-z0-9-]+|term=[A-Za-z0-9+-]+)$/.test(t.hubSearch))) bad.push(id + ': hub search form, or no hub row to hold it');
     for (const e of t.exams) {
+      if ((e.level || '') !== (e.credential ? '' : RESEARCH[id === 'eds' ? 'aemsites' : id].exams.find(r => r.portal_url === e.url).level)) bad.push(id + ': level of ' + e.title);
       if (!e.url.startsWith('https://certification.adobe.com/certification/') || /#/.test(e.url)) bad.push(id + ': exam address ' + e.url);
       if (e.id && !/^AD0-[A-Z]\d{3}$/.test(e.id)) bad.push(id + ': exam id ' + e.id);
       if (/beta|retired|retiring/i.test(e.title)) bad.push(id + ': release label in ' + e.title);
     }
     for (const x of t.training) {
+      if (JSON.stringify(x.level) !== JSON.stringify((NOV21.training_levels[id] || {})[x.url])) bad.push(id + ': level of ' + x.url);
+      if (x.level && !(x.level.length && x.level.every(l => ['Beginner', 'Intermediate', 'Experienced'].includes(l)))) bad.push(id + ': level words ' + x.level);
       if (!KIND[x.kind]) bad.push(id + ': kind ' + x.kind);
       if (!TRAINING_HOSTS.includes(new URL(x.url).host) || !x.url.startsWith('https://')) bad.push(id + ': training address ' + x.url);
     }
@@ -74,7 +83,10 @@ function expected(id) {
     const urls = [...t.exams, ...t.training].map(l => l.url);
     if (new Set(urls).size !== urls.length) bad.push(id + ': a link is listed twice');
   }
-  ok(bad.length === 0, 'every entry has a search term or a Products filter the training catalog has, the hub page and hub search the owner confirmed, addresses on the hosts the record uses, the same exams with their titles and notes, the same closest product and the same training links with their kinds and titles as the research record, known link kinds, no release labels and no repeated link', bad.join(' | '));
+  ok(bad.length === 0, 'every entry has a search term or a Products filter the training catalog has, the hub page and hub search the owner confirmed, addresses on the hosts the record uses, the same exams with their titles and notes, the same closest product and the same training links with their kinds and titles as the research record, known link kinds, no release labels and no repeated link; each certification carries its level from the research record and each training link the level Adobe states on its page, where it states one', bad.join(' | '));
+  ok(JSON.stringify(DATA.courseLevels) === '["Foundations","Professional","Expert"]' && Object.values(DATA.products).flatMap(t => t.training).filter(x => x.level).length === 70 &&
+    JSON.stringify(Object.keys(DATA.products).filter(id => DATA.products[id].hub && !HUB.confirmed[id]).sort()) === '["aco","cintel"]' && DATA.products.aco.hub.slug === 'commerce' && DATA.products.cintel.hub.slug === HUB.confirmed.commerce,
+    'the course catalog\'s three skill levels are in the data, 70 training links carry a level, and Commerce Optimizer and Commerce Intelligence take the Adobe Commerce hub page the owner confirmed');
   ok(Object.values(DATA.products).filter(t => t.hubSearch).length === 31 && JSON.stringify(Object.keys(HUB_SEARCH.none).sort()) === '["aco","brandintel","ca","cintel","cja"]',
     'thirty-one products carry a hub search link; Customer Journey Analytics, Content Analytics and Brand Intelligence carry none, as the README says, and nor do Commerce Optimizer and Commerce Intelligence (Nov 19 2026), which the owner has not checked on the hub');
   ok(DATA.hubSearch + DATA.products.bc.hubSearch === 'https://partners.adobe.com/digitalexperience/home/search/?filters=yes&products=caas:products/brand-concierge' && DATA.hubSearch + DATA.products.eds.hubSearch === 'https://partners.adobe.com/digitalexperience/home/search/?term=edge+delivery',
@@ -110,6 +122,9 @@ function expected(id) {
       return {open: d.open, text: text(d), status: text(d.querySelector('.rs')), rows: [...d.querySelectorAll('.rr > b')].map(text),
         links: [...d.querySelectorAll('a')].map(a => [a.getAttribute('href'), text(a), a.target, a.rel, (s => !!s && s.getBoundingClientRect().width > 0 && s.getAttribute('aria-label') === 'opens in a new tab')(a.querySelector('svg'))]),
         chevronHidden: d.querySelector('summary .chv').getAttribute('aria-hidden') === 'true',
+        tags: [...d.querySelectorAll('.rr li')].filter(li => rowOf('Certification').contains(li) || rowOf('Public training').contains(li)).map(li => (g => g ? text(g) : '')(li.querySelector('.lv'))),
+        look: (s => [s.borderTopColor, s.borderTopWidth, getComputedStyle(d.querySelector('summary')).backgroundColor])(getComputedStyle(d)),
+        jump: (j => j ? [text(j), j.previousElementSibling && j.previousElementSibling.id] : null)(c.querySelector('button.trjump')),
         courseRow: rowOf('Adobe courses') ? text(rowOf('Adobe courses').querySelector('div')) : '',
         hubLinks: rowOf('Partner hub') ? [...rowOf('Partner hub').querySelectorAll('a')].map(a => [a.getAttribute('href'), text(a)]) : [], hubLinkTops: rowOf('Partner hub') ? [...rowOf('Partner hub').querySelectorAll('a')].map(a => Math.round(a.getBoundingClientRect().top)) : [],
         hint: text(rowOf('Partner training').querySelector('small')), lead: [...cert.childNodes].filter(n => n.nodeName !== 'UL').map(n => n.textContent).join('').replace(/\s+/g, ' ').trim(),
@@ -142,7 +157,10 @@ function expected(id) {
         box.text.includes('sign-in') && 'a sign-in note is back',
         !box.text.startsWith('Get your team ready' + want.status) && 'heading "' + box.text.slice(0, 40) + '"',
         /[–—]|beta|retired|retiring/i.test(box.text) && 'a dash or a release label in the box',
-        box.courseRow !== (DATA.products[id].courses ? DATA.products[id].courses + ' courses on the Certification Portal' : '') && 'the Adobe courses row holds more than its link',
+        box.courseRow !== want.courseRow && 'the Adobe courses row is not its link and the portal\'s skill levels: "' + box.courseRow + '"',
+        JSON.stringify(box.tags) !== JSON.stringify(want.tags) && 'level tags ' + JSON.stringify(box.tags),
+        JSON.stringify(box.look) !== '["rgb(235, 16, 0)","2px","rgb(255, 244, 242)"]' && 'the box is not outlined in red with a filled heading ' + JSON.stringify(box.look),
+        !(box.jump && box.jump[1] === 'card-heading' && box.jump[0].startsWith('Get your team ready') && box.jump[0].endsWith('courses and training')) && 'no link under the product\'s name ' + JSON.stringify(box.jump),
         box.lead !== want.lead && 'certification text "' + box.lead + '"',
         JSON.stringify(box.exams) !== JSON.stringify(want.exams) && 'certifications and their notes ' + JSON.stringify(box.exams),
         !box.foot && 'the box is not at the foot of the card, above Remove',
@@ -178,7 +196,7 @@ function expected(id) {
     for (let i = 0; i < 60 && !reached; i++) { await p.keyboard.press('Tab'); reached = await p.evaluate(() => document.activeElement.matches('#card details.ready > summary')); }
     const ring = reached && await p.evaluate(() => (s => s.outlineStyle + ' ' + s.outlineWidth + ' ' + s.outlineColor)(getComputedStyle(document.activeElement)));
     if (reached) await p.keyboard.press('Enter');
-    ok(reached && ring === 'solid 2px rgb(235, 16, 0)' && !(await read()).open, 'Tab reaches the heading, which shows a focus ring, and Enter closes it', JSON.stringify([reached, ring]));
+    ok(reached && ring === 'solid 2px rgb(28, 28, 28)' && !(await read()).open, 'Tab reaches the heading, which shows a focus ring, and Enter closes it', JSON.stringify([reached, ring]));
     await seed(['bv'], ['cdn']);
     await p.evaluate(() => { pinned = true; showCard('p', 'cdn'); });
     ok(await read() === null, 'an outside system card has no training box');
@@ -187,6 +205,66 @@ function expected(id) {
     await seed(['aa', 'target']);
     await p.evaluate(() => openRoute(CBY['aa-target']));
     ok(await p.isVisible('#card') && await read() === null, 'nor has a connection between two Adobe products');
+
+    // 5. the link under a product's name opens the box, in view, and changes no fees
+    await seed(['aemsites']);
+    const fees0 = await snapshot();
+    await p.evaluate(() => { pinned = true; showCard('p', 'aemsites'); });
+    await p.click('#card button.trjump');
+    await p.waitForTimeout(200);
+    const jumped = await read();
+    ok(jumped.open && jumped.headingInView && await p.evaluate(() => document.activeElement.matches('#card details.ready > summary')) && await snapshot() === fees0,
+      'the link under a product\'s name opens the box, brings its heading into view and moves the keyboard there, changing no fees', JSON.stringify([jumped.open, jumped.headingInView]));
+
+    // 6. the menu in the top bar
+    const menu = () => p.evaluate(() => { const m = document.querySelector('#tr-menu'), text = e => e.textContent.replace(/\s+/g, ' ').trim();
+      return {open: !m.hidden, expanded: document.querySelector('#tr-btn').getAttribute('aria-expanded'), links: [...m.querySelectorAll('a')].map(a => [a.getAttribute('href'), text(a.querySelector('b')), a.target, a.rel]),
+        rows: [...m.querySelectorAll('[data-tr]')].map(r => [r.dataset.tr, text(r)]), left: Math.round(m.getBoundingClientRect().left), right: Math.round(m.getBoundingClientRect().right), wide: innerWidth}; });
+    const PORTALS = [['https://certification.adobe.com/courses/', 'Adobe courses', '_blank', 'noopener'], ['https://partners.adobe.com/digitalexperience/learn/on-demand-trainings#resources', 'Partner on-demand trainings', '_blank', 'noopener']];
+    await p.evaluate(() => { hideCard(true); st = {...st, play: 'aem', on: [], out: ['cdn'], ls: {}, keep: {}, fresh: true, pubSig: null, decisions: {authoring: ''}}; render(); });
+    await p.waitForTimeout(250);
+    await p.click('#tr-btn');
+    const onPlay = await menu();
+    ok(onPlay.open && onPlay.expanded === 'true' && JSON.stringify(onPlay.links) === JSON.stringify(PORTALS) && JSON.stringify(onPlay.rows.map(r => r[0])) === '["bv","so","eds"]' &&
+      onPlay.rows[2][1] === 'AEM Sites with Edge Delivery Services' + DATA.products.eds.exams.length + ' certifications' && onPlay.rows[0][1] === 'Brand VisibilityTraining links' && onPlay.left >= 16 && onPlay.right <= onPlay.wide - 16,
+      'the Get your team ready button in the top bar opens a menu with Adobe courses and Partner on-demand trainings, each in a new tab, then one row for each Adobe product on the canvas and none for an outside system', JSON.stringify(onPlay));
+    await p.click('#tr-menu [data-tr="eds"]');
+    await p.waitForTimeout(250);
+    const fromMenu = await read();
+    ok(fromMenu && fromMenu.open && fromMenu.headingInView && !(await menu()).open && await p.evaluate(() => card.id === 'eds'), 'a product\'s row closes the menu and opens that product\'s card with its box open and in view');
+    await p.keyboard.press('Escape');
+    await p.click('#tr-btn');
+    await p.keyboard.press('Escape');
+    ok(!(await menu()).open && await p.evaluate(() => document.activeElement.id === 'tr-btn'), 'Escape closes the menu and returns to its button');
+    await p.click('#tr-btn');
+    await p.click('#add-btn');
+    ok(!(await menu()).open && await p.isVisible('#add-menu'), 'opening Add product closes it, so one menu is open at a time');
+    await p.keyboard.press('Escape');
+    const heights = [];
+    for (const width of [1440, 1280, 1180, 1024, 900, 768, 390]) { await p.setViewportSize({width, height: 844}); await p.waitForTimeout(350);
+      heights.push([width, await p.evaluate(() => [Math.round(document.querySelector('.masthead').getBoundingClientRect().height), document.documentElement.scrollWidth > innerWidth + 1])]); }
+    ok(heights.every(([w, [h, sideways]]) => !sideways && h === (w === 390 ? 106 : 69)), 'the top bar keeps its height from a wide screen to a phone: the button\'s name shortens to Training, then to its cap alone', JSON.stringify(heights));
+    await p.click('#tr-btn');
+    const small = await menu();
+    ok(small.open && small.left >= 16 && small.right <= small.wide - 16 && await p.evaluate(() => document.querySelector('#tr-btn').getAttribute('aria-label') === 'Get your team ready'), 'on a phone the menu stays inside the screen and the button keeps its name for screen readers', JSON.stringify([small.left, small.right, small.wide]));
+    await p.keyboard.press('Escape');
+    await p.setViewportSize({width: 1440, height: 900});
+    const first = await browser.newPage({viewport: {width: 1440, height: 900}});
+    first.on('pageerror', e => errors.push(e.message));
+    await first.goto('http://localhost:' + server.address().port + '/');
+    await first.waitForFunction(() => window.READY);
+    await first.click('#tr-btn');
+    ok(await first.evaluate(PORTALS => { const m = document.querySelector('#tr-menu'); return !m.hidden && !m.querySelector('[data-tr]') && JSON.stringify([...m.querySelectorAll('a')].map(a => a.getAttribute('href'))) === JSON.stringify(PORTALS.map(l => l[0])) &&
+      document.querySelector('#trwrap').nextElementSibling.id === 'save-draft' && getComputedStyle(document.querySelector('#save-draft')).display === 'none'; }, PORTALS), 'on the first page the menu holds the two portals only, and its button sits before Open draft');
+    await first.goto('http://localhost:' + server.address().port + '/sow/index.html#scope');
+    await first.waitForTimeout(900);
+    await first.click('#tr-btn');
+    const steps = await first.evaluate(() => { const m = document.querySelector('#tr-menu'), text = e => e.textContent.replace(/\s+/g, ' ').trim();
+      return {open: !m.hidden, links: [...m.querySelectorAll('a')].map(a => [a.getAttribute('href'), text(a.querySelector('b')), a.target, a.rel]), levels: text(m).includes('skill level: Foundations, Professional, Expert.'), next: document.querySelector('#trwrap').nextElementSibling.id}; });
+    await first.keyboard.press('Escape');
+    ok(steps.open && JSON.stringify(steps.links) === JSON.stringify(PORTALS) && steps.levels === (DATA.courseLevels.join(', ') === 'Foundations, Professional, Expert') && steps.next === 'save-draft' && await first.evaluate(() => document.querySelector('#tr-menu').hidden),
+      'the Scope, Services, Statement of work and RFI Builder page has the same button before Save draft, with the same two portals and skill levels, and Escape closes it', JSON.stringify(steps));
+    await first.close();
 
     // 4. a fixed play and a phone
     await p.evaluate(() => { hideCard(true); st = {...st, play: 'aem', on: [], out: ['cdn'], ls: {}, keep: {}, fresh: true, pubSig: null, decisions: {authoring: ''}}; render(); });
