@@ -24,8 +24,8 @@ const LABELS = /\bbeta\b|early access|early adopter|limited availability|coming 
       P[id].systems_with_bv === fix(D[id].systems_on_brand_visibility_plays) && !P[id].rec && !P[id].lines.length && !P[id].more.length),
     '1. ChatGPT, Claude and Microsoft Copilot are outside systems with the build data\'s names and lines (a second line for plays with Brand Visibility), a speech bubble and no Recommended reason',
     JSON.stringify(AI.map(id => P[id])));
-  ok(CAT.products.length === 54 && CAT.products.filter(p => p.outside).length === 18 && CAT.connections.length === 217 && Object.keys(CAT.lines).length === 626,
-    '1. the catalog holds 54 products (18 outside systems), 217 connections (Claude + Brand Intelligence joined later on Nov 18; the Commerce round\'s 13 on Nov 19) and 626 services', [CAT.products.length, CAT.connections.length, Object.keys(CAT.lines).length].join());
+  ok(CAT.products.length === 54 && CAT.products.filter(p => p.outside).length === 18 && CAT.connections.length === 217 && Object.keys(CAT.lines).length === 632,
+    '1. the catalog holds 54 products (18 outside systems), 217 connections (Claude + Brand Intelligence joined later on Nov 18; the Commerce round\'s 13 on Nov 19) and 632 services', [CAT.products.length, CAT.connections.length, Object.keys(CAT.lines).length].join());
   const DC = DATA.connections, same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
   // Nov 19 2026 (test_first_page_rows.js): an assistant's line has a line type of its own ('assistant', thinner and grey, with its own key entry) and the two
   // lines between boxes the tool already had are typed by their own evidence ('native'); Copilot + AEM Sites follows Adobe's step-by-step Copilot Studio set-up, and Copilot + AEM Assets the same agent
