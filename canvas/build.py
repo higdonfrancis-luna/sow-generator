@@ -83,6 +83,12 @@ def main():
                       'url': x['source'], 'src': clean(x.get('sourceTitle') or x['source']), 'origin': 'sow'}
         if x.get('references'):
             lines[lid]['references'] = x['references']
+        if lid == 'F02':
+            lines[lid]['implementation'] = {
+                size: {'quantity': x['bands'][size]['qty'],
+                       'deliverable': x['bands'][size].get('deliverable', x['deliverable'])}
+                for size in ('small', 'typical', 'large')
+            }
         # step 47: the product (ext) and the package (tier) a live service needs, as research lines carry them
         for k in ('ext', 'tier'):
             if x.get(k):

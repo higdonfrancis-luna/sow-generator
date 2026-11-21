@@ -347,10 +347,10 @@ body.picking .tabs,body.picking .toolbar{display:none}
 .tg:hover{background:var(--soft)}
 .src{display:inline-flex;vertical-align:-2px;margin-left:6px;color:var(--ink2)}
 .src:hover{color:var(--red)}
-details.more{border-top:1px solid var(--line)}
-details.more summary{cursor:pointer;font-weight:600;font-size:15px;padding:7px 0;list-style:none;display:flex;align-items:center;gap:6px}
-details.more summary::-webkit-details-marker{display:none}
-details.more[open] summary svg{transform:rotate(180deg)}
+details:is(.more,.implementation){border-top:1px solid var(--line)}
+details:is(.more,.implementation)>summary{cursor:pointer;font-weight:600;font-size:15px;padding:7px 0;list-style:none;display:flex;align-items:center;gap:6px}
+details:is(.more,.implementation)>summary::-webkit-details-marker{display:none}
+details:is(.more,.implementation)[open]>summary svg{transform:rotate(180deg)}
 .ft{border-top:2px solid var(--ink);padding-top:8px;font-size:16px;font-weight:700;display:flex;justify-content:space-between}
 .none{font-size:15.5px;line-height:21px;margin:2px 0 10px}
 .card .kind{margin:0 0 8px;font-size:15px;line-height:20px}.card .kind b{display:inline-block;font-size:11.5px;font-weight:700;letter-spacing:1.1px;text-transform:uppercase;border:1.5px solid var(--ink);border-radius:3px;padding:1px 6px;margin:0 6px 2px 0}.card .kind b.pw{border-style:dashed}.card .kind b.pf{border-style:dotted}.card .avail.plain{color:var(--ink);font-weight:400}.card ul.pre{margin:0 0 4px 18px;padding:0;font-size:15px;line-height:20px}.card ul.pre li{margin:2px 0}.ln.lock.can .addb{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
@@ -1391,6 +1391,13 @@ const TIPS={
 let tipOpen={};
 const tipButton=(l,name)=>TIPS[l]?`<button type="button" class="tipb" data-tip="${l}" aria-expanded="${!!tipOpen[l]}" aria-label="When to include ${esc(name)}">i</button>`:'';
 const tipText=(l,on)=>TIPS[l]?`<span class="tip"><b>${on?'Keep it if':'Add it if'}</b>${esc(TIPS[l][0])}<b>${on?'Remove it if':'Leave it out if'}</b>${esc(TIPS[l][1])}</span>`:'';
+function implementationDetails(l){
+  const bands=LN[l].implementation;
+  if(!bands)return '';
+  const size=[effOf(l)?.b,st.size,'typical'].find(b=>Object.hasOwn(bands,b));
+  const band=bands[size],key='scope:'+l;
+  return `<details class="implementation" data-more="${key}"${moreOpen[key]?' open':''}><summary>What the implementation includes ${I.chev}</summary><p class="how"><b>${size[0].toUpperCase()+size.slice(1)} scope</b><br>${esc(band.quantity)}</p><p class="how">${esc(band.deliverable)}</p></details>`;
+}
 function row(l){const L=LN[l],on=lineOn(l),off=!on;
   if(!met(l)){const mm=missing(L);return `<div class="ln lock can" data-l="${l}"><span class="nm">${esc(L.name)}<a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a><span class="need">Needs ${missText(mm)} on the canvas</span>${extNote(l)}</span><span class="hr">${hrs(l)} h</span><span class="addb">${mm[0].map(n=>authoringPrerequisite(n)?'<button class="addp" data-focus-authoring>Choose page authoring</button>':`<button class="addp" data-addp="${n}">Add ${esc(short(n))}</button>`).join('')}</span></div>`;}
   const gate=lineGate(l);
@@ -1464,8 +1471,9 @@ function cardHTML(k,id){if(k==='p'&&P[id].outside)return outCardHTML(id);
      hours and tick, counted once, on the product */
   const sits=k==='c'&&o.covered_by&&prods().some(p=>all(p).includes(o.covered_by))?row(o.covered_by):'';
   if(!listed.length&&!extra.length)h+=k==='c'&&o.covered?`${sits}<p class="none">${esc(o.covered)}</p>`:k==='c'?`<p class="none">Adobe Experience League does not explicitly list any services for this connection. You can add your own services on the Services tab.</p>`:`<p class="none">No services for ${esc(o.name)} itself in the catalog yet. The work sits on its connections.</p>`;
-  h+=listed.map(l=>row(l)).join('');
-  if(extra.length)h+=`<details class="more" data-more="${key}"${availableOpen?' open':''}><summary>Available services (${extra.length}) ${I.chev}</summary>${extra.map(l=>row(l)).join('')}</details>`;
+  const serviceRow=l=>row(l)+implementationDetails(l);
+  h+=listed.map(serviceRow).join('');
+  if(extra.length)h+=`<details class="more" data-more="${key}"${availableOpen?' open':''}><summary>Available services (${extra.length}) ${I.chev}</summary>${extra.map(serviceRow).join('')}</details>`;
   if(listed.length||extra.length)h+=`<div class="ft"><span>${n?`${n} ${k==='p'?'product':'connection'} service${n===1?'':'s'} selected`:`No ${k==='p'?'product':'connection'} services selected`}</span><span>${st.rate?fees:''}</span></div>`;
   if(k==='p'&&linksOf(id).length)h+='<p class="how connection-note">Connection services are shown separately on the lines between products.</p>';
   if(k==='p'&&!(id==='aemsites'&&combinesSites()))h+=readyHTML(id);

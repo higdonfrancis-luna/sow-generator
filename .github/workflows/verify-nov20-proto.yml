@@ -1,4 +1,4 @@
-name: Verify revenue-goal answers and Proto package
+name: Verify Brand Concierge services and Proto package
 on:
   push:
     branches:
@@ -8,7 +8,7 @@ permissions:
 jobs:
   proto:
     runs-on: ubuntu-24.04
-    timeout-minutes: 28
+    timeout-minutes: 35
     steps:
       - uses: actions/checkout@v4
         with:
@@ -20,12 +20,12 @@ jobs:
           python3 canvas/build.py
           python3 build_site.py
           git diff --exit-code --stat
-          git archive --format=zip -o "$RUNNER_TEMP/sow-generator-proto-nov20-v8.zip" HEAD:site
-          unzip -tq "$RUNNER_TEMP/sow-generator-proto-nov20-v8.zip"
+          git archive --format=zip -o "$RUNNER_TEMP/sow-generator-proto-nov20-v9.zip" HEAD:site
+          unzip -tq "$RUNNER_TEMP/sow-generator-proto-nov20-v9.zip"
       - name: Package Adobe Proto with index.html at the root
         uses: actions/upload-artifact@v4
         with:
-          name: sow-generator-proto-nov20-v8
+          name: sow-generator-proto-nov20-v9
           path: site/
           if-no-files-found: error
           include-hidden-files: true
@@ -42,6 +42,10 @@ jobs:
           chromium.launch = (options = {}) => launch({...options, executablePath: process.env.PROTO_CHROME_BINARY});
           JS
           echo "PROTO_CHROME_BINARY=$PROTO_CHROME_BINARY" >> "$GITHUB_ENV"
+      - name: Check Brand Concierge services from selection to SOW
+        run: node --require "$RUNNER_TEMP/proto-chrome.cjs" test_brand_concierge_services.js
+      - name: Check next product recommendations
+        run: node --require "$RUNNER_TEMP/proto-chrome.cjs" test_next_product.js
       - name: Verify problems
         run: node --require "$RUNNER_TEMP/proto-chrome.cjs" canvas/test_problems.js
       - name: Verify agentic play
@@ -69,22 +73,22 @@ jobs:
           ref: codex/verify-genstudio-questions-nov20
       - name: Save the verified Proto ZIP for download
         env:
-          VERIFIED_SITE_TREE: 1770cc90d3ec38f1295e78789e8a9afd90418a2f
+          VERIFIED_SITE_TREE: 96cd67be965d4b5747172f84143f811bcf361688
         run: |
           test "$(git rev-parse HEAD:site)" = "$VERIFIED_SITE_TREE"
           mkdir -p proto
-          git archive --format=zip -o proto/sow-generator-proto-nov20-v8.zip HEAD:site
+          git archive --format=zip -o proto/sow-generator-proto-nov20-v9.zip HEAD:site
           python3 - <<'PY'
           import hashlib, pathlib, zipfile
           folder = pathlib.Path('site')
           expected = {p.relative_to(folder).as_posix() for p in folder.rglob('*') if p.is_file()}
-          with zipfile.ZipFile('proto/sow-generator-proto-nov20-v8.zip') as archive:
+          with zipfile.ZipFile('proto/sow-generator-proto-nov20-v9.zip') as archive:
               assert archive.testzip() is None
               assert {f.filename for f in archive.infolist() if not f.is_dir()} == expected
               for name in expected:
                   assert archive.read(name) == (folder / name).read_bytes(), name
           print(len(expected), 'files verified with index.html at the archive root')
           PY
-          git add -f proto/sow-generator-proto-nov20-v8.zip
+          git add -f proto/sow-generator-proto-nov20-v9.zip
           git -c user.name=github-actions -c user.email=github-actions@users.noreply.github.com commit -m "Save the verified Adobe Proto download [skip ci] [skip netlify]"
           git push origin HEAD:refs/heads/codex/verify-genstudio-questions-nov20

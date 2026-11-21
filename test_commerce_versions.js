@@ -27,8 +27,8 @@ const inPaste = q => { let at = 0; const t = norm(PASTE); return q.split('...').
 // ============ 1. the catalog: two products, five outside systems, 13 connections and 35 services, as the build data says ============
 { ok(NEWP.every(id => P[id] && !P[id].outside) && NEWOUT.every(id => P[id] && P[id].outside && P[id].icon && P[id].systems) && P.aco.info && /Optimizer Headless/.test(P.aco.info),
     '1. Adobe Commerce Optimizer and Adobe Commerce Intelligence are Adobe products; ERP, PIM, Order management, Warehouse management and Other commerce platform are outside systems with an icon and what they cover; Commerce Optimizer\'s i names its two packages', JSON.stringify(NEWOUT.map(id => P[id] && P[id].systems)));
-  ok(CAT.products.length === 54 && CAT.products.filter(p => p.outside).length === 18 && CAT.connections.length === 217 && Object.keys(CAT.lines).length === 626,
-    '1. the catalog holds 54 products (18 outside systems), 217 connections and 626 services', [CAT.products.length, CAT.connections.length, Object.keys(CAT.lines).length].join());
+  ok(CAT.products.length === 54 && CAT.products.filter(p => p.outside).length === 18 && CAT.connections.length === 217 && Object.keys(CAT.lines).length === 632,
+    '1. the catalog holds 54 products (18 outside systems), 217 connections and 632 services', [CAT.products.length, CAT.connections.length, Object.keys(CAT.lines).length].join());
   ok(NEWC.length === 13 && NEWC.every(id => CBY[id] && CBY[id].how && CBY[id].label && CBY[id].gain && CBY[id].sowHow && CBY[id].sowGain && CBY[id].prereqs.length >= 2 && ALLOWED.test(CBY[id].source.url) &&
       (CBY[id].flows || []).every(f => ALLOWED.test(f.source.url)) && !CBY[id].availability) && SYSTEMS.every(s => CBY['commerce-' + s] && CBY['commerce-' + s].kind === 'outside' && CBY['commerce-' + s].line === 'native'),
     '1. each of the 13 connections has its how, label, what you get, prerequisites, flows on Adobe pages, client wording and no availability line; the four back-office systems connect to Adobe Commerce as outside systems drawn as their own connections',
