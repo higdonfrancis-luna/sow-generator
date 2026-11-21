@@ -6,12 +6,65 @@ const { chromium } = require('playwright');
 const root = path.join(__dirname, 'site');
 const origin = 'https://question-navigation.test/';
 const catalog = require('./canvas/catalog.json');
-const family = catalog.plays.find(p => p.custom).family;
+const { family, agentic } = catalog.plays.find(p => p.custom);
 const problem = require('./canvas/problems.json').problems.find(p => p.id === 'content-too-slow');
 const snapshot = page => page.evaluate(() => JSON.parse(JSON.stringify({
   play: st.play, on: st.on, outside: st.out, rate: st.rate, size: st.size, choices: st.ls,
   decisions: st.decisions, selected: [...prods(), ...conns()].flatMap(o => all(o)).filter(counted), totals: totals()
 })));
+async function checkRevenueGoals(page, width) {
+  for (const goal of agentic.areas) {
+    for (const refinement of [null, ...goal.refine]) {
+      await page.evaluate(() => {
+        localStorage.clear();
+        localStorage.setItem('abv-sow-build-v1', JSON.stringify({v:2, rate:173, size:'typical'}));
+      });
+      await page.goto(origin); await page.waitForFunction(() => window.READY);
+      if (width === 390) {
+        await page.locator('#bp-q').fill(goal.question);
+        await page.locator('#bp-q').press('Enter');
+      } else {
+        await page.getByRole('button', {name:goal.question, exact:true}).click();
+      }
+      const answer = page.locator('#bp .bp-ans');
+      assert.equal(await answer.locator('#bp-goal-title').textContent(), 'Recommended: ' + goal.label);
+      if (refinement) await answer.getByRole('button', {name:refinement.chip, exact:true}).click();
+      const description = await answer.locator('.bp-del').innerText();
+      const quote = await answer.locator('.bp-del b').innerText();
+      const expectedProducts = [...new Set([...goal.products, ...(refinement?.add || [])])];
+      await answer.locator('[data-bpa="build"]').click(); await page.locator('#back-to-answer').waitFor();
+      const built = await page.evaluate(() => {
+        const ids = [...prods(), ...conns()].flatMap(o => all(o)).filter(counted);
+        let once = 0, monthly = 0;
+        for (const id of ids) {
+          if (unitOf(id) === 'monthly') monthly += hrs(id);
+          else once += hrs(id);
+        }
+        return {products:st.on, area:st.area, choices:st.ls, n:ids.length, once, monthly, fee:document.getElementById('t-big').textContent};
+      });
+      const detail = goal.label + (refinement ? ' / ' + refinement.chip : '');
+      assert.deepEqual(built.products, expectedProducts, detail);
+      assert.equal(built.area, goal.label, detail);
+      assert.equal(quote, built.fee, detail);
+      assert.ok(description.includes(built.n + ' starting services:'), detail);
+      assert.ok(description.includes(built.once.toLocaleString('en-US') + ' one-time hours'), detail);
+      assert.ok(description.includes(built.monthly.toLocaleString('en-US') + ' a month'), detail);
+      if (refinement) {
+        if (refinement.owned?.length) assert.ok(Object.values(built.choices).includes(false), detail);
+        await page.locator('#back-to-answer').click();
+        assert.equal(await page.locator('#bp .bp-ask').last().textContent(), refinement.chip);
+        assert.equal(await answer.locator('.bp-del b').innerText(), quote);
+        await answer.locator('[data-bpa="build-all"]').click();
+        await page.locator('#confirm-yes').click(); await page.locator('#back-to-answer').waitFor();
+        const combined = await snapshot(page);
+        assert.deepEqual(new Set(combined.on), new Set([...agentic.all.products, ...expectedProducts]), detail);
+        for (const [id, enabled] of Object.entries(built.choices)) {
+          if (!enabled) assert.equal(combined.choices[id], false, detail + ' / ' + id);
+        }
+      }
+    }
+  }
+}
 async function main() {
   const browser = await chromium.launch();
   try {
@@ -100,8 +153,9 @@ async function main() {
         const combined = await snapshot(p);
         assert.deepEqual(new Set(combined.on), new Set([...family.areas.flatMap(area => area.products), 'cja']));
         for (const service of refined.off) assert.equal(combined.choices[service], false);
+        await checkRevenueGoals(p, width);
         assert.deepEqual(errors, []);
-        console.log(width + 'px: typed and refined questions, Back/Forward, reload, edited canvas, replace, clear, and refined GenStudio family passed.');
+        console.log(width + 'px: navigation, refined GenStudio family and every revenue goal and refinement matched their canvases.');
       } finally { await ctx.close(); }
     }
   } finally { await browser.close(); }

@@ -154,7 +154,7 @@ const COPILOT_STUDIO = 'https://experienceleague.adobe.com/en/docs/experience-ma
       ok(!lay.sideways && lay.cols === (w > 1100 ? 4 : 1), `2. at ${w} px nothing runs off the side, and each row of plays is ${w > 1100 ? 'four cards across' : 'one card above another'}`, JSON.stringify(lay)); }
     await p.context().close(); }
 
-  // ============ 3. the Client KBO plays: products, outside systems, names, and no fee line ============
+  // ============ 3. revenue goals: full answers and the original named canvases ============
   { const p = await page(1440, 900), seen = [];
     for (let i = 0; i < KBO.length; i++) {
       await home(p); await preview(p, i === 3 ? 0 : i);
@@ -164,16 +164,20 @@ const COPILOT_STUDIO = 'https://experienceleague.adobe.com/en/docs/experience-ma
     ok(seen.every((s, i) => s.play === 'custom' && same(s.on, KBO[i][2]) && same(s.out, KBO[i][3]) && s.area === KBO[i][0] && s.label === KBO[i][0]),
       '3. each Client KBO area and all three together open Your own play with their products placed, every outside system they connect to on (the rule), and the canvas named "Find new customers", "Keep customers", "Grow share of wallet" or "Find, keep and grow customers"',
       JSON.stringify(seen.map(s => [s.label, s.on, s.out])));
-    // Nov 19 2026: the area cards show no fee line (Adam: that is what the canvas estimates and the Services step are for), before or after a rate is entered
     await home(p);
     for (const rate of [0, 175]) {
       await p.evaluate(r => { st.rate = r; render(); }, rate);
       for (let i = 0; i < 3; i++) {
         await preview(p, i);
         const card = p.locator('#bp .bp-ans');
-        ok(await card.locator('h3').innerText() === KBO[i][0] && await card.locator('.bp-heard').innerText() === KBO[i][1] &&
+        const goal = CUSTOM.agentic.areas[i], sections = await card.locator('h3.bp-lbl').allTextContents();
+        const fee = await card.locator('.bp-del').innerText();
+        ok(same(sections, ['Recommended: ' + goal.label, 'How they connect', 'Why they work together', 'What you deliver', 'Refine']) &&
           same(await card.locator('.bp-p').allTextContents(), KBO[i][2].map(id => P[id].name)) &&
-          !/\$|an hour/.test(await card.innerText()), '3. ' + KBO[i][0] + ' previews its outcome and products before opening at rate ' + rate);
+          await card.locator('.bp-del p').textContent() === goal.deliverable &&
+          (await card.locator('.bp-cx').count()) > 0 && (await card.locator('.capability-references a').count()) > 0 &&
+          (rate ? fee.includes('$175 an hour') : fee.includes('$100 to $300 an hour')),
+          '3. ' + goal.label + ' explains the connections, partner work and starting estimate at rate ' + rate, fee);
         await card.getByRole('button', {name:'Back to questions'}).click();
         ok(await p.evaluate(() => document.activeElement.textContent) === GOAL_QUESTIONS[i], '3. returning to questions restores focus to the chosen goal');
       }

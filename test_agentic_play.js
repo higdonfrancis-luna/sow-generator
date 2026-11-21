@@ -224,16 +224,14 @@ const fix = s => s.replace(/’/g, "'");
 
   // ============ 4. the problem finder: its fee is the estimate of the canvas Build this opens ============
   { const p = await page(1440, 1000); await p.evaluate(() => { st.rate = 150; }); const rows = [];
-    const entries = await p.evaluate(() => PROBS.map(q => ({id:q.id, goal:q.familyKey==='agentic'})));
+    const entries = await p.evaluate(() => PROBS.map(q => q.id));
     for (let i = 0; i < entries.length; i++) {
       await p.evaluate(i => bpAsk(PROBS[i].chip, i), i); await p.waitForTimeout(1200);
       const shown = await p.evaluate(() => { const b = document.querySelector('#bp-body .bp-del b'); return b ? b.textContent : ''; });
       await p.click('#bp-body [data-bpa="build"]'); await p.waitForTimeout(350);
-      rows.push({...entries[i], shown, total:await p.evaluate(() => money(totals().yr))});
+      rows.push({id:entries[i], shown, total:await p.evaluate(() => money(totals().yr))});
       await p.click('#change-play'); await p.click('#confirm-yes'); await p.waitForTimeout(250); await p.evaluate(() => { st.rate = 150; }); }
-    const priced = rows.filter(r => !r.goal), goals = rows.filter(r => r.goal);
-    ok(priced.length === 29 && priced.every(r => r.shown === r.total), '4. each detailed problem, including all six GenStudio plays, quotes the fee on the canvas it opens', JSON.stringify(priced.filter(r => r.shown !== r.total)));
-    ok(goals.length === 3 && goals.every(r => !r.shown && r.total.startsWith('$')), '4. revenue goals preview the play and show the estimate once its canvas opens');
+    ok(rows.length === 32 && rows.every(r => r.shown === r.total), '4. all 32 questions, including the three revenue goals, quote the fee on the canvas they open', JSON.stringify(rows.filter(r => r.shown !== r.total)));
     await p.context().close(); }
 
   // ============ 5. the SOW steps, the area's name, and states saved before this change ============

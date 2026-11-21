@@ -255,8 +255,13 @@ const withStart = (play, ids) => [...new Set([...ids, ...starting(play, ids.filt
   ok(cx.n === cx.want && cx.n === 2 && cx.txt.some(t => /CDN \+ Brand Visibility/.test(t)) && cx.bolt, 'S43: How they connect lists every connection, the CDN one included, each with the bolt', JSON.stringify(cx.txt));
   ok(cx.h3[0].startsWith('Recommended') && cx.h3.includes('How they connect') && cx.h3.includes('Why they work together'), 'S43: the answer\'s section labels are headings', cx.h3.join(' | '));
   ok(cx.txt.every(t => !/\bthe client\b|\bthe customer's\b/i.test(t)), 'S43: connection lines speak to the partner ("your client")', JSON.stringify(cx.txt));
-  const allCx = await page.evaluate(() => PROBS.filter(p => p.familyKey!=='agentic').every(p => { bpAsk(p.chip, PROBS.indexOf(p)); clearTimeout(bpT); bp.view = 'answer'; bpRender(); return document.querySelectorAll('.bp-ans .bp-cx').length === bpConns(bp.setup).length; }));
-  ok(allCx, 'S43: every detailed answer lists exactly the connections in the setup');
+  const incomplete = await page.evaluate(() => PROBS.filter((p, i) => {
+    bpAsk(p.chip, i); clearTimeout(bpT); bp.view = 'answer'; bpRender();
+    const answer = document.querySelector('.bp-ans'), links = bpConns(bp.setup);
+    return !answer.querySelector('.bp-del b') || !answer.querySelector('ul li') ||
+      !answer.querySelector('[data-bpr]') || answer.querySelectorAll('.bp-cx').length !== links.length;
+  }).map(p => p.id));
+  ok(incomplete.length === 0, 'S43: all questions show their rationale, estimate, refinements and exact catalog connections', incomplete.join(', '));
   await page.evaluate(() => { clearTimeout(bpT); bp.view = 'start'; bpRender(); });
 
   // the why text drops a product a chip took out; notes are full sentences; outside systems lowercase mid-sentence

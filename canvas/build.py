@@ -429,7 +429,7 @@ def main():
     assert len(question_ids) == len(set(question_ids)), 'each question needs a unique id'
     assert all(g['question'] and g['keywords'] for g in goals), 'each outcome play needs a question and search terms'
     pids, plids = {p['id'] for p in keep_p}, {p['id'] for p in plays}
-    family_questions = [dict(area, play=custom_play['id']) for area in custom_play['family']['areas']]
+    family_questions = [dict(area, play=custom_play['id']) for area in goals]
     for area in family_questions:
         assert all(area.get(field) for field in ('why', 'deliverable', 'refine', 'references')), area['id']
     for q in probs + family_questions:
